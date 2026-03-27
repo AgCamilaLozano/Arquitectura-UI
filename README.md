@@ -1,98 +1,36 @@
-# Convenciones Técnicas 
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Repositorio oficial de arquitectura y convenciones técnicas del proyecto.
+## Getting Started
 
----
+First, run the development server:
 
-## 🛠️ Stack tecnológico
-
-| Tecnología | Uso |
-|---|---|
-| Next.js 14 | Framework principal (App Router) |
-| TypeScript | Tipado estático |
-| Tailwind CSS | Estilos utilitarios |
-| PostCSS | Procesamiento de estilos |
-| pnpm | Gestor de paquetes |
-
----
-
-## 📁 Estructura del proyecto
-```
-convenciones-tecnicas/
-├── app/                    # App Router de Next.js
-│   ├── globals.css         # Estilos globales y variables CSS
-│   ├── layout.tsx          # Layout raíz de la aplicación
-│   └── page.tsx            # Página principal
-├── components/
-│   ├── Layout/             # Componentes estructurales
-│   │   ├── Tema/           # Configuración del tema
-│   │   ├── LayoutClient.tsx
-│   │   └── SideBar.tsx
-│   └── UI/                 # Componentes reutilizables
-│       ├── buttonIcons/
-│       ├── Breadcrumbs.tsx
-│       ├── MultiSelect.tsx
-│       └── Tooltip.tsx
-├── lib/
-│   └── utils.ts            # Utilidades compartidas
-└── public/                 # Archivos estáticos
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
----
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## 📐 Organización — Por tipo
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-El proyecto organiza el código por tipo de archivo, no por feature:
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- `app/` → rutas y páginas (Next.js App Router)
-- `components/` → componentes React reutilizables
-- `lib/` → utilidades y helpers
-- `public/` → assets estáticos
+## Learn More
 
----
+To learn more about Next.js, take a look at the following resources:
 
-## 🎨 Estilos
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-- Los estilos globales viven en `app/globals.css`
-- Variables de color, tipografía y espaciado como CSS custom properties
-- Clases utilitarias con **Tailwind CSS**
-- Sin CSS por componente — todo centralizado en globals o Tailwind
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
----
+## Deploy on Vercel
 
-## 🧩 Componentes UI
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-| Componente | Descripción |
-|---|---|
-| `Breadcrumbs.tsx` | Navegación jerárquica de páginas |
-| `MultiSelect.tsx` | Selector múltiple de opciones |
-| `Tooltip.tsx` | Información contextual al hacer hover |
-| `buttonIcons/` | Iconos con comportamiento de botón |
-
-### Componentes de Layout
-
-| Componente | Descripción |
-|---|---|
-| `SideBar.tsx` | Navegación lateral principal |
-| `LayoutClient.tsx` | Wrapper client-side del layout |
-| `Tema/` | Configuración del tema visual |
-
----
-
-## ✏️ Convenciones de nombres
-
-### Componentes
-- **PascalCase** → `MultiSelect.tsx`, `SideBar.tsx`
-- Una responsabilidad por componente
-- Carpeta propia si el componente tiene subarchivos
-
-### Funciones y hooks
-- Handlers: prefijo `handle` → `handleSubmit`
-- Hooks: prefijo `use` → `useFormState`
-- Utilidades: verbos descriptivos → `formatDate`, `getFilteredItems`
-
-### Archivos
-- Componentes: `PascalCase.tsx`
-- Utilidades: `camelCase.ts`
-- Carpetas: `PascalCase/` para componentes, `camelCase/` para el restoambas
-  
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
