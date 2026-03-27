@@ -1,4 +1,4 @@
-# Convenciones Técnicas — Antigravity
+# Convenciones Técnicas 
 
 Repositorio oficial de arquitectura y convenciones técnicas del proyecto.
 
