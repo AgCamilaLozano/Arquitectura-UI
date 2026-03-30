@@ -10,19 +10,6 @@ const menuGroups = [
     items: [
       { title: "Inicio", url: "/", icon: Home },
     ]
-  },
-  {
-    title: "Calculadoras",
-    items: [
-      { title: "CINA / FFC", url: "/Calculadoras/calculadora-incentivos", icon: Calculator },
-      { title: "Contabilidad", url: "/Calculadoras/calculadora-contabilidad", icon: SquareSigma }
-    ],
-  },
-  {
-    title: "Herramientas",
-    items: [
-      { title: "Carrito de compras", url: "/Carrito/carrito-compras", icon: ShoppingCart },
-    ],
   }
 
 ]
