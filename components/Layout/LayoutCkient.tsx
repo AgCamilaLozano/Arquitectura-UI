@@ -3,7 +3,7 @@ import { useState } from "react"
 import Sidebar from "@/components/Layout/SideBar"
 import { PanelRightOpen } from "lucide-react"
 import { ThemeToggle } from "@/components/Layout/Tema/ThemeToggle"
-import { Breadcrumbs } from "@/components/UI/Breadcrumbs"
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs"
 
 export default function LayoutClient({ children }: { children: React.ReactNode }) {
     const [isOpen, setIsOpen] = useState(false)
