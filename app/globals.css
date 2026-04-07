@@ -25,10 +25,10 @@
   --color-success: var(--alert-success);
   --color-info: var(--alert-info);
   --color-warning: var(--alert-warning);
-  --text-text-error: var(--text-error);
-  --text-text-success: var(--text-success);
-  --text-text-warning: var(--text-warning);
-  --text-text-info: var(--text-info);
+  --color-text-error: var(--text-error);
+  --color-text-success: var(--text-success);
+  --color-text-warning: var(--text-warning);
+  --color-text-info: var(--text-info);
 }
 
 :root {
@@ -75,10 +75,10 @@
 
   /* Color texto y bordes Alertas */
 
-  --text-error: #FCA5A5;
-  --text-success: #86EFAC;
-  --text-warning: #FDE047;
-  --text-info: #93C5FD;
+  --text-error: #e7000b;
+  --text-success: #00a63e;
+  --text-warning: #d08700;
+  --text-info: #155dfc;
 
 
 }
@@ -125,10 +125,10 @@
 
   /* Color texto y bordes Alertas */
 
-  --text-error: #FCA5A5;
-  --text-warning: #FDE047;
-  --text-info: #93C5FD;
-  --text-success: #86EFAC;
+  --text-error: #e7000b;
+  --text-success: #00a63e;
+  --text-warning: #d08700;
+  --text-info: #155dfc;
 
 }
 

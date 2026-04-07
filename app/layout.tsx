@@ -65,8 +65,8 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Dashboard de proyectos",
+  title: "Arquitectura-UI",
+  description: "Arquitectura de diseño.",
 };
 
 export default function RootLayout({

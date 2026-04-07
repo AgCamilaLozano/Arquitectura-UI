@@ -18,12 +18,12 @@ export const Toaster = (props: ToasterProps) => {
             theme={theme as ToasterProps["theme"]}
             position="bottom-left"
             closeButton
-            className="toaster !z-[100]"
+            className="toaster !z-[999]"
             icons={{
-                success: <CircleCheckIcon className="size-5 text-text-success" />,
-                error: <OctagonXIcon className="size-5 text-text-error" />,
-                warning: <TriangleAlertIcon className="size-5 text-text-warning" />,
-                info: <InfoIcon className="size-5 text-text-info" />,
+                success: <CircleCheckIcon className="size-5 !text-text-success" />,
+                error: <OctagonXIcon className="size-5 !text-text-error" />,
+                warning: <TriangleAlertIcon className="size-5 !text-text-warning" />,
+                info: <InfoIcon className="size-5 !text-text-info" />,
                 loading: <Loader2Icon className="size-5 animate-spin" />,
             }}
             style={
@@ -39,7 +39,7 @@ export const Toaster = (props: ToasterProps) => {
                     title:
                         "!text-md !font-bold uppercase",
                     toast:
-                        "border shadow-md backdrop-blur-sm !transition-all !rounded-md",
+                        "!border shadow-md !transition-all !rounded-md ",
                     description:
                         "!text-current !font-medium",
 

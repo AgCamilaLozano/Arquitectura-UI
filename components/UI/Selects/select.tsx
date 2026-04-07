@@ -148,7 +148,7 @@ function SelectContent({
   return (
     <div
       role="listbox"
-      className="bg-background absolute z-50 mt-1 min-w-[300px] rounded-md border shadow-md"
+      className="bg-background absolute z-50 mt-1 min-w-[250px] rounded-md border shadow-md"
     >
       <div className="max-h-60 overflow-auto p-1">
         {children}
@@ -205,8 +205,8 @@ function SelectItem({
       }}
       className={cn(
         "relative flex cursor-pointer items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm",
-        isActive && "bg-accent-soft text-accent",
-        isSelected && "bg-accent-hover text-accent"
+        isActive && "bg-accent-hover/20 text-accent",
+        isSelected && "bg-accent-hover/60 text-accent"
       )}
     >
       <span className="absolute right-2">
