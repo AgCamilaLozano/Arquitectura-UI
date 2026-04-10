@@ -169,5 +169,79 @@
     border-radius: 9999px;
   }
 
+  /* Animaciones Icono */
+
+  @keyframes blink {
+
+    0%,
+    80%,
+    100% {
+      transform: scaleY(1);
+    }
+
+    83% {
+      transform: scaleY(0.05);
+    }
+
+    86% {
+      transform: scaleY(1);
+    }
+  }
+
+  .lente {
+    transform-origin: 200px 175px;
+    animation: blink 8s ease-in-out infinite;
+  }
+
+  @keyframes wave {
+
+    0%,
+    80%,
+    100% {
+      transform: rotate(0deg);
+    }
+
+    83% {
+      transform: rotate(-15deg);
+    }
+
+    86% {
+      transform: rotate(15deg);
+    }
+
+    89% {
+      transform: rotate(-15deg);
+    }
+
+    92% {
+      transform: rotate(15deg);
+    }
+
+    96% {
+      transform: rotate(0deg);
+    }
+  }
+
+  .brazo-derecho {
+    transform-origin: 330px 200px;
+    animation: wave 8s ease-in-out infinite;
+  }
+
+  @keyframes zoom-breath {
+
+    0%,
+    100% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.12);
+    }
+  }
+
+  .mascot-zoom {
+    animation: zoom-breath 3s ease-in-out infinite;
+    transform-origin: center;
+  }
 
 }

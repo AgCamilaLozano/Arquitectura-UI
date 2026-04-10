@@ -1,75 +1,107 @@
 'use client'
 
-import { useState } from 'react'
-import { Modal, ModalBody, ModalFooter } from '@/components/ui/Modales/Modal'
-import { Button, Input } from '@/components/ui'
-import { AlertDialog } from '@/components/ui/Modales/AlertDialog'
+import Table, { Column } from "@/components/ui/Table";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  CardImage,
+} from "@/components/ui/Card";
+import { Button } from "@/components/ui";
+import { ChatWidget } from "@/components/ChatBox";
+import { GreekGodSkull, CascoSkull, SkullIcon, CascoFondoSkull, SkullOutline, CircleeSpigas } from '@/components/IconChat'
 
-export default function ExamplePage() {
-  const [open, setOpen] = useState(false)
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+// ─── Tipo de dato ─────────────────────────────────────────────────────────────
 
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  status: "active" | "inactive";
+}
+
+// ─── Datos de ejemplo ─────────────────────────────────────────────────────────
+
+const USERS: User[] = [
+  { id: 1, name: "Ana García", email: "ana@mail.com", role: "Admin", status: "active" },
+  { id: 2, name: "Luis Pérez", email: "luis@mail.com", role: "Editor", status: "inactive" },
+  { id: 3, name: "María López", email: "maria@mail.com", role: "Viewer", status: "active" },
+];
+
+// ─── Definición de columnas ───────────────────────────────────────────────────
+
+const columns: Column<User>[] = [
+  {
+    key: "name",
+    label: "Nombre",
+  },
+  {
+    key: "email",
+    label: "Correo",
+  },
+  {
+    key: "role",
+    label: "Rol",
+    align: "center",
+  },
+  {
+    key: "status",
+    label: "Estado",
+    align: "center",
+    // Celda personalizada con badge de color
+    render: (value) => {
+      const isActive = value === "active";
+      return (
+        <span
+          className={`
+            inline-block px-2 py-0.5 rounded-full text-xs font-medium
+            ${isActive
+              ? "bg-success text-text-success"
+              : "bg-error text-text-error"}
+          `}
+        >
+          {isActive ? "Activo" : "Inactivo"}
+        </span>
+      );
+    },
+  },
+];
+const data = [
+  { id: "1", name: "Proyecto Alpha", status: "Activo", amount: "$2,500.00" },
+  { id: "2", name: "Estrategia UI", status: "Pendiente", amount: "$1,200.00" },
+]
+
+
+// ─── Uso en página ────────────────────────────────────────────────────────────
+
+export default function UsersPage() {
   return (
-    <div className="p-6">
-      <Button
-        onClick={() => setOpen(true)}
-        className="px-4 py-2 bg-primary text-white rounded-lg"
-      >
-        Abrir modal
-      </Button>
-
-      <Modal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        title="Crear paquete"
-        description="Completa la información del paquete"
-        size="md"
-        variant="default"
-      >
-        <ModalBody>
-          <div className="space-y-4">
-            <Input
-              placeholder="Nombre"
-            />
-            <Input
-              placeholder="Versión"
-            />
-          </div>
-        </ModalBody>
-
-        <ModalFooter>
-          <Button
-            onClick={() => setOpen(false)}
-            className="px-4 py-2 rounded-lg border"
-          >
-            Cancelar
-          </Button>
-
-          <Button
-            onClick={() => {
-              setOpen(false)
-              setShowDeleteAlert(true)
-            }}
-            className="px-4 py-2 bg-primary text-white rounded-lg"
-          >
-            Guardar
-          </Button>
-        </ModalFooter>
-      </Modal>
-      <div>
-
-
-        <AlertDialog
-          isOpen={showDeleteAlert}
-          onClose={() => setShowDeleteAlert(false)}
-          variant="error"
-          title="¿Eliminar proyecto?"
-          description="Esta acción no se puede deshacer. Se borrarán permanentemente todos los archivos y datos asociados."
-          confirmLabel="Eliminar permanentemente"
-          cancelLabel="Mantener proyecto"
-        />
+    <div className="px-10 py-6">
+      <h1 className="text-xl font-semibold text-text-primary mb-4">Usuarios</h1>
+      <div className="fixed bottom-6 right-6 z-50">
+        <ChatWidget />
+      </div>
+      <div className="flex items-center gap-4 mt-4">
+        <div className='rounded-full w-20 h-20 flex flex-col items-center justify-center'>
+          <GreekGodSkull />
+        </div>
+        <div className='rounded-full w-20 h-20 flex flex-col items-center justify-center'>
+          <CascoSkull />
+        </div>
+        <div className='rounded-full w-20 h-20 flex flex-col items-center justify-center'>
+          <CascoFondoSkull />
+        </div>
+        <div className='rounded-full w-20 h-20 flex flex-col items-center justify-center'>
+          <SkullIcon />
+        </div>
+        <div className='rounded-full w-20 h-20 flex flex-col items-center justify-center'>
+          <SkullOutline />
+        </div>
 
       </div>
+
     </div>
-  )
+  );
 }

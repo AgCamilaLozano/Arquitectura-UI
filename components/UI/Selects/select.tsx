@@ -15,7 +15,7 @@ type SelectContextType = {
   setOpen: (open: boolean) => void
   activeIndex: number
   setActiveIndex: (i: number) => void
-  items: { value: string; ref: React.RefObject<HTMLDivElement> }[]
+  items: { value: string; label: string; ref: React.RefObject<HTMLDivElement> }[]
   registerItem: (item: any) => number
 }
 
@@ -45,10 +45,21 @@ function Select({
   const items = React.useRef<SelectContextType["items"]>([])
   const rootRef = React.useRef<HTMLDivElement>(null)
 
-  const registerItem = (item: any) => {
+  const registerItem = (item: {
+    value: string
+    label: string
+    ref: React.RefObject<HTMLDivElement>
+  }) => {
     items.current.push(item)
     return items.current.length - 1
   }
+
+  React.useEffect(() => {
+    const item = items.current.find((i) => i.value === value)
+    if (item) {
+      setSelectedLabel(item.label)
+    }
+  }, [value])
 
   // click outside
   React.useEffect(() => {
@@ -73,6 +84,7 @@ function Select({
         value,
         selectedLabel,
         onChange: (val, label) => {
+          console.log("SELECT:", val, label)
           setSelectedLabel(label)
           onValueChange(val, label)
         },
@@ -127,28 +139,72 @@ function SelectTrigger({
 // Value
 // ─────────────────────────────────────────────
 function SelectValue({ placeholder }: { placeholder?: string }) {
-
   const { selectedLabel } = useSelect()
 
   return <span>{selectedLabel || placeholder}</span>
 }
-
 // ─────────────────────────────────────────────
 // Content
 // ─────────────────────────────────────────────
 function SelectContent({
-  children
+  children,
+  className,
+  align = "start"
 }: {
   children: React.ReactNode
+  className?: string
+  align?: "start" | "center" | "end"
 }) {
   const { open } = useSelect()
+  const contentRef = React.useRef<HTMLDivElement>(null)
+  const triggerRef = React.useRef<HTMLButtonElement | null>(null)
+
+  const [position, setPosition] = React.useState<"top" | "bottom">("bottom")
+
+  React.useEffect(() => {
+    if (!open) return
+
+    const trigger = document.querySelector(
+      '[role="combobox"]'
+    ) as HTMLButtonElement
+
+    if (!trigger) return
+
+    triggerRef.current = trigger
+
+    const rect = trigger.getBoundingClientRect()
+    const spaceBelow = window.innerHeight - rect.bottom
+    const spaceAbove = rect.top
+
+    const dropdownHeight = 240 // aprox (max-h-60)
+
+    if (spaceBelow < dropdownHeight && spaceAbove > dropdownHeight) {
+      setPosition("top")
+    } else {
+      setPosition("bottom")
+    }
+  }, [open])
+
+  const alignClass = {
+    start: "left-0",
+    center: "left-1/2 -translate-x-1/2",
+    end: "right-0",
+  }[align]
 
   if (!open) return null
 
   return (
     <div
+      ref={contentRef}
       role="listbox"
-      className="bg-background absolute z-50 mt-1 min-w-[250px] rounded-md border shadow-md"
+
+      className={cn(
+        "bg-background absolute z-[999] min-w-[150px] rounded-md border shadow-md",
+        position === "bottom" && "mt-1 top-full",
+        position === "top" && "mb-1 bottom-full",
+        alignClass,
+        className
+      )}
     >
       <div className="max-h-60 overflow-auto p-1">
         {children}
@@ -162,8 +218,13 @@ function SelectContent({
 // ─────────────────────────────────────────────
 function SelectItem({
   value,
+  label,
   children
-}: any) {
+}: {
+  value: string
+  label: string
+  children: React.ReactNode
+}) {
   const {
     value: selected,
     onChange,
@@ -174,10 +235,9 @@ function SelectItem({
   } = useSelect()
 
   const ref = React.useRef<HTMLDivElement>(null)
-  const label = String(children)
 
   const index = React.useMemo(
-    () => registerItem({ value, ref }),
+    () => registerItem({ value, label, ref }),
     []
   )
 
@@ -206,7 +266,7 @@ function SelectItem({
       className={cn(
         "relative flex cursor-pointer items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm",
         isActive && "bg-accent-hover/20 text-accent",
-        isSelected && "bg-accent-hover/60 text-accent"
+        isSelected && "text-accent"
       )}
     >
       <span className="absolute right-2">

@@ -53,7 +53,7 @@ export function ThemeToggle() {
       <span className="sr-only">Toggle theme</span>
 
       {isOpen && (
-        <div className="absolute top-full mt-2 right-0 w-40 rounded-md border border-border-sidebar bg-background text-text-primary shadow-lg z-50">
+        <div className="absolute top-full mt-2 right-0 w-40 rounded-md border border-border-sidebar bg-background text-text-primary shadow-lg z-[9999]">
           <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
             <button onClick={() => { setTheme("light"); setIsOpen(false); }} className="flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent">
               <Sun className="mr-2 h-4 w-4" />
