@@ -1,105 +1,162 @@
-'use client'
+"use client";
 
-import Table, { Column } from "@/components/ui/Table";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardImage,
-} from "@/components/ui/Card";
-import { Button } from "@/components/ui";
-import { ChatWidget } from "@/components/ChatBox";
-import { GreekGodSkull, CascoSkull, SkullIcon, CascoFondoSkull, SkullOutline, CircleeSpigas } from '@/components/IconChat'
+import { useState } from "react";
+import Table, { Column } from "@/components/ui/DataDisplay/Table";
+import { StatusBadge, StatusVariant } from "@/components/ui/Compuesto/Badges";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Base/Selects/select";
+import { Button } from "@/components/ui/Base";
+import { Edit, Trash } from "lucide-react";
+import { Tooltip } from "@/components/ui/Compuesto/Tooltip";
 
-// ─── Tipo de dato ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// Tipos
+// ─────────────────────────────────────────────────────────────
 
-interface User {
+type UserStatus =
+  | "aprobado"
+  | "rechazado"
+  | "proceso"
+  | "pendiente";
+
+type User = {
   id: number;
   name: string;
-  email: string;
-  role: string;
-  status: "active" | "inactive";
+  status: UserStatus;
+  accion?: boolean;
+};
+
+// ─────────────────────────────────────────────────────────────
+// Mapping negocio → UI
+// ─────────────────────────────────────────────────────────────
+
+const statusMap: Record<
+  UserStatus,
+  { variant: StatusVariant; label: string }
+> = {
+  aprobado: { variant: "success", label: "Aprobado" },
+  rechazado: { variant: "error", label: "Rechazado" },
+  proceso: { variant: "info", label: "En proceso" },
+  pendiente: { variant: "warning", label: "Pendiente" }
+};
+
+// ─────────────────────────────────────────────────────────────
+// Data
+// ─────────────────────────────────────────────────────────────
+
+const initialData: User[] = [
+  { id: 1, name: "Camila", status: "pendiente" },
+  { id: 2, name: "Juan", status: "proceso" },
+  { id: 3, name: "Laura", status: "rechazado" },
+  { id: 4, name: "Carlos", status: "aprobado" },
+  { id: 5, name: "Camila", status: "pendiente" },
+  { id: 6, name: "Juan", status: "proceso" },
+  { id: 7, name: "Laura", status: "rechazado" },
+  { id: 8, name: "Carlos", status: "aprobado" },
+  { id: 9, name: "Camila", status: "proceso" },
+  { id: 10, name: "Juan", status: "proceso" },
+  { id: 11, name: "Laura", status: "rechazado" },
+  { id: 12, name: "Carlos", status: "aprobado" },
+  { id: 13, name: "Camila", status: "pendiente" },
+  { id: 14, name: "Juan", status: "proceso" },
+  { id: 15, name: "Laura", status: "rechazado" },
+  { id: 16, name: "Carlos", status: "aprobado" },
+];
+
+// ─────────────────────────────────────────────────────────────
+// Componentes
+// ─────────────────────────────────────────────────────────────
+
+function BusinessStatusBadge({ status }: { status: UserStatus }) {
+  const config = statusMap[status];
+
+  return (
+    <StatusBadge
+      status={config.variant}
+      label={config.label}
+      animated={status === "proceso"}
+    />
+  );
 }
 
-// ─── Datos de ejemplo ─────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// Page
+// ─────────────────────────────────────────────────────────────
 
-const USERS: User[] = [
-  { id: 1, name: "Ana García", email: "ana@mail.com", role: "Admin", status: "active" },
-  { id: 2, name: "Luis Pérez", email: "luis@mail.com", role: "Editor", status: "inactive" },
-  { id: 3, name: "María López", email: "maria@mail.com", role: "Viewer", status: "active" },
-];
+export default function Page() {
+  const [users, setUsers] = useState<User[]>(initialData);
 
-// ─── Definición de columnas ───────────────────────────────────────────────────
+  const updateStatus = (id: number, newStatus: UserStatus) => {
+    setUsers((prev) =>
+      prev.map((user) =>
+        user.id === id ? { ...user, status: newStatus } : user
+      )
+    );
+  };
 
-const columns: Column<User>[] = [
-  {
-    key: "name",
-    label: "Nombre",
-  },
-  {
-    key: "email",
-    label: "Correo",
-  },
-  {
-    key: "role",
-    label: "Rol",
-    align: "center",
-  },
-  {
-    key: "status",
-    label: "Estado",
-    align: "center",
-    // Celda personalizada con badge de color
-    render: (value) => {
-      const isActive = value === "active";
-      return (
-        <span
-          className={`
-            inline-block px-2 py-0.5 rounded-full text-xs font-medium
-            ${isActive
-              ? "bg-success text-text-success"
-              : "bg-error text-text-error"}
-          `}
-        >
-          {isActive ? "Activo" : "Inactivo"}
-        </span>
-      );
+  const columns: Column<User>[] = [
+    {
+      key: "name",
+      header: "Usuario",
     },
-  },
-];
-const data = [
-  { id: "1", name: "Proyecto Alpha", status: "Activo", amount: "$2,500.00" },
-  { id: "2", name: "Estrategia UI", status: "Pendiente", amount: "$1,200.00" },
-]
+    {
+      key: "status",
+      header: "Estado",
+      render: (row) => <BusinessStatusBadge status={row.status} />,
+    },
+    {
+      key: "edit",
+      header: "Cambiar estado",
+      render: (row) => (
+        <Select
+          value={row.status}
+          onValueChange={(value) =>
+            updateStatus(row.id, value as UserStatus)
 
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Seleccione un nuevo estado." />
+          </SelectTrigger>
+          <SelectContent >
+            <SelectItem value="activo" label="Activo">Activo</SelectItem>
+            <SelectItem value="inactivo" label="Inactivo">Inactivo</SelectItem>
+            <SelectItem value="aprobado" label="Aprobado">Aprobado</SelectItem>
+            <SelectItem value="rechazado" label="Rechazado">Rechazado</SelectItem>
+            <SelectItem value="proceso" label="En proceso">En proceso</SelectItem>
+          </SelectContent>
 
-// ─── Uso en página ────────────────────────────────────────────────────────────
+        </Select>
+      ),
+    },
+    {
+      key: "accion",
+      header: "Acción",
+      render: (row) => (
+        <Tooltip content="Editar" >
+          <Button variant={'ghost'}>
+            <Edit />
+          </Button>
+        </Tooltip>
+      )
+    }
+  ];
 
-export default function UsersPage() {
   return (
-    <div className="px-10 py-6">
-      <h1 className="text-xl font-semibold text-text-primary mb-4">Usuarios</h1>
-      <div className="fixed bottom-6 right-6 z-50">
-        <ChatWidget />
-      </div>
-      <div className="flex items-center gap-4 mt-4">
-        <div className='rounded-full w-20 h-20 flex flex-col items-center justify-center'>
-          <GreekGodSkull />
-        </div>
-        <div className='rounded-full w-20 h-20 flex flex-col items-center justify-center'>
-          <CascoSkull />
-        </div>
-        <div className='rounded-full w-20 h-20 flex flex-col items-center justify-center'>
-          <CascoFondoSkull />
-        </div>
-        <div className='rounded-full w-20 h-20 flex flex-col items-center justify-center'>
-          <SkullIcon />
-        </div>
-        <div className='rounded-full w-20 h-20 flex flex-col items-center justify-center'>
-          <SkullOutline />
-        </div>
+    <div className="p-8 space-y-8">
+      <h1 className="text-2xl font-bold">
+        Table + Estados Dinámicos ⚡
+      </h1>
 
+      <p className="text-sm text-gray-500">
+        Cambia el estado con el select y mira cómo el badge reacciona en tiempo real.
+      </p>
+      <div className="h-80 overflow-y-auto scrollbar-soft">
+        <Table
+          data={users}
+          columns={columns}
+          rowKey="id"
+          stickyHeader
+        />
       </div>
 
     </div>

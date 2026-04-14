@@ -1,10 +1,10 @@
 'use client'
 
-import { Button, Textarea } from '@/components/ui'
-import { Card, CardHeader, CardBody } from "@/components/ui/Card";
+import { Button, Textarea } from '@/components/ui/Base'
+import { Card, CardHeader, CardBody } from "@/components/ui/Compuesto/Modales/Card";
 import { Cpu, Mic, Send, X, Loader2, AudioLines, Maximize2, Minimize2 } from 'lucide-react';
 import { useState } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/Selects/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/Base/Selects/select';
 import { CascoSkull, CircleeSpigas } from '@/components/IconChat';
 
 const models = [

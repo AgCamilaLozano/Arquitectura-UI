@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import { Tooltip } from '@/components/ui/Tooltip'
+import { Tooltip } from '@/components/ui/Compuesto/Tooltip'
 
 // ─── Tipos ─────────────────────────────────────
 interface ChartSegment {

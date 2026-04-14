@@ -199,7 +199,7 @@ function SelectContent({
       role="listbox"
 
       className={cn(
-        "bg-background absolute z-[999] min-w-[150px] rounded-md border shadow-md",
+        "bg-background absolute z-[9999] min-w-[150px] rounded-md border shadow-md",
         position === "bottom" && "mt-1 top-full",
         position === "top" && "mb-1 bottom-full",
         alignClass,
@@ -264,7 +264,7 @@ function SelectItem({
         setOpen(false)
       }}
       className={cn(
-        "relative flex cursor-pointer items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm",
+        "relative flex cursor-pointer items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm z-[99]",
         isActive && "bg-accent-hover/20 text-accent",
         isSelected && "text-accent"
       )}

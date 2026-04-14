@@ -4,7 +4,7 @@ import "./globals.css";
 import { Lato, Geist } from "next/font/google";
 import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/Layout/Tema/theme-provider";
-import { Toaster } from "@/components/ui/Toaster";
+import { Toaster } from "@/components/ui/Compuesto/Toaster";
 import { CircleCheck, CircleAlert, TriangleAlert, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/Layout/Tema/ThemeToggle";
@@ -77,7 +77,7 @@ export default function RootLayout({
 
   return (
     <html lang="es" className={cn("h-full", neueMontreal.variable, "font-sans", geist.variable)} suppressHydrationWarning data-scroll-behavior="smooth">
-      <body className={` ${lato} bg-surface/70 dark:bg-background h-full overflow-x-hidden scrollbar-soft`}>
+      <body className={` ${lato} bg-background h-full overflow-x-hidden scrollbar-soft`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
