@@ -177,7 +177,7 @@ function SelectContent({
         alignClass,
         className
       ),
-      children: /* @__PURE__ */ jsx("div", { className: "max-h-60 overflow-auto p-1", children })
+      children: /* @__PURE__ */ jsx("div", { className: "p-1", children })
     }
   );
 }
@@ -1187,6 +1187,92 @@ function Breadcrumbs() {
     })
   ] });
 }
+
+// components/ui/Tema/ThemeToggle.tsx
+import * as React8 from "react";
+import { Moon, Sun, Laptop } from "lucide-react";
+import { useTheme as useTheme2 } from "next-themes";
+
+// components/ui/buttonIcons/fondoIcons.tsx
+import { useRef as useRef5 } from "react";
+import { jsx as jsx16, jsxs as jsxs12 } from "react/jsx-runtime";
+function AnimatedIconButton({ Icon, onClick }) {
+  const iconRef = useRef5(null);
+  return /* @__PURE__ */ jsx16("button", { onClick, className: "group", children: /* @__PURE__ */ jsxs12("div", { className: "relative bg-muted/50 rounded-full p-2 text-sm transition-all duration-300 transform group-hover:scale-110 active:scale-95 group-hover:shadow-2xl", children: [
+    /* @__PURE__ */ jsx16("div", { className: "absolute -bottom-1 right-5 rounded-full w-3 h-3 bg-muted/50" }),
+    /* @__PURE__ */ jsx16("div", { ref: iconRef, children: /* @__PURE__ */ jsx16(Icon, { className: "h-5 w-5 z-50" }) })
+  ] }) });
+}
+
+// components/ui/Tema/ThemeToggle.tsx
+import { jsx as jsx17, jsxs as jsxs13 } from "react/jsx-runtime";
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme2();
+  const [mounted, setMounted] = React8.useState(false);
+  const [isOpen, setIsOpen] = React8.useState(false);
+  const menuRef = React8.useRef(null);
+  React8.useEffect(() => {
+    setMounted(true);
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  if (!mounted) {
+    return /* @__PURE__ */ jsxs13(
+      "button",
+      {
+        className: "inline-flex items-center justify-center rounded-md border border-border bg-transparent p-2 text-sm font-medium text-foreground transition-colors",
+        "aria-label": "Cargando tema",
+        disabled: true,
+        children: [
+          /* @__PURE__ */ jsx17(Sun, { className: "h-5 w-5" }),
+          /* @__PURE__ */ jsx17("span", { className: "sr-only", children: "Toggle theme" })
+        ]
+      }
+    );
+  }
+  const CurrentIcon = theme === "dark" ? Moon : theme === "system" ? Laptop : Sun;
+  return /* @__PURE__ */ jsxs13("div", { className: "relative", ref: menuRef, children: [
+    /* @__PURE__ */ jsx17(
+      AnimatedIconButton,
+      {
+        onClick: () => setIsOpen(!isOpen),
+        "aria-label": "Cambiar tema",
+        Icon: CurrentIcon
+      }
+    ),
+    /* @__PURE__ */ jsx17("span", { className: "sr-only", children: "Toggle theme" }),
+    isOpen && /* @__PURE__ */ jsx17("div", { className: "absolute top-full mt-2 right-0 w-40 rounded-md border border-border-sidebar bg-background text-text-primary shadow-lg z-[9999]", children: /* @__PURE__ */ jsxs13("div", { className: "py-1", role: "menu", "aria-orientation": "vertical", "aria-labelledby": "options-menu", children: [
+      /* @__PURE__ */ jsxs13("button", { onClick: () => {
+        setTheme("light");
+        setIsOpen(false);
+      }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
+        /* @__PURE__ */ jsx17(Sun, { className: "mr-2 h-4 w-4" }),
+        /* @__PURE__ */ jsx17("span", { children: "Claro" })
+      ] }),
+      /* @__PURE__ */ jsxs13("button", { onClick: () => {
+        setTheme("dark");
+        setIsOpen(false);
+      }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
+        /* @__PURE__ */ jsx17(Moon, { className: "mr-2 h-4 w-4" }),
+        /* @__PURE__ */ jsx17("span", { children: "Oscuro" })
+      ] }),
+      /* @__PURE__ */ jsxs13("button", { onClick: () => {
+        setTheme("system");
+        setIsOpen(false);
+      }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
+        /* @__PURE__ */ jsx17(Laptop, { className: "mr-2 h-4 w-4" }),
+        /* @__PURE__ */ jsx17("span", { children: "Sistema" })
+      ] })
+    ] }) })
+  ] });
+}
 export {
   Breadcrumbs,
   Button,
@@ -1209,6 +1295,7 @@ export {
   StatusBadge,
   Table,
   Textarea,
+  ThemeToggle,
   Toaster,
   Tooltip,
   buttonVariants,
