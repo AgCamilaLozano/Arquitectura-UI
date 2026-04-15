@@ -7,7 +7,7 @@
 "use client";
 
 import { useState, ReactNode } from "react";
-import { Input } from "../Base";
+import { Input } from "../Base/Entradas";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 

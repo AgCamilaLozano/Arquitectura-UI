@@ -8,7 +8,7 @@
 
 import React, { useEffect, useCallback } from "react";
 import { X } from "lucide-react";
-import { Button } from "@/components/ui/Base";
+import { Button } from "@/components/ui/Base/Entradas";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 

@@ -1,11 +1,11 @@
 'use client'
 
-import { Button, Textarea } from '@/components/ui/Base'
-import { Card, CardHeader, CardBody } from "@/components/ui/Compuesto/Modales/Card";
+import { Button, Textarea } from '@/components/ui/Base/Entradas'
+import { Card, CardHeader, CardBody } from "@/components/ui/Compuesto/Modals/Card";
 import { Cpu, Mic, Send, X, Loader2, AudioLines, Maximize2, Minimize2 } from 'lucide-react';
 import { useState } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/Base/Selects/select';
-import { CascoSkull, CircleeSpigas } from '@/components/IconChat';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Base/Selects/select';
+import { CascoSkull, CircleeSpigas } from '@/components/Idt-Mascota/IconChat';
 
 const models = [
     { id: "gpt-5.2", name: "GPT-5.2", icon: Cpu },

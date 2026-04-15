@@ -4,9 +4,10 @@ import { useState } from "react";
 import Table, { Column } from "@/components/ui/DataDisplay/Table";
 import { StatusBadge, StatusVariant } from "@/components/ui/Compuesto/Badges";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Base/Selects/select";
-import { Button } from "@/components/ui/Base";
+import { Button } from "@/components/ui/Base/Entradas";
 import { Edit, Trash } from "lucide-react";
 import { Tooltip } from "@/components/ui/Compuesto/Tooltip";
+import { ChatWidget } from "@/components/Idt-Mascota/ChatBox";
 
 // ─────────────────────────────────────────────────────────────
 // Tipos
@@ -157,6 +158,10 @@ export default function Page() {
           rowKey="id"
           stickyHeader
         />
+
+      </div>
+      <div className="h-20 w-20 float-right">
+        <ChatWidget />
       </div>
 
     </div>
