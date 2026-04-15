@@ -80,6 +80,11 @@
   --text-warning: #d08700;
   --text-info: #155dfc;
 
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 12px;
+  --r-2xl: 16px;
 
 }
 
