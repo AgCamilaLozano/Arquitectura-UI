@@ -1,0 +1,12 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "incremental": false,
+        "declaration": true,
+        "emitDeclarationOnly": false,
+        "jsx": "react-jsx",
+        "types": [
+            "react"
+        ]
+    }
+}
