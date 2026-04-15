@@ -206,7 +206,7 @@ function SelectContent({
         className
       )}
     >
-      <div className="max-h-60 overflow-auto p-1">
+      <div className="p-1">
         {children}
       </div>
     </div>
