@@ -24,4 +24,5 @@ export default defineConfig({
             '.woff': 'file',
         }
     },
+    injectStyle: false,
 })

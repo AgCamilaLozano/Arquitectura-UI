@@ -11,6 +11,7 @@
       "types": "./dist/index.d.ts"
     },
     "./styles": {
+      "style": "./dist/styles.css",
       "import": "./dist/styles.js",
       "types": "./dist/styles.d.ts"
     },
