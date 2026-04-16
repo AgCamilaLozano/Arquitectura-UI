@@ -23,10 +23,11 @@ export default defineConfig({
             '.woff2': 'file',
             '.woff': 'file',
         }
+        options.banner = {
+            js: '"use client";'
+        }
     },
     injectStyle: false,
-    sourcemap: false,
     clean: true,
     splitting: false,
-    treeshake: true,
 })

@@ -1,36 +1,38 @@
-import { toast as toast$1 } from 'sonner';
+"use client";
 
 // lib/toast.ts
+import { toast as sonnerToast } from "sonner";
 var toast = {
-  success: (title, options) => toast$1.success(title, {
+  success: (title, options) => sonnerToast.success(title, {
     description: options == null ? void 0 : options.description,
     duration: options == null ? void 0 : options.duration,
     action: options == null ? void 0 : options.action
   }),
-  error: (title, options) => toast$1.error(title, {
+  error: (title, options) => sonnerToast.error(title, {
     description: options == null ? void 0 : options.description,
     duration: options == null ? void 0 : options.duration,
     action: options == null ? void 0 : options.action
   }),
-  warning: (title, options) => toast$1.warning(title, {
+  warning: (title, options) => sonnerToast.warning(title, {
     description: options == null ? void 0 : options.description,
     duration: options == null ? void 0 : options.duration,
     action: options == null ? void 0 : options.action
   }),
-  info: (title, options) => toast$1.info(title, {
+  info: (title, options) => sonnerToast.info(title, {
     description: options == null ? void 0 : options.description,
     duration: options == null ? void 0 : options.duration,
     action: options == null ? void 0 : options.action
   }),
-  loading: (title, options) => toast$1.loading(title, {
+  loading: (title, options) => sonnerToast.loading(title, {
     description: options == null ? void 0 : options.description
   }),
-  promise: (promise, messages) => toast$1.promise(promise, {
+  promise: (promise, messages) => sonnerToast.promise(promise, {
     loading: messages.loading,
     success: messages.success,
     error: messages.error
   }),
-  custom: (jsx) => toast$1(jsx)
+  custom: (jsx) => sonnerToast(jsx)
 };
-
-export { toast };
+export {
+  toast
+};
