@@ -1,6 +1,6 @@
 
 import type { Metadata } from "next";
-import "../lib/styles/globals.css";
+import "./globals.css";
 import { Lato, Geist } from "next/font/google";
 import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/ui/Tema/theme-provider";
