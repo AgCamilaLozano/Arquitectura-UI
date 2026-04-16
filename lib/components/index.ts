@@ -1,3 +1,4 @@
+'use client'
 export * from '../../components/ui/Base'
 export * from '../../components/ui/Compuesto'
 export * from '../../components/ui/DataDisplay'
