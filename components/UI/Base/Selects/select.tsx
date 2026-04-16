@@ -199,7 +199,7 @@ function SelectContent({
       role="listbox"
 
       className={cn(
-        "bg-background absolute z-[9999] min-w-[150px] rounded-md border shadow-md",
+        "bg-background absolute z-[9999] min-w-[150px] rounded-md border border-border shadow-md",
         position === "bottom" && "mt-1 top-full",
         position === "top" && "mb-1 bottom-full",
         alignClass,

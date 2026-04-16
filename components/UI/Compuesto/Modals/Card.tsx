@@ -48,15 +48,15 @@ export interface CardProps {
 /** Lógica clave: mapeo de variante → clases Tailwind usando tokens del sistema */
 const variantClasses: Record<CardVariant, string> = {
     default:
-        "bg-surface dark:bg-background border  shadow-[var(--shadow-surface)]",
+        "bg-background border border-border",
     outlined:
-        "bg-surface dark:bg-background border-2 border-border-strong",
+        "bg-background border-2 border-border-strong",
     elevated:
-        "bg-surface dark:bg-background border-1 shadow-[var(--shadow-card)]",
+        "bg-background border-1 ",
     accent:
-        "bg-surface dark:bg-background border border-border border-l-4 border-l-accent shadow-[var(--shadow-surface)]",
+        "bg-background border border-border border-l-4 border-l-accent shadow-[var(--shadow-surface)]",
     ghost:
-        "bg-background dark:bg-surface border-0 shadow-none",
+        ":bg-surface border-0 shadow-none",
 };
 
 const paddingClasses: Record<CardPadding, string> = {
