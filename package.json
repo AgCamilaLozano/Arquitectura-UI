@@ -5,6 +5,7 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "style": "dist/index.css",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -12,9 +13,12 @@
     },
     "./styles": {
       "style": "./dist/styles.css",
+      "default": "./dist/styles.css",
       "import": "./dist/styles.js",
       "types": "./dist/styles.d.ts"
     },
+    "./styles.css": "./dist/styles.css",
+    "./index.css": "./dist/index.css",
     "./fonts": {
       "import": "./dist/fonts.js",
       "types": "./dist/fonts.d.ts"

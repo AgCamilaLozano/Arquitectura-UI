@@ -1,7 +1,9 @@
-import {
-  cn
-} from "./chunk-4KN3V2ZJ.js";
-import "./chunk-ORMEWXMH.js";
-export {
-  cn
-};
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+// lib/utils.ts
+function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
+
+export { cn };

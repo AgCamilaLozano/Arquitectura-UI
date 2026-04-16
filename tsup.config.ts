@@ -25,4 +25,8 @@ export default defineConfig({
         }
     },
     injectStyle: false,
+    sourcemap: false,
+    clean: true,
+    splitting: false,
+    treeshake: true,
 })
