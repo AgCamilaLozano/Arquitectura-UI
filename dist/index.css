@@ -1,0 +1,191 @@
+/* lib/styles/fonts.css */
+@font-face {
+  font-family: "NeuMontreal";
+  src: url("./NeueMontreal-Light-G5MWQRNP.woff2") format("woff2");
+  font-weight: 300;
+}
+@font-face {
+  font-family: "NeuMontreal";
+  src: url("./NeueMontreal-Regular-ZI45ZBVF.woff2") format("woff2");
+  font-weight: 400;
+}
+@font-face {
+  font-family: "NeuMontreal";
+  src: url("./NeueMontreal-Bold-HK464E2X.woff2") format("woff2");
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Lato";
+  src: url("./Lato-Regular-YRHJNNTD.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Lato";
+  src: url("./Lato-Bold-YH47P64U.ttf") format("truetype");
+  font-weight: 700;
+}
+:root {
+  --font-heading: "NeuMontreal";
+  --font-body: "Lato";
+}
+body {
+  font-family: var(--font-body), sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading), sans-serif;
+}
+
+/* lib/styles/globals.css */
+:root {
+  --bg-surface: #f8f8f8;
+  --bg-base: #FFFFFF;
+  --bg-muted: #EBEEF2;
+  --primary: #2D2D2E;
+  --primary-hover: #3A3A3C;
+  --accent: #5E17A6;
+  --accent-hover: rgba(124, 58, 237, 0.33);
+  --accent-soft: rgba(94, 23, 166, 0.12);
+  --text-primary: #2D2D2E;
+  --text-secondary: #6B7280;
+  --text-muted: #737479;
+  --text-disabled: #D1D5DB;
+  --border-default: #E5E7EB;
+  --border-strong: #C084FC;
+  --border-sidebar: #E0E0E0;
+  --shadow-surface: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --chart-1: #7B3BC2;
+  --chart-2: #5E17A6;
+  --chart-3: #A855F7;
+  --chart-4: #C084FC;
+  --chart-5: #E9D5FF;
+  --chart-6: #38BDF8;
+  --alert-error: #fee2e2;
+  --alert-warning: #FEF9C3;
+  --alert-info: #DBEAFE;
+  --alert-success: #DCFCE7;
+  --text-error: #e7000b;
+  --text-success: #00a63e;
+  --text-warning: #d08700;
+  --text-info: #155dfc;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 12px;
+  --r-2xl: 16px;
+  --font-heading: "NeuMontreal";
+  --font-body: "Lato";
+}
+.dark {
+  --bg-base: #0A0A0B;
+  --bg-surface: #1A1A1B;
+  --bg-muted: #2A2A2B;
+  --primary: #FAFAFA;
+  --primary-hover: #F4F4F5;
+  --accent: #7B3BC2;
+  --accent-hover: rgba(124, 58, 237, 0.18);
+  --accent-soft: rgba(124, 58, 237, 0.12);
+  --text-primary: #EDEDED;
+  --text-secondary: #CACADB;
+  --text-muted: #B6B6C4;
+  --text-disabled: #52525B;
+  --border-default: #262626;
+  --border-strong: #C084FC;
+  --border-sidebar: #301942;
+  --chart-1: #7B3BC2;
+  --chart-2: #5E17A6;
+  --chart-3: #A855F7;
+  --chart-4: #C084FC;
+  --chart-5: #E9D5FF;
+  --chart-6: #38BDF8;
+  --chart-7: #0EA5E9;
+  --alert-error: rgba(153, 27, 27, 0.1);
+  --alert-warning: rgba(133, 77, 14, 0.1);
+  --alert-info: rgba(30, 64, 175, 0.1);
+  --alert-success: rgba(22, 101, 52, 0.1);
+  --text-error: #e7000b;
+  --text-success: #00a63e;
+  --text-warning: #d08700;
+  --text-info: #155dfc;
+}
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-body), sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading), sans-serif;
+}
+.scrollbar-soft::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollbar-soft::-webkit-scrollbar-thumb {
+  background: var(--bg-muted);
+  border-radius: 9999px;
+}
+@keyframes blink {
+  0%, 80%, 100% {
+    transform: scaleY(1);
+  }
+  83% {
+    transform: scaleY(0.05);
+  }
+  86% {
+    transform: scaleY(1);
+  }
+}
+.lente {
+  transform-origin: 200px 175px;
+  animation: blink 8s ease-in-out infinite;
+}
+@keyframes wave {
+  0%, 80%, 100% {
+    transform: rotate(0deg);
+  }
+  83% {
+    transform: rotate(-15deg);
+  }
+  86% {
+    transform: rotate(15deg);
+  }
+  89% {
+    transform: rotate(-15deg);
+  }
+  92% {
+    transform: rotate(15deg);
+  }
+  96% {
+    transform: rotate(0deg);
+  }
+}
+.brazo-derecho {
+  transform-origin: 330px 200px;
+  animation: wave 8s ease-in-out infinite;
+}
+@keyframes zoom-breath {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+.mascot-zoom {
+  animation: zoom-breath 3s ease-in-out infinite;
+  transform-origin: center;
+}

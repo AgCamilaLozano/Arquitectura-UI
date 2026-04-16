@@ -33,6 +33,8 @@
   "devDependencies": {
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "esbuild": "0.19.12",
+    "esbuild-plugin-copy": "^2.1.1",
     "eslint": "^9",
     "lucide-react": "^1.3.0",
     "next": "16.2.1",

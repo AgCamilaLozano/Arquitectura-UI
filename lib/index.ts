@@ -1,5 +1,6 @@
-export * from '../components/ui/Base'
-export * from '../components/ui/Compuesto'
-export * from '../components/ui/DataDisplay'
-export * from '../components/ui/Navegacion'
-export * from '../components/ui/Tema'
+import './styles/fonts.css'
+import './styles/globals.css'
+
+export * from './components'
+export * from './toast'
+export * from './utils'
