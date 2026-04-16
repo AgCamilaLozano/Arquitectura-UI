@@ -4,6 +4,7 @@ import React__default, { ReactNode } from 'react';
 import * as class_variance_authority_types from 'class-variance-authority/types';
 import { VariantProps } from 'class-variance-authority';
 import { ToasterProps } from 'sonner';
+import { ThemeProviderProps } from 'next-themes';
 
 declare function Select({ value, onValueChange, children }: {
     value?: string;
@@ -179,84 +180,6 @@ interface CardImageProps {
 }
 declare function CardImage({ src, alt, height, className, }: CardImageProps): react_jsx_runtime.JSX.Element;
 
-/**
- * Variantes visuales del dialog:
- * - default     → encabezado neutro, acciones primarias en accent
- * - destructive → indica acción irreversible (eliminar, revocar)
- * - warning     → requiere confirmación con precaución
- * - info        → informativo, sin acción destructiva
- */
-type DialogVariant = "default" | "destructive" | "warning" | "info";
-/**
- * Tamaños del panel modal
- */
-type DialogSize = "sm" | "md" | "lg" | "xl";
-interface DialogProps {
-    /** Controla visibilidad del dialog */
-    open: boolean;
-    /** Callback al cerrar (overlay click, tecla Escape o botón ✕) */
-    onClose: () => void;
-    /** Variante semántica */
-    variant?: DialogVariant;
-    /** Tamaño del panel */
-    size?: DialogSize;
-    /** Permite cerrar al hacer clic en el overlay */
-    closeOnOverlay?: boolean;
-    /** Oculta el botón de cierre (✕) */
-    hideCloseButton?: boolean;
-    /** Clases adicionales para el panel */
-    className?: string;
-    children: React__default.ReactNode;
-}
-declare function Dialog({ open, onClose, variant, size, closeOnOverlay, hideCloseButton, className, children, }: DialogProps): react_jsx_runtime.JSX.Element | null;
-interface DialogContextValue {
-    variant: DialogVariant;
-}
-declare const useDialogContext: () => DialogContextValue;
-/**
- * Propósito: Encabezado del dialog con ícono opcional y separador.
- *
- * Props:
- * - title      → título principal
- * - description → texto de apoyo debajo del título
- * - icon       → nodo React (ícono) alineado al título
- * - withDivider → línea separadora debajo
- */
-interface DialogHeaderProps {
-    title: React__default.ReactNode;
-    description?: React__default.ReactNode;
-    icon?: React__default.ReactNode;
-    withDivider?: boolean;
-    className?: string;
-}
-declare function DialogHeader({ title, description, icon, withDivider, className, }: DialogHeaderProps): react_jsx_runtime.JSX.Element;
-/**
- * Propósito: Área de contenido principal del dialog.
- * Soporta scroll interno cuando el contenido excede la altura máxima.
- */
-interface DialogBodyProps {
-    /** Habilita scroll interno con altura máxima */
-    scrollable?: boolean;
-    className?: string;
-    children: React__default.ReactNode;
-}
-declare function DialogBody({ scrollable, className, children, }: DialogBodyProps): react_jsx_runtime.JSX.Element;
-/**
- * Propósito: Pie del dialog con alineación configurable.
- * Contiene las acciones principales (botones).
- *
- * Props:
- * - align      → alineación horizontal de las acciones
- * - withDivider → línea separadora arriba
- */
-interface DialogFooterProps {
-    align?: "left" | "center" | "right" | "between";
-    withDivider?: boolean;
-    className?: string;
-    children: React__default.ReactNode;
-}
-declare function DialogFooter({ align, withDivider, className, children, }: DialogFooterProps): react_jsx_runtime.JSX.Element;
-
 declare const Toaster: (props: ToasterProps) => react_jsx_runtime.JSX.Element;
 
 type TooltipSide = "top" | "bottom" | "left" | "right";
@@ -346,6 +269,8 @@ declare function Table<T extends Record<string, unknown>>({ data, columns, rowKe
 
 declare function Breadcrumbs(): react_jsx_runtime.JSX.Element;
 
+declare function ThemeProvider({ children, ...props }: ThemeProviderProps): react_jsx_runtime.JSX.Element;
+
 declare function ThemeToggle(): react_jsx_runtime.JSX.Element;
 
-export { Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, type SortDirection, type SortState, StatusBadge, type StatusVariant, Table, type TableProps, Textarea, ThemeToggle, Toaster, Tooltip, buttonVariants, useDialogContext };
+export { Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, type SortDirection, type SortState, StatusBadge, type StatusVariant, Table, type TableProps, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants };
