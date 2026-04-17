@@ -72,6 +72,8 @@ export interface TableProps<T> {
     className?: string;
     /** Callback de ordenamiento externo; si se omite, el ordenamiento es interno */
     onSort?: (sort: SortState) => void;
+    // VARIANTES DE ENCABEZADO
+    headerVariant?: "default" | "primary" | "accent";
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -88,6 +90,12 @@ const alignMap = {
     left: "text-left",
     center: "text-center",
     right: "text-right",
+};
+
+const headerVariants = {
+    default: "bg-muted text-text-secondary",
+    primary: "bg-primary text-background",
+    accent: "bg-accent/80 text-white"
 };
 
 /** Ícono de orden: muestra la dirección activa o el estado neutro */
@@ -191,6 +199,7 @@ export function Table<T extends Record<string, unknown>>({
     size = "md",
     className = "",
     onSort,
+    headerVariant = "default"
 }: TableProps<T>) {
     // ── Estado interno de ordenamiento ──
     const [internalSort, setInternalSort] = useState<SortState>({
@@ -286,7 +295,7 @@ export function Table<T extends Record<string, unknown>>({
             >
                 {/* ── Encabezado ─────────────────────────────────────────────────── */}
                 <thead
-                    className={`bg-muted text-text-secondary ${stickyHeader ? "sticky top-0 z-10" : ""
+                    className={`${headerVariants[headerVariant ?? "default"]} ${stickyHeader ? "sticky top-0 z-10" : ""
                         }`}
                 >
                     <tr>

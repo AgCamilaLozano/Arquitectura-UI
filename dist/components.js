@@ -940,6 +940,11 @@ var alignMap = {
   center: "text-center",
   right: "text-right"
 };
+var headerVariants = {
+  default: "bg-muted text-text-secondary",
+  primary: "bg-primary text-background",
+  accent: "bg-accent/80 text-white"
+};
 function SortIcon({ direction }) {
   return /* @__PURE__ */ jsxs10("span", { className: "inline-flex flex-col ml-1 gap-[2px] ", children: [
     /* @__PURE__ */ jsx14(
@@ -1012,7 +1017,8 @@ function Table({
   variant = "default",
   size = "md",
   className = "",
-  onSort
+  onSort,
+  headerVariant = "default"
 }) {
   const [internalSort, setInternalSort] = useState6({
     key: "",
@@ -1072,7 +1078,7 @@ function Table({
             /* @__PURE__ */ jsx14(
               "thead",
               {
-                className: `bg-muted text-text-secondary ${stickyHeader ? "sticky top-0 z-10" : ""}`,
+                className: `${headerVariants[headerVariant != null ? headerVariant : "default"]} ${stickyHeader ? "sticky top-0 z-10" : ""}`,
                 children: /* @__PURE__ */ jsxs10("tr", { children: [
                   selectable && /* @__PURE__ */ jsx14("th", { className: `${cellPadding} w-10`, children: /* @__PURE__ */ jsx14(
                     Input,

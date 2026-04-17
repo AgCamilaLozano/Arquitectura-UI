@@ -333,6 +333,7 @@ interface TableProps<T> {
     className?: string;
     /** Callback de ordenamiento externo; si se omite, el ordenamiento es interno */
     onSort?: (sort: SortState) => void;
+    headerVariant?: "default" | "primary" | "accent";
 }
 /**
  * Table — Componente de tabla genérica y reutilizable.
@@ -343,7 +344,7 @@ interface TableProps<T> {
  * - La selección múltiple se maneja con un `Set` interno cuando no se pasa `selectedRows`.
  * - `stickyHeader` usa `sticky top-0` con z-index para mantener el header visible.
  */
-declare function Table<T extends Record<string, unknown>>({ data, columns, rowKey, loading, skeletonRows, emptyState, selectable, selectedRows, onSelectionChange, onRowClick, stickyHeader, variant, size, className, onSort, }: TableProps<T>): react_jsx_runtime.JSX.Element;
+declare function Table<T extends Record<string, unknown>>({ data, columns, rowKey, loading, skeletonRows, emptyState, selectable, selectedRows, onSelectionChange, onRowClick, stickyHeader, variant, size, className, onSort, headerVariant }: TableProps<T>): react_jsx_runtime.JSX.Element;
 
 declare function Breadcrumbs(): react_jsx_runtime.JSX.Element;
 
