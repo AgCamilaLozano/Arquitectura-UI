@@ -1041,12 +1041,13 @@ function Table({
     setInternalSort(next);
     onSort == null ? void 0 : onSort(next);
   };
-  const sortedData = !onSort && internalSort.key && internalSort.direction ? [...data].sort((a, b) => {
+  const safeData = Array.isArray(data) ? data : [];
+  const sortedData = !onSort && internalSort.key && internalSort.direction ? [...safeData].sort((a, b) => {
     const aVal = a[internalSort.key];
     const bVal = b[internalSort.key];
     const cmp = typeof aVal === "number" && typeof bVal === "number" ? aVal - bVal : String(aVal).localeCompare(String(bVal));
     return internalSort.direction === "asc" ? cmp : -cmp;
-  }) : data;
+  }) : safeData;
   const toggleRow = (id) => {
     const next = new Set(activeSelected);
     next.has(id) ? next.delete(id) : next.add(id);
@@ -1070,6 +1071,7 @@ function Table({
     return [base, hover, selected, striped].filter(Boolean).join(" ");
   };
   const cellPadding = cellPaddingMap[size];
+  const safeColumns = Array.isArray(columns) ? columns : [];
   return /* @__PURE__ */ jsx14(
     "div",
     {
@@ -1098,7 +1100,7 @@ function Table({
                       "aria-label": "Seleccionar todas las filas"
                     }
                   ) }),
-                  columns.map((col) => {
+                  safeColumns.map((col) => {
                     var _a;
                     const key = String(col.key);
                     const isActive = internalSort.key === key;

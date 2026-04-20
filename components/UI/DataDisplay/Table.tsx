@@ -236,9 +236,11 @@ export function Table<T extends Record<string, unknown>>({
     };
 
     /** Lógica clave: ordena internamente solo si no hay callback externo */
+    const safeData = Array.isArray(data) ? data : []
+
     const sortedData =
         !onSort && internalSort.key && internalSort.direction
-            ? [...data].sort((a, b) => {
+            ? [...safeData].sort((a, b) => {
                 const aVal = a[internalSort.key as keyof T];
                 const bVal = b[internalSort.key as keyof T];
                 const cmp =
@@ -247,7 +249,7 @@ export function Table<T extends Record<string, unknown>>({
                         : String(aVal).localeCompare(String(bVal));
                 return internalSort.direction === "asc" ? cmp : -cmp;
             })
-            : data;
+            : safeData;
 
     // ── Selección ─────────────────────────────────────────────────────────────
     const toggleRow = (id: unknown) => {
@@ -284,7 +286,7 @@ export function Table<T extends Record<string, unknown>>({
     };
 
     const cellPadding = cellPaddingMap[size];
-
+    const safeColumns = Array.isArray(columns) ? columns : []
     return (
         <div
             className={`w-full overflow-visible rounded-md border border-border bg-surface/50 scrollbar-soft ${className}`}
@@ -315,7 +317,7 @@ export function Table<T extends Record<string, unknown>>({
                             </th>
                         )}
 
-                        {columns.map((col) => {
+                        {safeColumns.map((col) => {
                             const key = String(col.key);
                             const isActive = internalSort.key === key;
                             return (
