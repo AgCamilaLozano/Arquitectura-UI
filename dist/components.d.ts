@@ -1,41 +1,28 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as React$1 from 'react';
 import React__default, { ReactNode } from 'react';
+import { Select as Select$1 } from 'radix-ui';
 import * as class_variance_authority_types from 'class-variance-authority/types';
 import { VariantProps } from 'class-variance-authority';
 import { ToasterProps } from 'sonner';
 import { ThemeProviderProps } from 'next-themes';
 
-type Option = {
-    value: string;
-    label: string;
-};
-declare function Select({ value, onValueChange, options, searchable, children }: {
-    value?: string;
-    onValueChange: (v: string) => void;
-    options?: Option[];
-    searchable?: boolean;
-    children: React$1.ReactNode;
+declare function Select({ ...props }: React$1.ComponentProps<typeof Select$1.Root>): react_jsx_runtime.JSX.Element;
+declare function SelectGroup({ ...props }: React$1.ComponentProps<typeof Select$1.Group>): react_jsx_runtime.JSX.Element;
+declare function SelectValue({ ...props }: React$1.ComponentProps<typeof Select$1.Value>): react_jsx_runtime.JSX.Element;
+declare function SelectTrigger({ className, size, children, ...props }: React$1.ComponentProps<typeof Select$1.Trigger> & {
+    size?: "sm" | "default";
 }): react_jsx_runtime.JSX.Element;
-declare function SelectTrigger({ className, children }: {
-    className?: string;
-    children: React$1.ReactNode;
-}): react_jsx_runtime.JSX.Element;
-declare function SelectValue({ placeholder }: {
-    placeholder?: string;
-}): react_jsx_runtime.JSX.Element;
-declare function SelectContent({ children }: {
-    children: React$1.ReactNode;
-}): react_jsx_runtime.JSX.Element | null;
-declare function SelectItem({ value, children, index }: {
-    value: string;
-    children: React$1.ReactNode;
-    index?: number;
-}): react_jsx_runtime.JSX.Element | null;
+declare function SelectContent({ className, children, position, align, ...props }: React$1.ComponentProps<typeof Select$1.Content>): react_jsx_runtime.JSX.Element;
+declare function SelectLabel({ className, ...props }: React$1.ComponentProps<typeof Select$1.Label>): react_jsx_runtime.JSX.Element;
+declare function SelectItem({ className, children, ...props }: React$1.ComponentProps<typeof Select$1.Item>): react_jsx_runtime.JSX.Element;
+declare function SelectSeparator({ className, ...props }: React$1.ComponentProps<typeof Select$1.Separator>): react_jsx_runtime.JSX.Element;
+declare function SelectScrollUpButton({ className, ...props }: React$1.ComponentProps<typeof Select$1.ScrollUpButton>): react_jsx_runtime.JSX.Element;
+declare function SelectScrollDownButton({ className, ...props }: React$1.ComponentProps<typeof Select$1.ScrollDownButton>): react_jsx_runtime.JSX.Element;
 
 declare const buttonVariants: (props?: ({
     variant?: "link" | "default" | "outline" | "secondary" | "ghost" | null | undefined;
-    size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | "icon-lg" | null | undefined;
+    size?: "sm" | "default" | "lg" | "icon" | "icon-sm" | "icon-lg" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface ButtonProps extends React__default.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
 }
@@ -356,4 +343,4 @@ declare function ThemeProvider({ children, ...props }: ThemeProviderProps): reac
 
 declare function ThemeToggle(): react_jsx_runtime.JSX.Element;
 
-export { Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, type SortDirection, type SortState, StatusBadge, type StatusVariant, Table, type TableProps, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useDialogContext };
+export { Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, type SortDirection, type SortState, StatusBadge, type StatusVariant, Table, type TableProps, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useDialogContext };

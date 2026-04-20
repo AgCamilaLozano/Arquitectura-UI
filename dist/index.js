@@ -33,8 +33,8 @@ var __objRest = (source, exclude) => {
 };
 
 // components/ui/Base/Selects/select.tsx
-import * as React from "react";
-import { CheckIcon, ChevronDownIcon, SearchIcon } from "lucide-react";
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import { Select as SelectPrimitive } from "radix-ui";
 
 // lib/utils.ts
 import { clsx } from "clsx";
@@ -45,198 +45,187 @@ function cn(...inputs) {
 
 // components/ui/Base/Selects/select.tsx
 import { jsx, jsxs } from "react/jsx-runtime";
-var normalize = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-var SelectContext = React.createContext(null);
-var useSelect = () => {
-  const c = React.useContext(SelectContext);
-  if (!c) throw new Error("Select must be used inside <Select>");
-  return c;
-};
-function Select({
-  value,
-  onValueChange,
-  options = [],
-  searchable = false,
-  children
-}) {
-  const [open, setOpen] = React.useState(false);
-  const [query, setQuery] = React.useState("");
-  const [activeIndex, setActiveIndex] = React.useState(-1);
-  const [visibleOptions, setVisibleOptions] = React.useState([]);
-  const triggerRef = React.useRef(null);
-  const listRef = React.useRef(null);
-  const items = React.useMemo(() => {
-    const map = /* @__PURE__ */ new Map();
-    options.forEach((o) => map.set(o.value, o.label));
-    return map;
-  }, [options]);
-  const registerItem = React.useCallback((opt) => {
-    if (!items.has(opt.value)) {
-      items.set(opt.value, opt.label);
-    }
-  }, [items]);
-  const onSelect = (v, l) => {
-    onValueChange(v);
-    setOpen(false);
-  };
-  React.useEffect(() => {
-    if (options.length === 0) return;
-    const filtered = searchable ? options.filter(
-      (o) => normalize(o.label).includes(normalize(query))
-    ) : options;
-    setVisibleOptions(filtered);
-    setActiveIndex(filtered.length > 0 ? 0 : -1);
-  }, [options, query, searchable]);
-  const handleKeyDown = (e) => {
-    if (!open && (e.key === "ArrowDown" || e.key === "Enter")) {
-      e.preventDefault();
-      setOpen(true);
-      setActiveIndex(0);
-      return;
-    }
-    if (!open) return;
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setActiveIndex(
-        (i) => Math.min(i + 1, visibleOptions.length - 1)
-      );
-    }
-    if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setActiveIndex((i) => Math.max(i - 1, 0));
-    }
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const opt = visibleOptions[activeIndex];
-      if (opt) onSelect(opt.value, opt.label);
-    }
-    if (e.key === "Escape") {
-      setOpen(false);
-    }
-  };
-  return /* @__PURE__ */ jsx(
-    SelectContext.Provider,
-    {
-      value: {
-        value,
-        onSelect,
-        open,
-        setOpen,
-        items,
-        registerItem,
-        searchable,
-        query,
-        setQuery,
-        activeIndex,
-        setActiveIndex,
-        visibleOptions,
-        setVisibleOptions,
-        listRef,
-        triggerRef
-      },
-      children: /* @__PURE__ */ jsx("div", { className: "relative w-full", onKeyDown: handleKeyDown, children })
-    }
+function Select(_a) {
+  var props = __objRest(_a, []);
+  return /* @__PURE__ */ jsx(SelectPrimitive.Root, __spreadValues({ "data-slot": "select" }, props));
+}
+function SelectGroup(_a) {
+  var props = __objRest(_a, []);
+  return /* @__PURE__ */ jsx(SelectPrimitive.Group, __spreadValues({ "data-slot": "select-group" }, props));
+}
+function SelectValue(_a) {
+  var props = __objRest(_a, []);
+  return /* @__PURE__ */ jsx(SelectPrimitive.Value, __spreadValues({ "data-slot": "select-value" }, props));
+}
+function SelectTrigger(_a) {
+  var _b = _a, {
+    className,
+    size = "default",
+    children
+  } = _b, props = __objRest(_b, [
+    "className",
+    "size",
+    "children"
+  ]);
+  return /* @__PURE__ */ jsxs(
+    SelectPrimitive.Trigger,
+    __spreadProps(__spreadValues({
+      "data-slot": "select-trigger",
+      type: "button",
+      "data-size": size,
+      className: cn(
+        "border-border data-[placeholder]:text-text-muted [&_svg:not([class*='text-'])]:text-text-muted focus-visible:border-ring focus-visible:ring-border-soft/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-background dark:hover:bg-backgraund flex w-fit items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        className
+      )
+    }, props), {
+      children: [
+        children,
+        /* @__PURE__ */ jsx(SelectPrimitive.Icon, { asChild: true, children: /* @__PURE__ */ jsx(ChevronDownIcon, { className: "size-4 opacity-50" }) })
+      ]
+    })
   );
 }
-function SelectTrigger({
-  className,
-  children
-}) {
-  const { open, setOpen, triggerRef } = useSelect();
-  return /* @__PURE__ */ jsxs(
-    "button",
-    {
-      ref: triggerRef,
-      type: "button",
-      onClick: () => setOpen(!open),
+function SelectContent(_a) {
+  var _b = _a, {
+    className,
+    children,
+    position = "item-aligned",
+    align = "center"
+  } = _b, props = __objRest(_b, [
+    "className",
+    "children",
+    "position",
+    "align"
+  ]);
+  return /* @__PURE__ */ jsx(SelectPrimitive.Portal, { children: /* @__PURE__ */ jsxs(
+    SelectPrimitive.Content,
+    __spreadProps(__spreadValues({
+      "data-slot": "select-content",
       className: cn(
-        "border border-border flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm",
+        "bg-background text-primary data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border shadow-md",
+        position === "popper" && "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
         className
       ),
+      position,
+      align
+    }, props), {
       children: [
-        children,
-        /* @__PURE__ */ jsx(ChevronDownIcon, { className: "size-4 opacity-50" })
+        /* @__PURE__ */ jsx(SelectScrollUpButton, {}),
+        /* @__PURE__ */ jsx(
+          SelectPrimitive.Viewport,
+          {
+            className: cn(
+              "p-1",
+              position === "popper" && "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1"
+            ),
+            children
+          }
+        ),
+        /* @__PURE__ */ jsx(SelectScrollDownButton, {})
       ]
-    }
+    })
+  ) });
+}
+function SelectLabel(_a) {
+  var _b = _a, {
+    className
+  } = _b, props = __objRest(_b, [
+    "className"
+  ]);
+  return /* @__PURE__ */ jsx(
+    SelectPrimitive.Label,
+    __spreadValues({
+      "data-slot": "select-label",
+      className: cn("text-muted-foreground px-2 py-1.5 text-xs border-b", className)
+    }, props)
   );
 }
-function SelectValue({ placeholder }) {
-  const { value, items } = useSelect();
-  const label = value ? items.get(value) : "";
-  return /* @__PURE__ */ jsx("span", { children: label || placeholder });
-}
-function SelectContent({
-  children
-}) {
-  const { open, searchable, query, setQuery, listRef } = useSelect();
-  if (!open) return null;
+function SelectItem(_a) {
+  var _b = _a, {
+    className,
+    children
+  } = _b, props = __objRest(_b, [
+    "className",
+    "children"
+  ]);
   return /* @__PURE__ */ jsxs(
-    "div",
-    {
-      ref: listRef,
-      className: "absolute z-50 mt-1 w-full rounded-md border border-border bg-background shadow-md",
-      children: [
-        searchable && /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 border-b px-2 py-1", children: [
-          /* @__PURE__ */ jsx(SearchIcon, { className: "size-4 opacity-50" }),
-          /* @__PURE__ */ jsx(
-            "input",
-            {
-              value: query,
-              onChange: (e) => setQuery(e.target.value),
-              placeholder: "Buscar...",
-              className: "w-full bg-transparent text-sm outline-none",
-              autoFocus: true
-            }
-          )
-        ] }),
-        /* @__PURE__ */ jsx("div", { className: "max-h-60 overflow-y-auto p-1", children })
-      ]
-    }
-  );
-}
-function SelectItem({
-  value,
-  children,
-  index
-}) {
-  const {
-    value: selected,
-    onSelect,
-    registerItem,
-    searchable,
-    query,
-    activeIndex,
-    setActiveIndex
-  } = useSelect();
-  const label = String(children);
-  React.useEffect(() => {
-    registerItem({ value, label });
-  }, [value, label, registerItem]);
-  const visible = searchable ? normalize(label).includes(normalize(query)) : true;
-  if (!visible) return null;
-  const isSelected = selected === value;
-  const isActive = index === activeIndex;
-  return /* @__PURE__ */ jsxs(
-    "div",
-    {
-      onMouseEnter: () => index !== void 0 && setActiveIndex(index),
-      onClick: () => onSelect(value, label),
+    SelectPrimitive.Item,
+    __spreadProps(__spreadValues({
+      "data-slot": "select-item",
       className: cn(
-        "flex cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-sm",
-        "hover:bg-accent-hover",
-        isActive && "bg-accent-hover",
-        isSelected && "text-accent"
-      ),
+        "focus:bg-accent-hover focus:text-accent [&_svg:not([class*='text-'])]:text-text-muted relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+        className
+      )
+    }, props), {
       children: [
-        children,
-        isSelected && /* @__PURE__ */ jsx(CheckIcon, { className: "size-4" })
+        /* @__PURE__ */ jsx(
+          "span",
+          {
+            "data-slot": "select-item-indicator",
+            className: "absolute right-2 flex size-3.5 items-center justify-center",
+            children: /* @__PURE__ */ jsx(SelectPrimitive.ItemIndicator, { children: /* @__PURE__ */ jsx(CheckIcon, { className: "size-4" }) })
+          }
+        ),
+        /* @__PURE__ */ jsx(SelectPrimitive.ItemText, { children })
       ]
-    }
+    })
+  );
+}
+function SelectSeparator(_a) {
+  var _b = _a, {
+    className
+  } = _b, props = __objRest(_b, [
+    "className"
+  ]);
+  return /* @__PURE__ */ jsx(
+    SelectPrimitive.Separator,
+    __spreadValues({
+      "data-slot": "select-separator",
+      className: cn("bg-border-border pointer-events-none -mx-1 my-1 h-px", className)
+    }, props)
+  );
+}
+function SelectScrollUpButton(_a) {
+  var _b = _a, {
+    className
+  } = _b, props = __objRest(_b, [
+    "className"
+  ]);
+  return /* @__PURE__ */ jsx(
+    SelectPrimitive.ScrollUpButton,
+    __spreadProps(__spreadValues({
+      "data-slot": "select-scroll-up-button",
+      className: cn(
+        "flex cursor-default items-center justify-center py-1",
+        className
+      )
+    }, props), {
+      children: /* @__PURE__ */ jsx(ChevronUpIcon, { className: "size-4" })
+    })
+  );
+}
+function SelectScrollDownButton(_a) {
+  var _b = _a, {
+    className
+  } = _b, props = __objRest(_b, [
+    "className"
+  ]);
+  return /* @__PURE__ */ jsx(
+    SelectPrimitive.ScrollDownButton,
+    __spreadProps(__spreadValues({
+      "data-slot": "select-scroll-down-button",
+      className: cn(
+        "flex cursor-default items-center justify-center py-1",
+        className
+      )
+    }, props), {
+      children: /* @__PURE__ */ jsx(ChevronDownIcon, { className: "size-4" })
+    })
   );
 }
 
 // components/ui/Base/Entradas/button.tsx
-import React2 from "react";
+import React from "react";
 import { cva } from "class-variance-authority";
 import { jsx as jsx2 } from "react/jsx-runtime";
 var buttonVariants = cva(
@@ -265,7 +254,7 @@ var buttonVariants = cva(
     }
   }
 );
-var Button = React2.forwardRef(
+var Button = React.forwardRef(
   (_a, ref) => {
     var _b = _a, { className, variant, size } = _b, props = __objRest(_b, ["className", "variant", "size"]);
     return /* @__PURE__ */ jsx2(
@@ -299,9 +288,9 @@ function Input(_a) {
 }
 
 // components/ui/Base/Entradas/textarea.tsx
-import React3 from "react";
+import React2 from "react";
 import { jsx as jsx4 } from "react/jsx-runtime";
-var Textarea = React3.forwardRef(
+var Textarea = React2.forwardRef(
   (_a, ref) => {
     var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
     return /* @__PURE__ */ jsx4(
@@ -587,7 +576,7 @@ function CardImage({
 }
 
 // components/ui/Compuesto/Modals/Dialog.tsx
-import React4, { useEffect as useEffect2, useCallback as useCallback2 } from "react";
+import React3, { useEffect, useCallback } from "react";
 import { X as X2 } from "lucide-react";
 import { jsx as jsx8, jsxs as jsxs5 } from "react/jsx-runtime";
 var sizeClasses = {
@@ -606,13 +595,13 @@ function Dialog({
   className = "",
   children
 }) {
-  const handleKeyDown = useCallback2(
+  const handleKeyDown = useCallback(
     (e) => {
       if (e.key === "Escape") onClose();
     },
     [onClose]
   );
-  useEffect2(() => {
+  useEffect(() => {
     if (open) {
       document.addEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "hidden";
@@ -674,10 +663,10 @@ function Dialog({
     )
   );
 }
-var DialogContext = React4.createContext({
+var DialogContext = React3.createContext({
   variant: "default"
 });
-var useDialogContext = () => React4.useContext(DialogContext);
+var useDialogContext = () => React3.useContext(DialogContext);
 var variantIconBg = {
   default: "bg-accent-soft text-accent",
   destructive: "bg-error text-text-error",
@@ -814,7 +803,7 @@ var Toaster = (props) => {
 };
 
 // components/ui/Compuesto/Tooltip.tsx
-import { useState as useState2, useEffect as useEffect3, useRef as useRef2 } from "react";
+import { useState, useEffect as useEffect2, useRef } from "react";
 import { jsx as jsx10, jsxs as jsxs6 } from "react/jsx-runtime";
 var sideClasses = {
   top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
@@ -859,8 +848,8 @@ var Tooltip = ({
   size,
   disabled = false
 }) => {
-  const [visible, setVisible] = useState2(false);
-  const timerRef = useRef2(null);
+  const [visible, setVisible] = useState(false);
+  const timerRef = useRef(null);
   const show = () => {
     if (disabled) return;
     timerRef.current = setTimeout(() => setVisible(true), 300);
@@ -869,7 +858,7 @@ var Tooltip = ({
     if (timerRef.current) clearTimeout(timerRef.current);
     setVisible(false);
   };
-  useEffect3(() => {
+  useEffect2(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") hide();
     };
@@ -914,19 +903,19 @@ var Tooltip = ({
 };
 
 // components/ui/DataDisplay/Graficas/GraficaBar.tsx
-import { useState as useState3, useRef as useRef3 } from "react";
+import { useState as useState2, useRef as useRef2 } from "react";
 import { jsx as jsx11, jsxs as jsxs7 } from "react/jsx-runtime";
 
 // components/ui/DataDisplay/Graficas/GraficaDonut.tsx
-import { useState as useState4 } from "react";
+import { useState as useState3 } from "react";
 import { Fragment, jsx as jsx12, jsxs as jsxs8 } from "react/jsx-runtime";
 
 // components/ui/DataDisplay/Graficas/GraficaLine.tsx
-import { useState as useState5, useRef as useRef4 } from "react";
+import { useState as useState4, useRef as useRef3 } from "react";
 import { Fragment as Fragment2, jsx as jsx13, jsxs as jsxs9 } from "react/jsx-runtime";
 
 // components/ui/DataDisplay/Table.tsx
-import { useState as useState6 } from "react";
+import { useState as useState5 } from "react";
 import { jsx as jsx14, jsxs as jsxs10 } from "react/jsx-runtime";
 var cellPaddingMap = {
   sm: "px-3 py-2 text-xs",
@@ -1018,11 +1007,11 @@ function Table({
   onSort,
   headerVariant = "default"
 }) {
-  const [internalSort, setInternalSort] = useState6({
+  const [internalSort, setInternalSort] = useState5({
     key: "",
     direction: null
   });
-  const [internalSelected, setInternalSelected] = useState6(
+  const [internalSelected, setInternalSelected] = useState5(
     new Set(selectedRows != null ? selectedRows : [])
   );
   const activeSelected = selectedRows !== void 0 ? new Set(selectedRows) : internalSelected;
@@ -1208,15 +1197,15 @@ function ThemeProvider(_a) {
 }
 
 // components/ui/Tema/ThemeToggle.tsx
-import * as React8 from "react";
+import * as React7 from "react";
 import { Moon, Sun, Laptop } from "lucide-react";
 import { useTheme as useTheme2 } from "next-themes";
 
 // components/ui/buttonIcons/fondoIcons.tsx
-import { useRef as useRef5 } from "react";
+import { useRef as useRef4 } from "react";
 import { jsx as jsx17, jsxs as jsxs12 } from "react/jsx-runtime";
 function AnimatedIconButton({ Icon, onClick }) {
-  const iconRef = useRef5(null);
+  const iconRef = useRef4(null);
   return /* @__PURE__ */ jsx17("button", { onClick, className: "group", children: /* @__PURE__ */ jsxs12("div", { className: "relative bg-muted/50 rounded-full p-2 text-sm transition-all duration-300 transform group-hover:scale-110 active:scale-95 group-hover:shadow-2xl", children: [
     /* @__PURE__ */ jsx17("div", { className: "absolute -bottom-1 right-5 rounded-full w-3 h-3 bg-muted/50" }),
     /* @__PURE__ */ jsx17("div", { ref: iconRef, children: /* @__PURE__ */ jsx17(Icon, { className: "h-5 w-5 z-50" }) })
@@ -1227,10 +1216,10 @@ function AnimatedIconButton({ Icon, onClick }) {
 import { jsx as jsx18, jsxs as jsxs13 } from "react/jsx-runtime";
 function ThemeToggle() {
   const { theme, setTheme } = useTheme2();
-  const [mounted, setMounted] = React8.useState(false);
-  const [isOpen, setIsOpen] = React8.useState(false);
-  const menuRef = React8.useRef(null);
-  React8.useEffect(() => {
+  const [mounted, setMounted] = React7.useState(false);
+  const [isOpen, setIsOpen] = React7.useState(false);
+  const menuRef = React7.useRef(null);
+  React7.useEffect(() => {
     setMounted(true);
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -1342,7 +1331,12 @@ export {
   LabelBadge,
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
   StatusBadge,
