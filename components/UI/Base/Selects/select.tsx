@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { CheckIcon, ChevronDownIcon } from "lucide-react"
+import { CheckIcon, ChevronDownIcon, SearchIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // ─────────────────────────────────────────────
@@ -13,19 +13,25 @@ type SelectContextType = {
   onChange: (value: string, label: string) => void
   open: boolean
   setOpen: (open: boolean) => void
-  activeIndex: number
-  setActiveIndex: (i: number) => void
-  items: { value: string; label: string; ref: React.RefObject<HTMLDivElement> }[]
-  registerItem: (item: any) => number
+  registerItem: (value: string, label: string) => void
+  query: string
+  setQuery: (q: string) => void
 }
 
 const SelectContext = React.createContext<SelectContextType | null>(null)
 
 function useSelect() {
   const ctx = React.useContext(SelectContext)
-  if (!ctx) throw new Error("Select components must be inside <Select>")
+  if (!ctx) throw new Error("Select must be inside <Select>")
   return ctx
 }
+
+// util búsqueda
+const normalize = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
 
 // ─────────────────────────────────────────────
 // Root
@@ -36,47 +42,25 @@ function Select({
   children
 }: {
   value?: string
-  onValueChange: (value: string, label: string) => void
+  onValueChange: (value: string) => void
   children: React.ReactNode
 }) {
   const [open, setOpen] = React.useState(false)
-  const [selectedLabel, setSelectedLabel] = React.useState("")
-  const [activeIndex, setActiveIndex] = React.useState(-1)
-  const items = React.useRef<SelectContextType["items"]>([])
-  const rootRef = React.useRef<HTMLDivElement>(null)
+  const [query, setQuery] = React.useState("")
 
-  const registerItem = (item: {
-    value: string
-    label: string
-    ref: React.RefObject<HTMLDivElement>
-  }) => {
-    items.current.push(item)
-    return items.current.length - 1
+  const itemsMap = React.useRef<Map<string, string>>(new Map())
+  itemsMap.current = new Map()
+
+  const [selectedLabel, setSelectedLabel] = React.useState("")
+
+  const registerItem = (value: string, label: string) => {
+    itemsMap.current.set(value, label)
   }
 
   React.useEffect(() => {
-    const item = items.current.find((i) => i.value === value)
-    if (item) {
-      setSelectedLabel(item.label)
-    }
-  }, [value])
-
-  // click outside
-  React.useEffect(() => {
-    const handle = (e: MouseEvent) => {
-      if (!rootRef.current?.contains(e.target as Node)) {
-        setOpen(false)
-      }
-    }
-    document.addEventListener("mousedown", handle)
-    return () => document.removeEventListener("mousedown", handle)
-  }, [])
-
-  React.useEffect(() => {
-    if (open) {
-      items.current = []
-    }
-  }, [open])
+    const label = itemsMap.current.get(value ?? "")
+    setSelectedLabel(label ?? "")
+  })
 
   return (
     <SelectContext.Provider
@@ -84,19 +68,19 @@ function Select({
         value,
         selectedLabel,
         onChange: (val, label) => {
-          console.log("SELECT:", val, label)
           setSelectedLabel(label)
-          onValueChange(val, label)
+          onValueChange(val)
+          setOpen(false)
+          setQuery("") // reset búsqueda
         },
         open,
         setOpen,
-        activeIndex,
-        setActiveIndex,
-        items: items.current,
-        registerItem
+        registerItem,
+        query,
+        setQuery
       }}
     >
-      <div ref={rootRef} className="relative inline-block">
+      <div className="relative inline-block w-full">
         {children}
       </div>
     </SelectContext.Provider>
@@ -107,25 +91,20 @@ function Select({
 // Trigger
 // ─────────────────────────────────────────────
 function SelectTrigger({
-  className,
-  children
+  children,
+  className
 }: {
-  className?: string
   children: React.ReactNode
+  className?: string
 }) {
-  const { open, setOpen, activeIndex, setActiveIndex, items } = useSelect()
+  const { open, setOpen } = useSelect()
 
   return (
     <button
       type="button"
-      role="combobox"
-      aria-expanded={open}
-      onClick={() => {
-        setOpen(!open)
-        if (!open) setActiveIndex(0)
-      }}
+      onClick={() => setOpen(!open)}
       className={cn(
-        "border-border flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm shadow-xs",
+        "border-border flex w-full items-center justify-between px-3 py-2 text-sm border rounded-md",
         className
       )}
     >
@@ -140,73 +119,31 @@ function SelectTrigger({
 // ─────────────────────────────────────────────
 function SelectValue({ placeholder }: { placeholder?: string }) {
   const { selectedLabel } = useSelect()
-
   return <span>{selectedLabel || placeholder}</span>
 }
+
 // ─────────────────────────────────────────────
-// Content
+// Content (con buscador)
 // ─────────────────────────────────────────────
-function SelectContent({
-  children,
-  className,
-  align = "start"
-}: {
-  children: React.ReactNode
-  className?: string
-  align?: "start" | "center" | "end"
-}) {
-  const { open } = useSelect()
-  const contentRef = React.useRef<HTMLDivElement>(null)
-  const triggerRef = React.useRef<HTMLButtonElement | null>(null)
-
-  const [position, setPosition] = React.useState<"top" | "bottom">("bottom")
-
-  React.useEffect(() => {
-    if (!open) return
-
-    const trigger = document.querySelector(
-      '[role="combobox"]'
-    ) as HTMLButtonElement
-
-    if (!trigger) return
-
-    triggerRef.current = trigger
-
-    const rect = trigger.getBoundingClientRect()
-    const spaceBelow = window.innerHeight - rect.bottom
-    const spaceAbove = rect.top
-
-    const dropdownHeight = 240 // aprox (max-h-60)
-
-    if (spaceBelow < dropdownHeight && spaceAbove > dropdownHeight) {
-      setPosition("top")
-    } else {
-      setPosition("bottom")
-    }
-  }, [open])
-
-  const alignClass = {
-    start: "left-0",
-    center: "left-1/2 -translate-x-1/2",
-    end: "right-0",
-  }[align]
+function SelectContent({ children }: { children: React.ReactNode }) {
+  const { open, query, setQuery } = useSelect()
 
   if (!open) return null
 
   return (
-    <div
-      ref={contentRef}
-      role="listbox"
+    <div className="absolute mt-1 w-full bg-background border rounded-md shadow-md z-50">
+      {/* 🔍 buscador */}
+      <div className="flex items-center gap-2 px-2 py-1 border-b">
+        <SearchIcon className="size-4 opacity-50" />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Buscar..."
+          className="w-full outline-none text-sm bg-transparent"
+        />
+      </div>
 
-      className={cn(
-        "bg-background absolute z-[9999] min-w-[150px] rounded-md border border-border shadow-md",
-        position === "bottom" && "mt-1 top-full",
-        position === "top" && "mb-1 bottom-full",
-        alignClass,
-        className
-      )}
-    >
-      <div className="p-1">
+      <div className="p-1 max-h-60 overflow-y-auto">
         {children}
       </div>
     </div>
@@ -214,70 +151,39 @@ function SelectContent({
 }
 
 // ─────────────────────────────────────────────
-// Item
+// Item (con filtro)
 // ─────────────────────────────────────────────
 function SelectItem({
   value,
-  label,
   children
 }: {
   value: string
-  label?: string
   children: React.ReactNode
 }) {
-  const {
-    value: selected,
-    onChange,
-    setOpen,
-    registerItem,
-    activeIndex,
-    setActiveIndex
-  } = useSelect()
+  const { value: selected, onChange, registerItem, query } = useSelect()
 
-  const ref = React.useRef<HTMLDivElement>(null)
+  const label = String(children)
 
-  const index = React.useMemo(
-    () => registerItem({
-      value,
-      label: label ?? String(children),
-      ref
-    }),
-    []
-  )
+  registerItem(value, label)
 
-  const isActive = index === activeIndex
+  // 🔍 filtro inteligente
+  const visible = normalize(label).includes(normalize(query))
+
+  if (!visible) return null
+
   const isSelected = selected === value
-
-  // scroll automático
-  React.useEffect(() => {
-    if (isActive) {
-      ref.current?.scrollIntoView({ block: "nearest" })
-    }
-  }, [isActive])
-
 
   return (
     <div
-      ref={ref}
-      role="option"
-      aria-selected={isSelected}
-      onMouseEnter={() => setActiveIndex(index)}
-      onMouseLeave={() => setActiveIndex(-1)}
-      onClick={() => {
-        const finalLabel = label ?? String(children)
-        onChange(value, finalLabel)
-        setOpen(false)
-      }}
+      onClick={() => onChange(value, label)}
       className={cn(
-        "relative flex cursor-pointer items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm z-[99]",
-        isActive && "bg-accent-hover/20 text-accent",
+        "flex items-center justify-between px-2 py-1.5 cursor-pointer rounded-sm text-sm",
+        "hover:bg-accent-hover/20",
         isSelected && "text-accent"
       )}
     >
-      <span className="absolute right-2">
-        {isSelected && <CheckIcon className="size-4" />}
-      </span>
-      {children}
+      {label}
+      {isSelected && <CheckIcon className="size-4" />}
     </div>
   )
 }
@@ -288,7 +194,7 @@ function SelectItem({
 export {
   Select,
   SelectTrigger,
+  SelectValue,
   SelectContent,
-  SelectItem,
-  SelectValue
+  SelectItem
 }

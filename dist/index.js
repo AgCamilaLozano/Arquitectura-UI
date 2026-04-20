@@ -34,7 +34,7 @@ var __objRest = (source, exclude) => {
 
 // components/ui/Base/Selects/select.tsx
 import * as React from "react";
-import { CheckIcon, ChevronDownIcon } from "lucide-react";
+import { CheckIcon, ChevronDownIcon, SearchIcon } from "lucide-react";
 
 // lib/utils.ts
 import { clsx } from "clsx";
@@ -48,44 +48,27 @@ import { jsx, jsxs } from "react/jsx-runtime";
 var SelectContext = React.createContext(null);
 function useSelect() {
   const ctx = React.useContext(SelectContext);
-  if (!ctx) throw new Error("Select components must be inside <Select>");
+  if (!ctx) throw new Error("Select must be inside <Select>");
   return ctx;
 }
+var normalize = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 function Select({
   value,
   onValueChange,
   children
 }) {
   const [open, setOpen] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const itemsMap = React.useRef(/* @__PURE__ */ new Map());
+  itemsMap.current = /* @__PURE__ */ new Map();
   const [selectedLabel, setSelectedLabel] = React.useState("");
-  const [activeIndex, setActiveIndex] = React.useState(-1);
-  const items = React.useRef([]);
-  const rootRef = React.useRef(null);
-  const registerItem = (item) => {
-    items.current.push(item);
-    return items.current.length - 1;
+  const registerItem = (value2, label) => {
+    itemsMap.current.set(value2, label);
   };
   React.useEffect(() => {
-    const item = items.current.find((i) => i.value === value);
-    if (item) {
-      setSelectedLabel(item.label);
-    }
-  }, [value]);
-  React.useEffect(() => {
-    const handle = (e) => {
-      var _a;
-      if (!((_a = rootRef.current) == null ? void 0 : _a.contains(e.target))) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handle);
-    return () => document.removeEventListener("mousedown", handle);
-  }, []);
-  React.useEffect(() => {
-    if (open) {
-      items.current = [];
-    }
-  }, [open]);
+    const label = itemsMap.current.get(value != null ? value : "");
+    setSelectedLabel(label != null ? label : "");
+  });
   return /* @__PURE__ */ jsx(
     SelectContext.Provider,
     {
@@ -93,38 +76,33 @@ function Select({
         value,
         selectedLabel,
         onChange: (val, label) => {
-          console.log("SELECT:", val, label);
           setSelectedLabel(label);
-          onValueChange(val, label);
+          onValueChange(val);
+          setOpen(false);
+          setQuery("");
         },
         open,
         setOpen,
-        activeIndex,
-        setActiveIndex,
-        items: items.current,
-        registerItem
+        registerItem,
+        query,
+        setQuery
       },
-      children: /* @__PURE__ */ jsx("div", { ref: rootRef, className: "relative inline-block", children })
+      children: /* @__PURE__ */ jsx("div", { className: "relative inline-block w-full", children })
     }
   );
 }
 function SelectTrigger({
-  className,
-  children
+  children,
+  className
 }) {
-  const { open, setOpen, activeIndex, setActiveIndex, items } = useSelect();
+  const { open, setOpen } = useSelect();
   return /* @__PURE__ */ jsxs(
     "button",
     {
       type: "button",
-      role: "combobox",
-      "aria-expanded": open,
-      onClick: () => {
-        setOpen(!open);
-        if (!open) setActiveIndex(0);
-      },
+      onClick: () => setOpen(!open),
       className: cn(
-        "border-border flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm shadow-xs",
+        "border-border flex w-full items-center justify-between px-3 py-2 text-sm border rounded-md",
         className
       ),
       children: [
@@ -138,105 +116,47 @@ function SelectValue({ placeholder }) {
   const { selectedLabel } = useSelect();
   return /* @__PURE__ */ jsx("span", { children: selectedLabel || placeholder });
 }
-function SelectContent({
-  children,
-  className,
-  align = "start"
-}) {
-  const { open } = useSelect();
-  const contentRef = React.useRef(null);
-  const triggerRef = React.useRef(null);
-  const [position, setPosition] = React.useState("bottom");
-  React.useEffect(() => {
-    if (!open) return;
-    const trigger = document.querySelector(
-      '[role="combobox"]'
-    );
-    if (!trigger) return;
-    triggerRef.current = trigger;
-    const rect = trigger.getBoundingClientRect();
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
-    const dropdownHeight = 240;
-    if (spaceBelow < dropdownHeight && spaceAbove > dropdownHeight) {
-      setPosition("top");
-    } else {
-      setPosition("bottom");
-    }
-  }, [open]);
-  const alignClass = {
-    start: "left-0",
-    center: "left-1/2 -translate-x-1/2",
-    end: "right-0"
-  }[align];
+function SelectContent({ children }) {
+  const { open, query, setQuery } = useSelect();
   if (!open) return null;
-  return /* @__PURE__ */ jsx(
-    "div",
-    {
-      ref: contentRef,
-      role: "listbox",
-      className: cn(
-        "bg-background absolute z-[9999] min-w-[150px] rounded-md border border-border shadow-md",
-        position === "bottom" && "mt-1 top-full",
-        position === "top" && "mb-1 bottom-full",
-        alignClass,
-        className
-      ),
-      children: /* @__PURE__ */ jsx("div", { className: "p-1", children })
-    }
-  );
+  return /* @__PURE__ */ jsxs("div", { className: "absolute mt-1 w-full bg-background border rounded-md shadow-md z-50", children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-2 py-1 border-b", children: [
+      /* @__PURE__ */ jsx(SearchIcon, { className: "size-4 opacity-50" }),
+      /* @__PURE__ */ jsx(
+        "input",
+        {
+          value: query,
+          onChange: (e) => setQuery(e.target.value),
+          placeholder: "Buscar...",
+          className: "w-full outline-none text-sm bg-transparent"
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "p-1 max-h-60 overflow-y-auto", children })
+  ] });
 }
 function SelectItem({
   value,
-  label,
   children
 }) {
-  const {
-    value: selected,
-    onChange,
-    setOpen,
-    registerItem,
-    activeIndex,
-    setActiveIndex
-  } = useSelect();
-  const ref = React.useRef(null);
-  const index = React.useMemo(
-    () => registerItem({
-      value,
-      label: label != null ? label : String(children),
-      ref
-    }),
-    []
-  );
-  const isActive = index === activeIndex;
+  const { value: selected, onChange, registerItem, query } = useSelect();
+  const label = String(children);
+  registerItem(value, label);
+  const visible = normalize(label).includes(normalize(query));
+  if (!visible) return null;
   const isSelected = selected === value;
-  React.useEffect(() => {
-    var _a;
-    if (isActive) {
-      (_a = ref.current) == null ? void 0 : _a.scrollIntoView({ block: "nearest" });
-    }
-  }, [isActive]);
   return /* @__PURE__ */ jsxs(
     "div",
     {
-      ref,
-      role: "option",
-      "aria-selected": isSelected,
-      onMouseEnter: () => setActiveIndex(index),
-      onMouseLeave: () => setActiveIndex(-1),
-      onClick: () => {
-        const finalLabel = label != null ? label : String(children);
-        onChange(value, finalLabel);
-        setOpen(false);
-      },
+      onClick: () => onChange(value, label),
       className: cn(
-        "relative flex cursor-pointer items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm z-[99]",
-        isActive && "bg-accent-hover/20 text-accent",
+        "flex items-center justify-between px-2 py-1.5 cursor-pointer rounded-sm text-sm",
+        "hover:bg-accent-hover/20",
         isSelected && "text-accent"
       ),
       children: [
-        /* @__PURE__ */ jsx("span", { className: "absolute right-2", children: isSelected && /* @__PURE__ */ jsx(CheckIcon, { className: "size-4" }) }),
-        children
+        label,
+        isSelected && /* @__PURE__ */ jsx(CheckIcon, { className: "size-4" })
       ]
     }
   );

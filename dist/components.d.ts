@@ -8,26 +8,23 @@ import { ThemeProviderProps } from 'next-themes';
 
 declare function Select({ value, onValueChange, children }: {
     value?: string;
-    onValueChange: (value: string, label: string) => void;
+    onValueChange: (value: string) => void;
     children: React$1.ReactNode;
 }): react_jsx_runtime.JSX.Element;
-declare function SelectTrigger({ className, children }: {
-    className?: string;
+declare function SelectTrigger({ children, className }: {
     children: React$1.ReactNode;
+    className?: string;
 }): react_jsx_runtime.JSX.Element;
 declare function SelectValue({ placeholder }: {
     placeholder?: string;
 }): react_jsx_runtime.JSX.Element;
-declare function SelectContent({ children, className, align }: {
+declare function SelectContent({ children }: {
     children: React$1.ReactNode;
-    className?: string;
-    align?: "start" | "center" | "end";
 }): react_jsx_runtime.JSX.Element | null;
-declare function SelectItem({ value, label, children }: {
+declare function SelectItem({ value, children }: {
     value: string;
-    label?: string;
     children: React$1.ReactNode;
-}): react_jsx_runtime.JSX.Element;
+}): react_jsx_runtime.JSX.Element | null;
 
 declare const buttonVariants: (props?: ({
     variant?: "link" | "default" | "outline" | "secondary" | "ghost" | null | undefined;
