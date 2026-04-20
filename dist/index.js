@@ -47,44 +47,94 @@ function cn(...inputs) {
 import { jsx, jsxs } from "react/jsx-runtime";
 var normalize = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 var SelectContext = React.createContext(null);
-function useSelect() {
-  const ctx = React.useContext(SelectContext);
-  if (!ctx) throw new Error("Select must be used inside <Select>");
-  return ctx;
-}
+var useSelect = () => {
+  const c = React.useContext(SelectContext);
+  if (!c) throw new Error("Select must be used inside <Select>");
+  return c;
+};
 function Select({
   value,
   onValueChange,
-  children,
-  searchable = false
+  options = [],
+  searchable = false,
+  children
 }) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
-  const items = React.useRef(/* @__PURE__ */ new Map());
-  const registerItem = React.useCallback((item) => {
-    if (!items.current.has(item.value)) {
-      items.current.set(item.value, item.label);
+  const [activeIndex, setActiveIndex] = React.useState(-1);
+  const [visibleOptions, setVisibleOptions] = React.useState([]);
+  const triggerRef = React.useRef(null);
+  const listRef = React.useRef(null);
+  const items = React.useMemo(() => {
+    const map = /* @__PURE__ */ new Map();
+    options.forEach((o) => map.set(o.value, o.label));
+    return map;
+  }, [options]);
+  const registerItem = React.useCallback((opt) => {
+    if (!items.has(opt.value)) {
+      items.set(opt.value, opt.label);
     }
-  }, []);
-  const onChange = (val, label) => {
-    onValueChange(val);
+  }, [items]);
+  const onSelect = (v, l) => {
+    onValueChange(v);
     setOpen(false);
+  };
+  React.useEffect(() => {
+    if (options.length === 0) return;
+    const filtered = searchable ? options.filter(
+      (o) => normalize(o.label).includes(normalize(query))
+    ) : options;
+    setVisibleOptions(filtered);
+    setActiveIndex(filtered.length > 0 ? 0 : -1);
+  }, [options, query, searchable]);
+  const handleKeyDown = (e) => {
+    if (!open && (e.key === "ArrowDown" || e.key === "Enter")) {
+      e.preventDefault();
+      setOpen(true);
+      setActiveIndex(0);
+      return;
+    }
+    if (!open) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex(
+        (i) => Math.min(i + 1, visibleOptions.length - 1)
+      );
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => Math.max(i - 1, 0));
+    }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const opt = visibleOptions[activeIndex];
+      if (opt) onSelect(opt.value, opt.label);
+    }
+    if (e.key === "Escape") {
+      setOpen(false);
+    }
   };
   return /* @__PURE__ */ jsx(
     SelectContext.Provider,
     {
       value: {
         value,
-        onChange,
+        onSelect,
         open,
         setOpen,
-        items: items.current,
+        items,
         registerItem,
         searchable,
         query,
-        setQuery
+        setQuery,
+        activeIndex,
+        setActiveIndex,
+        visibleOptions,
+        setVisibleOptions,
+        listRef,
+        triggerRef
       },
-      children: /* @__PURE__ */ jsx("div", { className: "relative inline-block w-full", children })
+      children: /* @__PURE__ */ jsx("div", { className: "relative w-full", onKeyDown: handleKeyDown, children })
     }
   );
 }
@@ -92,14 +142,15 @@ function SelectTrigger({
   className,
   children
 }) {
-  const { open, setOpen } = useSelect();
+  const { open, setOpen, triggerRef } = useSelect();
   return /* @__PURE__ */ jsxs(
     "button",
     {
+      ref: triggerRef,
       type: "button",
       onClick: () => setOpen(!open),
       className: cn(
-        "border-border flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm",
+        "border border-border flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm",
         className
       ),
       children: [
@@ -115,18 +166,15 @@ function SelectValue({ placeholder }) {
   return /* @__PURE__ */ jsx("span", { children: label || placeholder });
 }
 function SelectContent({
-  className,
   children
 }) {
-  const { open, searchable, query, setQuery } = useSelect();
+  const { open, searchable, query, setQuery, listRef } = useSelect();
   if (!open) return null;
   return /* @__PURE__ */ jsxs(
     "div",
     {
-      className: cn(
-        "absolute z-50 mt-1 w-full rounded-md border bg-background shadow-md",
-        className
-      ),
+      ref: listRef,
+      className: "absolute z-50 mt-1 w-full rounded-md border border-border bg-background shadow-md",
       children: [
         searchable && /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 border-b px-2 py-1", children: [
           /* @__PURE__ */ jsx(SearchIcon, { className: "size-4 opacity-50" }),
@@ -136,7 +184,8 @@ function SelectContent({
               value: query,
               onChange: (e) => setQuery(e.target.value),
               placeholder: "Buscar...",
-              className: "w-full bg-transparent text-sm outline-none"
+              className: "w-full bg-transparent text-sm outline-none",
+              autoFocus: true
             }
           )
         ] }),
@@ -147,9 +196,18 @@ function SelectContent({
 }
 function SelectItem({
   value,
-  children
+  children,
+  index
 }) {
-  const { value: selected, onChange, registerItem, searchable, query } = useSelect();
+  const {
+    value: selected,
+    onSelect,
+    registerItem,
+    searchable,
+    query,
+    activeIndex,
+    setActiveIndex
+  } = useSelect();
   const label = String(children);
   React.useEffect(() => {
     registerItem({ value, label });
@@ -157,13 +215,16 @@ function SelectItem({
   const visible = searchable ? normalize(label).includes(normalize(query)) : true;
   if (!visible) return null;
   const isSelected = selected === value;
+  const isActive = index === activeIndex;
   return /* @__PURE__ */ jsxs(
     "div",
     {
-      onClick: () => onChange(value, label),
+      onMouseEnter: () => index !== void 0 && setActiveIndex(index),
+      onClick: () => onSelect(value, label),
       className: cn(
         "flex cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-sm",
         "hover:bg-accent-hover",
+        isActive && "bg-accent-hover",
         isSelected && "text-accent"
       ),
       children: [

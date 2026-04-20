@@ -5,40 +5,48 @@ import { CheckIcon, ChevronDownIcon, SearchIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // ─────────────────────────────────────────────
-// Utils
+// Types & utils
 // ─────────────────────────────────────────────
+type Option = { value: string; label: string }
+
 const normalize = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
 
 // ─────────────────────────────────────────────
 // Context
 // ─────────────────────────────────────────────
-type Item = {
-  value: string
-  label: string
-}
-
-type SelectContextType = {
+type Ctx = {
   value?: string
-  onChange: (value: string, label: string) => void
+  onSelect: (v: string, l: string) => void
 
   open: boolean
-  setOpen: (v: boolean) => void
+  setOpen: (o: boolean) => void
 
+  // registro híbrido
   items: Map<string, string>
-  registerItem: (item: Item) => void
+  registerItem: (opt: Option) => void
 
+  // búsqueda
   searchable: boolean
   query: string
   setQuery: (q: string) => void
+
+  // teclado
+  activeIndex: number
+  setActiveIndex: (i: number) => void
+  visibleOptions: Option[]
+  setVisibleOptions: (opts: Option[]) => void
+
+  // refs
+  listRef: React.RefObject<HTMLDivElement | null>
+  triggerRef: React.RefObject<HTMLButtonElement | null>
 }
 
-const SelectContext = React.createContext<SelectContextType | null>(null)
-
-function useSelect() {
-  const ctx = React.useContext(SelectContext)
-  if (!ctx) throw new Error("Select must be used inside <Select>")
-  return ctx
+const SelectContext = React.createContext<Ctx | null>(null)
+const useSelect = () => {
+  const c = React.useContext(SelectContext)
+  if (!c) throw new Error("Select must be used inside <Select>")
+  return c
 }
 
 // ─────────────────────────────────────────────
@@ -47,44 +55,110 @@ function useSelect() {
 function Select({
   value,
   onValueChange,
-  children,
-  searchable = false
+  options = [],
+  searchable = false,
+  children
 }: {
   value?: string
-  onValueChange: (value: string) => void
-  children: React.ReactNode
+  onValueChange: (v: string) => void
+  options?: Option[]
   searchable?: boolean
+  children: React.ReactNode
 }) {
   const [open, setOpen] = React.useState(false)
   const [query, setQuery] = React.useState("")
-  const items = React.useRef<Map<string, string>>(new Map())
+  const [activeIndex, setActiveIndex] = React.useState(-1)
+  const [visibleOptions, setVisibleOptions] = React.useState<Option[]>([])
 
-  const registerItem = React.useCallback((item: Item) => {
-    if (!items.current.has(item.value)) {
-      items.current.set(item.value, item.label)
+  const triggerRef = React.useRef<HTMLButtonElement>(null)
+  const listRef = React.useRef<HTMLDivElement>(null)
+
+  const items = React.useMemo(() => {
+    const map = new Map<string, string>()
+    options.forEach(o => map.set(o.value, o.label))
+    return map
+  }, [options])
+
+  const registerItem = React.useCallback((opt: Option) => {
+    if (!items.has(opt.value)) {
+      items.set(opt.value, opt.label)
     }
-  }, [])
+  }, [items])
 
-  const onChange = (val: string, label: string) => {
-    onValueChange(val)
+  const onSelect = (v: string, l: string) => {
+    onValueChange(v)
     setOpen(false)
+  }
+
+  React.useEffect(() => {
+    if (options.length === 0) return
+
+    const filtered = searchable
+      ? options.filter(o =>
+        normalize(o.label).includes(normalize(query))
+      )
+      : options
+
+    setVisibleOptions(filtered)
+    setActiveIndex(filtered.length > 0 ? 0 : -1)
+  }, [options, query, searchable])
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!open && (e.key === "ArrowDown" || e.key === "Enter")) {
+      e.preventDefault()
+      setOpen(true)
+      setActiveIndex(0)
+      return
+    }
+
+    if (!open) return
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault()
+      setActiveIndex(i =>
+        Math.min(i + 1, visibleOptions.length - 1)
+      )
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault()
+      setActiveIndex(i => Math.max(i - 1, 0))
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault()
+      const opt = visibleOptions[activeIndex]
+      if (opt) onSelect(opt.value, opt.label)
+    }
+
+    if (e.key === "Escape") {
+      setOpen(false)
+    }
   }
 
   return (
     <SelectContext.Provider
       value={{
         value,
-        onChange,
+        onSelect,
         open,
         setOpen,
-        items: items.current,
+        items,
         registerItem,
         searchable,
         query,
-        setQuery
+        setQuery,
+        activeIndex,
+        setActiveIndex,
+        visibleOptions,
+        setVisibleOptions,
+        listRef,
+        triggerRef
       }}
     >
-      <div className="relative inline-block w-full">{children}</div>
+      <div className="relative w-full" onKeyDown={handleKeyDown}>
+        {children}
+      </div>
     </SelectContext.Provider>
   )
 }
@@ -99,14 +173,15 @@ function SelectTrigger({
   className?: string
   children: React.ReactNode
 }) {
-  const { open, setOpen } = useSelect()
+  const { open, setOpen, triggerRef } = useSelect()
 
   return (
     <button
+      ref={triggerRef}
       type="button"
       onClick={() => setOpen(!open)}
       className={cn(
-        "border-border flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm",
+        "border border-border flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm",
         className
       )}
     >
@@ -117,13 +192,11 @@ function SelectTrigger({
 }
 
 // ─────────────────────────────────────────────
-// Value (label dinámico)
+// Value
 // ─────────────────────────────────────────────
 function SelectValue({ placeholder }: { placeholder?: string }) {
   const { value, items } = useSelect()
-
   const label = value ? items.get(value) : ""
-
   return <span>{label || placeholder}</span>
 }
 
@@ -131,31 +204,27 @@ function SelectValue({ placeholder }: { placeholder?: string }) {
 // Content
 // ─────────────────────────────────────────────
 function SelectContent({
-  className,
   children
 }: {
-  className?: string
   children: React.ReactNode
 }) {
-  const { open, searchable, query, setQuery } = useSelect()
-
+  const { open, searchable, query, setQuery, listRef } = useSelect()
   if (!open) return null
 
   return (
     <div
-      className={cn(
-        "absolute z-50 mt-1 w-full rounded-md border bg-background shadow-md",
-        className
-      )}
+      ref={listRef}
+      className="absolute z-50 mt-1 w-full rounded-md border border-border bg-background shadow-md"
     >
       {searchable && (
         <div className="flex items-center gap-2 border-b px-2 py-1">
           <SearchIcon className="size-4 opacity-50" />
           <input
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={e => setQuery(e.target.value)}
             placeholder="Buscar..."
             className="w-full bg-transparent text-sm outline-none"
+            autoFocus
           />
         </div>
       )}
@@ -170,16 +239,25 @@ function SelectContent({
 // ─────────────────────────────────────────────
 function SelectItem({
   value,
-  children
+  children,
+  index
 }: {
   value: string
   children: React.ReactNode
+  index?: number
 }) {
-  const { value: selected, onChange, registerItem, searchable, query } = useSelect()
+  const {
+    value: selected,
+    onSelect,
+    registerItem,
+    searchable,
+    query,
+    activeIndex,
+    setActiveIndex
+  } = useSelect()
 
   const label = String(children)
 
-  // registrar UNA vez
   React.useEffect(() => {
     registerItem({ value, label })
   }, [value, label, registerItem])
@@ -191,13 +269,16 @@ function SelectItem({
   if (!visible) return null
 
   const isSelected = selected === value
+  const isActive = index === activeIndex
 
   return (
     <div
-      onClick={() => onChange(value, label)}
+      onMouseEnter={() => index !== undefined && setActiveIndex(index)}
+      onClick={() => onSelect(value, label)}
       className={cn(
         "flex cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-sm",
         "hover:bg-accent-hover",
+        isActive && "bg-accent-hover",
         isSelected && "text-accent"
       )}
     >
@@ -207,9 +288,6 @@ function SelectItem({
   )
 }
 
-// ─────────────────────────────────────────────
-// Export
-// ─────────────────────────────────────────────
 export {
   Select,
   SelectTrigger,
