@@ -201,7 +201,11 @@ function SelectItem({
   } = useSelect();
   const ref = React.useRef(null);
   const index = React.useMemo(
-    () => registerItem({ value, label, ref }),
+    () => registerItem({
+      value,
+      label: label != null ? label : String(children),
+      ref
+    }),
     []
   );
   const isActive = index === activeIndex;
@@ -221,7 +225,8 @@ function SelectItem({
       onMouseEnter: () => setActiveIndex(index),
       onMouseLeave: () => setActiveIndex(-1),
       onClick: () => {
-        onChange(value, label);
+        const finalLabel = label != null ? label : String(children);
+        onChange(value, finalLabel);
         setOpen(false);
       },
       className: cn(

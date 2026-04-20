@@ -25,7 +25,7 @@ declare function SelectContent({ children, className, align }: {
 }): react_jsx_runtime.JSX.Element | null;
 declare function SelectItem({ value, label, children }: {
     value: string;
-    label: string;
+    label?: string;
     children: React$1.ReactNode;
 }): react_jsx_runtime.JSX.Element;
 

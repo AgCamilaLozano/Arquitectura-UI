@@ -222,7 +222,7 @@ function SelectItem({
   children
 }: {
   value: string
-  label: string
+  label?: string
   children: React.ReactNode
 }) {
   const {
@@ -237,7 +237,11 @@ function SelectItem({
   const ref = React.useRef<HTMLDivElement>(null)
 
   const index = React.useMemo(
-    () => registerItem({ value, label, ref }),
+    () => registerItem({
+      value,
+      label: label ?? String(children),
+      ref
+    }),
     []
   )
 
@@ -260,7 +264,8 @@ function SelectItem({
       onMouseEnter={() => setActiveIndex(index)}
       onMouseLeave={() => setActiveIndex(-1)}
       onClick={() => {
-        onChange(value, label)
+        const finalLabel = label ?? String(children)
+        onChange(value, finalLabel)
         setOpen(false)
       }}
       className={cn(
