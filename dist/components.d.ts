@@ -6,19 +6,21 @@ import { VariantProps } from 'class-variance-authority';
 import { ToasterProps } from 'sonner';
 import { ThemeProviderProps } from 'next-themes';
 
-declare function Select({ value, onValueChange, children }: {
+declare function Select({ value, onValueChange, children, searchable }: {
     value?: string;
     onValueChange: (value: string) => void;
     children: React$1.ReactNode;
+    searchable?: boolean;
 }): react_jsx_runtime.JSX.Element;
-declare function SelectTrigger({ children, className }: {
-    children: React$1.ReactNode;
+declare function SelectTrigger({ className, children }: {
     className?: string;
+    children: React$1.ReactNode;
 }): react_jsx_runtime.JSX.Element;
 declare function SelectValue({ placeholder }: {
     placeholder?: string;
 }): react_jsx_runtime.JSX.Element;
-declare function SelectContent({ children }: {
+declare function SelectContent({ className, children }: {
+    className?: string;
     children: React$1.ReactNode;
 }): react_jsx_runtime.JSX.Element | null;
 declare function SelectItem({ value, children }: {

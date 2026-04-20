@@ -45,45 +45,42 @@ function cn(...inputs) {
 
 // components/ui/Base/Selects/select.tsx
 import { jsx, jsxs } from "react/jsx-runtime";
+var normalize = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 var SelectContext = React.createContext(null);
 function useSelect() {
   const ctx = React.useContext(SelectContext);
-  if (!ctx) throw new Error("Select must be inside <Select>");
+  if (!ctx) throw new Error("Select must be used inside <Select>");
   return ctx;
 }
-var normalize = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 function Select({
   value,
   onValueChange,
-  children
+  children,
+  searchable = false
 }) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
-  const itemsMap = React.useRef(/* @__PURE__ */ new Map());
-  itemsMap.current = /* @__PURE__ */ new Map();
-  const [selectedLabel, setSelectedLabel] = React.useState("");
-  const registerItem = (value2, label) => {
-    itemsMap.current.set(value2, label);
+  const items = React.useRef(/* @__PURE__ */ new Map());
+  const registerItem = React.useCallback((item) => {
+    if (!items.current.has(item.value)) {
+      items.current.set(item.value, item.label);
+    }
+  }, []);
+  const onChange = (val, label) => {
+    onValueChange(val);
+    setOpen(false);
   };
-  React.useEffect(() => {
-    const label = itemsMap.current.get(value != null ? value : "");
-    setSelectedLabel(label != null ? label : "");
-  });
   return /* @__PURE__ */ jsx(
     SelectContext.Provider,
     {
       value: {
         value,
-        selectedLabel,
-        onChange: (val, label) => {
-          setSelectedLabel(label);
-          onValueChange(val);
-          setOpen(false);
-          setQuery("");
-        },
+        onChange,
         open,
         setOpen,
+        items: items.current,
         registerItem,
+        searchable,
         query,
         setQuery
       },
@@ -92,8 +89,8 @@ function Select({
   );
 }
 function SelectTrigger({
-  children,
-  className
+  className,
+  children
 }) {
   const { open, setOpen } = useSelect();
   return /* @__PURE__ */ jsxs(
@@ -102,7 +99,7 @@ function SelectTrigger({
       type: "button",
       onClick: () => setOpen(!open),
       className: cn(
-        "border-border flex w-full items-center justify-between px-3 py-2 text-sm border rounded-md",
+        "border-border flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm",
         className
       ),
       children: [
@@ -113,36 +110,51 @@ function SelectTrigger({
   );
 }
 function SelectValue({ placeholder }) {
-  const { selectedLabel } = useSelect();
-  return /* @__PURE__ */ jsx("span", { children: selectedLabel || placeholder });
+  const { value, items } = useSelect();
+  const label = value ? items.get(value) : "";
+  return /* @__PURE__ */ jsx("span", { children: label || placeholder });
 }
-function SelectContent({ children }) {
-  const { open, query, setQuery } = useSelect();
+function SelectContent({
+  className,
+  children
+}) {
+  const { open, searchable, query, setQuery } = useSelect();
   if (!open) return null;
-  return /* @__PURE__ */ jsxs("div", { className: "absolute mt-1 w-full bg-background border rounded-md shadow-md z-50", children: [
-    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 px-2 py-1 border-b", children: [
-      /* @__PURE__ */ jsx(SearchIcon, { className: "size-4 opacity-50" }),
-      /* @__PURE__ */ jsx(
-        "input",
-        {
-          value: query,
-          onChange: (e) => setQuery(e.target.value),
-          placeholder: "Buscar...",
-          className: "w-full outline-none text-sm bg-transparent"
-        }
-      )
-    ] }),
-    /* @__PURE__ */ jsx("div", { className: "p-1 max-h-60 overflow-y-auto", children })
-  ] });
+  return /* @__PURE__ */ jsxs(
+    "div",
+    {
+      className: cn(
+        "absolute z-50 mt-1 w-full rounded-md border bg-background shadow-md",
+        className
+      ),
+      children: [
+        searchable && /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2 border-b px-2 py-1", children: [
+          /* @__PURE__ */ jsx(SearchIcon, { className: "size-4 opacity-50" }),
+          /* @__PURE__ */ jsx(
+            "input",
+            {
+              value: query,
+              onChange: (e) => setQuery(e.target.value),
+              placeholder: "Buscar...",
+              className: "w-full bg-transparent text-sm outline-none"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "max-h-60 overflow-y-auto p-1", children })
+      ]
+    }
+  );
 }
 function SelectItem({
   value,
   children
 }) {
-  const { value: selected, onChange, registerItem, query } = useSelect();
+  const { value: selected, onChange, registerItem, searchable, query } = useSelect();
   const label = String(children);
-  registerItem(value, label);
-  const visible = normalize(label).includes(normalize(query));
+  React.useEffect(() => {
+    registerItem({ value, label });
+  }, [value, label, registerItem]);
+  const visible = searchable ? normalize(label).includes(normalize(query)) : true;
   if (!visible) return null;
   const isSelected = selected === value;
   return /* @__PURE__ */ jsxs(
@@ -150,12 +162,12 @@ function SelectItem({
     {
       onClick: () => onChange(value, label),
       className: cn(
-        "flex items-center justify-between px-2 py-1.5 cursor-pointer rounded-sm text-sm",
-        "hover:bg-accent-hover/20",
+        "flex cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-sm",
+        "hover:bg-accent-hover",
         isSelected && "text-accent"
       ),
       children: [
-        label,
+        children,
         isSelected && /* @__PURE__ */ jsx(CheckIcon, { className: "size-4" })
       ]
     }
@@ -514,7 +526,7 @@ function CardImage({
 }
 
 // components/ui/Compuesto/Modals/Dialog.tsx
-import React4, { useEffect as useEffect2, useCallback } from "react";
+import React4, { useEffect as useEffect2, useCallback as useCallback2 } from "react";
 import { X as X2 } from "lucide-react";
 import { jsx as jsx8, jsxs as jsxs5 } from "react/jsx-runtime";
 var sizeClasses = {
@@ -533,7 +545,7 @@ function Dialog({
   className = "",
   children
 }) {
-  const handleKeyDown = useCallback(
+  const handleKeyDown = useCallback2(
     (e) => {
       if (e.key === "Escape") onClose();
     },

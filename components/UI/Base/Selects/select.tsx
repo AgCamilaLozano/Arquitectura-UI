@@ -5,15 +5,30 @@ import { CheckIcon, ChevronDownIcon, SearchIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // ─────────────────────────────────────────────
+// Utils
+// ─────────────────────────────────────────────
+const normalize = (s: string) =>
+  s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+
+// ─────────────────────────────────────────────
 // Context
 // ─────────────────────────────────────────────
+type Item = {
+  value: string
+  label: string
+}
+
 type SelectContextType = {
   value?: string
-  selectedLabel?: string
   onChange: (value: string, label: string) => void
+
   open: boolean
-  setOpen: (open: boolean) => void
-  registerItem: (value: string, label: string) => void
+  setOpen: (v: boolean) => void
+
+  items: Map<string, string>
+  registerItem: (item: Item) => void
+
+  searchable: boolean
   query: string
   setQuery: (q: string) => void
 }
@@ -22,16 +37,9 @@ const SelectContext = React.createContext<SelectContextType | null>(null)
 
 function useSelect() {
   const ctx = React.useContext(SelectContext)
-  if (!ctx) throw new Error("Select must be inside <Select>")
+  if (!ctx) throw new Error("Select must be used inside <Select>")
   return ctx
 }
-
-// util búsqueda
-const normalize = (s: string) =>
-  s
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
 
 // ─────────────────────────────────────────────
 // Root
@@ -39,50 +47,44 @@ const normalize = (s: string) =>
 function Select({
   value,
   onValueChange,
-  children
+  children,
+  searchable = false
 }: {
   value?: string
   onValueChange: (value: string) => void
   children: React.ReactNode
+  searchable?: boolean
 }) {
   const [open, setOpen] = React.useState(false)
   const [query, setQuery] = React.useState("")
+  const items = React.useRef<Map<string, string>>(new Map())
 
-  const itemsMap = React.useRef<Map<string, string>>(new Map())
-  itemsMap.current = new Map()
+  const registerItem = React.useCallback((item: Item) => {
+    if (!items.current.has(item.value)) {
+      items.current.set(item.value, item.label)
+    }
+  }, [])
 
-  const [selectedLabel, setSelectedLabel] = React.useState("")
-
-  const registerItem = (value: string, label: string) => {
-    itemsMap.current.set(value, label)
+  const onChange = (val: string, label: string) => {
+    onValueChange(val)
+    setOpen(false)
   }
-
-  React.useEffect(() => {
-    const label = itemsMap.current.get(value ?? "")
-    setSelectedLabel(label ?? "")
-  })
 
   return (
     <SelectContext.Provider
       value={{
         value,
-        selectedLabel,
-        onChange: (val, label) => {
-          setSelectedLabel(label)
-          onValueChange(val)
-          setOpen(false)
-          setQuery("") // reset búsqueda
-        },
+        onChange,
         open,
         setOpen,
+        items: items.current,
         registerItem,
+        searchable,
         query,
         setQuery
       }}
     >
-      <div className="relative inline-block w-full">
-        {children}
-      </div>
+      <div className="relative inline-block w-full">{children}</div>
     </SelectContext.Provider>
   )
 }
@@ -91,11 +93,11 @@ function Select({
 // Trigger
 // ─────────────────────────────────────────────
 function SelectTrigger({
-  children,
-  className
+  className,
+  children
 }: {
-  children: React.ReactNode
   className?: string
+  children: React.ReactNode
 }) {
   const { open, setOpen } = useSelect()
 
@@ -104,7 +106,7 @@ function SelectTrigger({
       type="button"
       onClick={() => setOpen(!open)}
       className={cn(
-        "border-border flex w-full items-center justify-between px-3 py-2 text-sm border rounded-md",
+        "border-border flex w-full items-center justify-between rounded-md border px-3 py-2 text-sm",
         className
       )}
     >
@@ -115,43 +117,56 @@ function SelectTrigger({
 }
 
 // ─────────────────────────────────────────────
-// Value
+// Value (label dinámico)
 // ─────────────────────────────────────────────
 function SelectValue({ placeholder }: { placeholder?: string }) {
-  const { selectedLabel } = useSelect()
-  return <span>{selectedLabel || placeholder}</span>
+  const { value, items } = useSelect()
+
+  const label = value ? items.get(value) : ""
+
+  return <span>{label || placeholder}</span>
 }
 
 // ─────────────────────────────────────────────
-// Content (con buscador)
+// Content
 // ─────────────────────────────────────────────
-function SelectContent({ children }: { children: React.ReactNode }) {
-  const { open, query, setQuery } = useSelect()
+function SelectContent({
+  className,
+  children
+}: {
+  className?: string
+  children: React.ReactNode
+}) {
+  const { open, searchable, query, setQuery } = useSelect()
 
   if (!open) return null
 
   return (
-    <div className="absolute mt-1 w-full bg-background border rounded-md shadow-md z-50">
-      {/* 🔍 buscador */}
-      <div className="flex items-center gap-2 px-2 py-1 border-b">
-        <SearchIcon className="size-4 opacity-50" />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Buscar..."
-          className="w-full outline-none text-sm bg-transparent"
-        />
-      </div>
+    <div
+      className={cn(
+        "absolute z-50 mt-1 w-full rounded-md border bg-background shadow-md",
+        className
+      )}
+    >
+      {searchable && (
+        <div className="flex items-center gap-2 border-b px-2 py-1">
+          <SearchIcon className="size-4 opacity-50" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar..."
+            className="w-full bg-transparent text-sm outline-none"
+          />
+        </div>
+      )}
 
-      <div className="p-1 max-h-60 overflow-y-auto">
-        {children}
-      </div>
+      <div className="max-h-60 overflow-y-auto p-1">{children}</div>
     </div>
   )
 }
 
 // ─────────────────────────────────────────────
-// Item (con filtro)
+// Item
 // ─────────────────────────────────────────────
 function SelectItem({
   value,
@@ -160,14 +175,18 @@ function SelectItem({
   value: string
   children: React.ReactNode
 }) {
-  const { value: selected, onChange, registerItem, query } = useSelect()
+  const { value: selected, onChange, registerItem, searchable, query } = useSelect()
 
   const label = String(children)
 
-  registerItem(value, label)
+  // registrar UNA vez
+  React.useEffect(() => {
+    registerItem({ value, label })
+  }, [value, label, registerItem])
 
-  // 🔍 filtro inteligente
-  const visible = normalize(label).includes(normalize(query))
+  const visible = searchable
+    ? normalize(label).includes(normalize(query))
+    : true
 
   if (!visible) return null
 
@@ -177,12 +196,12 @@ function SelectItem({
     <div
       onClick={() => onChange(value, label)}
       className={cn(
-        "flex items-center justify-between px-2 py-1.5 cursor-pointer rounded-sm text-sm",
-        "hover:bg-accent-hover/20",
+        "flex cursor-pointer items-center justify-between rounded-sm px-2 py-1.5 text-sm",
+        "hover:bg-accent-hover",
         isSelected && "text-accent"
       )}
     >
-      {label}
+      {children}
       {isSelected && <CheckIcon className="size-4" />}
     </div>
   )
