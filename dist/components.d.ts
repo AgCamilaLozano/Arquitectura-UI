@@ -283,6 +283,8 @@ interface Column<T> {
     align?: "left" | "center" | "right";
     /** Ancho fijo opcional (ej. "120px", "10%") */
     width?: string;
+    /** Título superior opcional para agrupar columnas */
+    group?: string;
 }
 type SortDirection = "asc" | "desc" | null;
 interface SortState {

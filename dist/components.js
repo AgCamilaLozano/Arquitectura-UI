@@ -1007,6 +1007,23 @@ function Table({
   onSort,
   headerVariant = "default"
 }) {
+  const safeColumns = Array.isArray(columns) ? columns : [];
+  const groups = [];
+  if (safeColumns.length > 0) {
+    safeColumns.forEach((col) => {
+      const groupTitle = col.group || "";
+      const lastGroup = groups[groups.length - 1];
+      if (lastGroup && lastGroup.title === groupTitle) {
+        lastGroup.colSpan++;
+      } else {
+        groups.push({ title: groupTitle, colSpan: 1 });
+      }
+    });
+  }
+  const hasGroups = groups.some((g) => g.title !== "");
+  const safeData = Array.isArray(data) ? data : [];
+  const allSelected = safeData.length > 0 && safeData.every((r) => activeSelected.has(r[rowKey]));
+  const someSelected = safeData.some((r) => activeSelected.has(r[rowKey]));
   const [internalSort, setInternalSort] = useState5({
     key: "",
     direction: null
@@ -1023,7 +1040,6 @@ function Table({
     setInternalSort(next);
     onSort == null ? void 0 : onSort(next);
   };
-  const safeData = Array.isArray(data) ? data : [];
   const sortedData = !onSort && internalSort.key && internalSort.direction ? [...safeData].sort((a, b) => {
     const aVal = a[internalSort.key];
     const bVal = b[internalSort.key];
@@ -1043,8 +1059,19 @@ function Table({
     setInternalSelected(next);
     onSelectionChange == null ? void 0 : onSelectionChange(Array.from(next));
   };
-  const allSelected = sortedData.length > 0 && sortedData.every((r) => activeSelected.has(r[rowKey]));
-  const someSelected = sortedData.some((r) => activeSelected.has(r[rowKey]));
+  const SelectAllCheckbox = /* @__PURE__ */ jsx14(
+    Input,
+    {
+      type: "checkbox",
+      checked: allSelected,
+      ref: (el) => {
+        if (el) el.indeterminate = someSelected && !allSelected;
+      },
+      onChange: toggleAll,
+      className: "accent-accent w-4 h-4 rounded cursor-pointer",
+      "aria-label": "Seleccionar todas las filas"
+    }
+  );
   const rowVariantClass = (index, isSelected) => {
     const base = "border-b border-border transition-colors";
     const hover = onRowClick ? "cursor-pointer hover:bg-accent-hover" : "";
@@ -1053,7 +1080,6 @@ function Table({
     return [base, hover, selected, striped].filter(Boolean).join(" ");
   };
   const cellPadding = cellPaddingMap[size];
-  const safeColumns = Array.isArray(columns) ? columns : [];
   return /* @__PURE__ */ jsx14(
     "div",
     {
@@ -1064,54 +1090,61 @@ function Table({
         {
           className: `w-full table-fixed border-collapse ${variant === "bordered" ? "border border-border" : ""}`,
           children: [
-            /* @__PURE__ */ jsx14(
+            /* @__PURE__ */ jsxs10(
               "thead",
               {
                 className: `${headerVariants[headerVariant != null ? headerVariant : "default"]} ${stickyHeader ? "sticky top-0 z-10" : ""}`,
-                children: /* @__PURE__ */ jsxs10("tr", { children: [
-                  selectable && /* @__PURE__ */ jsx14("th", { className: `${cellPadding} w-10`, children: /* @__PURE__ */ jsx14(
-                    Input,
-                    {
-                      type: "checkbox",
-                      checked: allSelected,
-                      ref: (el) => {
-                        if (el) el.indeterminate = someSelected && !allSelected;
-                      },
-                      onChange: toggleAll,
-                      className: "accent-accent w-4 h-4 rounded cursor-pointer",
-                      "aria-label": "Seleccionar todas las filas"
-                    }
-                  ) }),
-                  safeColumns.map((col) => {
-                    var _a;
-                    const key = String(col.key);
-                    const isActive = internalSort.key === key;
-                    return /* @__PURE__ */ jsx14(
+                children: [
+                  hasGroups && /* @__PURE__ */ jsxs10("tr", { className: "border-b border-border/50", children: [
+                    selectable && /* @__PURE__ */ jsx14("th", { rowSpan: 2, className: `${cellPadding} w-10 border-r border-border/50 align-middle`, children: SelectAllCheckbox }),
+                    groups.map((group, idx) => /* @__PURE__ */ jsx14(
                       "th",
                       {
+                        colSpan: group.colSpan,
                         className: [
                           cellPadding,
-                          "font-bold tracking-widest uppercase text-xs",
-                          alignMap[(_a = col.align) != null ? _a : "left"],
-                          col.sortable ? "select-none cursor-pointer hover:text-text-primary transition-colors" : "",
-                          variant === "bordered" ? "border border-border" : ""
+                          "text-center font-bold tracking-wider uppercase text-[10px] opacity-70",
+                          variant === "bordered" ? "border border-border" : "",
+                          idx < groups.length - 1 ? "border-r border-border/50" : ""
                         ].filter(Boolean).join(" "),
-                        style: { width: col.width },
-                        onClick: col.sortable ? () => handleSort(key) : void 0,
-                        "aria-sort": isActive ? internalSort.direction === "asc" ? "ascending" : "descending" : "none",
-                        children: /* @__PURE__ */ jsxs10("span", { className: "inline-flex items-center gap-1", children: [
-                          col.header,
-                          col.sortable && /* @__PURE__ */ jsx14(SortIcon, { direction: isActive ? internalSort.direction : null })
-                        ] })
+                        children: group.title
                       },
-                      key
-                    );
-                  })
-                ] })
+                      `group-${idx}`
+                    ))
+                  ] }),
+                  /* @__PURE__ */ jsxs10("tr", { children: [
+                    !hasGroups && selectable && /* @__PURE__ */ jsx14("th", { className: `${cellPadding} w-10`, children: SelectAllCheckbox }),
+                    safeColumns.map((col) => {
+                      var _a;
+                      const key = String(col.key);
+                      const isActive = internalSort.key === key;
+                      return /* @__PURE__ */ jsx14(
+                        "th",
+                        {
+                          className: [
+                            cellPadding,
+                            "font-bold tracking-widest uppercase text-xs",
+                            alignMap[(_a = col.align) != null ? _a : "left"],
+                            col.sortable ? "select-none cursor-pointer hover:text-text-primary transition-colors" : "",
+                            variant === "bordered" ? "border border-border" : ""
+                          ].filter(Boolean).join(" "),
+                          style: { width: col.width },
+                          onClick: col.sortable ? () => handleSort(key) : void 0,
+                          "aria-sort": isActive ? internalSort.direction === "asc" ? "ascending" : "descending" : "none",
+                          children: /* @__PURE__ */ jsxs10("span", { className: "inline-flex items-center gap-1", children: [
+                            col.header,
+                            col.sortable && /* @__PURE__ */ jsx14(SortIcon, { direction: isActive ? internalSort.direction : null })
+                          ] })
+                        },
+                        key
+                      );
+                    })
+                  ] })
+                ]
               }
             ),
             /* @__PURE__ */ jsxs10("tbody", { className: "overflorw-y-auto scrollbar-soft", children: [
-              loading && Array.from({ length: skeletonRows }).map((_, i) => /* @__PURE__ */ jsx14(SkeletonRow, { cols: columns.length, selectable }, i)),
+              loading && Array.from({ length: skeletonRows }).map((_, i) => /* @__PURE__ */ jsx14(SkeletonRow, { cols: safeColumns.length, selectable }, i)),
               !loading && sortedData.length === 0 && /* @__PURE__ */ jsx14(EmptyState, { content: emptyState }),
               !loading && sortedData.map((row, index) => {
                 const id = row[rowKey];

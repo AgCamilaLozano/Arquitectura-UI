@@ -28,6 +28,8 @@ export interface Column<T> {
     align?: "left" | "center" | "right";
     /** Ancho fijo opcional (ej. "120px", "10%") */
     width?: string;
+    /** Título superior opcional para agrupar columnas */
+    group?: string;
 }
 
 export type SortDirection = "asc" | "desc" | null;
@@ -201,6 +203,30 @@ export function Table<T extends Record<string, unknown>>({
     onSort,
     headerVariant = "default"
 }: TableProps<T>) {
+    const safeColumns = Array.isArray(columns) ? columns : [];
+
+    // ─── Lógica de Agrupación de Columnas ──────────────────────────────────────
+    const groups: { title: string; colSpan: number }[] = [];
+    if (safeColumns.length > 0) {
+        safeColumns.forEach((col) => {
+            const groupTitle = col.group || "";
+            const lastGroup = groups[groups.length - 1];
+
+            if (lastGroup && lastGroup.title === groupTitle) {
+                lastGroup.colSpan++;
+            } else {
+                groups.push({ title: groupTitle, colSpan: 1 });
+            }
+        });
+    }
+    const hasGroups = groups.some((g) => g.title !== "");
+    const safeData = Array.isArray(data) ? data : []
+
+    const allSelected =
+        safeData.length > 0 &&
+        safeData.every((r) => activeSelected.has(r[rowKey]));
+    const someSelected = safeData.some((r) => activeSelected.has(r[rowKey]));
+
     // ── Estado interno de ordenamiento ──
     const [internalSort, setInternalSort] = useState<SortState>({
         key: "",
@@ -236,7 +262,7 @@ export function Table<T extends Record<string, unknown>>({
     };
 
     /** Lógica clave: ordena internamente solo si no hay callback externo */
-    const safeData = Array.isArray(data) ? data : []
+
 
     const sortedData =
         !onSort && internalSort.key && internalSort.direction
@@ -267,10 +293,18 @@ export function Table<T extends Record<string, unknown>>({
         onSelectionChange?.(Array.from(next) as (T[keyof T])[]);
     };
 
-    const allSelected =
-        sortedData.length > 0 &&
-        sortedData.every((r) => activeSelected.has(r[rowKey]));
-    const someSelected = sortedData.some((r) => activeSelected.has(r[rowKey]));
+    const SelectAllCheckbox = (
+        <Input
+            type="checkbox"
+            checked={allSelected}
+            ref={(el) => {
+                if (el) el.indeterminate = someSelected && !allSelected;
+            }}
+            onChange={toggleAll}
+            className="accent-accent w-4 h-4 rounded cursor-pointer"
+            aria-label="Seleccionar todas las filas"
+        />
+    );
 
     // ── Clases por variante ───────────────────────────────────────────────────
     const rowVariantClass = (index: number, isSelected: boolean) => {
@@ -286,7 +320,7 @@ export function Table<T extends Record<string, unknown>>({
     };
 
     const cellPadding = cellPaddingMap[size];
-    const safeColumns = Array.isArray(columns) ? columns : []
+
     return (
         <div
             className={`w-full overflow-visible rounded-md border border-border bg-surface/50 scrollbar-soft ${className}`}
@@ -300,21 +334,35 @@ export function Table<T extends Record<string, unknown>>({
                     className={`${headerVariants[headerVariant ?? "default"]} ${stickyHeader ? "sticky top-0 z-10" : ""
                         }`}
                 >
+                    {/* Fila de Grupos (Subtítulos de agrupación) */}
+                    {hasGroups && (
+                        <tr className="border-b border-border/50">
+                            {selectable && (
+                                <th rowSpan={2} className={`${cellPadding} w-10 border-r border-border/50 align-middle`}>
+                                    {SelectAllCheckbox}
+                                </th>
+                            )}
+                            {groups.map((group, idx) => (
+                                <th
+                                    key={`group-${idx}`}
+                                    colSpan={group.colSpan}
+                                    className={[
+                                        cellPadding,
+                                        "text-center font-bold tracking-wider uppercase text-[10px] opacity-70",
+                                        variant === "bordered" ? "border border-border" : "",
+                                        idx < groups.length - 1 ? "border-r border-border/50" : "",
+                                    ].filter(Boolean).join(" ")}
+                                >
+                                    {group.title}
+                                </th>
+                            ))}
+                        </tr>
+                    )}
+
                     <tr>
                         {/* Checkbox de selección global */}
-                        {selectable && (
-                            <th className={`${cellPadding} w-10`}>
-                                <Input
-                                    type="checkbox"
-                                    checked={allSelected}
-                                    ref={(el) => {
-                                        if (el) el.indeterminate = someSelected && !allSelected;
-                                    }}
-                                    onChange={toggleAll}
-                                    className="accent-accent w-4 h-4 rounded cursor-pointer"
-                                    aria-label="Seleccionar todas las filas"
-                                />
-                            </th>
+                        {!hasGroups && selectable && (
+                            <th className={`${cellPadding} w-10`}>{SelectAllCheckbox}</th>
                         )}
 
                         {safeColumns.map((col) => {
@@ -361,7 +409,7 @@ export function Table<T extends Record<string, unknown>>({
                     {/* Estado de carga */}
                     {loading &&
                         Array.from({ length: skeletonRows }).map((_, i) => (
-                            <SkeletonRow key={i} cols={columns.length} selectable={selectable} />
+                            <SkeletonRow key={i} cols={safeColumns.length} selectable={selectable} />
                         ))}
 
                     {/* Estado vacío */}
