@@ -293,7 +293,7 @@ export function Table<T extends Record<string, unknown>>({
             style={{ boxShadow: "var(--shadow-card)" }}
         >
             <table
-                className={`w-full border-collapse ${variant === "bordered" ? "border border-border" : ""}`}
+                className={`w-full table-fixed border-collapse ${variant === "bordered" ? "border border-border" : ""}`}
             >
                 {/* ── Encabezado ─────────────────────────────────────────────────── */}
                 <thead
@@ -407,6 +407,7 @@ export function Table<T extends Record<string, unknown>>({
                                         return (
                                             <td
                                                 key={key}
+                                                style={{ width: col.width }}
                                                 className={[
                                                     cellPadding,
                                                     "text-text-primary",

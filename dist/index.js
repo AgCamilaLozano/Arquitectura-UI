@@ -1062,7 +1062,7 @@ function Table({
       children: /* @__PURE__ */ jsxs10(
         "table",
         {
-          className: `w-full border-collapse ${variant === "bordered" ? "border border-border" : ""}`,
+          className: `w-full table-fixed border-collapse ${variant === "bordered" ? "border border-border" : ""}`,
           children: [
             /* @__PURE__ */ jsx14(
               "thead",
@@ -1143,6 +1143,7 @@ function Table({
                         return /* @__PURE__ */ jsx14(
                           "td",
                           {
+                            style: { width: col.width },
                             className: [
                               cellPadding,
                               "text-text-primary",
