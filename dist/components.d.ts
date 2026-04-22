@@ -266,24 +266,13 @@ interface TooltipProps {
 }
 declare const Tooltip: ({ content, children, side, ariaLabel, align, variant, size, disabled, }: TooltipProps) => react_jsx_runtime.JSX.Element;
 
-/**
- * Props de cada columna.
- * @template T - Tipo del objeto de datos de cada fila
- */
 interface Column<T> {
-    /** Identificador único de la columna */
     key: keyof T | string;
-    /** Texto del encabezado */
     header: string;
-    /** Función para renderizar la celda; si se omite, imprime el valor directamente */
     render?: (row: T, index: number) => ReactNode;
-    /** Permite al usuario ordenar por esta columna */
     sortable?: boolean;
-    /** Alineación del contenido de la celda */
     align?: "left" | "center" | "right";
-    /** Ancho fijo opcional (ej. "120px", "10%") */
     width?: string;
-    /** Título superior opcional para agrupar columnas */
     group?: string;
 }
 type SortDirection = "asc" | "desc" | null;
@@ -291,53 +280,18 @@ interface SortState {
     key: string;
     direction: SortDirection;
 }
-/**
- * Props principales del componente Table.
- * @template T - Tipo del objeto de datos
- */
 interface TableProps<T> {
-    /** Arreglo de datos a mostrar */
     data: T[];
-    /** Definición de columnas */
     columns: Column<T>[];
-    /** Clave única por fila (keyof T) */
     rowKey: keyof T;
-    /** Muestra skeleton de carga */
-    loading?: boolean;
-    /** Número de filas skeleton durante la carga */
-    skeletonRows?: number;
-    /** Mensaje o nodo cuando no hay datos */
-    emptyState?: ReactNode;
-    /** Habilita selección de filas con checkbox */
     selectable?: boolean;
-    /** Filas seleccionadas (array de valores de rowKey) */
     selectedRows?: (T[keyof T])[];
-    /** Callback al cambiar la selección */
     onSelectionChange?: (selected: (T[keyof T])[]) => void;
-    /** Callback al hacer clic en una fila */
     onRowClick?: (row: T) => void;
-    /** Encabezado fijo al hacer scroll */
     stickyHeader?: boolean;
-    /** Variante visual de la tabla */
-    variant?: "default" | "striped" | "bordered";
-    /** Tamaño de las celdas */
-    size?: "sm" | "md" | "lg";
-    /** Clase CSS adicional para el contenedor */
     className?: string;
-    /** Callback de ordenamiento externo; si se omite, el ordenamiento es interno */
-    onSort?: (sort: SortState) => void;
-    headerVariant?: "default" | "primary" | "accent";
 }
-/**
- * Table — Componente de tabla genérica y reutilizable.
- *
- * Lógica clave:
- * - Usa generics `<T>` para tipar filas y columnas sin acoplar a datos específicos.
- * - El ordenamiento puede ser interno (por defecto) o delegado al padre via `onSort`.
- * - La selección múltiple se maneja con un `Set` interno cuando no se pasa `selectedRows`.
- * - `stickyHeader` usa `sticky top-0` con z-index para mantener el header visible.
- */
-declare function Table<T extends Record<string, unknown>>({ data, columns, rowKey, loading, skeletonRows, emptyState, selectable, selectedRows, onSelectionChange, onRowClick, stickyHeader, variant, size, className, onSort, headerVariant }: TableProps<T>): react_jsx_runtime.JSX.Element;
+declare function Table<T extends Record<string, unknown>>({ data, columns, rowKey, selectable, selectedRows, onSelectionChange, onRowClick, stickyHeader, className, }: TableProps<T>): react_jsx_runtime.JSX.Element;
 
 declare function Breadcrumbs(): react_jsx_runtime.JSX.Element;
 

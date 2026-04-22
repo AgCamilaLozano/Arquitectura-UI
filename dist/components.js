@@ -917,288 +917,120 @@ import { Fragment as Fragment2, jsx as jsx13, jsxs as jsxs9 } from "react/jsx-ru
 // components/ui/DataDisplay/Table.tsx
 import { useState as useState5 } from "react";
 import { jsx as jsx14, jsxs as jsxs10 } from "react/jsx-runtime";
-var cellPaddingMap = {
-  sm: "px-3 py-2 text-xs",
-  md: "px-4 py-3 text-sm",
-  lg: "px-5 py-4 text-base"
-};
 var alignMap = {
   left: "text-left",
   center: "text-center",
   right: "text-right"
 };
-var headerVariants = {
-  default: "bg-muted text-text-secondary",
-  primary: "bg-primary text-background",
-  accent: "bg-accent/80 text-white"
-};
-function SortIcon({ direction }) {
-  return /* @__PURE__ */ jsxs10("span", { className: "inline-flex flex-col ml-1 gap-[2px] ", children: [
-    /* @__PURE__ */ jsx14(
-      "svg",
-      {
-        className: `w-2.5 h-2.5 transition-colors ${direction === "asc" ? "text-accent" : "text-text-muted"}`,
-        viewBox: "0 0 10 6",
-        fill: "currentColor",
-        children: /* @__PURE__ */ jsx14("path", { d: "M5 0L10 6H0L5 0Z" })
-      }
-    ),
-    /* @__PURE__ */ jsx14(
-      "svg",
-      {
-        className: `w-2.5 h-2.5 transition-colors ${direction === "desc" ? "text-accent" : "text-text-muted"}`,
-        viewBox: "0 0 10 6",
-        fill: "currentColor",
-        children: /* @__PURE__ */ jsx14("path", { d: "M5 6L0 0H10L5 6Z" })
-      }
-    )
-  ] });
-}
-function SkeletonRow({ cols, selectable }) {
-  return /* @__PURE__ */ jsxs10("tr", { className: "border-b border-border", children: [
-    selectable && /* @__PURE__ */ jsx14("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsx14("div", { className: "w-4 h-4 rounded bg-muted animate-pulse" }) }),
-    Array.from({ length: cols }).map((_, i) => /* @__PURE__ */ jsx14("td", { className: "px-4 py-3", children: /* @__PURE__ */ jsx14(
-      "div",
-      {
-        className: "h-3 rounded bg-muted animate-pulse",
-        style: { width: `${60 + Math.random() * 30}%` }
-      }
-    ) }, i))
-  ] });
-}
-function EmptyState({ content }) {
-  return /* @__PURE__ */ jsx14("tr", { children: /* @__PURE__ */ jsx14("td", { colSpan: 999, children: /* @__PURE__ */ jsxs10("div", { className: "flex flex-col items-center justify-center py-16 text-text-muted gap-3", children: [
-    /* @__PURE__ */ jsx14(
-      "svg",
-      {
-        className: "w-10 h-10 opacity-40",
-        fill: "none",
-        viewBox: "0 0 24 24",
-        stroke: "currentColor",
-        strokeWidth: 1.5,
-        children: /* @__PURE__ */ jsx14(
-          "path",
-          {
-            strokeLinecap: "round",
-            strokeLinejoin: "round",
-            d: "M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
-          }
-        )
-      }
-    ),
-    /* @__PURE__ */ jsx14("span", { className: "text-sm", children: content != null ? content : "No hay datos disponibles" })
-  ] }) }) });
-}
 function Table({
   data,
   columns,
   rowKey,
-  loading = false,
-  skeletonRows = 5,
-  emptyState,
   selectable = false,
   selectedRows,
   onSelectionChange,
   onRowClick,
   stickyHeader = false,
-  variant = "default",
-  size = "md",
-  className = "",
-  onSort,
-  headerVariant = "default"
+  className = ""
 }) {
-  const safeColumns = Array.isArray(columns) ? columns : [];
-  const groups = [];
-  if (safeColumns.length > 0) {
-    safeColumns.forEach((col) => {
-      const groupTitle = col.group || "";
-      const lastGroup = groups[groups.length - 1];
-      if (lastGroup && lastGroup.title === groupTitle) {
-        lastGroup.colSpan++;
-      } else {
-        groups.push({ title: groupTitle, colSpan: 1 });
-      }
-    });
-  }
-  const hasGroups = groups.some((g) => g.title !== "");
-  const safeData = Array.isArray(data) ? data : [];
+  const safeColumns = columns != null ? columns : [];
+  const safeData = data != null ? data : [];
   const [internalSelected, setInternalSelected] = useState5(
     new Set(selectedRows != null ? selectedRows : [])
   );
   const activeSelected = selectedRows !== void 0 ? new Set(selectedRows) : internalSelected;
-  const allSelected = safeData.length > 0 && safeData.every((r) => activeSelected.has(r[rowKey]));
-  const someSelected = safeData.some((r) => activeSelected.has(r[rowKey]));
-  const [internalSort, setInternalSort] = useState5({
-    key: "",
-    direction: null
-  });
-  const handleSort = (key) => {
-    const next = {
-      key,
-      direction: internalSort.key === key ? internalSort.direction === "asc" ? "desc" : internalSort.direction === "desc" ? null : "asc" : "asc"
-    };
-    setInternalSort(next);
-    onSort == null ? void 0 : onSort(next);
-  };
-  const sortedData = !onSort && internalSort.key && internalSort.direction ? [...safeData].sort((a, b) => {
-    const aVal = a[internalSort.key];
-    const bVal = b[internalSort.key];
-    const cmp = typeof aVal === "number" && typeof bVal === "number" ? aVal - bVal : String(aVal).localeCompare(String(bVal));
-    return internalSort.direction === "asc" ? cmp : -cmp;
-  }) : safeData;
   const toggleRow = (id) => {
     const next = new Set(activeSelected);
     next.has(id) ? next.delete(id) : next.add(id);
     setInternalSelected(next);
     onSelectionChange == null ? void 0 : onSelectionChange(Array.from(next));
   };
-  const toggleAll = () => {
-    const allIds = sortedData.map((r) => r[rowKey]);
-    const allSelected2 = allIds.every((id) => activeSelected.has(id));
-    const next = allSelected2 ? /* @__PURE__ */ new Set() : new Set(allIds);
-    setInternalSelected(next);
-    onSelectionChange == null ? void 0 : onSelectionChange(Array.from(next));
-  };
-  const SelectAllCheckbox = /* @__PURE__ */ jsx14(
-    Input,
-    {
-      type: "checkbox",
-      checked: allSelected,
-      ref: (el) => {
-        if (el) el.indeterminate = someSelected && !allSelected;
-      },
-      onChange: toggleAll,
-      className: "accent-accent w-4 h-4 rounded cursor-pointer",
-      "aria-label": "Seleccionar todas las filas"
-    }
-  );
-  const rowVariantClass = (index, isSelected) => {
-    const base = "border-b border-border transition-colors";
-    const hover = onRowClick ? "cursor-pointer hover:bg-accent-hover" : "";
-    const selected = isSelected ? "bg-accent-soft" : "";
-    const striped = variant === "striped" && index % 2 !== 0 && !isSelected ? "bg-muted/40" : "";
-    return [base, hover, selected, striped].filter(Boolean).join(" ");
-  };
-  const cellPadding = cellPaddingMap[size];
-  return /* @__PURE__ */ jsx14(
-    "div",
-    {
-      className: `w-full overflow-x-auto rounded-md border border-border bg-surface/50 scrollbar-soft ${className}`,
-      style: { boxShadow: "var(--shadow-card)" },
-      children: /* @__PURE__ */ jsxs10(
-        "table",
-        {
-          className: `min-w-[2200px] table-fixed border-collapse ${variant === "bordered" ? "border border-border" : ""}`,
-          children: [
-            /* @__PURE__ */ jsxs10(
-              "thead",
+  const groups = [];
+  safeColumns.forEach((col) => {
+    const title = col.group || "";
+    const last = groups[groups.length - 1];
+    if (last && last.title === title) last.colSpan++;
+    else groups.push({ title, colSpan: 1 });
+  });
+  const hasGroups = groups.some((g) => g.title !== "");
+  return /* @__PURE__ */ jsx14("div", { className: `w-full overflow-x-auto ${className}`, children: /* @__PURE__ */ jsxs10("table", { className: "min-w-[2200px] table-fixed border-collapse", children: [
+    /* @__PURE__ */ jsxs10("colgroup", { children: [
+      selectable && /* @__PURE__ */ jsx14("col", { style: { width: "40px" } }),
+      safeColumns.map((col, i) => /* @__PURE__ */ jsx14("col", { style: { width: col.width || "180px" } }, i))
+    ] }),
+    /* @__PURE__ */ jsxs10(
+      "thead",
+      {
+        className: `bg-accent/80 text-white ${stickyHeader ? "sticky top-0 z-10" : ""}`,
+        children: [
+          hasGroups && /* @__PURE__ */ jsxs10("tr", { children: [
+            selectable && /* @__PURE__ */ jsx14("th", { rowSpan: 2, className: "px-3 py-2" }),
+            groups.map((g, i) => /* @__PURE__ */ jsx14(
+              "th",
               {
-                className: `${headerVariants[headerVariant != null ? headerVariant : "default"]} ${stickyHeader ? "sticky top-0 z-10" : ""}`,
-                children: [
-                  hasGroups && /* @__PURE__ */ jsxs10("tr", { className: "border-b border-border", children: [
-                    selectable && /* @__PURE__ */ jsx14("th", { rowSpan: 2, className: `${cellPadding} w-10 border-r border-border align-middle`, children: SelectAllCheckbox }),
-                    groups.map((group, idx) => /* @__PURE__ */ jsx14(
-                      "th",
-                      {
-                        colSpan: group.colSpan,
-                        className: [
-                          cellPadding,
-                          "text-center font-bold tracking-wider uppercase text-[10px]",
-                          variant === "bordered" ? "border border-border" : "",
-                          idx < groups.length - 1 ? "border-r border-border" : ""
-                        ].filter(Boolean).join(" "),
-                        children: group.title
-                      },
-                      `group-${idx}`
-                    ))
-                  ] }),
-                  /* @__PURE__ */ jsxs10("tr", { children: [
-                    !hasGroups && selectable && /* @__PURE__ */ jsx14("th", { className: `${cellPadding} w-10`, children: SelectAllCheckbox }),
-                    safeColumns.map((col) => {
-                      var _a;
-                      const key = String(col.key);
-                      const isActive = internalSort.key === key;
-                      return /* @__PURE__ */ jsx14(
-                        "th",
-                        {
-                          className: [
-                            cellPadding,
-                            "font-bold tracking-widest uppercase text-xs whitespace-nowrap",
-                            alignMap[(_a = col.align) != null ? _a : "left"],
-                            col.sortable ? "select-none cursor-pointer hover:text-text-primary transition-colors" : "",
-                            variant === "bordered" ? "border border-border" : ""
-                          ].filter(Boolean).join(" "),
-                          style: { width: col.width },
-                          onClick: col.sortable ? () => handleSort(key) : void 0,
-                          "aria-sort": isActive ? internalSort.direction === "asc" ? "ascending" : "descending" : "none",
-                          children: /* @__PURE__ */ jsxs10("span", { className: "inline-flex items-center gap-1", children: [
-                            col.header,
-                            col.sortable && /* @__PURE__ */ jsx14(SortIcon, { direction: isActive ? internalSort.direction : null })
-                          ] })
-                        },
-                        key
-                      );
-                    })
-                  ] })
-                ]
+                colSpan: g.colSpan,
+                className: "px-3 py-2 text-[10px] uppercase text-center opacity-70 whitespace-nowrap",
+                children: g.title
+              },
+              i
+            ))
+          ] }),
+          /* @__PURE__ */ jsxs10("tr", { children: [
+            !hasGroups && selectable && /* @__PURE__ */ jsx14("th", { className: "px-3 py-2" }),
+            safeColumns.map((col) => {
+              var _a;
+              return /* @__PURE__ */ jsx14(
+                "th",
+                {
+                  className: `px-3 py-2 text-xs font-bold uppercase whitespace-nowrap ${alignMap[(_a = col.align) != null ? _a : "left"]}`,
+                  children: col.header
+                },
+                String(col.key)
+              );
+            })
+          ] })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsx14("tbody", { children: safeData.map((row, i) => {
+      const id = row[rowKey];
+      const isSelected = activeSelected.has(id);
+      return /* @__PURE__ */ jsxs10(
+        "tr",
+        {
+          className: "border-b border-border hover:bg-muted/30",
+          onClick: () => {
+            onRowClick == null ? void 0 : onRowClick(row);
+            if (selectable) toggleRow(id);
+          },
+          children: [
+            selectable && /* @__PURE__ */ jsx14("td", { className: "px-3 py-2", children: /* @__PURE__ */ jsx14(
+              Input,
+              {
+                type: "checkbox",
+                checked: isSelected,
+                onChange: () => toggleRow(id),
+                onClick: (e) => e.stopPropagation()
               }
-            ),
-            /* @__PURE__ */ jsxs10("tbody", { className: "overflorw-y-auto scrollbar-soft", children: [
-              loading && Array.from({ length: skeletonRows }).map((_, i) => /* @__PURE__ */ jsx14(SkeletonRow, { cols: safeColumns.length, selectable }, i)),
-              !loading && sortedData.length === 0 && /* @__PURE__ */ jsx14(EmptyState, { content: emptyState }),
-              !loading && sortedData.map((row, index) => {
-                const id = row[rowKey];
-                const isSelected = activeSelected.has(id);
-                return /* @__PURE__ */ jsxs10(
-                  "tr",
-                  {
-                    className: rowVariantClass(index, isSelected),
-                    onClick: () => {
-                      onRowClick == null ? void 0 : onRowClick(row);
-                      if (selectable) toggleRow(id);
-                    },
-                    children: [
-                      selectable && /* @__PURE__ */ jsx14("td", { className: cellPadding, children: /* @__PURE__ */ jsx14(
-                        Input,
-                        {
-                          type: "checkbox",
-                          checked: isSelected,
-                          onChange: () => toggleRow(id),
-                          onClick: (e) => e.stopPropagation(),
-                          className: "accent-accent w-4 h-4 rounded cursor-pointer",
-                          "aria-label": `Seleccionar fila ${index + 1}`
-                        }
-                      ) }),
-                      columns.map((col) => {
-                        var _a, _b;
-                        const key = String(col.key);
-                        const value = col.render ? col.render(row, index) : String((_a = row[col.key]) != null ? _a : "\u2014");
-                        return /* @__PURE__ */ jsx14(
-                          "td",
-                          {
-                            style: { width: col.width },
-                            className: [
-                              cellPadding,
-                              "text-text-primary",
-                              alignMap[(_b = col.align) != null ? _b : "left"],
-                              variant === "bordered" ? "border border-border" : ""
-                            ].filter(Boolean).join(" "),
-                            children: value
-                          },
-                          key
-                        );
-                      })
-                    ]
-                  },
-                  String(id)
-                );
-              })
-            ] })
+            ) }),
+            safeColumns.map((col) => {
+              var _a, _b;
+              const value = col.render ? col.render(row, i) : String((_a = row[col.key]) != null ? _a : "\u2014");
+              return /* @__PURE__ */ jsx14(
+                "td",
+                {
+                  className: `px-3 py-2 ${alignMap[(_b = col.align) != null ? _b : "left"]}`,
+                  children: /* @__PURE__ */ jsx14("div", { className: "w-full min-w-0 overflow-hidden truncate", children: value })
+                },
+                String(col.key)
+              );
+            })
           ]
-        }
-      )
-    }
-  );
+        },
+        String(id)
+      );
+    }) })
+  ] }) });
 }
 
 // components/ui/Navegacion/Breadcrumbs.tsx
