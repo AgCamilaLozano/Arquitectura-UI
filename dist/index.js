@@ -1083,29 +1083,29 @@ function Table({
   return /* @__PURE__ */ jsx14(
     "div",
     {
-      className: `w-full overflow-visible rounded-md border border-border bg-surface/50 scrollbar-soft ${className}`,
+      className: `w-full overflow-x-auto rounded-md border border-border bg-surface/50 scrollbar-soft ${className}`,
       style: { boxShadow: "var(--shadow-card)" },
       children: /* @__PURE__ */ jsxs10(
         "table",
         {
-          className: `w-full table-fixed border-collapse ${variant === "bordered" ? "border border-border" : ""}`,
+          className: `min-w-[2200px] table-fixed border-collapse ${variant === "bordered" ? "border border-border" : ""}`,
           children: [
             /* @__PURE__ */ jsxs10(
               "thead",
               {
                 className: `${headerVariants[headerVariant != null ? headerVariant : "default"]} ${stickyHeader ? "sticky top-0 z-10" : ""}`,
                 children: [
-                  hasGroups && /* @__PURE__ */ jsxs10("tr", { className: "border-b border-border/50", children: [
-                    selectable && /* @__PURE__ */ jsx14("th", { rowSpan: 2, className: `${cellPadding} w-10 border-r border-border/50 align-middle`, children: SelectAllCheckbox }),
+                  hasGroups && /* @__PURE__ */ jsxs10("tr", { className: "border-b border-border", children: [
+                    selectable && /* @__PURE__ */ jsx14("th", { rowSpan: 2, className: `${cellPadding} w-10 border-r border-border align-middle`, children: SelectAllCheckbox }),
                     groups.map((group, idx) => /* @__PURE__ */ jsx14(
                       "th",
                       {
                         colSpan: group.colSpan,
                         className: [
                           cellPadding,
-                          "text-center font-bold tracking-wider uppercase text-[10px] opacity-70",
+                          "text-center font-bold tracking-wider uppercase text-[10px]",
                           variant === "bordered" ? "border border-border" : "",
-                          idx < groups.length - 1 ? "border-r border-border/50" : ""
+                          idx < groups.length - 1 ? "border-r border-border" : ""
                         ].filter(Boolean).join(" "),
                         children: group.title
                       },
@@ -1123,7 +1123,7 @@ function Table({
                         {
                           className: [
                             cellPadding,
-                            "font-bold tracking-widest uppercase text-xs",
+                            "font-bold tracking-widest uppercase text-xs whitespace-nowrap",
                             alignMap[(_a = col.align) != null ? _a : "left"],
                             col.sortable ? "select-none cursor-pointer hover:text-text-primary transition-colors" : "",
                             variant === "bordered" ? "border border-border" : ""

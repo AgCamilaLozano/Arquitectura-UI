@@ -338,9 +338,9 @@ export function Table<T extends Record<string, unknown>>({
                 >
                     {/* Fila de Grupos (Subtítulos de agrupación) */}
                     {hasGroups && (
-                        <tr className="border-b border-border/50">
+                        <tr className="border-b border-border">
                             {selectable && (
-                                <th rowSpan={2} className={`${cellPadding} w-10 border-r border-border/50 align-middle`}>
+                                <th rowSpan={2} className={`${cellPadding} w-10 border-r border-border align-middle`}>
                                     {SelectAllCheckbox}
                                 </th>
                             )}
@@ -350,9 +350,9 @@ export function Table<T extends Record<string, unknown>>({
                                     colSpan={group.colSpan}
                                     className={[
                                         cellPadding,
-                                        "text-center font-bold tracking-wider uppercase text-[10px] opacity-70",
+                                        "text-center font-bold tracking-wider uppercase text-[10px]",
                                         variant === "bordered" ? "border border-border" : "",
-                                        idx < groups.length - 1 ? "border-r border-border/50" : "",
+                                        idx < groups.length - 1 ? "border-r border-border" : "",
                                     ].filter(Boolean).join(" ")}
                                 >
                                     {group.title}
@@ -375,7 +375,7 @@ export function Table<T extends Record<string, unknown>>({
                                     key={key}
                                     className={[
                                         cellPadding,
-                                        "font-bold tracking-widest uppercase text-xs",
+                                        "font-bold tracking-widest uppercase text-xs whitespace-nowrap",
                                         alignMap[col.align ?? "left"],
                                         col.sortable
                                             ? "select-none cursor-pointer hover:text-text-primary transition-colors"
