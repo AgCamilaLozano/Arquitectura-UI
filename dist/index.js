@@ -1022,16 +1022,16 @@ function Table({
   }
   const hasGroups = groups.some((g) => g.title !== "");
   const safeData = Array.isArray(data) ? data : [];
+  const [internalSelected, setInternalSelected] = useState5(
+    new Set(selectedRows != null ? selectedRows : [])
+  );
+  const activeSelected = selectedRows !== void 0 ? new Set(selectedRows) : internalSelected;
   const allSelected = safeData.length > 0 && safeData.every((r) => activeSelected.has(r[rowKey]));
   const someSelected = safeData.some((r) => activeSelected.has(r[rowKey]));
   const [internalSort, setInternalSort] = useState5({
     key: "",
     direction: null
   });
-  const [internalSelected, setInternalSelected] = useState5(
-    new Set(selectedRows != null ? selectedRows : [])
-  );
-  const activeSelected = selectedRows !== void 0 ? new Set(selectedRows) : internalSelected;
   const handleSort = (key) => {
     const next = {
       key,

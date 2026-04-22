@@ -221,6 +221,16 @@ export function Table<T extends Record<string, unknown>>({
     }
     const hasGroups = groups.some((g) => g.title !== "");
     const safeData = Array.isArray(data) ? data : []
+    // ── Estado interno de selección (cuando no se controla externamente) ──
+    const [internalSelected, setInternalSelected] = useState<Set<unknown>>(
+        new Set(selectedRows ?? [])
+    );
+    // Lógica clave: usa selección externa si se provee, sino la interna
+    const activeSelected =
+        selectedRows !== undefined
+            ? new Set(selectedRows)
+            : internalSelected;
+
 
     const allSelected =
         safeData.length > 0 &&
@@ -233,16 +243,8 @@ export function Table<T extends Record<string, unknown>>({
         direction: null,
     });
 
-    // ── Estado interno de selección (cuando no se controla externamente) ──
-    const [internalSelected, setInternalSelected] = useState<Set<unknown>>(
-        new Set(selectedRows ?? [])
-    );
 
-    // Lógica clave: usa selección externa si se provee, sino la interna
-    const activeSelected =
-        selectedRows !== undefined
-            ? new Set(selectedRows)
-            : internalSelected;
+
 
     // ── Ordenamiento interno ──────────────────────────────────────────────────
     const handleSort = (key: string) => {
