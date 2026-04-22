@@ -325,11 +325,11 @@ export function Table<T extends Record<string, unknown>>({
 
     return (
         <div
-            className={`w-full overflow-visible rounded-md border border-border bg-surface/50 scrollbar-soft ${className}`}
+            className={`w-full overflow-x-auto rounded-md border border-border bg-surface/50 scrollbar-soft ${className}`}
             style={{ boxShadow: "var(--shadow-card)" }}
         >
             <table
-                className={`w-full table-fixed border-collapse ${variant === "bordered" ? "border border-border" : ""}`}
+                className={`min-w-[2200px] table-fixed border-collapse ${variant === "bordered" ? "border border-border" : ""}`}
             >
                 {/* ── Encabezado ─────────────────────────────────────────────────── */}
                 <thead
@@ -447,7 +447,6 @@ export function Table<T extends Record<string, unknown>>({
                                             />
                                         </td>
                                     )}
-
                                     {columns.map((col) => {
                                         const key = String(col.key);
                                         const value = col.render
@@ -455,6 +454,7 @@ export function Table<T extends Record<string, unknown>>({
                                             : String(row[col.key as keyof T] ?? "—");
 
                                         return (
+
                                             <td
                                                 key={key}
                                                 style={{ width: col.width }}
