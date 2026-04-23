@@ -71,7 +71,7 @@ const GraficaDonut = ({
 
     if (loading) {
         return (
-            <div className="p-6 rounded-2xl bg-surface border border-border animate-pulse">
+            <div className="p-6 rounded-2xl bg-background border border-border animate-pulse">
                 <div className="h-4 w-32 bg-muted rounded mb-4" />
                 <div className="h-[180px] w-[180px] bg-muted rounded-full mx-auto" />
             </div>

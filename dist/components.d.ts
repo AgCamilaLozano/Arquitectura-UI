@@ -1,6 +1,6 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as React$1 from 'react';
-import React__default, { ReactNode } from 'react';
+import React__default from 'react';
 import { Select as Select$1 } from 'radix-ui';
 import * as class_variance_authority_types from 'class-variance-authority/types';
 import { VariantProps } from 'class-variance-authority';
@@ -271,6 +271,7 @@ interface BarSegment {
     value: number;
 }
 interface PureBarChartProps {
+    className?: string;
     data: BarSegment[];
     title?: string;
     description?: string;
@@ -280,7 +281,7 @@ interface PureBarChartProps {
     legendLabel?: string;
     yLabel?: string;
 }
-declare const GraficaBar: ({ data, title, description, height, barRadius, animated, legendLabel, yLabel, }: PureBarChartProps) => react_jsx_runtime.JSX.Element;
+declare const GraficaBar: ({ className, data, title, description, height, barRadius, animated, legendLabel, yLabel, }: PureBarChartProps) => react_jsx_runtime.JSX.Element;
 
 interface ChartSegment {
     value: number;
@@ -317,32 +318,33 @@ interface PureLineChartProps {
 }
 declare const PureLineChart: ({ data, title, description, height, lineColor, showArea, animated, legendLabel, yLabel, }: PureLineChartProps) => react_jsx_runtime.JSX.Element;
 
+/** Una columna individual de la tabla */
 interface Column<T> {
-    key: keyof T | string;
-    header: string;
-    render?: (row: T, index: number) => ReactNode;
-    sortable?: boolean;
-    align?: "left" | "center" | "right";
-    width?: string;
-    group?: string;
-}
-type SortDirection = "asc" | "desc" | null;
-interface SortState {
     key: string;
-    direction: SortDirection;
+    header: string;
+    accessor?: keyof T | ((row: T) => React__default.ReactNode);
+    render?: (row: T) => React__default.ReactNode;
+    width?: string | number;
+    align?: "left" | "center" | "right";
+    group?: string;
+    groupStyle?: {
+        bg?: string;
+        border?: string;
+    };
 }
-interface TableProps<T> {
+/** Props del componente DataTable */
+interface DataTableProps<T> {
     data: T[];
     columns: Column<T>[];
+    maxHeight?: string;
     rowKey: keyof T;
-    selectable?: boolean;
-    selectedRows?: (T[keyof T])[];
-    onSelectionChange?: (selected: (T[keyof T])[]) => void;
-    onRowClick?: (row: T) => void;
-    stickyHeader?: boolean;
+    emptyState?: React__default.ReactNode;
+    isLoading?: boolean;
     className?: string;
+    headerVariant?: "default" | "accent";
+    size?: "sm" | "md" | "lg";
 }
-declare function Table<T extends Record<string, unknown>>({ data, columns, rowKey, selectable, selectedRows, onSelectionChange, onRowClick, stickyHeader, className, }: TableProps<T>): react_jsx_runtime.JSX.Element;
+declare function DataTable<T>({ data, columns, maxHeight, rowKey, emptyState, isLoading, className, headerVariant, size, }: DataTableProps<T>): react_jsx_runtime.JSX.Element;
 
 declare function Breadcrumbs(): react_jsx_runtime.JSX.Element;
 
@@ -350,4 +352,4 @@ declare function ThemeProvider({ children, ...props }: ThemeProviderProps): reac
 
 declare function ThemeToggle(): react_jsx_runtime.JSX.Element;
 
-export { Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, type SortDirection, type SortState, StatusBadge, type StatusVariant, Table, type TableProps, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useDialogContext };
+export { Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, StatusBadge, type StatusVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useDialogContext };

@@ -10,6 +10,7 @@ interface BarSegment {
 }
 
 interface PureBarChartProps {
+    className?: string
     data: BarSegment[]
     title?: string
     description?: string
@@ -30,6 +31,7 @@ const chartColors = [
 
 // ─── Componente ──────────────────────────────────────────────────
 const GraficaBar = ({
+    className,
     data,
     title,
     description,
@@ -63,7 +65,7 @@ const GraficaBar = ({
     } | null>(null)
 
     return (
-        <div ref={containerRef} className="relative rounded-2xl border border-border bg-surface shadow-sm p-5"
+        <div ref={containerRef} className="relative rounded-2xl border border-border bg-background shadow-sm p-5"
             onMouseLeave={() => {
                 setHoveredIndex(null)
                 setTooltip(null)

@@ -913,6 +913,7 @@ var chartColors = [
   "var(--chart-5)"
 ];
 var GraficaBar = ({
+  className,
   data,
   title,
   description,
@@ -940,7 +941,7 @@ var GraficaBar = ({
     "div",
     {
       ref: containerRef,
-      className: "relative rounded-2xl border border-border bg-surface shadow-sm p-5",
+      className: "relative rounded-2xl border border-border bg-background shadow-sm p-5",
       onMouseLeave: () => {
         setHoveredIndex(null);
         setTooltip(null);
@@ -1133,7 +1134,7 @@ var GraficaDonut = ({
     });
   });
   if (loading) {
-    return /* @__PURE__ */ jsxs8("div", { className: "p-6 rounded-2xl bg-surface border border-border animate-pulse", children: [
+    return /* @__PURE__ */ jsxs8("div", { className: "p-6 rounded-2xl bg-background border border-border animate-pulse", children: [
       /* @__PURE__ */ jsx12("div", { className: "h-4 w-32 bg-muted rounded mb-4" }),
       /* @__PURE__ */ jsx12("div", { className: "h-[180px] w-[180px] bg-muted rounded-full mx-auto" })
     ] });
@@ -1517,122 +1518,253 @@ var PureLineChart = ({
 var GraficaLine_default = PureLineChart;
 
 // components/ui/DataDisplay/Table.tsx
-import { useState as useState5 } from "react";
+import React7 from "react";
 import { jsx as jsx14, jsxs as jsxs10 } from "react/jsx-runtime";
-var alignMap = {
-  left: "text-left",
-  center: "text-center",
-  right: "text-right"
+function getCellValue(row, col) {
+  if (col.render) return col.render(row);
+  if (!col.accessor) return null;
+  if (typeof col.accessor === "function") return col.accessor(row);
+  return row[col.accessor];
+}
+var CELL_PADDING = {
+  sm: "6px 10px",
+  md: "10px 12px",
+  lg: "14px 16px"
 };
-function Table({
+var FONT_SIZE = {
+  sm: "12px",
+  md: "13px",
+  lg: "14px"
+};
+function DataTable({
   data,
   columns,
+  maxHeight = "70vh",
   rowKey,
-  selectable = false,
-  selectedRows,
-  onSelectionChange,
-  onRowClick,
-  stickyHeader = false,
-  className = ""
+  emptyState,
+  isLoading = false,
+  className,
+  headerVariant = "default",
+  size = "md"
 }) {
-  const safeColumns = columns != null ? columns : [];
-  const safeData = data != null ? data : [];
-  const [internalSelected, setInternalSelected] = useState5(
-    new Set(selectedRows != null ? selectedRows : [])
-  );
-  const activeSelected = selectedRows !== void 0 ? new Set(selectedRows) : internalSelected;
-  const toggleRow = (id) => {
-    const next = new Set(activeSelected);
-    next.has(id) ? next.delete(id) : next.add(id);
-    setInternalSelected(next);
-    onSelectionChange == null ? void 0 : onSelectionChange(Array.from(next));
-  };
-  const groups = [];
-  safeColumns.forEach((col) => {
-    const title = col.group || "";
-    const last = groups[groups.length - 1];
-    if (last && last.title === title) last.colSpan++;
-    else groups.push({ title, colSpan: 1 });
-  });
-  const hasGroups = groups.some((g) => g.title !== "");
-  return /* @__PURE__ */ jsx14("div", { className: `w-full overflow-x-auto ${className}`, children: /* @__PURE__ */ jsxs10("table", { className: "min-w-[2200px] table-fixed border-collapse", children: [
-    /* @__PURE__ */ jsxs10("colgroup", { children: [
-      selectable && /* @__PURE__ */ jsx14("col", { style: { width: "40px" } }),
-      safeColumns.map((col, i) => /* @__PURE__ */ jsx14("col", { style: { width: col.width || "180px" } }, i))
-    ] }),
-    /* @__PURE__ */ jsxs10(
-      "thead",
-      {
-        className: `bg-accent/80 text-white ${stickyHeader ? "sticky top-0 z-10" : ""}`,
-        children: [
-          hasGroups && /* @__PURE__ */ jsxs10("tr", { children: [
-            selectable && /* @__PURE__ */ jsx14("th", { rowSpan: 2, className: "px-3 py-2" }),
-            groups.map((g, i) => /* @__PURE__ */ jsx14(
-              "th",
-              {
-                colSpan: g.colSpan,
-                className: "px-3 py-2 text-[10px] uppercase text-center opacity-70 whitespace-nowrap",
-                children: g.title
-              },
-              i
-            ))
-          ] }),
-          /* @__PURE__ */ jsxs10("tr", { children: [
-            !hasGroups && selectable && /* @__PURE__ */ jsx14("th", { className: "px-3 py-2" }),
-            safeColumns.map((col) => {
-              var _a;
-              return /* @__PURE__ */ jsx14(
-                "th",
-                {
-                  className: `px-3 py-2 text-xs font-bold uppercase whitespace-nowrap ${alignMap[(_a = col.align) != null ? _a : "left"]}`,
-                  children: col.header
-                },
-                String(col.key)
-              );
-            })
-          ] })
-        ]
+  var _a, _b;
+  const groupedHeaders = React7.useMemo(() => {
+    const result = [];
+    let i = 0;
+    while (i < columns.length) {
+      const col = columns[i];
+      if (col.group) {
+        let span = 0;
+        const start = i;
+        while (i < columns.length && columns[i].group === col.group) {
+          span++;
+          i++;
+        }
+        result.push({ label: col.group, start, span });
+      } else {
+        result.push({ label: "", start: i, span: 1 });
+        i++;
       }
-    ),
-    /* @__PURE__ */ jsx14("tbody", { children: safeData.map((row, i) => {
-      const id = row[rowKey];
-      const isSelected = activeSelected.has(id);
-      return /* @__PURE__ */ jsxs10(
-        "tr",
-        {
-          className: "border-b border-border hover:bg-muted/30",
-          onClick: () => {
-            onRowClick == null ? void 0 : onRowClick(row);
-            if (selectable) toggleRow(id);
-          },
-          children: [
-            selectable && /* @__PURE__ */ jsx14("td", { className: "px-3 py-2", children: /* @__PURE__ */ jsx14(
-              Input,
+    }
+    return result;
+  }, [columns]);
+  const hasGroups = columns.some((c) => c.group);
+  const cellPadding = (_a = CELL_PADDING[size]) != null ? _a : CELL_PADDING.md;
+  const fontSize = (_b = FONT_SIZE[size]) != null ? _b : FONT_SIZE.md;
+  const headerBg = headerVariant === "accent" ? "var(--accent)" : "var(--bg-muted)";
+  const headerText = headerVariant === "accent" ? "#ffffff" : "var(--text-secondary)";
+  const groupLabelColor = headerVariant === "accent" ? "#f7f4f4ff" : "var(--accent)";
+  const groupBorderColor = headerVariant === "accent" ? "var(--border-default)" : "var(--border-strong)";
+  const groupStyles = React7.useMemo(() => {
+    const map = /* @__PURE__ */ new Map();
+    columns.forEach((col) => {
+      if (col.group && col.groupStyle && !map.has(col.group)) {
+        map.set(col.group, col.groupStyle);
+      }
+    });
+    return map;
+  }, [columns]);
+  return /* @__PURE__ */ jsxs10(
+    "div",
+    {
+      className,
+      style: {
+        border: "0.5px solid var(--border-default)",
+        borderRadius: "var(--r-lg)",
+        overflow: "hidden",
+        background: "var(--bg-surface)",
+        boxShadow: "var(--shadow-card)"
+      },
+      children: [
+        /* @__PURE__ */ jsx14(
+          "div",
+          {
+            className: "scrollbar-soft",
+            style: { overflowX: "auto", overflowY: "auto", maxHeight },
+            children: /* @__PURE__ */ jsxs10(
+              "table",
               {
-                type: "checkbox",
-                checked: isSelected,
-                onChange: () => toggleRow(id),
-                onClick: (e) => e.stopPropagation()
-              }
-            ) }),
-            safeColumns.map((col) => {
-              var _a, _b;
-              const value = col.render ? col.render(row, i) : String((_a = row[col.key]) != null ? _a : "\u2014");
-              return /* @__PURE__ */ jsx14(
-                "td",
-                {
-                  className: `px-3 py-2 ${alignMap[(_b = col.align) != null ? _b : "left"]}`,
-                  children: /* @__PURE__ */ jsx14("div", { className: "w-full min-w-0 overflow-hidden truncate", children: value })
+                style: {
+                  width: "100%",
+                  borderCollapse: "separate",
+                  borderSpacing: 0,
+                  fontSize,
+                  minWidth: "600px",
+                  fontFamily: "var(--font-body), sans-serif"
                 },
-                String(col.key)
-              );
-            })
-          ]
-        },
-        String(id)
-      );
-    }) })
-  ] }) });
+                children: [
+                  /* @__PURE__ */ jsxs10(
+                    "thead",
+                    {
+                      style: {
+                        position: "sticky",
+                        top: 0,
+                        zIndex: 10,
+                        background: headerBg
+                      },
+                      children: [
+                        hasGroups && /* @__PURE__ */ jsx14("tr", { children: groupedHeaders.map((g, idx) => {
+                          var _a2, _b2;
+                          const style = groupStyles.get(g.label);
+                          return g.label ? /* @__PURE__ */ jsx14(
+                            "th",
+                            {
+                              colSpan: g.span,
+                              style: {
+                                padding: "5px 12px",
+                                textAlign: "center",
+                                fontWeight: 600,
+                                fontSize: "10px",
+                                letterSpacing: "0.08em",
+                                textTransform: "uppercase",
+                                color: groupLabelColor,
+                                borderBottom: `0.5px solid ${(_a2 = style == null ? void 0 : style.border) != null ? _a2 : groupBorderColor}`,
+                                background: (_b2 = style == null ? void 0 : style.bg) != null ? _b2 : headerBg,
+                                borderLeft: idx !== 0 ? "0.5px solid var(--border-default)" : void 0,
+                                borderRight: idx === groupedHeaders.length - 1 ? "2px solid var(--border-default)" : "2px solid transparent",
+                                whiteSpace: "nowrap"
+                              },
+                              children: g.label
+                            },
+                            `group-${g.label}-${idx}`
+                          ) : /* @__PURE__ */ jsx14(
+                            "th",
+                            {
+                              style: {
+                                padding: 0,
+                                borderBottom: "0.5px solid var(--border-default)"
+                              }
+                            },
+                            `empty-${g.start}`
+                          );
+                        }) }),
+                        /* @__PURE__ */ jsx14("tr", { children: columns.map((col, i) => {
+                          var _a2, _b2, _c;
+                          const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
+                          const style = col.group ? groupStyles.get(col.group) : void 0;
+                          return /* @__PURE__ */ jsx14(
+                            "th",
+                            {
+                              style: {
+                                padding: cellPadding,
+                                textAlign: (_a2 = col.align) != null ? _a2 : "left",
+                                fontWeight: 600,
+                                fontSize: "11px",
+                                letterSpacing: "0.04em",
+                                color: headerText,
+                                background: (_b2 = style == null ? void 0 : style.bg) != null ? _b2 : headerBg,
+                                borderBottom: "0.5px solid var(--border-default)",
+                                borderLeft: isFirstInGroup && i !== 0 ? `1px solid ${(_c = style == null ? void 0 : style.border) != null ? _c : "var(--border-default)"}` : void 0,
+                                whiteSpace: "nowrap",
+                                width: col.width !== void 0 ? typeof col.width === "number" ? `${col.width}px` : col.width : void 0,
+                                minWidth: col.width !== void 0 ? typeof col.width === "number" ? `${col.width}px` : col.width : "100px"
+                              },
+                              children: col.header
+                            },
+                            col.key
+                          );
+                        }) })
+                      ]
+                    }
+                  ),
+                  /* @__PURE__ */ jsx14("tbody", { children: isLoading ? Array.from({ length: 5 }).map((_, rowIdx) => /* @__PURE__ */ jsx14("tr", { children: columns.map((col) => /* @__PURE__ */ jsx14(
+                    "td",
+                    {
+                      style: {
+                        padding: cellPadding,
+                        borderBottom: "0.5px solid var(--border-default)"
+                      },
+                      children: /* @__PURE__ */ jsx14(
+                        "div",
+                        {
+                          style: {
+                            height: "12px",
+                            borderRadius: "var(--r-sm)",
+                            background: "var(--bg-muted)",
+                            width: `${60 + Math.random() * 30}%`,
+                            animation: "dt-pulse 1.5s ease-in-out infinite"
+                          }
+                        }
+                      )
+                    },
+                    col.key
+                  )) }, `skeleton-${rowIdx}`)) : data.length === 0 ? /* @__PURE__ */ jsx14("tr", { children: /* @__PURE__ */ jsx14(
+                    "td",
+                    {
+                      colSpan: columns.length,
+                      style: {
+                        padding: "48px 16px",
+                        textAlign: "center",
+                        color: "var(--text-muted)",
+                        fontFamily: "var(--font-body), sans-serif"
+                      },
+                      children: emptyState != null ? emptyState : "Sin resultados"
+                    }
+                  ) }) : data.map((row, rowIdx) => {
+                    const key = String(row[rowKey]);
+                    return /* @__PURE__ */ jsx14(
+                      "tr",
+                      {
+                        style: {
+                          background: "var(--bg-base)"
+                        },
+                        children: columns.map((col, i) => {
+                          var _a2;
+                          const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
+                          return /* @__PURE__ */ jsx14(
+                            "td",
+                            {
+                              style: {
+                                padding: cellPadding,
+                                textAlign: (_a2 = col.align) != null ? _a2 : "left",
+                                borderBottom: "0.5px solid var(--border-default)",
+                                borderLeft: isFirstInGroup && i !== 0 ? "0.5px solid var(--border-default)" : void 0,
+                                color: "var(--text-primary)",
+                                whiteSpace: "nowrap"
+                              },
+                              children: getCellValue(row, col)
+                            },
+                            col.key
+                          );
+                        })
+                      },
+                      key
+                    );
+                  }) })
+                ]
+              }
+            )
+          }
+        ),
+        /* @__PURE__ */ jsx14("style", { children: `
+                @keyframes dt-pulse {
+                    0%, 100% { opacity: 1; }
+                    50%       { opacity: 0.35; }
+                }
+            ` })
+      ]
+    }
+  );
 }
 
 // components/ui/Navegacion/Breadcrumbs.tsx
@@ -1665,7 +1797,7 @@ function ThemeProvider(_a) {
 }
 
 // components/ui/Tema/ThemeToggle.tsx
-import * as React7 from "react";
+import * as React8 from "react";
 import { Moon, Sun, Laptop } from "lucide-react";
 import { useTheme as useTheme2 } from "next-themes";
 
@@ -1684,10 +1816,10 @@ function AnimatedIconButton({ Icon, onClick }) {
 import { jsx as jsx18, jsxs as jsxs13 } from "react/jsx-runtime";
 function ThemeToggle() {
   const { theme, setTheme } = useTheme2();
-  const [mounted, setMounted] = React7.useState(false);
-  const [isOpen, setIsOpen] = React7.useState(false);
-  const menuRef = React7.useRef(null);
-  React7.useEffect(() => {
+  const [mounted, setMounted] = React8.useState(false);
+  const [isOpen, setIsOpen] = React8.useState(false);
+  const menuRef = React8.useRef(null);
+  React8.useEffect(() => {
     setMounted(true);
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -1757,6 +1889,7 @@ export {
   CardFooter,
   CardHeader,
   CardImage,
+  DataTable,
   Dialog,
   DialogBody,
   DialogFooter,
@@ -1777,7 +1910,6 @@ export {
   SelectTrigger,
   SelectValue,
   StatusBadge,
-  Table,
   Textarea,
   ThemeProvider,
   ThemeToggle,
