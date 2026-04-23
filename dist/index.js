@@ -905,14 +905,616 @@ var Tooltip = ({
 // components/ui/DataDisplay/Graficas/GraficaBar.tsx
 import { useState as useState2, useRef as useRef2 } from "react";
 import { jsx as jsx11, jsxs as jsxs7 } from "react/jsx-runtime";
+var chartColors = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)"
+];
+var GraficaBar = ({
+  data,
+  title,
+  description,
+  height = 240,
+  barRadius = 2,
+  animated = true,
+  legendLabel,
+  yLabel
+}) => {
+  const [hoveredIndex, setHoveredIndex] = useState2(null);
+  const containerRef = useRef2(null);
+  const maxValue = Math.max(...data.map((d) => d.value), 1);
+  const ceilMax = Math.ceil(maxValue * 1.15);
+  const padding = { top: 16, bottom: 36, left: 52, right: 16 };
+  const svgW = Math.max(data.length * 72 + padding.left + padding.right, 320);
+  const chartH = height - padding.top - padding.bottom;
+  const yTicks = Array.from({ length: 5 }, (_, i) => Math.round(ceilMax / 4 * i));
+  const formatVal = (n) => {
+    if (n >= 1e6) return `${(n / 1e6).toFixed(1)}M`;
+    if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
+    return n.toString();
+  };
+  const [tooltip, setTooltip] = useState2(null);
+  return /* @__PURE__ */ jsxs7(
+    "div",
+    {
+      ref: containerRef,
+      className: "relative rounded-2xl border border-border bg-surface shadow-sm p-5",
+      onMouseLeave: () => {
+        setHoveredIndex(null);
+        setTooltip(null);
+      },
+      children: [
+        title && /* @__PURE__ */ jsx11("p", { className: "text-sm font-semibold text-text-primary", children: title }),
+        description && /* @__PURE__ */ jsx11("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
+        /* @__PURE__ */ jsxs7("div", { className: "w-full relative overflow-hidden", children: [
+          /* @__PURE__ */ jsxs7("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "select-none relative z-0", children: [
+            yLabel && /* @__PURE__ */ jsx11(
+              "text",
+              {
+                x: 10,
+                y: padding.top - 5,
+                fill: "var(--text-muted)",
+                fontSize: 10,
+                fontWeight: 600,
+                children: yLabel
+              }
+            ),
+            /* @__PURE__ */ jsxs7("g", { transform: `translate(${padding.left}, ${padding.top + 10})`, children: [
+              yTicks.map((tick) => {
+                const y = chartH - tick / ceilMax * chartH;
+                return /* @__PURE__ */ jsxs7("g", { children: [
+                  /* @__PURE__ */ jsx11(
+                    "line",
+                    {
+                      x1: 0,
+                      y1: y,
+                      x2: svgW - padding.left - padding.right,
+                      y2: y,
+                      stroke: "var(--border-default)",
+                      strokeDasharray: "4 3"
+                    }
+                  ),
+                  /* @__PURE__ */ jsx11("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(tick) })
+                ] }, tick);
+              }),
+              data.map((item, i) => {
+                const barH = item.value / ceilMax * chartH;
+                const x = i * 72 + 16;
+                const isHov = hoveredIndex === i;
+                return /* @__PURE__ */ jsxs7("g", { children: [
+                  /* @__PURE__ */ jsx11(
+                    "rect",
+                    {
+                      x: x - 4,
+                      y: 0,
+                      width: 28,
+                      height: chartH,
+                      fill: "transparent",
+                      style: { cursor: "pointer" },
+                      onMouseEnter: (e) => {
+                        var _a;
+                        setHoveredIndex(i);
+                        const containerRect = (_a = containerRef.current) == null ? void 0 : _a.getBoundingClientRect();
+                        const svgEl = e.currentTarget.closest("svg");
+                        const svgRect = svgEl == null ? void 0 : svgEl.getBoundingClientRect();
+                        if (!containerRect || !svgRect) return;
+                        const scaleX = svgRect.width / svgW;
+                        const scaleY = svgRect.height / height;
+                        const xCenter = (x + 35 + padding.left) * scaleX + (svgRect.left - containerRect.left);
+                        const yTop = (chartH - barH + padding.top) * scaleY + (svgRect.top - containerRect.top);
+                        setTooltip({ x: xCenter, y: yTop, label: item.label, value: item.value });
+                      }
+                    }
+                  ),
+                  isHov && /* @__PURE__ */ jsx11(
+                    "rect",
+                    {
+                      x: x - 6,
+                      y: 0,
+                      width: 42,
+                      height: chartH,
+                      rx: 8,
+                      fill: chartColors[i % chartColors.length],
+                      opacity: 0.08,
+                      className: "transition-all duration-300"
+                    }
+                  ),
+                  /* @__PURE__ */ jsx11(
+                    "rect",
+                    {
+                      x,
+                      y: chartH - barH,
+                      width: 28,
+                      height: barH,
+                      rx: barRadius,
+                      fill: chartColors[i % chartColors.length],
+                      opacity: isHov ? 1 : 0.85,
+                      className: "transition-all duration-300 ease-out pointer-events-none",
+                      style: {
+                        filter: isHov ? `drop-shadow(0 4px 8px ${chartColors[i % chartColors.length]}40)` : "none"
+                      }
+                    }
+                  ),
+                  /* @__PURE__ */ jsx11(
+                    "text",
+                    {
+                      x: x + 14,
+                      y: chartH + 18,
+                      textAnchor: "middle",
+                      fill: isHov ? "var(--text-primary)" : "var(--text-muted)",
+                      fontSize: 11,
+                      fontWeight: isHov ? 600 : 400,
+                      className: "pointer-events-none transition-all duration-200",
+                      children: item.label
+                    }
+                  )
+                ] }, i);
+              }),
+              /* @__PURE__ */ jsx11("line", { x1: 0, y1: chartH, x2: svgW - padding.left - padding.right, y2: chartH, stroke: "var(--border-strong)" })
+            ] }),
+            /* @__PURE__ */ jsx11("style", { children: `
+                        @keyframes barGrow {
+                            from { transform: scaleY(0); opacity: 0; }
+                            to   { transform: scaleY(1); opacity: 1; }
+                        }
+                    ` })
+          ] }),
+          tooltip && /* @__PURE__ */ jsx11(
+            "div",
+            {
+              className: "absolute z-50 pointer-events-none transition-all duration-150",
+              style: {
+                left: tooltip.x,
+                top: tooltip.y,
+                transform: "translate(calc(-50% - 10px), calc(-50% - 10px))"
+              },
+              children: /* @__PURE__ */ jsxs7("div", { className: "relative bg-[#0A0A0B] text-white text-xs rounded-lg px-3 py-2 shadow-2xl border border-white/10 backdrop-blur-sm whitespace-nowrap", children: [
+                /* @__PURE__ */ jsx11("p", { className: "text-[11px] text-center", children: tooltip.label }),
+                /* @__PURE__ */ jsx11("p", { className: "text-sm font-semibold", children: formatVal(tooltip.value) })
+              ] })
+            }
+          )
+        ] }),
+        legendLabel && /* @__PURE__ */ jsx11("div", { className: "flex justify-center items-center gap-2 mt-4 px-2", children: /* @__PURE__ */ jsxs7("div", { className: "flex items-center gap-1.5", children: [
+          /* @__PURE__ */ jsx11(
+            "div",
+            {
+              className: "w-3 h-3 rounded-sm",
+              style: { backgroundColor: chartColors[0] }
+            }
+          ),
+          /* @__PURE__ */ jsx11("span", { className: "text-sm font-medium", children: legendLabel })
+        ] }) })
+      ]
+    }
+  );
+};
+var GraficaBar_default = GraficaBar;
 
 // components/ui/DataDisplay/Graficas/GraficaDonut.tsx
 import { useState as useState3 } from "react";
 import { Fragment, jsx as jsx12, jsxs as jsxs8 } from "react/jsx-runtime";
+var chartColors2 = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)"
+];
+var GraficaDonut = ({
+  data,
+  title,
+  description,
+  size = 300,
+  strokeWidth = 40,
+  loading = false,
+  showTotal = true,
+  totalValue,
+  formatValue = (v) => `${v}%`
+}) => {
+  const [hoveredIndex, setHoveredIndex] = useState3(null);
+  const total = data.reduce((acc, item) => acc + item.value, 0);
+  const center = size / 2;
+  const radius = center - strokeWidth;
+  const circumference = 2 * Math.PI * radius;
+  let accumulated = 0;
+  const segmentMeta = data.map((segment, i) => {
+    const percentage = segment.value / total;
+    const strokeDash = percentage * circumference;
+    const offset = accumulated;
+    accumulated += strokeDash;
+    return __spreadProps(__spreadValues({}, segment), {
+      color: chartColors2[i % chartColors2.length],
+      strokeDash,
+      offset,
+      index: i
+    });
+  });
+  if (loading) {
+    return /* @__PURE__ */ jsxs8("div", { className: "p-6 rounded-2xl bg-surface border border-border animate-pulse", children: [
+      /* @__PURE__ */ jsx12("div", { className: "h-4 w-32 bg-muted rounded mb-4" }),
+      /* @__PURE__ */ jsx12("div", { className: "h-[180px] w-[180px] bg-muted rounded-full mx-auto" })
+    ] });
+  }
+  if (!data.length) {
+    return /* @__PURE__ */ jsx12("div", { className: "p-6 rounded-2xl bg-surface border border-border text-center", children: /* @__PURE__ */ jsx12("p", { className: "text-sm text-text-muted", children: "No hay datos disponibles" }) });
+  }
+  return /* @__PURE__ */ jsxs8("div", { className: "rounded-2xl bg-surface border border-border shadow-md p-6", children: [
+    (title || description) && /* @__PURE__ */ jsxs8("div", { className: "mb-4", children: [
+      title && /* @__PURE__ */ jsx12("p", { className: "text-sm font-semibold text-text-primary", children: title }),
+      description && /* @__PURE__ */ jsx12("p", { className: "text-xs text-text-muted mt-1", children: description })
+    ] }),
+    /* @__PURE__ */ jsxs8("div", { className: "flex flex-col items-center gap-8 justify-center", children: [
+      /* @__PURE__ */ jsxs8("div", { style: { width: size, height: size }, className: "relative mx-auto md:mx-0", children: [
+        /* @__PURE__ */ jsxs8("svg", { className: "w-full h-full -rotate-90", children: [
+          /* @__PURE__ */ jsx12(
+            "circle",
+            {
+              cx: center,
+              cy: center,
+              r: radius,
+              stroke: "var(--bg-muted)",
+              strokeWidth,
+              fill: "transparent",
+              strokeLinecap: "butt"
+            }
+          ),
+          segmentMeta.map((seg) => {
+            const isHov = hoveredIndex === seg.index;
+            const sliceAngle = seg.value / total * 360;
+            const startAngle = seg.offset / circumference * 360;
+            const midAngleDeg = startAngle + sliceAngle / 2 - 90;
+            const midAngleRad = midAngleDeg * Math.PI / 180;
+            const tooltipRadius = radius + strokeWidth / 2 + 16;
+            const tx = center + tooltipRadius * Math.cos(midAngleRad);
+            const ty = center + tooltipRadius * Math.sin(midAngleRad);
+            return /* @__PURE__ */ jsx12("g", { children: /* @__PURE__ */ jsx12(
+              "circle",
+              {
+                cx: center,
+                cy: center,
+                r: radius,
+                stroke: seg.color,
+                strokeWidth,
+                fill: "transparent",
+                strokeDasharray: `${seg.strokeDash} ${circumference}`,
+                strokeDashoffset: -seg.offset,
+                className: "transition-all duration-300 cursor-pointer stroke-linecap-butt",
+                onMouseEnter: () => setHoveredIndex(seg.index),
+                onMouseLeave: () => setHoveredIndex(null),
+                style: {
+                  pointerEvents: "stroke",
+                  filter: hoveredIndex === seg.index ? "drop-shadow(0 0 4px rgba(0,0,0,0.5))" : "none",
+                  transform: hoveredIndex === seg.index ? "scale(1.02)" : "scale(1)",
+                  transformOrigin: "center"
+                },
+                strokeLinecap: "butt"
+              }
+            ) }, seg.index);
+          })
+        ] }),
+        hoveredIndex !== null && /* @__PURE__ */ jsx12(
+          "div",
+          {
+            className: "absolute pointer-events-none z-10",
+            style: {
+              left: (() => {
+                const seg = segmentMeta[hoveredIndex];
+                const sliceAngle = seg.value / total * 360;
+                const startAngle = seg.offset / circumference * 360;
+                const midAngleDeg = startAngle + sliceAngle / 2 - 90;
+                const rad = midAngleDeg * Math.PI / 180;
+                const tooltipRadius = radius + strokeWidth / 2 + 16;
+                return center + tooltipRadius * Math.cos(rad);
+              })(),
+              top: (() => {
+                const seg = segmentMeta[hoveredIndex];
+                const sliceAngle = seg.value / total * 360;
+                const startAngle = seg.offset / circumference * 360;
+                const midAngleDeg = startAngle + sliceAngle / 2 - 90;
+                const rad = midAngleDeg * Math.PI / 180;
+                const tooltipRadius = radius + strokeWidth / 2 + 16;
+                return center + tooltipRadius * Math.sin(rad);
+              })(),
+              transform: "translate(-50%, -50%)"
+            },
+            children: /* @__PURE__ */ jsxs8("div", { className: "bg-[#0A0A0B] text-white text-xs rounded-md px-3 py-1 shadow-xl whitespace-nowrap", children: [
+              /* @__PURE__ */ jsx12("p", { className: "font-semibold", children: segmentMeta[hoveredIndex].label }),
+              /* @__PURE__ */ jsx12("p", { className: "text-center", children: formatValue(segmentMeta[hoveredIndex].value) })
+            ] })
+          }
+        ),
+        /* @__PURE__ */ jsx12("div", { className: "absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none", children: showTotal ? /* @__PURE__ */ jsxs8(Fragment, { children: [
+          /* @__PURE__ */ jsx12("span", { className: "text-xs text-text-muted", children: "Total" }),
+          /* @__PURE__ */ jsx12("span", { className: "text-xl font-bold text-accent", children: formatValue(total) })
+        ] }) : null })
+      ] }),
+      /* @__PURE__ */ jsx12("div", { className: "flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4", children: segmentMeta.map((item, i) => {
+        const isActive = hoveredIndex === i;
+        return /* @__PURE__ */ jsxs8(
+          "div",
+          {
+            onMouseEnter: () => setHoveredIndex(i),
+            onMouseLeave: () => setHoveredIndex(null),
+            className: `flex items-center gap-2 text-sm transition-all duration-200
+                                  ${isActive ? "opacity-100 scale-100" : "opacity-80"}
+                                `,
+            children: [
+              /* @__PURE__ */ jsx12(
+                "div",
+                {
+                  className: "w-2.5 h-2.5 rounded-full",
+                  style: {
+                    backgroundColor: item.color,
+                    boxShadow: isActive ? `0 0 6px ${item.color}` : "none"
+                  }
+                }
+              ),
+              /* @__PURE__ */ jsx12("span", { className: "text-text-primary", children: item.label })
+            ]
+          },
+          i
+        );
+      }) })
+    ] })
+  ] });
+};
+var GraficaDonut_default = GraficaDonut;
 
 // components/ui/DataDisplay/Graficas/GraficaLine.tsx
 import { useState as useState4, useRef as useRef3 } from "react";
 import { Fragment as Fragment2, jsx as jsx13, jsxs as jsxs9 } from "react/jsx-runtime";
+var PureLineChart = ({
+  data,
+  title,
+  description,
+  height = 240,
+  lineColor = "#7c3aed",
+  showArea = false,
+  animated = true,
+  legendLabel,
+  yLabel
+}) => {
+  const [hoveredIndex, setHoveredIndex] = useState4(null);
+  const [tooltip, setTooltip] = useState4(null);
+  const containerRef = useRef3(null);
+  const maxValue = Math.max(...data.map((d) => d.value), 1) * 1.15;
+  const padding = { top: 16, bottom: 36, left: 52, right: 24 };
+  const svgW = Math.max(data.length * 80 + padding.left + padding.right, 360);
+  const chartW = svgW - padding.left - padding.right;
+  const chartH = height - padding.top - padding.bottom;
+  const scaleX = (i) => i / Math.max(data.length - 1, 1) * chartW;
+  const scaleY = (v) => chartH - v / maxValue * chartH;
+  const buildSmoothPath = () => {
+    if (data.length < 2) return "";
+    let path = `M${scaleX(0)},${scaleY(data[0].value)}`;
+    for (let i = 0; i < data.length - 1; i++) {
+      const x0 = scaleX(i), y0 = scaleY(data[i].value);
+      const x1 = scaleX(i + 1), y1 = scaleY(data[i + 1].value);
+      const cpx = (x0 + x1) / 2;
+      path += ` C${cpx},${y0} ${cpx},${y1} ${x1},${y1}`;
+    }
+    return path;
+  };
+  const smoothLine = buildSmoothPath();
+  const areaPath = smoothLine + ` L${scaleX(data.length - 1)},${chartH} L${scaleX(0)},${chartH} Z`;
+  const yTicks = Array.from({ length: 5 }, (_, i) => Math.round(maxValue / 4 * i));
+  const gradientId = `area-grad-${lineColor.replace("#", "")}`;
+  const formatVal = (n) => {
+    if (n >= 1e6) return `${(n / 1e6).toFixed(1)}M`;
+    if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
+    return Number.isInteger(n) ? n.toString() : n.toFixed(1);
+  };
+  const updateTooltip = (e, i) => {
+    var _a;
+    const containerRect = (_a = containerRef.current) == null ? void 0 : _a.getBoundingClientRect();
+    const svgEl = e.currentTarget.closest("svg");
+    const svgRect = svgEl == null ? void 0 : svgEl.getBoundingClientRect();
+    if (!containerRect || !svgRect) return;
+    const scaleFactorX = svgRect.width / svgW;
+    const scaleFactorY = svgRect.height / height;
+    const xPx = (scaleX(i) + padding.left) * scaleFactorX + (svgRect.left - containerRect.left);
+    const yPx = (scaleY(data[i].value) + padding.top) * scaleFactorY + (svgRect.top - containerRect.top);
+    setTooltip({ x: xPx, y: yPx, label: data[i].label, value: data[i].value });
+  };
+  const handleMouseMove = (e) => {
+    const svgEl = e.currentTarget.closest("svg");
+    const svgRect = svgEl == null ? void 0 : svgEl.getBoundingClientRect();
+    if (!svgRect) return;
+    const scaleFactorX = svgRect.width / svgW;
+    const mouseX = e.clientX - svgRect.left - padding.left * scaleFactorX;
+    const idx = Math.round(mouseX / (chartW * scaleFactorX) * (data.length - 1));
+    const clampedIdx = Math.max(0, Math.min(data.length - 1, idx));
+    setHoveredIndex(clampedIdx);
+  };
+  return /* @__PURE__ */ jsxs9(
+    "div",
+    {
+      ref: containerRef,
+      className: "relative rounded-2xl border border-border bg-surface shadow-sm p-5",
+      onMouseLeave: () => {
+        setHoveredIndex(null);
+        setTooltip(null);
+      },
+      children: [
+        title && /* @__PURE__ */ jsx13("p", { className: "text-sm font-semibold text-text-primary", children: title }),
+        description && /* @__PURE__ */ jsx13("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
+        /* @__PURE__ */ jsxs9("div", { className: "w-full overflow-x-auto relative", children: [
+          /* @__PURE__ */ jsxs9("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "select-none", children: [
+            yLabel && /* @__PURE__ */ jsx13(
+              "text",
+              {
+                x: 10,
+                y: padding.top - 8,
+                fill: "var(--text-muted)",
+                fontSize: 10,
+                fontWeight: 600,
+                children: yLabel
+              }
+            ),
+            /* @__PURE__ */ jsx13("defs", { children: showArea && /* @__PURE__ */ jsxs9("linearGradient", { id: gradientId, x1: "0", y1: "0", x2: "0", y2: "1", children: [
+              /* @__PURE__ */ jsx13("stop", { offset: "0%", stopColor: lineColor, stopOpacity: 0.3 }),
+              /* @__PURE__ */ jsx13("stop", { offset: "100%", stopColor: lineColor, stopOpacity: 0.02 })
+            ] }) }),
+            /* @__PURE__ */ jsxs9("g", { transform: `translate(${padding.left}, ${padding.top + 15})`, children: [
+              yTicks.map((tick) => {
+                const y = scaleY(tick);
+                return /* @__PURE__ */ jsxs9("g", { children: [
+                  /* @__PURE__ */ jsx13(
+                    "line",
+                    {
+                      x1: 0,
+                      y1: y,
+                      x2: chartW,
+                      y2: y,
+                      stroke: "var(--border-default)",
+                      strokeDasharray: "4 3"
+                    }
+                  ),
+                  /* @__PURE__ */ jsx13("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(Math.round(tick)) })
+                ] }, tick);
+              }),
+              showArea && /* @__PURE__ */ jsx13("path", { d: areaPath, fill: `url(#${gradientId})` }),
+              /* @__PURE__ */ jsx13(
+                "path",
+                {
+                  d: smoothLine,
+                  fill: "none",
+                  stroke: lineColor,
+                  strokeWidth: 2.5,
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round",
+                  style: animated ? {
+                    strokeDasharray: 2e3,
+                    strokeDashoffset: 2e3,
+                    animation: `drawLine 1.2s ease-out forwards`
+                  } : void 0
+                }
+              ),
+              hoveredIndex !== null && /* @__PURE__ */ jsxs9(Fragment2, { children: [
+                /* @__PURE__ */ jsx13(
+                  "line",
+                  {
+                    x1: scaleX(hoveredIndex),
+                    y1: 0,
+                    x2: scaleX(hoveredIndex),
+                    y2: chartH,
+                    stroke: lineColor,
+                    strokeWidth: 1,
+                    strokeDasharray: "3 3",
+                    opacity: 0.4
+                  }
+                ),
+                /* @__PURE__ */ jsx13(
+                  "circle",
+                  {
+                    cx: scaleX(hoveredIndex),
+                    cy: scaleY(data[hoveredIndex].value),
+                    r: 7,
+                    fill: lineColor,
+                    opacity: 0.15
+                  }
+                )
+              ] }),
+              data.map((d, i) => {
+                const cx = scaleX(i), cy = scaleY(d.value);
+                const isHov = hoveredIndex === i;
+                return /* @__PURE__ */ jsxs9("g", { children: [
+                  /* @__PURE__ */ jsx13(
+                    "circle",
+                    {
+                      cx,
+                      cy,
+                      r: isHov ? 5.5 : 3.5,
+                      fill: "var(--bg-surface)",
+                      stroke: lineColor,
+                      strokeWidth: 2.5,
+                      className: "transition-all duration-200 pointer-events-none"
+                    }
+                  ),
+                  /* @__PURE__ */ jsx13("circle", { cx, cy, r: 14, fill: "transparent" })
+                ] }, i);
+              }),
+              data.map((d, i) => /* @__PURE__ */ jsx13(
+                "text",
+                {
+                  x: scaleX(i),
+                  y: chartH + 18,
+                  textAnchor: "middle",
+                  fill: "var(--text-muted)",
+                  fontSize: 11,
+                  fontWeight: hoveredIndex === i ? 600 : 400,
+                  className: "pointer-events-none",
+                  children: d.label
+                },
+                i
+              )),
+              /* @__PURE__ */ jsx13(
+                "rect",
+                {
+                  x: 0,
+                  y: 0,
+                  width: chartW,
+                  height: chartH,
+                  fill: "transparent",
+                  onMouseMove: (e) => {
+                    const svgEl = e.currentTarget.closest("svg");
+                    const svgRect = svgEl == null ? void 0 : svgEl.getBoundingClientRect();
+                    if (!svgRect) return;
+                    const scaleFactorX = svgRect.width / svgW;
+                    const mouseX = e.clientX - svgRect.left - padding.left * scaleFactorX;
+                    const idx = Math.max(0, Math.min(
+                      data.length - 1,
+                      Math.round(mouseX / (chartW * scaleFactorX) * (data.length - 1))
+                    ));
+                    setHoveredIndex(idx);
+                    updateTooltip(e, idx);
+                  },
+                  onMouseLeave: () => {
+                    setHoveredIndex(null);
+                    setTooltip(null);
+                  }
+                }
+              ),
+              /* @__PURE__ */ jsx13("line", { x1: 0, y1: chartH, x2: chartW, y2: chartH, stroke: "var(--border-strong)" })
+            ] }),
+            /* @__PURE__ */ jsx13("style", { children: `
+                        @keyframes drawLine { to { stroke-dashoffset: 0; } }
+                    ` })
+          ] }),
+          tooltip && /* @__PURE__ */ jsx13(
+            "div",
+            {
+              className: "absolute z-50 pointer-events-none transition-all duration-150",
+              style: {
+                left: tooltip.x,
+                top: tooltip.y,
+                transform: "translate(-90%, -70%)"
+              },
+              children: /* @__PURE__ */ jsxs9("div", { className: "relative bg-[#0A0A0B] text-white text-sm rounded-lg px-8 py-2 shadow-2xl border border-white/10 whitespace-nowrap", children: [
+                /* @__PURE__ */ jsx13("p", { className: "text-[11px] text-center", children: tooltip.label }),
+                /* @__PURE__ */ jsx13("p", { className: "text-sm font-semibold text-center", children: formatVal(tooltip.value) })
+              ] })
+            }
+          )
+        ] }),
+        legendLabel && /* @__PURE__ */ jsx13("div", { className: "flex justify-center items-center gap-2 mt-4 px-2", children: /* @__PURE__ */ jsxs9("div", { className: "flex items-center gap-1.5", children: [
+          /* @__PURE__ */ jsx13(
+            "div",
+            {
+              className: "w-3 h-1 rounded-sm",
+              style: { backgroundColor: lineColor }
+            }
+          ),
+          /* @__PURE__ */ jsx13("span", { className: "text-sm font-medium", children: legendLabel })
+        ] }) })
+      ]
+    }
+  );
+};
+var GraficaLine_default = PureLineChart;
 
 // components/ui/DataDisplay/Table.tsx
 import { useState as useState5 } from "react";
@@ -1193,6 +1795,9 @@ export {
   DialogBody,
   DialogFooter,
   DialogHeader,
+  GraficaBar_default as GraficaBar,
+  GraficaDonut_default as GraficaDonut,
+  GraficaLine_default as GraficaLine,
   Input,
   LabelBadge,
   Select,

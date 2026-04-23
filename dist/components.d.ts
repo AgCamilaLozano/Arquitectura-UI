@@ -266,6 +266,57 @@ interface TooltipProps {
 }
 declare const Tooltip: ({ content, children, side, ariaLabel, align, variant, size, disabled, }: TooltipProps) => react_jsx_runtime.JSX.Element;
 
+interface BarSegment {
+    label: string;
+    value: number;
+}
+interface PureBarChartProps {
+    data: BarSegment[];
+    title?: string;
+    description?: string;
+    height?: number;
+    barRadius?: number;
+    animated?: boolean;
+    legendLabel?: string;
+    yLabel?: string;
+}
+declare const GraficaBar: ({ data, title, description, height, barRadius, animated, legendLabel, yLabel, }: PureBarChartProps) => react_jsx_runtime.JSX.Element;
+
+interface ChartSegment {
+    value: number;
+    label: string;
+    color?: string;
+}
+interface MultiDonutChartProps {
+    data: ChartSegment[];
+    title?: string;
+    description?: string;
+    size?: number;
+    strokeWidth?: number;
+    loading?: boolean;
+    showTotal?: boolean;
+    totalValue?: number;
+    formatValue?: (value: number) => string;
+}
+declare const GraficaDonut: ({ data, title, description, size, strokeWidth, loading, showTotal, totalValue, formatValue, }: MultiDonutChartProps) => react_jsx_runtime.JSX.Element;
+
+interface DataPoint {
+    label: string;
+    value: number;
+}
+interface PureLineChartProps {
+    data: DataPoint[];
+    title?: string;
+    description?: string;
+    height?: number;
+    lineColor?: string;
+    showArea?: boolean;
+    animated?: boolean;
+    legendLabel?: string;
+    yLabel?: string;
+}
+declare const PureLineChart: ({ data, title, description, height, lineColor, showArea, animated, legendLabel, yLabel, }: PureLineChartProps) => react_jsx_runtime.JSX.Element;
+
 interface Column<T> {
     key: keyof T | string;
     header: string;
@@ -299,4 +350,4 @@ declare function ThemeProvider({ children, ...props }: ThemeProviderProps): reac
 
 declare function ThemeToggle(): react_jsx_runtime.JSX.Element;
 
-export { Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, type SortDirection, type SortState, StatusBadge, type StatusVariant, Table, type TableProps, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useDialogContext };
+export { Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, type SortDirection, type SortState, StatusBadge, type StatusVariant, Table, type TableProps, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useDialogContext };
