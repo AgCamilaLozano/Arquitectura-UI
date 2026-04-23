@@ -1142,7 +1142,7 @@ var GraficaDonut = ({
   if (!data.length) {
     return /* @__PURE__ */ jsx12("div", { className: "p-6 rounded-2xl bg-surface border border-border text-center", children: /* @__PURE__ */ jsx12("p", { className: "text-sm text-text-muted", children: "No hay datos disponibles" }) });
   }
-  return /* @__PURE__ */ jsxs8("div", { className: "rounded-2xl bg-surface border border-border shadow-md p-6", children: [
+  return /* @__PURE__ */ jsxs8("div", { className: "rounded-2xl bg-background border border-border shadow-md p-6", children: [
     (title || description) && /* @__PURE__ */ jsxs8("div", { className: "mb-4", children: [
       title && /* @__PURE__ */ jsx12("p", { className: "text-sm font-semibold text-text-primary", children: title }),
       description && /* @__PURE__ */ jsx12("p", { className: "text-xs text-text-muted mt-1", children: description })
