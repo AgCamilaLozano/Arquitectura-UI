@@ -352,4 +352,34 @@ declare function ThemeProvider({ children, ...props }: ThemeProviderProps): reac
 
 declare function ThemeToggle(): react_jsx_runtime.JSX.Element;
 
-export { Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, StatusBadge, type StatusVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useDialogContext };
+type AlertDialogVariant = "destructive" | "warning" | "success" | "info";
+type AlertDialogSize = "sm" | "md" | "lg";
+interface AlertDialogProps {
+    open: boolean;
+    onClose: () => void;
+    variant?: AlertDialogVariant;
+    size?: AlertDialogSize;
+    title: React__default.ReactNode;
+    description?: React__default.ReactNode;
+    confirmLabel?: string;
+    cancelLabel?: string;
+    onConfirm?: () => void;
+    onCancel?: () => void;
+    closeOnOverlay?: boolean;
+    hideCloseButton?: boolean;
+    className?: string;
+    children?: React__default.ReactNode;
+}
+declare const variantConfig: Record<AlertDialogVariant, {
+    icon: React__default.ReactNode;
+    iconBg: string;
+    confirmVariant: "primary" | "destructive";
+}>;
+declare function AlertDialog({ open, onClose, variant, size, title, description, confirmLabel, cancelLabel, onConfirm, onCancel, closeOnOverlay, hideCloseButton, className, children, }: AlertDialogProps): react_jsx_runtime.JSX.Element | null;
+interface AlertDialogContextValue {
+    variant: AlertDialogVariant;
+    config: typeof variantConfig["destructive"];
+}
+declare const useAlertDialogContext: () => AlertDialogContextValue;
+
+export { AlertDialog, type AlertDialogProps, type AlertDialogSize, type AlertDialogVariant, Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, StatusBadge, type StatusVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useAlertDialogContext, useDialogContext };

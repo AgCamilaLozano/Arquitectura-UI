@@ -1881,7 +1881,131 @@ function ThemeToggle() {
     ] }) })
   ] });
 }
+
+// components/Prueba/AlertDialog.tsx
+import React9, { useEffect as useEffect4, useCallback as useCallback2 } from "react";
+import { X as X3, AlertTriangle, AlertCircle, CheckCircle, Info } from "lucide-react";
+import { jsx as jsx19, jsxs as jsxs14 } from "react/jsx-runtime";
+var sizeClasses3 = {
+  sm: "max-w-sm",
+  md: "max-w-md",
+  lg: "max-w-lg"
+};
+var variantConfig = {
+  destructive: {
+    icon: /* @__PURE__ */ jsx19(AlertTriangle, { className: "w-5 h-5" }),
+    iconBg: "bg-error/10 text-text-error",
+    confirmVariant: "destructive"
+  },
+  warning: {
+    icon: /* @__PURE__ */ jsx19(AlertCircle, { className: "w-5 h-5" }),
+    iconBg: "bg-warning/10 text-text-warning",
+    confirmVariant: "primary"
+  },
+  success: {
+    icon: /* @__PURE__ */ jsx19(CheckCircle, { className: "w-5 h-5" }),
+    iconBg: "bg-success/10 text-text-success",
+    confirmVariant: "primary"
+  },
+  info: {
+    icon: /* @__PURE__ */ jsx19(Info, { className: "w-5 h-5" }),
+    iconBg: "bg-info/10 text-text-info",
+    confirmVariant: "primary"
+  }
+};
+function AlertDialog({
+  open,
+  onClose,
+  variant = "info",
+  size = "md",
+  title,
+  description,
+  confirmLabel = "Confirmar",
+  cancelLabel = "Cancelar",
+  onConfirm,
+  onCancel,
+  closeOnOverlay = true,
+  hideCloseButton = false,
+  className = "",
+  children
+}) {
+  const handleKeyDown = useCallback2(
+    (e) => {
+      if (e.key === "Escape") onClose();
+    },
+    [onClose]
+  );
+  useEffect4(() => {
+    if (open) {
+      document.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [open, handleKeyDown]);
+  const config = variantConfig[variant];
+  if (!open) return null;
+  return /* @__PURE__ */ jsxs14("div", { role: "alertdialog", "aria-modal": "true", className: "fixed inset-0 z-50 flex items-center justify-center p-4", children: [
+    /* @__PURE__ */ jsx19(
+      "div",
+      {
+        className: "absolute inset-0 bg-black/50 animate-in fade-in duration-200",
+        onClick: closeOnOverlay ? onClose : void 0,
+        "aria-hidden": "true"
+      }
+    ),
+    /* @__PURE__ */ jsxs14(
+      "div",
+      {
+        className: `
+          relative z-10 w-full
+          bg-surface dark:bg-background
+          rounded-xl overflow-hidden
+          border border-border
+          shadow-[var(--shadow-card)]
+          animate-in fade-in zoom-in-95 duration-200
+          ${sizeClasses3[size]}
+          ${className}
+        `,
+        children: [
+          !hideCloseButton && /* @__PURE__ */ jsx19(
+            Button,
+            {
+              variant: "ghost",
+              size: "icon-sm",
+              onClick: onClose,
+              "aria-label": "Cerrar",
+              className: "absolute top-3 right-3 text-text-muted hover:text-text-primary z-10",
+              children: /* @__PURE__ */ jsx19(X3, {})
+            }
+          ),
+          /* @__PURE__ */ jsxs14(AlertDialogContext.Provider, { value: { variant, config }, children: [
+            /* @__PURE__ */ jsx19("div", { className: "px-6 pt-6 pb-4", children: /* @__PURE__ */ jsxs14("div", { className: "flex items-start gap-3", children: [
+              /* @__PURE__ */ jsx19("span", { className: `flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${config.iconBg}`, children: config.icon }),
+              /* @__PURE__ */ jsxs14("div", { className: "flex-1 min-w-0 pr-6", children: [
+                /* @__PURE__ */ jsx19("h2", { className: "font-heading text-lg font-semibold leading-snug text-text-primary", children: title }),
+                description && /* @__PURE__ */ jsx19("p", { className: "mt-2 text-sm text-text-secondary leading-relaxed", children: description })
+              ] })
+            ] }) }),
+            (children || onConfirm || onCancel) && /* @__PURE__ */ jsx19("div", { className: "border-t border-border px-6 py-4", children: children || /* @__PURE__ */ jsxs14("div", { className: "flex items-center justify-end gap-2", children: [
+              onCancel && /* @__PURE__ */ jsx19(Button, { variant: "secondary", onClick: onCancel, children: cancelLabel }),
+              onConfirm && /* @__PURE__ */ jsx19(Button, { variant: "default", onClick: onConfirm, children: confirmLabel })
+            ] }) })
+          ] })
+        ]
+      }
+    )
+  ] });
+}
+var AlertDialogContext = React9.createContext({
+  variant: "info",
+  config: variantConfig["info"]
+});
+var useAlertDialogContext = () => React9.useContext(AlertDialogContext);
 export {
+  AlertDialog,
   Breadcrumbs,
   Button,
   Card,
@@ -1916,5 +2040,6 @@ export {
   Toaster,
   Tooltip,
   buttonVariants,
+  useAlertDialogContext,
   useDialogContext
 };

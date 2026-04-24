@@ -1,169 +1,122 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import Table, { Column } from "@/components/ui/DataDisplay/Table";
-import { StatusBadge, StatusVariant } from "@/components/ui/Compuesto/Badges";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Base/Selects/select";
-import { Button } from "@/components/ui/Base/Entradas";
-import { Edit, Trash } from "lucide-react";
-import { Tooltip } from "@/components/ui/Compuesto/Tooltip";
-import { ChatWidget } from "@/components/Idt-Mascota/ChatBox";
+import { useState } from 'react'
 
-// ─────────────────────────────────────────────────────────────
-// Tipos
-// ─────────────────────────────────────────────────────────────
+import {
+  Button,
+  Input,
+  Textarea,
+} from '@/components/ui/Base'
 
-type UserStatus =
-  | "aprobado"
-  | "rechazado"
-  | "proceso"
-  | "pendiente";
+import {
+  StatusBadge,
+  LabelBadge,
+} from '@/components/ui/Compuesto/Badges'
 
-type User = {
-  id: number;
-  name: string;
-  status: UserStatus;
-  accion?: boolean;
-};
+import {
+  Card,
+  CardHeader,
+  CardBody,
+} from '@/components/ui/Compuesto/Modals/Card'
 
-// ─────────────────────────────────────────────────────────────
-// Mapping negocio → UI
-// ─────────────────────────────────────────────────────────────
+import {
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from '@/components/ui/Compuesto/Modals/Dialog'
 
-const statusMap: Record<
-  UserStatus,
-  { variant: StatusVariant; label: string }
-> = {
-  aprobado: { variant: "success", label: "Aprobado" },
-  rechazado: { variant: "error", label: "Rechazado" },
-  proceso: { variant: "info", label: "En proceso" },
-  pendiente: { variant: "warning", label: "Pendiente" }
-};
+import { Tooltip } from '@/components/ui/Compuesto/Tooltip'
 
-// ─────────────────────────────────────────────────────────────
-// Data
-// ─────────────────────────────────────────────────────────────
+import {
+  GraficaBar,
+  GraficaDonut,
+  GraficaLine,
+} from '@/components/ui/DataDisplay/Graficas'
 
-const initialData: User[] = [
-  { id: 1, name: "Camila", status: "pendiente" },
-  { id: 2, name: "Juan", status: "proceso" },
-  { id: 3, name: "Laura", status: "rechazado" },
-  { id: 4, name: "Carlos", status: "aprobado" },
-  { id: 5, name: "Camila", status: "pendiente" },
-  { id: 6, name: "Juan", status: "proceso" },
-  { id: 7, name: "Laura", status: "rechazado" },
-  { id: 8, name: "Carlos", status: "aprobado" },
-  { id: 9, name: "Camila", status: "proceso" },
-  { id: 10, name: "Juan", status: "proceso" },
-  { id: 11, name: "Laura", status: "rechazado" },
-  { id: 12, name: "Carlos", status: "aprobado" },
-  { id: 13, name: "Camila", status: "pendiente" },
-  { id: 14, name: "Juan", status: "proceso" },
-  { id: 15, name: "Laura", status: "rechazado" },
-  { id: 16, name: "Carlos", status: "aprobado" },
-];
+import { DataTable } from '@/components/ui/DataDisplay/Table'
 
-// ─────────────────────────────────────────────────────────────
-// Componentes
-// ─────────────────────────────────────────────────────────────
+import { Breadcrumbs } from '@/components/ui/Navegacion/Breadcrumbs'
 
-function BusinessStatusBadge({ status }: { status: UserStatus }) {
-  const config = statusMap[status];
+import { AlertDialog } from '@/components/Prueba'
 
+export default function UIShowcase() {
+  const [alertOpen, setAlertOpen] = useState<{ type: string; open: boolean }>({ type: 'info', open: false })
   return (
-    <StatusBadge
-      status={config.variant}
-      label={config.label}
-      animated={status === "proceso"}
-    />
-  );
-}
+    <div className="p-8 space-y-12">
 
-// ─────────────────────────────────────────────────────────────
-// Page
-// ─────────────────────────────────────────────────────────────
 
-export default function Page() {
-  const [users, setUsers] = useState<User[]>(initialData);
+      {/* 🧭 NAVEGACIÓN */}
+      <section>
+        <h2 className="text-xl font-bold mb-4">navegación</h2>
 
-  const updateStatus = (id: number, newStatus: UserStatus) => {
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === id ? { ...user, status: newStatus } : user
-      )
-    );
-  };
+        <Breadcrumbs />
 
-  const columns: Column<User>[] = [
-    {
-      key: "name",
-      header: "Usuario",
-    },
-    {
-      key: "status",
-      header: "Estado",
-      render: (row) => <BusinessStatusBadge status={row.status} />,
-    },
-    {
-      key: "edit",
-      header: "Cambiar estado",
-      render: (row) => (
-        <Select
-          value={row.status}
-          onValueChange={(value) =>
-            updateStatus(row.id, value as UserStatus)
+      </section>
 
-          }
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Seleccione un nuevo estado." />
-          </SelectTrigger>
-          <SelectContent >
-            <SelectItem value="activo" label="Activo">Activo</SelectItem>
-            <SelectItem value="inactivo" label="Inactivo">Inactivo</SelectItem>
-            <SelectItem value="aprobado" label="Aprobado">Aprobado</SelectItem>
-            <SelectItem value="rechazado" label="Rechazado">Rechazado</SelectItem>
-            <SelectItem value="proceso" label="En proceso">En proceso</SelectItem>
-          </SelectContent>
+      {/* ⚠️ ALERTDIALOG */}
+      <section>
+        <h2 className="text-xl font-bold mb-4">AlertDialog</h2>
 
-        </Select>
-      ),
-    },
-    {
-      key: "accion",
-      header: "Acción",
-      render: (row) => (
-        <Tooltip content="Editar" >
-          <Button variant={'ghost'}>
-            <Edit />
+        <div className="flex gap-4 flex-wrap">
+          <Button variant="secondary" className="!bg-error !text-white !hover:bg-error/90" onClick={() => setAlertOpen({ type: 'destructive', open: true })}>
+            Eliminar
           </Button>
-        </Tooltip>
-      )
-    }
-  ];
+          <Button variant="secondary" className="!bg-warning !text-white !hover:bg-warning/90" onClick={() => setAlertOpen({ type: 'warning', open: true })}>
+            Advertencia
+          </Button>
+          <Button variant="secondary" className="!bg-success !text-white !hover:bg-success/90" onClick={() => setAlertOpen({ type: 'success', open: true })}>
+            Éxito
+          </Button>
+          <Button variant="secondary" className="!bg-info !text-white !hover:bg-info/90" onClick={() => setAlertOpen({ type: 'info', open: true })}>
+            Info
+          </Button>
+        </div>
 
-  return (
-    <div className="p-8 space-y-8">
-      <h1 className="text-2xl font-bold">
-        Table + Estados Dinámicos
-      </h1>
-
-      <p className="text-sm text-gray-500">
-        Cambia el estado con el select y mira cómo el badge reacciona en tiempo real.
-      </p>
-      <div className="h-80 overflow-y-auto scrollbar-soft">
-        <Table
-          data={users}
-          columns={columns}
-          rowKey="id"
-          stickyHeader
+        <AlertDialog
+          open={alertOpen.open && alertOpen.type === 'destructive'}
+          onClose={() => setAlertOpen({ type: 'info', open: false })}
+          variant="destructive"
+          title="¿Eliminar usuario?"
+          description="Esta acción no se puede deshacer. El usuario será eliminado permanentemente."
+          confirmLabel="Eliminar"
+          onConfirm={() => setAlertOpen({ type: 'destructive', open: false })}
+          onCancel={() => setAlertOpen({ type: 'destructive', open: false })}
         />
 
-      </div>
-      <div className="h-20 w-20 float-right">
-        <ChatWidget />
-      </div>
+        <AlertDialog
+          open={alertOpen.open && alertOpen.type === 'warning'}
+          onClose={() => setAlertOpen({ type: 'warning', open: false })}
+          variant="warning"
+          title="¿Continuar con la operación?"
+          description="Esta acción requiere confirmación especial. ¿Desea proceder?"
+          confirmLabel="Continuar"
+          onConfirm={() => setAlertOpen({ type: 'warning', open: false })}
+          onCancel={() => setAlertOpen({ type: 'warning', open: false })}
+        />
+
+        <AlertDialog
+          open={alertOpen.open && alertOpen.type === 'success'}
+          onClose={() => setAlertOpen({ type: 'success', open: false })}
+          variant="success"
+          title="¡Operación exitosa!"
+          description="Los cambios se han guardado correctamente."
+          confirmLabel="Aceptar"
+          onConfirm={() => setAlertOpen({ type: 'success', open: false })}
+        />
+
+        <AlertDialog
+          open={alertOpen.open && alertOpen.type === 'info'}
+          onClose={() => setAlertOpen({ type: 'info', open: false })}
+          variant="info"
+          title="Información importante"
+          description="Tu sesión expirará en 5 minutos. Guarda tu trabajo antes de continuar."
+          confirmLabel="Entendido"
+          onConfirm={() => setAlertOpen({ type: 'info', open: false })}
+        />
+
+      </section>
 
     </div>
-  );
+  )
 }
