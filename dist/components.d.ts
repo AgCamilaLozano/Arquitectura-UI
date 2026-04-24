@@ -1,6 +1,6 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as React$1 from 'react';
-import React__default from 'react';
+import React__default, { ReactNode } from 'react';
 import { Select as Select$1 } from 'radix-ui';
 import * as class_variance_authority_types from 'class-variance-authority/types';
 import { VariantProps } from 'class-variance-authority';
@@ -346,6 +346,37 @@ interface DataTableProps<T> {
 }
 declare function DataTable<T>({ data, columns, maxHeight, rowKey, emptyState, isLoading, className, headerVariant, size, }: DataTableProps<T>): react_jsx_runtime.JSX.Element;
 
+type TabItem = {
+    /** Identificador único del tab */
+    id: string;
+    /** Etiqueta visible del tab */
+    label: string;
+    /** Ícono opcional (izquierda del label) */
+    icon?: ReactNode;
+    /** Contenido a renderizar cuando el tab está activo */
+    content: ReactNode;
+    /** Deshabilita interacción con el tab */
+    disabled?: boolean;
+};
+type TabsVariant = "underline" | "pill" | "card";
+type TabsProps = {
+    /** Lista de tabs a renderizar */
+    tabs: TabItem[];
+    /** Tab activo por defecto (no controlado) */
+    defaultTab?: string;
+    /** Tab activo controlado externamente */
+    activeTab?: string;
+    /** Callback cuando cambia el tab activo */
+    onChange?: (id: string) => void;
+    /** Variante visual del componente */
+    variant?: TabsVariant;
+    /** Clases adicionales para el contenedor raíz */
+    className?: string;
+    /** Alinea los tabs horizontalmente */
+    align?: "start" | "center" | "end" | "stretch";
+};
+declare function Tabs({ tabs, defaultTab, activeTab: controlledTab, onChange, variant, className, align, }: TabsProps): react_jsx_runtime.JSX.Element;
+
 declare function Breadcrumbs(): react_jsx_runtime.JSX.Element;
 
 declare function ThemeProvider({ children, ...props }: ThemeProviderProps): react_jsx_runtime.JSX.Element;
@@ -382,4 +413,4 @@ interface AlertDialogContextValue {
 }
 declare const useAlertDialogContext: () => AlertDialogContextValue;
 
-export { AlertDialog, type AlertDialogProps, type AlertDialogSize, type AlertDialogVariant, Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, StatusBadge, type StatusVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useAlertDialogContext, useDialogContext };
+export { AlertDialog, type AlertDialogProps, type AlertDialogSize, type AlertDialogVariant, Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useAlertDialogContext, useDialogContext };

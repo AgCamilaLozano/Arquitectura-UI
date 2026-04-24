@@ -1767,22 +1767,117 @@ function DataTable({
   );
 }
 
+// components/ui/DataDisplay/Tabs.tsx
+import { useState as useState5 } from "react";
+import { jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
+var triggerBase = "inline-flex items-center gap-2 text-sm font-medium transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
+var variantStyles2 = {
+  underline: {
+    list: "flex border-b border-border gap-1",
+    trigger: "px-4 py-2.5 border-b-2 -mb-px",
+    active: "border-accent text-accent",
+    inactive: "border-transparent text-text-secondary hover:text-text-primary hover:border-border-strong"
+  },
+  pill: {
+    list: "flex gap-1 bg-muted p-1 rounded-xl",
+    trigger: "px-4 py-2 rounded-lg",
+    active: "bg-surface text-text-primary shadow-[var(--shadow-surface)]",
+    inactive: "text-text-muted hover:text-text-primary hover:bg-accent-hover"
+  },
+  card: {
+    list: "flex gap-2",
+    trigger: "px-4 py-2.5 rounded-t-lg border border-b-0",
+    active: "border-border bg-surface text-text-primary",
+    inactive: "border-transparent bg-muted text-text-muted hover:text-text-primary hover:bg-accent-soft"
+  }
+};
+var alignClass = {
+  start: "justify-start",
+  center: "justify-center",
+  end: "justify-end",
+  stretch: "[&>button]:flex-1 [&>button]:justify-center"
+};
+function Tabs({
+  tabs,
+  defaultTab,
+  activeTab: controlledTab,
+  onChange,
+  variant = "underline",
+  className = "",
+  align = "start"
+}) {
+  var _a, _b, _c;
+  const [internalActive, setInternalActive] = useState5(
+    (_b = defaultTab != null ? defaultTab : (_a = tabs[0]) == null ? void 0 : _a.id) != null ? _b : ""
+  );
+  const isControlled = controlledTab !== void 0;
+  const active = isControlled ? controlledTab : internalActive;
+  const handleSelect = (id) => {
+    if (!isControlled) setInternalActive(id);
+    onChange == null ? void 0 : onChange(id);
+  };
+  const styles = variantStyles2[variant];
+  const activeContent = (_c = tabs.find((t) => t.id === active)) == null ? void 0 : _c.content;
+  return /* @__PURE__ */ jsxs11("div", { className: `flex flex-col w-full ${className}`, children: [
+    /* @__PURE__ */ jsx15(
+      "div",
+      {
+        role: "tablist",
+        className: `${styles.list} ${alignClass[align]}`,
+        children: tabs.map((tab) => {
+          const isActive = tab.id === active;
+          return /* @__PURE__ */ jsxs11(
+            "button",
+            {
+              role: "tab",
+              "aria-selected": isActive,
+              "aria-controls": `tabpanel-${tab.id}`,
+              disabled: tab.disabled,
+              onClick: () => !tab.disabled && handleSelect(tab.id),
+              className: [
+                triggerBase,
+                styles.trigger,
+                isActive ? styles.active : styles.inactive
+              ].join(" "),
+              children: [
+                tab.icon && /* @__PURE__ */ jsx15("span", { className: "shrink-0 size-4", children: tab.icon }),
+                tab.label
+              ]
+            },
+            tab.id
+          );
+        })
+      }
+    ),
+    /* @__PURE__ */ jsx15(
+      "div",
+      {
+        role: "tabpanel",
+        id: `tabpanel-${active}`,
+        "aria-labelledby": active,
+        className: "mt-4 text-text-primary",
+        children: activeContent
+      }
+    )
+  ] });
+}
+
 // components/ui/Navegacion/Breadcrumbs.tsx
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
+import { jsx as jsx16, jsxs as jsxs12 } from "react/jsx-runtime";
 function Breadcrumbs() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter((segment) => segment !== "");
-  return /* @__PURE__ */ jsxs11("nav", { className: "flex items-center space-x-2 text-xs tracking-widest font-semibold text-text-muted whitespace-nowrap overflow-x-auto scrollbar-hide", children: [
-    segments.length === 0 ? /* @__PURE__ */ jsx15("span", { className: "text-text-primary", children: "INICIO" }) : /* @__PURE__ */ jsx15(Link, { href: "/", className: "hover:text-text-primary transition-colors flex items-center", children: "INICIO" }),
+  return /* @__PURE__ */ jsxs12("nav", { className: "flex items-center space-x-2 text-xs tracking-widest font-semibold text-text-muted whitespace-nowrap overflow-x-auto scrollbar-hide", children: [
+    segments.length === 0 ? /* @__PURE__ */ jsx16("span", { className: "text-text-primary", children: "INICIO" }) : /* @__PURE__ */ jsx16(Link, { href: "/", className: "hover:text-text-primary transition-colors flex items-center", children: "INICIO" }),
     segments.map((segment, index) => {
       const href = `/${segments.slice(0, index + 1).join("/")}`;
       const isLast = index === segments.length - 1;
       let name = decodeURIComponent(segment).replace(/[-_]/g, " ").toUpperCase();
-      return /* @__PURE__ */ jsxs11("div", { className: "flex items-center space-x-2", children: [
-        /* @__PURE__ */ jsx15("span", { className: "text-text-muted/50", children: "/" }),
-        isLast ? /* @__PURE__ */ jsx15("span", { className: "text-text-primary", children: name }) : /* @__PURE__ */ jsx15(Link, { href, className: "hover:text-text-primary transition-colors", children: name })
+      return /* @__PURE__ */ jsxs12("div", { className: "flex items-center space-x-2", children: [
+        /* @__PURE__ */ jsx16("span", { className: "text-text-muted/50", children: "/" }),
+        isLast ? /* @__PURE__ */ jsx16("span", { className: "text-text-primary", children: name }) : /* @__PURE__ */ jsx16(Link, { href, className: "hover:text-text-primary transition-colors", children: name })
       ] }, href);
     })
   ] });
@@ -1790,10 +1885,10 @@ function Breadcrumbs() {
 
 // components/ui/Tema/theme-provider.tsx
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { jsx as jsx16 } from "react/jsx-runtime";
+import { jsx as jsx17 } from "react/jsx-runtime";
 function ThemeProvider(_a) {
   var _b = _a, { children } = _b, props = __objRest(_b, ["children"]);
-  return /* @__PURE__ */ jsx16(NextThemesProvider, __spreadProps(__spreadValues({}, props), { children }));
+  return /* @__PURE__ */ jsx17(NextThemesProvider, __spreadProps(__spreadValues({}, props), { children }));
 }
 
 // components/ui/Tema/ThemeToggle.tsx
@@ -1803,17 +1898,17 @@ import { useTheme as useTheme2 } from "next-themes";
 
 // components/ui/buttonIcons/fondoIcons.tsx
 import { useRef as useRef4 } from "react";
-import { jsx as jsx17, jsxs as jsxs12 } from "react/jsx-runtime";
+import { jsx as jsx18, jsxs as jsxs13 } from "react/jsx-runtime";
 function AnimatedIconButton({ Icon, onClick }) {
   const iconRef = useRef4(null);
-  return /* @__PURE__ */ jsx17("button", { onClick, className: "group", children: /* @__PURE__ */ jsxs12("div", { className: "relative bg-muted/50 rounded-full p-2 text-sm transition-all duration-300 transform group-hover:scale-110 active:scale-95 group-hover:shadow-2xl", children: [
-    /* @__PURE__ */ jsx17("div", { className: "absolute -bottom-1 right-5 rounded-full w-3 h-3 bg-muted/50" }),
-    /* @__PURE__ */ jsx17("div", { ref: iconRef, children: /* @__PURE__ */ jsx17(Icon, { className: "h-5 w-5 z-50" }) })
+  return /* @__PURE__ */ jsx18("button", { onClick, className: "group", children: /* @__PURE__ */ jsxs13("div", { className: "relative bg-muted/50 rounded-full p-2 text-sm transition-all duration-300 transform group-hover:scale-110 active:scale-95 group-hover:shadow-2xl", children: [
+    /* @__PURE__ */ jsx18("div", { className: "absolute -bottom-1 right-5 rounded-full w-3 h-3 bg-muted/50" }),
+    /* @__PURE__ */ jsx18("div", { ref: iconRef, children: /* @__PURE__ */ jsx18(Icon, { className: "h-5 w-5 z-50" }) })
   ] }) });
 }
 
 // components/ui/Tema/ThemeToggle.tsx
-import { jsx as jsx18, jsxs as jsxs13 } from "react/jsx-runtime";
+import { jsx as jsx19, jsxs as jsxs14 } from "react/jsx-runtime";
 function ThemeToggle() {
   const { theme, setTheme } = useTheme2();
   const [mounted, setMounted] = React8.useState(false);
@@ -1832,22 +1927,22 @@ function ThemeToggle() {
     };
   }, []);
   if (!mounted) {
-    return /* @__PURE__ */ jsxs13(
+    return /* @__PURE__ */ jsxs14(
       "button",
       {
         className: "inline-flex items-center justify-center rounded-md border border-border bg-transparent p-2 text-sm font-medium text-foreground transition-colors",
         "aria-label": "Cargando tema",
         disabled: true,
         children: [
-          /* @__PURE__ */ jsx18(Sun, { className: "h-5 w-5" }),
-          /* @__PURE__ */ jsx18("span", { className: "sr-only", children: "Toggle theme" })
+          /* @__PURE__ */ jsx19(Sun, { className: "h-5 w-5" }),
+          /* @__PURE__ */ jsx19("span", { className: "sr-only", children: "Toggle theme" })
         ]
       }
     );
   }
   const CurrentIcon = theme === "dark" ? Moon : theme === "system" ? Laptop : Sun;
-  return /* @__PURE__ */ jsxs13("div", { className: "relative", ref: menuRef, children: [
-    /* @__PURE__ */ jsx18(
+  return /* @__PURE__ */ jsxs14("div", { className: "relative", ref: menuRef, children: [
+    /* @__PURE__ */ jsx19(
       AnimatedIconButton,
       {
         onClick: () => setIsOpen(!isOpen),
@@ -1855,28 +1950,28 @@ function ThemeToggle() {
         Icon: CurrentIcon
       }
     ),
-    /* @__PURE__ */ jsx18("span", { className: "sr-only", children: "Toggle theme" }),
-    isOpen && /* @__PURE__ */ jsx18("div", { className: "absolute top-full mt-2 right-0 w-40 rounded-md border border-border-sidebar bg-background text-text-primary shadow-lg z-[9999]", children: /* @__PURE__ */ jsxs13("div", { className: "py-1", role: "menu", "aria-orientation": "vertical", "aria-labelledby": "options-menu", children: [
-      /* @__PURE__ */ jsxs13("button", { onClick: () => {
+    /* @__PURE__ */ jsx19("span", { className: "sr-only", children: "Toggle theme" }),
+    isOpen && /* @__PURE__ */ jsx19("div", { className: "absolute top-full mt-2 right-0 w-40 rounded-md border border-border-sidebar bg-background text-text-primary shadow-lg z-[9999]", children: /* @__PURE__ */ jsxs14("div", { className: "py-1", role: "menu", "aria-orientation": "vertical", "aria-labelledby": "options-menu", children: [
+      /* @__PURE__ */ jsxs14("button", { onClick: () => {
         setTheme("light");
         setIsOpen(false);
       }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
-        /* @__PURE__ */ jsx18(Sun, { className: "mr-2 h-4 w-4" }),
-        /* @__PURE__ */ jsx18("span", { children: "Claro" })
+        /* @__PURE__ */ jsx19(Sun, { className: "mr-2 h-4 w-4" }),
+        /* @__PURE__ */ jsx19("span", { children: "Claro" })
       ] }),
-      /* @__PURE__ */ jsxs13("button", { onClick: () => {
+      /* @__PURE__ */ jsxs14("button", { onClick: () => {
         setTheme("dark");
         setIsOpen(false);
       }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
-        /* @__PURE__ */ jsx18(Moon, { className: "mr-2 h-4 w-4" }),
-        /* @__PURE__ */ jsx18("span", { children: "Oscuro" })
+        /* @__PURE__ */ jsx19(Moon, { className: "mr-2 h-4 w-4" }),
+        /* @__PURE__ */ jsx19("span", { children: "Oscuro" })
       ] }),
-      /* @__PURE__ */ jsxs13("button", { onClick: () => {
+      /* @__PURE__ */ jsxs14("button", { onClick: () => {
         setTheme("system");
         setIsOpen(false);
       }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
-        /* @__PURE__ */ jsx18(Laptop, { className: "mr-2 h-4 w-4" }),
-        /* @__PURE__ */ jsx18("span", { children: "Sistema" })
+        /* @__PURE__ */ jsx19(Laptop, { className: "mr-2 h-4 w-4" }),
+        /* @__PURE__ */ jsx19("span", { children: "Sistema" })
       ] })
     ] }) })
   ] });
@@ -1885,7 +1980,7 @@ function ThemeToggle() {
 // components/Prueba/AlertDialog.tsx
 import React9, { useEffect as useEffect4, useCallback as useCallback2 } from "react";
 import { X as X3, AlertTriangle, AlertCircle, CheckCircle, Info } from "lucide-react";
-import { jsx as jsx19, jsxs as jsxs14 } from "react/jsx-runtime";
+import { jsx as jsx20, jsxs as jsxs15 } from "react/jsx-runtime";
 var sizeClasses3 = {
   sm: "max-w-sm",
   md: "max-w-md",
@@ -1893,22 +1988,22 @@ var sizeClasses3 = {
 };
 var variantConfig = {
   destructive: {
-    icon: /* @__PURE__ */ jsx19(AlertTriangle, { className: "w-5 h-5" }),
+    icon: /* @__PURE__ */ jsx20(AlertTriangle, { className: "w-5 h-5" }),
     iconBg: "bg-error/10 text-text-error",
     confirmVariant: "destructive"
   },
   warning: {
-    icon: /* @__PURE__ */ jsx19(AlertCircle, { className: "w-5 h-5" }),
+    icon: /* @__PURE__ */ jsx20(AlertCircle, { className: "w-5 h-5" }),
     iconBg: "bg-warning/10 text-text-warning",
     confirmVariant: "primary"
   },
   success: {
-    icon: /* @__PURE__ */ jsx19(CheckCircle, { className: "w-5 h-5" }),
+    icon: /* @__PURE__ */ jsx20(CheckCircle, { className: "w-5 h-5" }),
     iconBg: "bg-success/10 text-text-success",
     confirmVariant: "primary"
   },
   info: {
-    icon: /* @__PURE__ */ jsx19(Info, { className: "w-5 h-5" }),
+    icon: /* @__PURE__ */ jsx20(Info, { className: "w-5 h-5" }),
     iconBg: "bg-info/10 text-text-info",
     confirmVariant: "primary"
   }
@@ -1947,8 +2042,8 @@ function AlertDialog({
   }, [open, handleKeyDown]);
   const config = variantConfig[variant];
   if (!open) return null;
-  return /* @__PURE__ */ jsxs14("div", { role: "alertdialog", "aria-modal": "true", className: "fixed inset-0 z-50 flex items-center justify-center p-4", children: [
-    /* @__PURE__ */ jsx19(
+  return /* @__PURE__ */ jsxs15("div", { role: "alertdialog", "aria-modal": "true", className: "fixed inset-0 z-50 flex items-center justify-center p-4", children: [
+    /* @__PURE__ */ jsx20(
       "div",
       {
         className: "absolute inset-0 bg-black/50 animate-in fade-in duration-200",
@@ -1956,7 +2051,7 @@ function AlertDialog({
         "aria-hidden": "true"
       }
     ),
-    /* @__PURE__ */ jsxs14(
+    /* @__PURE__ */ jsxs15(
       "div",
       {
         className: `
@@ -1970,7 +2065,7 @@ function AlertDialog({
           ${className}
         `,
         children: [
-          !hideCloseButton && /* @__PURE__ */ jsx19(
+          !hideCloseButton && /* @__PURE__ */ jsx20(
             Button,
             {
               variant: "ghost",
@@ -1978,20 +2073,20 @@ function AlertDialog({
               onClick: onClose,
               "aria-label": "Cerrar",
               className: "absolute top-3 right-3 text-text-muted hover:text-text-primary z-10",
-              children: /* @__PURE__ */ jsx19(X3, {})
+              children: /* @__PURE__ */ jsx20(X3, {})
             }
           ),
-          /* @__PURE__ */ jsxs14(AlertDialogContext.Provider, { value: { variant, config }, children: [
-            /* @__PURE__ */ jsx19("div", { className: "px-6 pt-6 pb-4", children: /* @__PURE__ */ jsxs14("div", { className: "flex items-start gap-3", children: [
-              /* @__PURE__ */ jsx19("span", { className: `flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${config.iconBg}`, children: config.icon }),
-              /* @__PURE__ */ jsxs14("div", { className: "flex-1 min-w-0 pr-6", children: [
-                /* @__PURE__ */ jsx19("h2", { className: "font-heading text-lg font-semibold leading-snug text-text-primary", children: title }),
-                description && /* @__PURE__ */ jsx19("p", { className: "mt-2 text-sm text-text-secondary leading-relaxed", children: description })
+          /* @__PURE__ */ jsxs15(AlertDialogContext.Provider, { value: { variant, config }, children: [
+            /* @__PURE__ */ jsx20("div", { className: "px-6 pt-6 pb-4", children: /* @__PURE__ */ jsxs15("div", { className: "flex items-start gap-3", children: [
+              /* @__PURE__ */ jsx20("span", { className: `flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${config.iconBg}`, children: config.icon }),
+              /* @__PURE__ */ jsxs15("div", { className: "flex-1 min-w-0 pr-6", children: [
+                /* @__PURE__ */ jsx20("h2", { className: "font-heading text-lg font-semibold leading-snug text-text-primary", children: title }),
+                description && /* @__PURE__ */ jsx20("p", { className: "mt-2 text-sm text-text-secondary leading-relaxed", children: description })
               ] })
             ] }) }),
-            (children || onConfirm || onCancel) && /* @__PURE__ */ jsx19("div", { className: "border-t border-border px-6 py-4", children: children || /* @__PURE__ */ jsxs14("div", { className: "flex items-center justify-end gap-2", children: [
-              onCancel && /* @__PURE__ */ jsx19(Button, { variant: "secondary", onClick: onCancel, children: cancelLabel }),
-              onConfirm && /* @__PURE__ */ jsx19(Button, { variant: "default", onClick: onConfirm, children: confirmLabel })
+            (children || onConfirm || onCancel) && /* @__PURE__ */ jsx20("div", { className: "border-t border-border px-6 py-4", children: children || /* @__PURE__ */ jsxs15("div", { className: "flex items-center justify-end gap-2", children: [
+              onCancel && /* @__PURE__ */ jsx20(Button, { variant: "secondary", onClick: onCancel, children: cancelLabel }),
+              onConfirm && /* @__PURE__ */ jsx20(Button, { variant: "default", onClick: onConfirm, children: confirmLabel })
             ] }) })
           ] })
         ]
@@ -2034,6 +2129,7 @@ export {
   SelectTrigger,
   SelectValue,
   StatusBadge,
+  Tabs,
   Textarea,
   ThemeProvider,
   ThemeToggle,
