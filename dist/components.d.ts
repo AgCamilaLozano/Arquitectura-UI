@@ -266,6 +266,45 @@ interface TooltipProps {
 }
 declare const Tooltip: ({ content, children, side, ariaLabel, align, variant, size, disabled, }: TooltipProps) => react_jsx_runtime.JSX.Element;
 
+/** Un ítem individual dentro del menú */
+interface DropdownItem {
+    label: string;
+    /** Ícono opcional a la izquierda del label */
+    icon?: ReactNode;
+    /** Ícono opcional a la derecha del label */
+    trailingIcon?: ReactNode;
+    onClick?: () => void;
+    /** Deshabilita la interacción del ítem */
+    disabled?: boolean;
+    /** Variante de color para acciones destructivas */
+    variant?: "default" | "danger";
+    /** Separador visual debajo del ítem */
+    separator?: boolean;
+}
+/** Grupo de ítems con label opcional */
+interface DropdownGroup {
+    groupLabel?: string;
+    items: DropdownItem[];
+}
+/**
+ * Props del DropdownMenu
+ * @param trigger      - Contenido del botón que abre el menú
+ * @param groups       - Array de grupos de ítems
+ * @param align        - Alineación del panel (left | right | center)
+ * @param width        - Ancho del panel (ej. "w-48", "w-64")
+ * @param disabled     - Deshabilita el trigger completo
+ * @param className    - Clases extra para el contenedor raíz
+ */
+interface DropdownMenuProps {
+    trigger: ReactNode;
+    groups: DropdownGroup[];
+    align?: "left" | "right" | "center";
+    width?: string;
+    disabled?: boolean;
+    className?: string;
+}
+declare function DropdownMenu({ trigger, groups, align, width, disabled, className, }: DropdownMenuProps): react_jsx_runtime.JSX.Element;
+
 interface BarSegment {
     label: string;
     value: number;
@@ -318,6 +357,25 @@ interface PureLineChartProps {
 }
 declare const PureLineChart: ({ data, title, description, height, lineColor, showArea, animated, legendLabel, yLabel, }: PureLineChartProps) => react_jsx_runtime.JSX.Element;
 
+type TabItem = {
+    id: string;
+    label: string;
+    icon?: ReactNode;
+    content: ReactNode;
+    disabled?: boolean;
+};
+type TabsVariant = "underline" | "pill" | "card";
+type TabsProps = {
+    tabs: TabItem[];
+    defaultTab?: string;
+    activeTab?: string;
+    onChange?: (id: string) => void;
+    variant?: TabsVariant;
+    className?: string;
+    align?: "start" | "center" | "end" | "stretch";
+};
+declare function Tabs({ tabs, defaultTab, activeTab: controlledTab, onChange, variant, className, align, }: TabsProps): react_jsx_runtime.JSX.Element;
+
 /** Una columna individual de la tabla */
 interface Column<T> {
     key: string;
@@ -345,37 +403,6 @@ interface DataTableProps<T> {
     size?: "sm" | "md" | "lg";
 }
 declare function DataTable<T>({ data, columns, maxHeight, rowKey, emptyState, isLoading, className, headerVariant, size, }: DataTableProps<T>): react_jsx_runtime.JSX.Element;
-
-type TabItem = {
-    /** Identificador único del tab */
-    id: string;
-    /** Etiqueta visible del tab */
-    label: string;
-    /** Ícono opcional (izquierda del label) */
-    icon?: ReactNode;
-    /** Contenido a renderizar cuando el tab está activo */
-    content: ReactNode;
-    /** Deshabilita interacción con el tab */
-    disabled?: boolean;
-};
-type TabsVariant = "underline" | "pill" | "card";
-type TabsProps = {
-    /** Lista de tabs a renderizar */
-    tabs: TabItem[];
-    /** Tab activo por defecto (no controlado) */
-    defaultTab?: string;
-    /** Tab activo controlado externamente */
-    activeTab?: string;
-    /** Callback cuando cambia el tab activo */
-    onChange?: (id: string) => void;
-    /** Variante visual del componente */
-    variant?: TabsVariant;
-    /** Clases adicionales para el contenedor raíz */
-    className?: string;
-    /** Alinea los tabs horizontalmente */
-    align?: "start" | "center" | "end" | "stretch";
-};
-declare function Tabs({ tabs, defaultTab, activeTab: controlledTab, onChange, variant, className, align, }: TabsProps): react_jsx_runtime.JSX.Element;
 
 declare function Breadcrumbs(): react_jsx_runtime.JSX.Element;
 
@@ -413,4 +440,4 @@ interface AlertDialogContextValue {
 }
 declare const useAlertDialogContext: () => AlertDialogContextValue;
 
-export { AlertDialog, type AlertDialogProps, type AlertDialogSize, type AlertDialogVariant, Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useAlertDialogContext, useDialogContext };
+export { AlertDialog, type AlertDialogProps, type AlertDialogSize, type AlertDialogVariant, Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useAlertDialogContext, useDialogContext };
