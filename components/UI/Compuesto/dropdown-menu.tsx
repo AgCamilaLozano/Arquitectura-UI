@@ -103,7 +103,7 @@ export function DropdownMenu({
   };
 
   return (
-    <div ref={containerRef} className={`relative z-[9999] inline-block ${className}`}>
+    <div ref={containerRef} className={`relative  inline-block ${className}`}>
       {/* ── Trigger ── */}
       <button
         type="button"
