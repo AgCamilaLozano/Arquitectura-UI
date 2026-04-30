@@ -942,7 +942,7 @@ function DropdownMenu({
     (_a = item.onClick) == null ? void 0 : _a.call(item);
     setOpen(false);
   };
-  return /* @__PURE__ */ jsxs7("div", { ref: containerRef, className: `relative inline-block ${className}`, children: [
+  return /* @__PURE__ */ jsxs7("div", { ref: containerRef, className: `relative z-[9999] inline-block ${className}`, children: [
     /* @__PURE__ */ jsxs7(
       "button",
       {
