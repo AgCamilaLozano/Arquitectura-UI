@@ -472,10 +472,10 @@ function StatusBadge({
 import { jsx as jsx7, jsxs as jsxs4 } from "react/jsx-runtime";
 var variantClasses = {
   default: "bg-background border border-border",
-  outlined: "bg-background border-2 border-border-strong",
+  outlined: "bg-background border border-border-accent",
   elevated: "bg-background border-1 ",
-  accent: "bg-background border border-border border-l-4 border-l-accent shadow-[var(--shadow-surface)]",
-  ghost: ":bg-surface border-0 shadow-none"
+  accent: "bg-background border border-border border-l-2 border-l-accent shadow-[var(--shadow-surface)]",
+  ghost: "bg-surface border-0 shadow-none"
 };
 var paddingClasses = {
   none: "",

@@ -50,13 +50,13 @@ const variantClasses: Record<CardVariant, string> = {
     default:
         "bg-background border border-border",
     outlined:
-        "bg-background border-2 border-border-strong",
+        "bg-background border border-border-accent",
     elevated:
         "bg-background border-1 ",
     accent:
-        "bg-background border border-border border-l-4 border-l-accent shadow-[var(--shadow-surface)]",
+        "bg-background border border-border border-l-2 border-l-accent shadow-[var(--shadow-surface)]",
     ghost:
-        ":bg-surface border-0 shadow-none",
+        "bg-surface border-0 shadow-none",
 };
 
 const paddingClasses: Record<CardPadding, string> = {
