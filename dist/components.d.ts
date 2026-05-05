@@ -20,6 +20,19 @@ declare function SelectSeparator({ className, ...props }: React$1.ComponentProps
 declare function SelectScrollUpButton({ className, ...props }: React$1.ComponentProps<typeof Select$1.ScrollUpButton>): react_jsx_runtime.JSX.Element;
 declare function SelectScrollDownButton({ className, ...props }: React$1.ComponentProps<typeof Select$1.ScrollDownButton>): react_jsx_runtime.JSX.Element;
 
+type MultiSelectOption = string | {
+    label: string;
+    value: string;
+};
+interface MultiSelectProps {
+    options: MultiSelectOption[];
+    selected: string[];
+    onChange: (values: string[]) => void;
+    placeholder?: string;
+    className?: string;
+}
+declare function MultiSelect({ options, selected, onChange, placeholder, className, }: MultiSelectProps): react_jsx_runtime.JSX.Element;
+
 declare const buttonVariants: (props?: ({
     variant?: "link" | "default" | "outline" | "secondary" | "ghost" | null | undefined;
     size?: "sm" | "default" | "lg" | "icon" | "icon-sm" | "icon-lg" | null | undefined;
@@ -440,4 +453,4 @@ interface AlertDialogContextValue {
 }
 declare const useAlertDialogContext: () => AlertDialogContextValue;
 
-export { AlertDialog, type AlertDialogProps, type AlertDialogSize, type AlertDialogVariant, Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useAlertDialogContext, useDialogContext };
+export { AlertDialog, type AlertDialogProps, type AlertDialogSize, type AlertDialogVariant, Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, MultiSelect, type MultiSelectOption, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useAlertDialogContext, useDialogContext };

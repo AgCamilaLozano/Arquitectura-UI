@@ -224,10 +224,85 @@ function SelectScrollDownButton(_a) {
   );
 }
 
+// components/ui/Base/Selects/MultiSelect.tsx
+import { useState, useRef, useEffect } from "react";
+import { ChevronDown, Check } from "lucide-react";
+import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
+function MultiSelect({
+  options,
+  selected,
+  onChange,
+  placeholder = "Seleccionar...",
+  className
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+  const toggle = (value) => {
+    onChange(
+      selected.includes(value) ? selected.filter((v) => v !== value) : [...selected, value]
+    );
+  };
+  const normalized = options.map(
+    (opt) => typeof opt === "string" ? { label: opt, value: opt } : opt
+  );
+  const selectedLabels = normalized.filter((o) => selected.includes(o.value)).map((o) => o.label);
+  return /* @__PURE__ */ jsxs2("div", { ref, className: cn("relative", className), children: [
+    /* @__PURE__ */ jsxs2(
+      "button",
+      {
+        type: "button",
+        onClick: () => setOpen((prev) => !prev),
+        className: cn(
+          "flex items-center justify-between gap-2 min-w-[180px] opacity-100 h-9 rounded-md border border-border px-3 py-2 text-sm shadow-sm",
+          "text-muted-foreground hover:opacity-70"
+        ),
+        children: [
+          /* @__PURE__ */ jsx2("span", { children: selected.length === 0 ? placeholder : `${placeholder} (${selected.length})` }),
+          /* @__PURE__ */ jsx2(ChevronDown, { className: cn("h-4 w-4 shrink-0 transition-transform", open && "rotate-180") })
+        ]
+      }
+    ),
+    open && /* @__PURE__ */ jsx2("div", { className: "absolute z-50 mt-1 min-w-[180px] max-h-[250px] overflow-y-auto scrollbar-soft rounded-md border border-border shadow-md bg-surface dark:bg-background", children: /* @__PURE__ */ jsx2("div", { className: "p-1 flex flex-col", children: normalized.map((option) => {
+      const isSelected = selected.includes(option.value);
+      return /* @__PURE__ */ jsxs2(
+        "button",
+        {
+          type: "button",
+          onClick: () => toggle(option.value),
+          className: "group flex items-center gap-2 px-2 py-1.5 rounded-sm text-sm text-left hover:bg-accent-hover/20 hover:border-accent hover:text-accent w-full",
+          children: [
+            /* @__PURE__ */ jsx2(
+              "span",
+              {
+                className: cn(
+                  "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border border-border group-hover:border-accent",
+                  isSelected ? "bg-accent text-white border-accent" : "bg-transparent"
+                ),
+                children: isSelected && /* @__PURE__ */ jsx2(Check, { className: "h-3 w-3" })
+              }
+            ),
+            option.label
+          ]
+        },
+        option.value
+      );
+    }) }) })
+  ] });
+}
+
 // components/ui/Base/Entradas/button.tsx
 import React from "react";
 import { cva } from "class-variance-authority";
-import { jsx as jsx2 } from "react/jsx-runtime";
+import { jsx as jsx3 } from "react/jsx-runtime";
 var buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer hover:opacity-90 transition-opacity disabled:cursor-not-allowed rounded-md font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 focus-visible:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
@@ -257,7 +332,7 @@ var buttonVariants = cva(
 var Button = React.forwardRef(
   (_a, ref) => {
     var _b = _a, { className, variant, size } = _b, props = __objRest(_b, ["className", "variant", "size"]);
-    return /* @__PURE__ */ jsx2(
+    return /* @__PURE__ */ jsx3(
       "button",
       __spreadValues({
         className: buttonVariants({ variant, size, className }),
@@ -269,10 +344,10 @@ var Button = React.forwardRef(
 Button.displayName = "Button";
 
 // components/ui/Base/Entradas/input.tsx
-import { jsx as jsx3 } from "react/jsx-runtime";
+import { jsx as jsx4 } from "react/jsx-runtime";
 function Input(_a) {
   var _b = _a, { className, type } = _b, props = __objRest(_b, ["className", "type"]);
-  return /* @__PURE__ */ jsx3(
+  return /* @__PURE__ */ jsx4(
     "input",
     __spreadValues({
       type,
@@ -289,11 +364,11 @@ function Input(_a) {
 
 // components/ui/Base/Entradas/textarea.tsx
 import React2 from "react";
-import { jsx as jsx4 } from "react/jsx-runtime";
+import { jsx as jsx5 } from "react/jsx-runtime";
 var Textarea = React2.forwardRef(
   (_a, ref) => {
     var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-    return /* @__PURE__ */ jsx4(
+    return /* @__PURE__ */ jsx5(
       "textarea",
       __spreadValues({
         ref,
@@ -310,7 +385,7 @@ Textarea.displayName = "Textarea";
 
 // components/ui/Compuesto/Badges/LabelBadge.tsx
 import { X } from "lucide-react";
-import { jsx as jsx5, jsxs as jsxs2 } from "react/jsx-runtime";
+import { jsx as jsx6, jsxs as jsxs3 } from "react/jsx-runtime";
 var colorVariantStyles = {
   neutral: {
     filled: "bg-primary text-background",
@@ -362,7 +437,7 @@ function LabelBadge({
   onRemove,
   className
 }) {
-  return /* @__PURE__ */ jsxs2(
+  return /* @__PURE__ */ jsxs3(
     "span",
     {
       className: cn(
@@ -372,16 +447,16 @@ function LabelBadge({
         className
       ),
       children: [
-        icon && /* @__PURE__ */ jsx5("span", { className: cn("flex-shrink-0", iconSizeStyles[size]), children: icon }),
+        icon && /* @__PURE__ */ jsx6("span", { className: cn("flex-shrink-0", iconSizeStyles[size]), children: icon }),
         label,
-        onRemove && /* @__PURE__ */ jsx5(
+        onRemove && /* @__PURE__ */ jsx6(
           "button",
           {
             type: "button",
             onClick: onRemove,
             className: "ml-0.5 flex-shrink-0 rounded-full opacity-60 hover:opacity-100 transition-opacity focus:outline-none",
             "aria-label": `Eliminar ${label}`,
-            children: /* @__PURE__ */ jsx5(X, { className: iconSizeStyles[size] })
+            children: /* @__PURE__ */ jsx6(X, { className: iconSizeStyles[size] })
           }
         )
       ]
@@ -390,7 +465,7 @@ function LabelBadge({
 }
 
 // components/ui/Compuesto/Badges/StatusBadge.tsx
-import { jsx as jsx6, jsxs as jsxs3 } from "react/jsx-runtime";
+import { jsx as jsx7, jsxs as jsxs4 } from "react/jsx-runtime";
 var variantStyles = {
   success: {
     container: "bg-success text-text-success border border-text-success/20",
@@ -430,7 +505,7 @@ function StatusBadge({
   className
 }) {
   const { container, dot } = variantStyles[status];
-  return /* @__PURE__ */ jsxs3(
+  return /* @__PURE__ */ jsxs4(
     "span",
     {
       className: cn(
@@ -440,8 +515,8 @@ function StatusBadge({
         className
       ),
       children: [
-        withDot && /* @__PURE__ */ jsxs3("span", { className: "relative flex items-center justify-center", children: [
-          animated && /* @__PURE__ */ jsx6(
+        withDot && /* @__PURE__ */ jsxs4("span", { className: "relative flex items-center justify-center", children: [
+          animated && /* @__PURE__ */ jsx7(
             "span",
             {
               className: cn(
@@ -451,7 +526,7 @@ function StatusBadge({
               )
             }
           ),
-          /* @__PURE__ */ jsx6(
+          /* @__PURE__ */ jsx7(
             "span",
             {
               className: cn(
@@ -469,10 +544,10 @@ function StatusBadge({
 }
 
 // components/ui/Compuesto/Modals/Card.tsx
-import { jsx as jsx7, jsxs as jsxs4 } from "react/jsx-runtime";
+import { jsx as jsx8, jsxs as jsxs5 } from "react/jsx-runtime";
 var variantClasses = {
   default: "bg-background border border-border",
-  outlined: "bg-background border border-border-accent",
+  outlined: "bg-background border border-accent",
   elevated: "bg-background border-1 ",
   accent: "bg-background border border-border border-l-2 border-l-accent shadow-[var(--shadow-surface)]",
   ghost: "bg-surface border-0 shadow-none"
@@ -493,7 +568,7 @@ function Card({
   children
 }) {
   const isInteractive = clickable || Boolean(onClick);
-  return /* @__PURE__ */ jsx7(
+  return /* @__PURE__ */ jsx8(
     "div",
     {
       onClick,
@@ -516,16 +591,16 @@ function CardHeader({
   withDivider = false,
   className = ""
 }) {
-  return /* @__PURE__ */ jsx7("div", { className: `${withDivider ? "pb-4 mb-4 border-b border-border" : "mb-3"} ${className}`, children: /* @__PURE__ */ jsxs4("div", { className: "flex items-start justify-between gap-3", children: [
-    /* @__PURE__ */ jsxs4("div", { children: [
-      /* @__PURE__ */ jsx7("h3", { className: "text-base text-lg font-semibold leading-snug", children: title }),
-      subtitle && /* @__PURE__ */ jsx7("p", { className: "mt-0.5 text-sm text-text-secondary", children: subtitle })
+  return /* @__PURE__ */ jsx8("div", { className: `${withDivider ? "pb-4 mb-4 border-b border-border" : "mb-3"} ${className}`, children: /* @__PURE__ */ jsxs5("div", { className: "flex items-start justify-between gap-3", children: [
+    /* @__PURE__ */ jsxs5("div", { children: [
+      /* @__PURE__ */ jsx8("h3", { className: "text-base text-lg font-semibold leading-snug", children: title }),
+      subtitle && /* @__PURE__ */ jsx8("p", { className: "mt-0.5 text-sm text-text-secondary", children: subtitle })
     ] }),
-    action && /* @__PURE__ */ jsx7("div", { className: "shrink-0", children: action })
+    action && /* @__PURE__ */ jsx8("div", { className: "shrink-0", children: action })
   ] }) });
 }
 function CardBody({ className = "", children }) {
-  return /* @__PURE__ */ jsx7("div", { className: `text-sm text-text-primary ${className}`, children });
+  return /* @__PURE__ */ jsx8("div", { className: `text-sm text-text-primary ${className}`, children });
 }
 var footerAlignClasses = {
   left: "justify-start",
@@ -539,7 +614,7 @@ function CardFooter({
   className = "",
   children
 }) {
-  return /* @__PURE__ */ jsx7(
+  return /* @__PURE__ */ jsx8(
     "div",
     {
       className: `
@@ -558,12 +633,12 @@ function CardImage({
   height = "200px",
   className = ""
 }) {
-  return /* @__PURE__ */ jsx7(
+  return /* @__PURE__ */ jsx8(
     "div",
     {
       className: `w-full overflow-hidden bg-muted ${className}`,
       style: { height },
-      children: /* @__PURE__ */ jsx7(
+      children: /* @__PURE__ */ jsx8(
         "img",
         {
           src,
@@ -576,9 +651,9 @@ function CardImage({
 }
 
 // components/ui/Compuesto/Modals/Dialog.tsx
-import React3, { useEffect, useCallback } from "react";
+import React3, { useEffect as useEffect2, useCallback } from "react";
 import { X as X2 } from "lucide-react";
-import { jsx as jsx8, jsxs as jsxs5 } from "react/jsx-runtime";
+import { jsx as jsx9, jsxs as jsxs6 } from "react/jsx-runtime";
 var sizeClasses = {
   sm: "max-w-sm",
   md: "max-w-md",
@@ -601,7 +676,7 @@ function Dialog({
     },
     [onClose]
   );
-  useEffect(() => {
+  useEffect2(() => {
     if (open) {
       document.addEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "hidden";
@@ -614,14 +689,14 @@ function Dialog({
   if (!open) return null;
   return (
     /* Overlay */
-    /* @__PURE__ */ jsxs5(
+    /* @__PURE__ */ jsxs6(
       "div",
       {
         role: "dialog",
         "aria-modal": "true",
         className: "fixed inset-0 z-50 flex items-center justify-center p-4",
         children: [
-          /* @__PURE__ */ jsx8(
+          /* @__PURE__ */ jsx9(
             "div",
             {
               className: "absolute inset-0 bg-black/50 animate-in fade-in duration-200",
@@ -629,7 +704,7 @@ function Dialog({
               "aria-hidden": "true"
             }
           ),
-          /* @__PURE__ */ jsxs5(
+          /* @__PURE__ */ jsxs6(
             "div",
             {
               className: `
@@ -643,7 +718,7 @@ function Dialog({
           ${className}
         `,
               children: [
-                !hideCloseButton && /* @__PURE__ */ jsx8(
+                !hideCloseButton && /* @__PURE__ */ jsx9(
                   Button,
                   {
                     variant: "ghost",
@@ -651,10 +726,10 @@ function Dialog({
                     onClick: onClose,
                     "aria-label": "Cerrar",
                     className: "absolute top-3 right-3 text-text-muted hover:text-text-primary",
-                    children: /* @__PURE__ */ jsx8(X2, {})
+                    children: /* @__PURE__ */ jsx9(X2, {})
                   }
                 ),
-                /* @__PURE__ */ jsx8(DialogContext.Provider, { value: { variant }, children })
+                /* @__PURE__ */ jsx9(DialogContext.Provider, { value: { variant }, children })
               ]
             }
           )
@@ -681,7 +756,7 @@ function DialogHeader({
   className = ""
 }) {
   const { variant } = useDialogContext();
-  return /* @__PURE__ */ jsx8(
+  return /* @__PURE__ */ jsx9(
     "div",
     {
       className: `
@@ -689,8 +764,8 @@ function DialogHeader({
         ${withDivider ? "pb-4 border-b border-border" : "pb-2"}
         ${className}
       `,
-      children: /* @__PURE__ */ jsxs5("div", { className: "flex items-start gap-3", children: [
-        icon && /* @__PURE__ */ jsx8(
+      children: /* @__PURE__ */ jsxs6("div", { className: "flex items-start gap-3", children: [
+        icon && /* @__PURE__ */ jsx9(
           "span",
           {
             className: `
@@ -701,9 +776,9 @@ function DialogHeader({
             children: icon
           }
         ),
-        /* @__PURE__ */ jsxs5("div", { className: "flex-1 min-w-0 pr-6", children: [
-          /* @__PURE__ */ jsx8("h2", { className: "font-heading text-base font-semibold leading-snug text-text-primary", children: title }),
-          description && /* @__PURE__ */ jsx8("p", { className: "mt-1 text-sm text-text-secondary leading-relaxed", children: description })
+        /* @__PURE__ */ jsxs6("div", { className: "flex-1 min-w-0 pr-6", children: [
+          /* @__PURE__ */ jsx9("h2", { className: "font-heading text-base font-semibold leading-snug text-text-primary", children: title }),
+          description && /* @__PURE__ */ jsx9("p", { className: "mt-1 text-sm text-text-secondary leading-relaxed", children: description })
         ] })
       ] })
     }
@@ -714,7 +789,7 @@ function DialogBody({
   className = "",
   children
 }) {
-  return /* @__PURE__ */ jsx8(
+  return /* @__PURE__ */ jsx9(
     "div",
     {
       className: `
@@ -738,7 +813,7 @@ function DialogFooter({
   className = "",
   children
 }) {
-  return /* @__PURE__ */ jsx8(
+  return /* @__PURE__ */ jsx9(
     "div",
     {
       className: `
@@ -762,10 +837,10 @@ import {
   OctagonXIcon,
   Loader2Icon
 } from "lucide-react";
-import { jsx as jsx9 } from "react/jsx-runtime";
+import { jsx as jsx10 } from "react/jsx-runtime";
 var Toaster = (props) => {
   const { theme = "system" } = useTheme();
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx10(
     Sonner,
     __spreadValues({
       theme,
@@ -773,11 +848,11 @@ var Toaster = (props) => {
       closeButton: true,
       className: "toaster !z-[999]",
       icons: {
-        success: /* @__PURE__ */ jsx9(CircleCheckIcon, { className: "size-5 !text-text-success" }),
-        error: /* @__PURE__ */ jsx9(OctagonXIcon, { className: "size-5 !text-text-error" }),
-        warning: /* @__PURE__ */ jsx9(TriangleAlertIcon, { className: "size-5 !text-text-warning" }),
-        info: /* @__PURE__ */ jsx9(InfoIcon, { className: "size-5 !text-text-info" }),
-        loading: /* @__PURE__ */ jsx9(Loader2Icon, { className: "size-5 animate-spin" })
+        success: /* @__PURE__ */ jsx10(CircleCheckIcon, { className: "size-5 !text-text-success" }),
+        error: /* @__PURE__ */ jsx10(OctagonXIcon, { className: "size-5 !text-text-error" }),
+        warning: /* @__PURE__ */ jsx10(TriangleAlertIcon, { className: "size-5 !text-text-warning" }),
+        info: /* @__PURE__ */ jsx10(InfoIcon, { className: "size-5 !text-text-info" }),
+        loading: /* @__PURE__ */ jsx10(Loader2Icon, { className: "size-5 animate-spin" })
       },
       style: {
         "--normal-bg": "var(--popover)",
@@ -803,8 +878,8 @@ var Toaster = (props) => {
 };
 
 // components/ui/Compuesto/Tooltip.tsx
-import { useState, useEffect as useEffect2, useRef } from "react";
-import { jsx as jsx10, jsxs as jsxs6 } from "react/jsx-runtime";
+import { useState as useState2, useEffect as useEffect3, useRef as useRef2 } from "react";
+import { jsx as jsx11, jsxs as jsxs7 } from "react/jsx-runtime";
 var sideClasses = {
   top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
   bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
@@ -848,8 +923,8 @@ var Tooltip = ({
   size,
   disabled = false
 }) => {
-  const [visible, setVisible] = useState(false);
-  const timerRef = useRef(null);
+  const [visible, setVisible] = useState2(false);
+  const timerRef = useRef2(null);
   const show = () => {
     if (disabled) return;
     timerRef.current = setTimeout(() => setVisible(true), 300);
@@ -858,7 +933,7 @@ var Tooltip = ({
     if (timerRef.current) clearTimeout(timerRef.current);
     setVisible(false);
   };
-  useEffect2(() => {
+  useEffect3(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") hide();
     };
@@ -867,7 +942,7 @@ var Tooltip = ({
   }, []);
   const resolvedSizeClass = size ? sizeClasses2[size] : "";
   const accessibleLabel = ariaLabel != null ? ariaLabel : typeof content === "string" ? content : void 0;
-  return /* @__PURE__ */ jsxs6(
+  return /* @__PURE__ */ jsxs7(
     "div",
     {
       className: "relative inline-flex items-center",
@@ -878,7 +953,7 @@ var Tooltip = ({
       "aria-label": accessibleLabel,
       children: [
         children,
-        visible && !disabled && /* @__PURE__ */ jsx10(
+        visible && !disabled && /* @__PURE__ */ jsx11(
           "div",
           {
             role: "tooltip",
@@ -903,8 +978,8 @@ var Tooltip = ({
 };
 
 // components/ui/Compuesto/dropdown-menu.tsx
-import { useEffect as useEffect3, useRef as useRef2, useState as useState2 } from "react";
-import { jsx as jsx11, jsxs as jsxs7 } from "react/jsx-runtime";
+import { useEffect as useEffect4, useRef as useRef3, useState as useState3 } from "react";
+import { jsx as jsx12, jsxs as jsxs8 } from "react/jsx-runtime";
 var alignMap = {
   left: "left-0",
   right: "right-0",
@@ -918,9 +993,9 @@ function DropdownMenu({
   disabled = false,
   className = ""
 }) {
-  const [open, setOpen] = useState2(false);
-  const containerRef = useRef2(null);
-  useEffect3(() => {
+  const [open, setOpen] = useState3(false);
+  const containerRef = useRef3(null);
+  useEffect4(() => {
     const handleOutsideClick = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
         setOpen(false);
@@ -929,7 +1004,7 @@ function DropdownMenu({
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
-  useEffect3(() => {
+  useEffect4(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") setOpen(false);
     };
@@ -942,8 +1017,8 @@ function DropdownMenu({
     (_a = item.onClick) == null ? void 0 : _a.call(item);
     setOpen(false);
   };
-  return /* @__PURE__ */ jsxs7("div", { ref: containerRef, className: `relative  inline-block ${className}`, children: [
-    /* @__PURE__ */ jsxs7(
+  return /* @__PURE__ */ jsxs8("div", { ref: containerRef, className: `relative  inline-block ${className}`, children: [
+    /* @__PURE__ */ jsxs8(
       "button",
       {
         type: "button",
@@ -961,7 +1036,7 @@ function DropdownMenu({
         ].filter(Boolean).join(" "),
         children: [
           trigger,
-          /* @__PURE__ */ jsx11(
+          /* @__PURE__ */ jsx12(
             "svg",
             {
               xmlns: "http://www.w3.org/2000/svg",
@@ -975,13 +1050,13 @@ function DropdownMenu({
               strokeLinejoin: "round",
               className: `text-text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`,
               "aria-hidden": "true",
-              children: /* @__PURE__ */ jsx11("polyline", { points: "6 9 12 15 18 9" })
+              children: /* @__PURE__ */ jsx12("polyline", { points: "6 9 12 15 18 9" })
             }
           )
         ]
       }
     ),
-    open && /* @__PURE__ */ jsx11(
+    open && /* @__PURE__ */ jsx12(
       "div",
       {
         role: "menu",
@@ -994,10 +1069,10 @@ function DropdownMenu({
           "shadow-[var(--shadow-card)]",
           "animate-in fade-in-0 zoom-in-95 duration-150"
         ].join(" "),
-        children: groups.map((group, gIdx) => /* @__PURE__ */ jsxs7("div", { children: [
-          group.groupLabel && /* @__PURE__ */ jsx11("p", { className: "px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted select-none", children: group.groupLabel }),
-          group.items.map((item, iIdx) => /* @__PURE__ */ jsxs7("div", { children: [
-            /* @__PURE__ */ jsxs7(
+        children: groups.map((group, gIdx) => /* @__PURE__ */ jsxs8("div", { children: [
+          group.groupLabel && /* @__PURE__ */ jsx12("p", { className: "px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted select-none", children: group.groupLabel }),
+          group.items.map((item, iIdx) => /* @__PURE__ */ jsxs8("div", { children: [
+            /* @__PURE__ */ jsxs8(
               "button",
               {
                 role: "menuitem",
@@ -1010,15 +1085,15 @@ function DropdownMenu({
                   item.disabled ? "cursor-not-allowed text-text-disabled" : item.variant === "danger" ? "cursor-pointer text-text-error hover:bg-error" : "cursor-pointer text-text-primary hover:bg-accent-soft hover:text-accent"
                 ].filter(Boolean).join(" "),
                 children: [
-                  item.icon && /* @__PURE__ */ jsx11("span", { className: "shrink-0 text-current", "aria-hidden": "true", children: item.icon }),
-                  /* @__PURE__ */ jsx11("span", { className: "flex-1", children: item.label }),
-                  item.trailingIcon && /* @__PURE__ */ jsx11("span", { className: "shrink-0 text-text-muted", "aria-hidden": "true", children: item.trailingIcon })
+                  item.icon && /* @__PURE__ */ jsx12("span", { className: "shrink-0 text-current", "aria-hidden": "true", children: item.icon }),
+                  /* @__PURE__ */ jsx12("span", { className: "flex-1", children: item.label }),
+                  item.trailingIcon && /* @__PURE__ */ jsx12("span", { className: "shrink-0 text-text-muted", "aria-hidden": "true", children: item.trailingIcon })
                 ]
               }
             ),
-            item.separator && /* @__PURE__ */ jsx11("hr", { className: "my-1 border-border" })
+            item.separator && /* @__PURE__ */ jsx12("hr", { className: "my-1 border-border" })
           ] }, iIdx)),
-          gIdx < groups.length - 1 && /* @__PURE__ */ jsx11("hr", { className: "my-1 border-border" })
+          gIdx < groups.length - 1 && /* @__PURE__ */ jsx12("hr", { className: "my-1 border-border" })
         ] }, gIdx))
       }
     )
@@ -1026,8 +1101,8 @@ function DropdownMenu({
 }
 
 // components/ui/DataDisplay/Graficas/GraficaBar.tsx
-import { useState as useState3, useRef as useRef3 } from "react";
-import { jsx as jsx12, jsxs as jsxs8 } from "react/jsx-runtime";
+import { useState as useState4, useRef as useRef4 } from "react";
+import { jsx as jsx13, jsxs as jsxs9 } from "react/jsx-runtime";
 var chartColors = [
   "var(--chart-1)",
   "var(--chart-2)",
@@ -1046,8 +1121,8 @@ var GraficaBar = ({
   legendLabel,
   yLabel
 }) => {
-  const [hoveredIndex, setHoveredIndex] = useState3(null);
-  const containerRef = useRef3(null);
+  const [hoveredIndex, setHoveredIndex] = useState4(null);
+  const containerRef = useRef4(null);
   const maxValue = Math.max(...data.map((d) => d.value), 1);
   const ceilMax = Math.ceil(maxValue * 1.15);
   const padding = { top: 16, bottom: 36, left: 52, right: 16 };
@@ -1059,8 +1134,8 @@ var GraficaBar = ({
     if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
     return n.toString();
   };
-  const [tooltip, setTooltip] = useState3(null);
-  return /* @__PURE__ */ jsxs8(
+  const [tooltip, setTooltip] = useState4(null);
+  return /* @__PURE__ */ jsxs9(
     "div",
     {
       ref: containerRef,
@@ -1070,11 +1145,11 @@ var GraficaBar = ({
         setTooltip(null);
       },
       children: [
-        title && /* @__PURE__ */ jsx12("p", { className: "text-sm font-semibold text-text-primary", children: title }),
-        description && /* @__PURE__ */ jsx12("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
-        /* @__PURE__ */ jsxs8("div", { className: "w-full relative overflow-hidden", children: [
-          /* @__PURE__ */ jsxs8("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "select-none relative z-0", children: [
-            yLabel && /* @__PURE__ */ jsx12(
+        title && /* @__PURE__ */ jsx13("p", { className: "text-sm font-semibold text-text-primary", children: title }),
+        description && /* @__PURE__ */ jsx13("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
+        /* @__PURE__ */ jsxs9("div", { className: "w-full relative overflow-hidden", children: [
+          /* @__PURE__ */ jsxs9("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "select-none relative z-0", children: [
+            yLabel && /* @__PURE__ */ jsx13(
               "text",
               {
                 x: 10,
@@ -1085,11 +1160,11 @@ var GraficaBar = ({
                 children: yLabel
               }
             ),
-            /* @__PURE__ */ jsxs8("g", { transform: `translate(${padding.left}, ${padding.top + 10})`, children: [
+            /* @__PURE__ */ jsxs9("g", { transform: `translate(${padding.left}, ${padding.top + 10})`, children: [
               yTicks.map((tick) => {
                 const y = chartH - tick / ceilMax * chartH;
-                return /* @__PURE__ */ jsxs8("g", { children: [
-                  /* @__PURE__ */ jsx12(
+                return /* @__PURE__ */ jsxs9("g", { children: [
+                  /* @__PURE__ */ jsx13(
                     "line",
                     {
                       x1: 0,
@@ -1100,15 +1175,15 @@ var GraficaBar = ({
                       strokeDasharray: "4 3"
                     }
                   ),
-                  /* @__PURE__ */ jsx12("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(tick) })
+                  /* @__PURE__ */ jsx13("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(tick) })
                 ] }, tick);
               }),
               data.map((item, i) => {
                 const barH = item.value / ceilMax * chartH;
                 const x = i * 72 + 16;
                 const isHov = hoveredIndex === i;
-                return /* @__PURE__ */ jsxs8("g", { children: [
-                  /* @__PURE__ */ jsx12(
+                return /* @__PURE__ */ jsxs9("g", { children: [
+                  /* @__PURE__ */ jsx13(
                     "rect",
                     {
                       x: x - 4,
@@ -1132,7 +1207,7 @@ var GraficaBar = ({
                       }
                     }
                   ),
-                  isHov && /* @__PURE__ */ jsx12(
+                  isHov && /* @__PURE__ */ jsx13(
                     "rect",
                     {
                       x: x - 6,
@@ -1145,7 +1220,7 @@ var GraficaBar = ({
                       className: "transition-all duration-300"
                     }
                   ),
-                  /* @__PURE__ */ jsx12(
+                  /* @__PURE__ */ jsx13(
                     "rect",
                     {
                       x,
@@ -1161,7 +1236,7 @@ var GraficaBar = ({
                       }
                     }
                   ),
-                  /* @__PURE__ */ jsx12(
+                  /* @__PURE__ */ jsx13(
                     "text",
                     {
                       x: x + 14,
@@ -1176,16 +1251,16 @@ var GraficaBar = ({
                   )
                 ] }, i);
               }),
-              /* @__PURE__ */ jsx12("line", { x1: 0, y1: chartH, x2: svgW - padding.left - padding.right, y2: chartH, stroke: "var(--border-strong)" })
+              /* @__PURE__ */ jsx13("line", { x1: 0, y1: chartH, x2: svgW - padding.left - padding.right, y2: chartH, stroke: "var(--border-strong)" })
             ] }),
-            /* @__PURE__ */ jsx12("style", { children: `
+            /* @__PURE__ */ jsx13("style", { children: `
                         @keyframes barGrow {
                             from { transform: scaleY(0); opacity: 0; }
                             to   { transform: scaleY(1); opacity: 1; }
                         }
                     ` })
           ] }),
-          tooltip && /* @__PURE__ */ jsx12(
+          tooltip && /* @__PURE__ */ jsx13(
             "div",
             {
               className: "absolute z-50 pointer-events-none transition-all duration-150",
@@ -1194,22 +1269,22 @@ var GraficaBar = ({
                 top: tooltip.y,
                 transform: "translate(calc(-50% - 10px), calc(-50% - 10px))"
               },
-              children: /* @__PURE__ */ jsxs8("div", { className: "relative bg-[#0A0A0B] text-white text-xs rounded-lg px-3 py-2 shadow-2xl border border-white/10 backdrop-blur-sm whitespace-nowrap", children: [
-                /* @__PURE__ */ jsx12("p", { className: "text-[11px] text-center", children: tooltip.label }),
-                /* @__PURE__ */ jsx12("p", { className: "text-sm font-semibold", children: formatVal(tooltip.value) })
+              children: /* @__PURE__ */ jsxs9("div", { className: "relative bg-[#0A0A0B] text-white text-xs rounded-lg px-3 py-2 shadow-2xl border border-white/10 backdrop-blur-sm whitespace-nowrap", children: [
+                /* @__PURE__ */ jsx13("p", { className: "text-[11px] text-center", children: tooltip.label }),
+                /* @__PURE__ */ jsx13("p", { className: "text-sm font-semibold", children: formatVal(tooltip.value) })
               ] })
             }
           )
         ] }),
-        legendLabel && /* @__PURE__ */ jsx12("div", { className: "flex justify-center items-center gap-2 mt-4 px-2", children: /* @__PURE__ */ jsxs8("div", { className: "flex items-center gap-1.5", children: [
-          /* @__PURE__ */ jsx12(
+        legendLabel && /* @__PURE__ */ jsx13("div", { className: "flex justify-center items-center gap-2 mt-4 px-2", children: /* @__PURE__ */ jsxs9("div", { className: "flex items-center gap-1.5", children: [
+          /* @__PURE__ */ jsx13(
             "div",
             {
               className: "w-3 h-3 rounded-sm",
               style: { backgroundColor: chartColors[0] }
             }
           ),
-          /* @__PURE__ */ jsx12("span", { className: "text-sm font-medium", children: legendLabel })
+          /* @__PURE__ */ jsx13("span", { className: "text-sm font-medium", children: legendLabel })
         ] }) })
       ]
     }
@@ -1218,8 +1293,8 @@ var GraficaBar = ({
 var GraficaBar_default = GraficaBar;
 
 // components/ui/DataDisplay/Graficas/GraficaDonut.tsx
-import { useState as useState4 } from "react";
-import { Fragment, jsx as jsx13, jsxs as jsxs9 } from "react/jsx-runtime";
+import { useState as useState5 } from "react";
+import { Fragment, jsx as jsx14, jsxs as jsxs10 } from "react/jsx-runtime";
 var chartColors2 = [
   "var(--chart-1)",
   "var(--chart-2)",
@@ -1238,7 +1313,7 @@ var GraficaDonut = ({
   totalValue,
   formatValue = (v) => `${v}%`
 }) => {
-  const [hoveredIndex, setHoveredIndex] = useState4(null);
+  const [hoveredIndex, setHoveredIndex] = useState5(null);
   const total = data.reduce((acc, item) => acc + item.value, 0);
   const center = size / 2;
   const radius = center - strokeWidth;
@@ -1257,23 +1332,23 @@ var GraficaDonut = ({
     });
   });
   if (loading) {
-    return /* @__PURE__ */ jsxs9("div", { className: "p-6 rounded-2xl bg-background border border-border animate-pulse", children: [
-      /* @__PURE__ */ jsx13("div", { className: "h-4 w-32 bg-muted rounded mb-4" }),
-      /* @__PURE__ */ jsx13("div", { className: "h-[180px] w-[180px] bg-muted rounded-full mx-auto" })
+    return /* @__PURE__ */ jsxs10("div", { className: "p-6 rounded-2xl bg-background border border-border animate-pulse", children: [
+      /* @__PURE__ */ jsx14("div", { className: "h-4 w-32 bg-muted rounded mb-4" }),
+      /* @__PURE__ */ jsx14("div", { className: "h-[180px] w-[180px] bg-muted rounded-full mx-auto" })
     ] });
   }
   if (!data.length) {
-    return /* @__PURE__ */ jsx13("div", { className: "p-6 rounded-2xl bg-surface border border-border text-center", children: /* @__PURE__ */ jsx13("p", { className: "text-sm text-text-muted", children: "No hay datos disponibles" }) });
+    return /* @__PURE__ */ jsx14("div", { className: "p-6 rounded-2xl bg-surface border border-border text-center", children: /* @__PURE__ */ jsx14("p", { className: "text-sm text-text-muted", children: "No hay datos disponibles" }) });
   }
-  return /* @__PURE__ */ jsxs9("div", { className: "rounded-2xl bg-background border border-border shadow-md p-6", children: [
-    (title || description) && /* @__PURE__ */ jsxs9("div", { className: "mb-4", children: [
-      title && /* @__PURE__ */ jsx13("p", { className: "text-sm font-semibold text-text-primary", children: title }),
-      description && /* @__PURE__ */ jsx13("p", { className: "text-xs text-text-muted mt-1", children: description })
+  return /* @__PURE__ */ jsxs10("div", { className: "rounded-2xl bg-background border border-border shadow-md p-6", children: [
+    (title || description) && /* @__PURE__ */ jsxs10("div", { className: "mb-4", children: [
+      title && /* @__PURE__ */ jsx14("p", { className: "text-sm font-semibold text-text-primary", children: title }),
+      description && /* @__PURE__ */ jsx14("p", { className: "text-xs text-text-muted mt-1", children: description })
     ] }),
-    /* @__PURE__ */ jsxs9("div", { className: "flex flex-col items-center gap-8 justify-center", children: [
-      /* @__PURE__ */ jsxs9("div", { style: { width: size, height: size }, className: "relative mx-auto md:mx-0", children: [
-        /* @__PURE__ */ jsxs9("svg", { className: "w-full h-full -rotate-90", children: [
-          /* @__PURE__ */ jsx13(
+    /* @__PURE__ */ jsxs10("div", { className: "flex flex-col items-center gap-8 justify-center", children: [
+      /* @__PURE__ */ jsxs10("div", { style: { width: size, height: size }, className: "relative mx-auto md:mx-0", children: [
+        /* @__PURE__ */ jsxs10("svg", { className: "w-full h-full -rotate-90", children: [
+          /* @__PURE__ */ jsx14(
             "circle",
             {
               cx: center,
@@ -1294,7 +1369,7 @@ var GraficaDonut = ({
             const tooltipRadius = radius + strokeWidth / 2 + 16;
             const tx = center + tooltipRadius * Math.cos(midAngleRad);
             const ty = center + tooltipRadius * Math.sin(midAngleRad);
-            return /* @__PURE__ */ jsx13("g", { children: /* @__PURE__ */ jsx13(
+            return /* @__PURE__ */ jsx14("g", { children: /* @__PURE__ */ jsx14(
               "circle",
               {
                 cx: center,
@@ -1319,7 +1394,7 @@ var GraficaDonut = ({
             ) }, seg.index);
           })
         ] }),
-        hoveredIndex !== null && /* @__PURE__ */ jsx13(
+        hoveredIndex !== null && /* @__PURE__ */ jsx14(
           "div",
           {
             className: "absolute pointer-events-none z-10",
@@ -1344,20 +1419,20 @@ var GraficaDonut = ({
               })(),
               transform: "translate(-50%, -50%)"
             },
-            children: /* @__PURE__ */ jsxs9("div", { className: "bg-[#0A0A0B] text-white text-xs rounded-md px-3 py-1 shadow-xl whitespace-nowrap", children: [
-              /* @__PURE__ */ jsx13("p", { className: "font-semibold", children: segmentMeta[hoveredIndex].label }),
-              /* @__PURE__ */ jsx13("p", { className: "text-center", children: formatValue(segmentMeta[hoveredIndex].value) })
+            children: /* @__PURE__ */ jsxs10("div", { className: "bg-[#0A0A0B] text-white text-xs rounded-md px-3 py-1 shadow-xl whitespace-nowrap", children: [
+              /* @__PURE__ */ jsx14("p", { className: "font-semibold", children: segmentMeta[hoveredIndex].label }),
+              /* @__PURE__ */ jsx14("p", { className: "text-center", children: formatValue(segmentMeta[hoveredIndex].value) })
             ] })
           }
         ),
-        /* @__PURE__ */ jsx13("div", { className: "absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none", children: showTotal ? /* @__PURE__ */ jsxs9(Fragment, { children: [
-          /* @__PURE__ */ jsx13("span", { className: "text-xs text-text-muted", children: "Total" }),
-          /* @__PURE__ */ jsx13("span", { className: "text-xl font-bold text-accent", children: formatValue(total) })
+        /* @__PURE__ */ jsx14("div", { className: "absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none", children: showTotal ? /* @__PURE__ */ jsxs10(Fragment, { children: [
+          /* @__PURE__ */ jsx14("span", { className: "text-xs text-text-muted", children: "Total" }),
+          /* @__PURE__ */ jsx14("span", { className: "text-xl font-bold text-accent", children: formatValue(total) })
         ] }) : null })
       ] }),
-      /* @__PURE__ */ jsx13("div", { className: "flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4", children: segmentMeta.map((item, i) => {
+      /* @__PURE__ */ jsx14("div", { className: "flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4", children: segmentMeta.map((item, i) => {
         const isActive = hoveredIndex === i;
-        return /* @__PURE__ */ jsxs9(
+        return /* @__PURE__ */ jsxs10(
           "div",
           {
             onMouseEnter: () => setHoveredIndex(i),
@@ -1366,7 +1441,7 @@ var GraficaDonut = ({
                                   ${isActive ? "opacity-100 scale-100" : "opacity-80"}
                                 `,
             children: [
-              /* @__PURE__ */ jsx13(
+              /* @__PURE__ */ jsx14(
                 "div",
                 {
                   className: "w-2.5 h-2.5 rounded-full",
@@ -1376,7 +1451,7 @@ var GraficaDonut = ({
                   }
                 }
               ),
-              /* @__PURE__ */ jsx13("span", { className: "text-text-primary", children: item.label })
+              /* @__PURE__ */ jsx14("span", { className: "text-text-primary", children: item.label })
             ]
           },
           i
@@ -1388,8 +1463,8 @@ var GraficaDonut = ({
 var GraficaDonut_default = GraficaDonut;
 
 // components/ui/DataDisplay/Graficas/GraficaLine.tsx
-import { useState as useState5, useRef as useRef4 } from "react";
-import { Fragment as Fragment2, jsx as jsx14, jsxs as jsxs10 } from "react/jsx-runtime";
+import { useState as useState6, useRef as useRef5 } from "react";
+import { Fragment as Fragment2, jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
 var PureLineChart = ({
   data,
   title,
@@ -1401,9 +1476,9 @@ var PureLineChart = ({
   legendLabel,
   yLabel
 }) => {
-  const [hoveredIndex, setHoveredIndex] = useState5(null);
-  const [tooltip, setTooltip] = useState5(null);
-  const containerRef = useRef4(null);
+  const [hoveredIndex, setHoveredIndex] = useState6(null);
+  const [tooltip, setTooltip] = useState6(null);
+  const containerRef = useRef5(null);
   const maxValue = Math.max(...data.map((d) => d.value), 1) * 1.15;
   const padding = { top: 16, bottom: 36, left: 52, right: 24 };
   const svgW = Math.max(data.length * 80 + padding.left + padding.right, 360);
@@ -1453,7 +1528,7 @@ var PureLineChart = ({
     const clampedIdx = Math.max(0, Math.min(data.length - 1, idx));
     setHoveredIndex(clampedIdx);
   };
-  return /* @__PURE__ */ jsxs10(
+  return /* @__PURE__ */ jsxs11(
     "div",
     {
       ref: containerRef,
@@ -1463,11 +1538,11 @@ var PureLineChart = ({
         setTooltip(null);
       },
       children: [
-        title && /* @__PURE__ */ jsx14("p", { className: "text-sm font-semibold text-text-primary", children: title }),
-        description && /* @__PURE__ */ jsx14("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
-        /* @__PURE__ */ jsxs10("div", { className: "w-full overflow-x-auto relative", children: [
-          /* @__PURE__ */ jsxs10("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "select-none", children: [
-            yLabel && /* @__PURE__ */ jsx14(
+        title && /* @__PURE__ */ jsx15("p", { className: "text-sm font-semibold text-text-primary", children: title }),
+        description && /* @__PURE__ */ jsx15("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
+        /* @__PURE__ */ jsxs11("div", { className: "w-full overflow-x-auto relative", children: [
+          /* @__PURE__ */ jsxs11("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "select-none", children: [
+            yLabel && /* @__PURE__ */ jsx15(
               "text",
               {
                 x: 10,
@@ -1478,15 +1553,15 @@ var PureLineChart = ({
                 children: yLabel
               }
             ),
-            /* @__PURE__ */ jsx14("defs", { children: showArea && /* @__PURE__ */ jsxs10("linearGradient", { id: gradientId, x1: "0", y1: "0", x2: "0", y2: "1", children: [
-              /* @__PURE__ */ jsx14("stop", { offset: "0%", stopColor: lineColor, stopOpacity: 0.3 }),
-              /* @__PURE__ */ jsx14("stop", { offset: "100%", stopColor: lineColor, stopOpacity: 0.02 })
+            /* @__PURE__ */ jsx15("defs", { children: showArea && /* @__PURE__ */ jsxs11("linearGradient", { id: gradientId, x1: "0", y1: "0", x2: "0", y2: "1", children: [
+              /* @__PURE__ */ jsx15("stop", { offset: "0%", stopColor: lineColor, stopOpacity: 0.3 }),
+              /* @__PURE__ */ jsx15("stop", { offset: "100%", stopColor: lineColor, stopOpacity: 0.02 })
             ] }) }),
-            /* @__PURE__ */ jsxs10("g", { transform: `translate(${padding.left}, ${padding.top + 15})`, children: [
+            /* @__PURE__ */ jsxs11("g", { transform: `translate(${padding.left}, ${padding.top + 15})`, children: [
               yTicks.map((tick) => {
                 const y = scaleY(tick);
-                return /* @__PURE__ */ jsxs10("g", { children: [
-                  /* @__PURE__ */ jsx14(
+                return /* @__PURE__ */ jsxs11("g", { children: [
+                  /* @__PURE__ */ jsx15(
                     "line",
                     {
                       x1: 0,
@@ -1497,11 +1572,11 @@ var PureLineChart = ({
                       strokeDasharray: "4 3"
                     }
                   ),
-                  /* @__PURE__ */ jsx14("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(Math.round(tick)) })
+                  /* @__PURE__ */ jsx15("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(Math.round(tick)) })
                 ] }, tick);
               }),
-              showArea && /* @__PURE__ */ jsx14("path", { d: areaPath, fill: `url(#${gradientId})` }),
-              /* @__PURE__ */ jsx14(
+              showArea && /* @__PURE__ */ jsx15("path", { d: areaPath, fill: `url(#${gradientId})` }),
+              /* @__PURE__ */ jsx15(
                 "path",
                 {
                   d: smoothLine,
@@ -1517,8 +1592,8 @@ var PureLineChart = ({
                   } : void 0
                 }
               ),
-              hoveredIndex !== null && /* @__PURE__ */ jsxs10(Fragment2, { children: [
-                /* @__PURE__ */ jsx14(
+              hoveredIndex !== null && /* @__PURE__ */ jsxs11(Fragment2, { children: [
+                /* @__PURE__ */ jsx15(
                   "line",
                   {
                     x1: scaleX(hoveredIndex),
@@ -1531,7 +1606,7 @@ var PureLineChart = ({
                     opacity: 0.4
                   }
                 ),
-                /* @__PURE__ */ jsx14(
+                /* @__PURE__ */ jsx15(
                   "circle",
                   {
                     cx: scaleX(hoveredIndex),
@@ -1545,8 +1620,8 @@ var PureLineChart = ({
               data.map((d, i) => {
                 const cx = scaleX(i), cy = scaleY(d.value);
                 const isHov = hoveredIndex === i;
-                return /* @__PURE__ */ jsxs10("g", { children: [
-                  /* @__PURE__ */ jsx14(
+                return /* @__PURE__ */ jsxs11("g", { children: [
+                  /* @__PURE__ */ jsx15(
                     "circle",
                     {
                       cx,
@@ -1558,10 +1633,10 @@ var PureLineChart = ({
                       className: "transition-all duration-200 pointer-events-none"
                     }
                   ),
-                  /* @__PURE__ */ jsx14("circle", { cx, cy, r: 14, fill: "transparent" })
+                  /* @__PURE__ */ jsx15("circle", { cx, cy, r: 14, fill: "transparent" })
                 ] }, i);
               }),
-              data.map((d, i) => /* @__PURE__ */ jsx14(
+              data.map((d, i) => /* @__PURE__ */ jsx15(
                 "text",
                 {
                   x: scaleX(i),
@@ -1575,7 +1650,7 @@ var PureLineChart = ({
                 },
                 i
               )),
-              /* @__PURE__ */ jsx14(
+              /* @__PURE__ */ jsx15(
                 "rect",
                 {
                   x: 0,
@@ -1602,13 +1677,13 @@ var PureLineChart = ({
                   }
                 }
               ),
-              /* @__PURE__ */ jsx14("line", { x1: 0, y1: chartH, x2: chartW, y2: chartH, stroke: "var(--border-strong)" })
+              /* @__PURE__ */ jsx15("line", { x1: 0, y1: chartH, x2: chartW, y2: chartH, stroke: "var(--border-strong)" })
             ] }),
-            /* @__PURE__ */ jsx14("style", { children: `
+            /* @__PURE__ */ jsx15("style", { children: `
                         @keyframes drawLine { to { stroke-dashoffset: 0; } }
                     ` })
           ] }),
-          tooltip && /* @__PURE__ */ jsx14(
+          tooltip && /* @__PURE__ */ jsx15(
             "div",
             {
               className: "absolute z-50 pointer-events-none transition-all duration-150",
@@ -1617,22 +1692,22 @@ var PureLineChart = ({
                 top: tooltip.y,
                 transform: "translate(-90%, -70%)"
               },
-              children: /* @__PURE__ */ jsxs10("div", { className: "relative bg-[#0A0A0B] text-white text-sm rounded-lg px-8 py-2 shadow-2xl border border-white/10 whitespace-nowrap", children: [
-                /* @__PURE__ */ jsx14("p", { className: "text-[11px] text-center", children: tooltip.label }),
-                /* @__PURE__ */ jsx14("p", { className: "text-sm font-semibold text-center", children: formatVal(tooltip.value) })
+              children: /* @__PURE__ */ jsxs11("div", { className: "relative bg-[#0A0A0B] text-white text-sm rounded-lg px-8 py-2 shadow-2xl border border-white/10 whitespace-nowrap", children: [
+                /* @__PURE__ */ jsx15("p", { className: "text-[11px] text-center", children: tooltip.label }),
+                /* @__PURE__ */ jsx15("p", { className: "text-sm font-semibold text-center", children: formatVal(tooltip.value) })
               ] })
             }
           )
         ] }),
-        legendLabel && /* @__PURE__ */ jsx14("div", { className: "flex justify-center items-center gap-2 mt-4 px-2", children: /* @__PURE__ */ jsxs10("div", { className: "flex items-center gap-1.5", children: [
-          /* @__PURE__ */ jsx14(
+        legendLabel && /* @__PURE__ */ jsx15("div", { className: "flex justify-center items-center gap-2 mt-4 px-2", children: /* @__PURE__ */ jsxs11("div", { className: "flex items-center gap-1.5", children: [
+          /* @__PURE__ */ jsx15(
             "div",
             {
               className: "w-3 h-1 rounded-sm",
               style: { backgroundColor: lineColor }
             }
           ),
-          /* @__PURE__ */ jsx14("span", { className: "text-sm font-medium", children: legendLabel })
+          /* @__PURE__ */ jsx15("span", { className: "text-sm font-medium", children: legendLabel })
         ] }) })
       ]
     }
@@ -1641,8 +1716,8 @@ var PureLineChart = ({
 var GraficaLine_default = PureLineChart;
 
 // components/ui/DataDisplay/Tabs.tsx
-import { useState as useState6 } from "react";
-import { jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
+import { useState as useState7 } from "react";
+import { jsx as jsx16, jsxs as jsxs12 } from "react/jsx-runtime";
 var triggerBase = "inline-flex items-center gap-2 text-sm font-medium transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 var variantStyles2 = {
   underline: {
@@ -1680,7 +1755,7 @@ function Tabs({
   align = "start"
 }) {
   var _a, _b;
-  const [internalActive, setInternalActive] = useState6(
+  const [internalActive, setInternalActive] = useState7(
     (_b = defaultTab != null ? defaultTab : (_a = tabs[0]) == null ? void 0 : _a.id) != null ? _b : ""
   );
   const isControlled = controlledTab !== void 0;
@@ -1690,15 +1765,15 @@ function Tabs({
     onChange == null ? void 0 : onChange(id);
   };
   const styles = variantStyles2[variant];
-  return /* @__PURE__ */ jsxs11("div", { className: `flex flex-col w-full ${className}`, children: [
-    /* @__PURE__ */ jsx15(
+  return /* @__PURE__ */ jsxs12("div", { className: `flex flex-col w-full ${className}`, children: [
+    /* @__PURE__ */ jsx16(
       "div",
       {
         role: "tablist",
         className: `${styles.list} ${alignClass[align]}`,
         children: tabs.map((tab) => {
           const isActive = tab.id === active;
-          return /* @__PURE__ */ jsxs11(
+          return /* @__PURE__ */ jsxs12(
             "button",
             {
               role: "tab",
@@ -1712,7 +1787,7 @@ function Tabs({
                 isActive ? styles.active : styles.inactive
               ].join(" "),
               children: [
-                tab.icon && /* @__PURE__ */ jsx15("span", { className: "shrink-0 size-4", children: tab.icon }),
+                tab.icon && /* @__PURE__ */ jsx16("span", { className: "shrink-0 size-4", children: tab.icon }),
                 tab.label
               ]
             },
@@ -1721,7 +1796,7 @@ function Tabs({
         })
       }
     ),
-    tabs.map((tab) => /* @__PURE__ */ jsx15(
+    tabs.map((tab) => /* @__PURE__ */ jsx16(
       "div",
       {
         role: "tabpanel",
@@ -1738,7 +1813,7 @@ function Tabs({
 
 // components/ui/DataDisplay/Table.tsx
 import React7 from "react";
-import { jsx as jsx16, jsxs as jsxs12 } from "react/jsx-runtime";
+import { jsx as jsx17, jsxs as jsxs13 } from "react/jsx-runtime";
 function getCellValue(row, col) {
   if (col.render) return col.render(row);
   if (!col.accessor) return null;
@@ -1803,7 +1878,7 @@ function DataTable({
     });
     return map;
   }, [columns]);
-  return /* @__PURE__ */ jsxs12(
+  return /* @__PURE__ */ jsxs13(
     "div",
     {
       className,
@@ -1815,12 +1890,12 @@ function DataTable({
         boxShadow: "var(--shadow-card)"
       },
       children: [
-        /* @__PURE__ */ jsx16(
+        /* @__PURE__ */ jsx17(
           "div",
           {
             className: "scrollbar-soft",
             style: { overflowX: "auto", overflowY: "auto", maxHeight },
-            children: /* @__PURE__ */ jsxs12(
+            children: /* @__PURE__ */ jsxs13(
               "table",
               {
                 style: {
@@ -1832,7 +1907,7 @@ function DataTable({
                   fontFamily: "var(--font-body), sans-serif"
                 },
                 children: [
-                  /* @__PURE__ */ jsxs12(
+                  /* @__PURE__ */ jsxs13(
                     "thead",
                     {
                       style: {
@@ -1842,10 +1917,10 @@ function DataTable({
                         background: headerBg
                       },
                       children: [
-                        hasGroups && /* @__PURE__ */ jsx16("tr", { children: groupedHeaders.map((g, idx) => {
+                        hasGroups && /* @__PURE__ */ jsx17("tr", { children: groupedHeaders.map((g, idx) => {
                           var _a2, _b2;
                           const style = groupStyles.get(g.label);
-                          return g.label ? /* @__PURE__ */ jsx16(
+                          return g.label ? /* @__PURE__ */ jsx17(
                             "th",
                             {
                               colSpan: g.span,
@@ -1866,7 +1941,7 @@ function DataTable({
                               children: g.label
                             },
                             `group-${g.label}-${idx}`
-                          ) : /* @__PURE__ */ jsx16(
+                          ) : /* @__PURE__ */ jsx17(
                             "th",
                             {
                               style: {
@@ -1877,11 +1952,11 @@ function DataTable({
                             `empty-${g.start}`
                           );
                         }) }),
-                        /* @__PURE__ */ jsx16("tr", { children: columns.map((col, i) => {
+                        /* @__PURE__ */ jsx17("tr", { children: columns.map((col, i) => {
                           var _a2, _b2, _c;
                           const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
                           const style = col.group ? groupStyles.get(col.group) : void 0;
-                          return /* @__PURE__ */ jsx16(
+                          return /* @__PURE__ */ jsx17(
                             "th",
                             {
                               style: {
@@ -1906,14 +1981,14 @@ function DataTable({
                       ]
                     }
                   ),
-                  /* @__PURE__ */ jsx16("tbody", { children: isLoading ? Array.from({ length: 5 }).map((_, rowIdx) => /* @__PURE__ */ jsx16("tr", { children: columns.map((col) => /* @__PURE__ */ jsx16(
+                  /* @__PURE__ */ jsx17("tbody", { children: isLoading ? Array.from({ length: 5 }).map((_, rowIdx) => /* @__PURE__ */ jsx17("tr", { children: columns.map((col) => /* @__PURE__ */ jsx17(
                     "td",
                     {
                       style: {
                         padding: cellPadding,
                         borderBottom: "0.5px solid var(--border-default)"
                       },
-                      children: /* @__PURE__ */ jsx16(
+                      children: /* @__PURE__ */ jsx17(
                         "div",
                         {
                           style: {
@@ -1927,7 +2002,7 @@ function DataTable({
                       )
                     },
                     col.key
-                  )) }, `skeleton-${rowIdx}`)) : data.length === 0 ? /* @__PURE__ */ jsx16("tr", { children: /* @__PURE__ */ jsx16(
+                  )) }, `skeleton-${rowIdx}`)) : data.length === 0 ? /* @__PURE__ */ jsx17("tr", { children: /* @__PURE__ */ jsx17(
                     "td",
                     {
                       colSpan: columns.length,
@@ -1941,7 +2016,7 @@ function DataTable({
                     }
                   ) }) : data.map((row, rowIdx) => {
                     const key = String(row[rowKey]);
-                    return /* @__PURE__ */ jsx16(
+                    return /* @__PURE__ */ jsx17(
                       "tr",
                       {
                         style: {
@@ -1950,7 +2025,7 @@ function DataTable({
                         children: columns.map((col, i) => {
                           var _a2;
                           const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
-                          return /* @__PURE__ */ jsx16(
+                          return /* @__PURE__ */ jsx17(
                             "td",
                             {
                               style: {
@@ -1975,7 +2050,7 @@ function DataTable({
             )
           }
         ),
-        /* @__PURE__ */ jsx16("style", { children: `
+        /* @__PURE__ */ jsx17("style", { children: `
                 @keyframes dt-pulse {
                     0%, 100% { opacity: 1; }
                     50%       { opacity: 0.35; }
@@ -1989,19 +2064,19 @@ function DataTable({
 // components/ui/Navegacion/Breadcrumbs.tsx
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { jsx as jsx17, jsxs as jsxs13 } from "react/jsx-runtime";
+import { jsx as jsx18, jsxs as jsxs14 } from "react/jsx-runtime";
 function Breadcrumbs() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter((segment) => segment !== "");
-  return /* @__PURE__ */ jsxs13("nav", { className: "flex items-center space-x-2 text-xs tracking-widest font-semibold text-text-muted whitespace-nowrap overflow-x-auto scrollbar-hide", children: [
-    segments.length === 0 ? /* @__PURE__ */ jsx17("span", { className: "text-text-primary", children: "INICIO" }) : /* @__PURE__ */ jsx17(Link, { href: "/", className: "hover:text-text-primary transition-colors flex items-center", children: "INICIO" }),
+  return /* @__PURE__ */ jsxs14("nav", { className: "flex items-center space-x-2 text-xs tracking-widest font-semibold text-text-muted whitespace-nowrap overflow-x-auto scrollbar-hide", children: [
+    segments.length === 0 ? /* @__PURE__ */ jsx18("span", { className: "text-text-primary", children: "INICIO" }) : /* @__PURE__ */ jsx18(Link, { href: "/", className: "hover:text-text-primary transition-colors flex items-center", children: "INICIO" }),
     segments.map((segment, index) => {
       const href = `/${segments.slice(0, index + 1).join("/")}`;
       const isLast = index === segments.length - 1;
       let name = decodeURIComponent(segment).replace(/[-_]/g, " ").toUpperCase();
-      return /* @__PURE__ */ jsxs13("div", { className: "flex items-center space-x-2", children: [
-        /* @__PURE__ */ jsx17("span", { className: "text-text-muted/50", children: "/" }),
-        isLast ? /* @__PURE__ */ jsx17("span", { className: "text-text-primary", children: name }) : /* @__PURE__ */ jsx17(Link, { href, className: "hover:text-text-primary transition-colors", children: name })
+      return /* @__PURE__ */ jsxs14("div", { className: "flex items-center space-x-2", children: [
+        /* @__PURE__ */ jsx18("span", { className: "text-text-muted/50", children: "/" }),
+        isLast ? /* @__PURE__ */ jsx18("span", { className: "text-text-primary", children: name }) : /* @__PURE__ */ jsx18(Link, { href, className: "hover:text-text-primary transition-colors", children: name })
       ] }, href);
     })
   ] });
@@ -2009,10 +2084,10 @@ function Breadcrumbs() {
 
 // components/ui/Tema/theme-provider.tsx
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { jsx as jsx18 } from "react/jsx-runtime";
+import { jsx as jsx19 } from "react/jsx-runtime";
 function ThemeProvider(_a) {
   var _b = _a, { children } = _b, props = __objRest(_b, ["children"]);
-  return /* @__PURE__ */ jsx18(NextThemesProvider, __spreadProps(__spreadValues({}, props), { children }));
+  return /* @__PURE__ */ jsx19(NextThemesProvider, __spreadProps(__spreadValues({}, props), { children }));
 }
 
 // components/ui/Tema/ThemeToggle.tsx
@@ -2021,18 +2096,18 @@ import { Moon, Sun, Laptop } from "lucide-react";
 import { useTheme as useTheme2 } from "next-themes";
 
 // components/ui/buttonIcons/fondoIcons.tsx
-import { useRef as useRef5 } from "react";
-import { jsx as jsx19, jsxs as jsxs14 } from "react/jsx-runtime";
+import { useRef as useRef6 } from "react";
+import { jsx as jsx20, jsxs as jsxs15 } from "react/jsx-runtime";
 function AnimatedIconButton({ Icon, onClick }) {
-  const iconRef = useRef5(null);
-  return /* @__PURE__ */ jsx19("button", { onClick, className: "group", children: /* @__PURE__ */ jsxs14("div", { className: "relative bg-muted/50 rounded-full p-2 text-sm transition-all duration-300 transform group-hover:scale-110 active:scale-95 group-hover:shadow-2xl", children: [
-    /* @__PURE__ */ jsx19("div", { className: "absolute -bottom-1 right-5 rounded-full w-3 h-3 bg-muted/50" }),
-    /* @__PURE__ */ jsx19("div", { ref: iconRef, children: /* @__PURE__ */ jsx19(Icon, { className: "h-5 w-5 z-50" }) })
+  const iconRef = useRef6(null);
+  return /* @__PURE__ */ jsx20("button", { onClick, className: "group", children: /* @__PURE__ */ jsxs15("div", { className: "relative bg-muted/50 rounded-full p-2 text-sm transition-all duration-300 transform group-hover:scale-110 active:scale-95 group-hover:shadow-2xl", children: [
+    /* @__PURE__ */ jsx20("div", { className: "absolute -bottom-1 right-5 rounded-full w-3 h-3 bg-muted/50" }),
+    /* @__PURE__ */ jsx20("div", { ref: iconRef, children: /* @__PURE__ */ jsx20(Icon, { className: "h-5 w-5 z-50" }) })
   ] }) });
 }
 
 // components/ui/Tema/ThemeToggle.tsx
-import { jsx as jsx20, jsxs as jsxs15 } from "react/jsx-runtime";
+import { jsx as jsx21, jsxs as jsxs16 } from "react/jsx-runtime";
 function ThemeToggle() {
   const { theme, setTheme } = useTheme2();
   const [mounted, setMounted] = React8.useState(false);
@@ -2051,22 +2126,22 @@ function ThemeToggle() {
     };
   }, []);
   if (!mounted) {
-    return /* @__PURE__ */ jsxs15(
+    return /* @__PURE__ */ jsxs16(
       "button",
       {
         className: "inline-flex items-center justify-center rounded-md border border-border bg-transparent p-2 text-sm font-medium text-foreground transition-colors",
         "aria-label": "Cargando tema",
         disabled: true,
         children: [
-          /* @__PURE__ */ jsx20(Sun, { className: "h-5 w-5" }),
-          /* @__PURE__ */ jsx20("span", { className: "sr-only", children: "Toggle theme" })
+          /* @__PURE__ */ jsx21(Sun, { className: "h-5 w-5" }),
+          /* @__PURE__ */ jsx21("span", { className: "sr-only", children: "Toggle theme" })
         ]
       }
     );
   }
   const CurrentIcon = theme === "dark" ? Moon : theme === "system" ? Laptop : Sun;
-  return /* @__PURE__ */ jsxs15("div", { className: "relative", ref: menuRef, children: [
-    /* @__PURE__ */ jsx20(
+  return /* @__PURE__ */ jsxs16("div", { className: "relative", ref: menuRef, children: [
+    /* @__PURE__ */ jsx21(
       AnimatedIconButton,
       {
         onClick: () => setIsOpen(!isOpen),
@@ -2074,37 +2149,37 @@ function ThemeToggle() {
         Icon: CurrentIcon
       }
     ),
-    /* @__PURE__ */ jsx20("span", { className: "sr-only", children: "Toggle theme" }),
-    isOpen && /* @__PURE__ */ jsx20("div", { className: "absolute top-full mt-2 right-0 w-40 rounded-md border border-border-sidebar bg-background text-text-primary shadow-lg z-[9999]", children: /* @__PURE__ */ jsxs15("div", { className: "py-1", role: "menu", "aria-orientation": "vertical", "aria-labelledby": "options-menu", children: [
-      /* @__PURE__ */ jsxs15("button", { onClick: () => {
+    /* @__PURE__ */ jsx21("span", { className: "sr-only", children: "Toggle theme" }),
+    isOpen && /* @__PURE__ */ jsx21("div", { className: "absolute top-full mt-2 right-0 w-40 rounded-md border border-border-sidebar bg-background text-text-primary shadow-lg z-[9999]", children: /* @__PURE__ */ jsxs16("div", { className: "py-1", role: "menu", "aria-orientation": "vertical", "aria-labelledby": "options-menu", children: [
+      /* @__PURE__ */ jsxs16("button", { onClick: () => {
         setTheme("light");
         setIsOpen(false);
       }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
-        /* @__PURE__ */ jsx20(Sun, { className: "mr-2 h-4 w-4" }),
-        /* @__PURE__ */ jsx20("span", { children: "Claro" })
+        /* @__PURE__ */ jsx21(Sun, { className: "mr-2 h-4 w-4" }),
+        /* @__PURE__ */ jsx21("span", { children: "Claro" })
       ] }),
-      /* @__PURE__ */ jsxs15("button", { onClick: () => {
+      /* @__PURE__ */ jsxs16("button", { onClick: () => {
         setTheme("dark");
         setIsOpen(false);
       }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
-        /* @__PURE__ */ jsx20(Moon, { className: "mr-2 h-4 w-4" }),
-        /* @__PURE__ */ jsx20("span", { children: "Oscuro" })
+        /* @__PURE__ */ jsx21(Moon, { className: "mr-2 h-4 w-4" }),
+        /* @__PURE__ */ jsx21("span", { children: "Oscuro" })
       ] }),
-      /* @__PURE__ */ jsxs15("button", { onClick: () => {
+      /* @__PURE__ */ jsxs16("button", { onClick: () => {
         setTheme("system");
         setIsOpen(false);
       }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
-        /* @__PURE__ */ jsx20(Laptop, { className: "mr-2 h-4 w-4" }),
-        /* @__PURE__ */ jsx20("span", { children: "Sistema" })
+        /* @__PURE__ */ jsx21(Laptop, { className: "mr-2 h-4 w-4" }),
+        /* @__PURE__ */ jsx21("span", { children: "Sistema" })
       ] })
     ] }) })
   ] });
 }
 
 // components/Prueba/AlertDialog.tsx
-import React9, { useEffect as useEffect5, useCallback as useCallback2 } from "react";
+import React9, { useEffect as useEffect6, useCallback as useCallback2 } from "react";
 import { X as X3, AlertTriangle, AlertCircle, CheckCircle, Info } from "lucide-react";
-import { jsx as jsx21, jsxs as jsxs16 } from "react/jsx-runtime";
+import { jsx as jsx22, jsxs as jsxs17 } from "react/jsx-runtime";
 var sizeClasses3 = {
   sm: "max-w-sm",
   md: "max-w-md",
@@ -2112,22 +2187,22 @@ var sizeClasses3 = {
 };
 var variantConfig = {
   destructive: {
-    icon: /* @__PURE__ */ jsx21(AlertTriangle, { className: "w-5 h-5" }),
+    icon: /* @__PURE__ */ jsx22(AlertTriangle, { className: "w-5 h-5" }),
     iconBg: "bg-error/10 text-text-error",
     confirmVariant: "destructive"
   },
   warning: {
-    icon: /* @__PURE__ */ jsx21(AlertCircle, { className: "w-5 h-5" }),
+    icon: /* @__PURE__ */ jsx22(AlertCircle, { className: "w-5 h-5" }),
     iconBg: "bg-warning/10 text-text-warning",
     confirmVariant: "primary"
   },
   success: {
-    icon: /* @__PURE__ */ jsx21(CheckCircle, { className: "w-5 h-5" }),
+    icon: /* @__PURE__ */ jsx22(CheckCircle, { className: "w-5 h-5" }),
     iconBg: "bg-success/10 text-text-success",
     confirmVariant: "primary"
   },
   info: {
-    icon: /* @__PURE__ */ jsx21(Info, { className: "w-5 h-5" }),
+    icon: /* @__PURE__ */ jsx22(Info, { className: "w-5 h-5" }),
     iconBg: "bg-info/10 text-text-info",
     confirmVariant: "primary"
   }
@@ -2154,7 +2229,7 @@ function AlertDialog({
     },
     [onClose]
   );
-  useEffect5(() => {
+  useEffect6(() => {
     if (open) {
       document.addEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "hidden";
@@ -2166,8 +2241,8 @@ function AlertDialog({
   }, [open, handleKeyDown]);
   const config = variantConfig[variant];
   if (!open) return null;
-  return /* @__PURE__ */ jsxs16("div", { role: "alertdialog", "aria-modal": "true", className: "fixed inset-0 z-50 flex items-center justify-center p-4", children: [
-    /* @__PURE__ */ jsx21(
+  return /* @__PURE__ */ jsxs17("div", { role: "alertdialog", "aria-modal": "true", className: "fixed inset-0 z-50 flex items-center justify-center p-4", children: [
+    /* @__PURE__ */ jsx22(
       "div",
       {
         className: "absolute inset-0 bg-black/50 animate-in fade-in duration-200",
@@ -2175,7 +2250,7 @@ function AlertDialog({
         "aria-hidden": "true"
       }
     ),
-    /* @__PURE__ */ jsxs16(
+    /* @__PURE__ */ jsxs17(
       "div",
       {
         className: `
@@ -2189,7 +2264,7 @@ function AlertDialog({
           ${className}
         `,
         children: [
-          !hideCloseButton && /* @__PURE__ */ jsx21(
+          !hideCloseButton && /* @__PURE__ */ jsx22(
             Button,
             {
               variant: "ghost",
@@ -2197,20 +2272,20 @@ function AlertDialog({
               onClick: onClose,
               "aria-label": "Cerrar",
               className: "absolute top-3 right-3 text-text-muted hover:text-text-primary z-10",
-              children: /* @__PURE__ */ jsx21(X3, {})
+              children: /* @__PURE__ */ jsx22(X3, {})
             }
           ),
-          /* @__PURE__ */ jsxs16(AlertDialogContext.Provider, { value: { variant, config }, children: [
-            /* @__PURE__ */ jsx21("div", { className: "px-6 pt-6 pb-4", children: /* @__PURE__ */ jsxs16("div", { className: "flex items-start gap-3", children: [
-              /* @__PURE__ */ jsx21("span", { className: `flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${config.iconBg}`, children: config.icon }),
-              /* @__PURE__ */ jsxs16("div", { className: "flex-1 min-w-0 pr-6", children: [
-                /* @__PURE__ */ jsx21("h2", { className: "font-heading text-lg font-semibold leading-snug text-text-primary", children: title }),
-                description && /* @__PURE__ */ jsx21("p", { className: "mt-2 text-sm text-text-secondary leading-relaxed", children: description })
+          /* @__PURE__ */ jsxs17(AlertDialogContext.Provider, { value: { variant, config }, children: [
+            /* @__PURE__ */ jsx22("div", { className: "px-6 pt-6 pb-4", children: /* @__PURE__ */ jsxs17("div", { className: "flex items-start gap-3", children: [
+              /* @__PURE__ */ jsx22("span", { className: `flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${config.iconBg}`, children: config.icon }),
+              /* @__PURE__ */ jsxs17("div", { className: "flex-1 min-w-0 pr-6", children: [
+                /* @__PURE__ */ jsx22("h2", { className: "font-heading text-lg font-semibold leading-snug text-text-primary", children: title }),
+                description && /* @__PURE__ */ jsx22("p", { className: "mt-2 text-sm text-text-secondary leading-relaxed", children: description })
               ] })
             ] }) }),
-            (children || onConfirm || onCancel) && /* @__PURE__ */ jsx21("div", { className: "border-t border-border px-6 py-4", children: children || /* @__PURE__ */ jsxs16("div", { className: "flex items-center justify-end gap-2", children: [
-              onCancel && /* @__PURE__ */ jsx21(Button, { variant: "secondary", onClick: onCancel, children: cancelLabel }),
-              onConfirm && /* @__PURE__ */ jsx21(Button, { variant: "default", onClick: onConfirm, children: confirmLabel })
+            (children || onConfirm || onCancel) && /* @__PURE__ */ jsx22("div", { className: "border-t border-border px-6 py-4", children: children || /* @__PURE__ */ jsxs17("div", { className: "flex items-center justify-end gap-2", children: [
+              onCancel && /* @__PURE__ */ jsx22(Button, { variant: "secondary", onClick: onCancel, children: cancelLabel }),
+              onConfirm && /* @__PURE__ */ jsx22(Button, { variant: "default", onClick: onConfirm, children: confirmLabel })
             ] }) })
           ] })
         ]
@@ -2255,7 +2330,7 @@ var toast = {
     success: messages.success,
     error: messages.error
   }),
-  custom: (jsx22) => sonnerToast(jsx22)
+  custom: (jsx23) => sonnerToast(jsx23)
 };
 export {
   AlertDialog,
@@ -2277,6 +2352,7 @@ export {
   GraficaLine_default as GraficaLine,
   Input,
   LabelBadge,
+  MultiSelect,
   Select,
   SelectContent,
   SelectGroup,

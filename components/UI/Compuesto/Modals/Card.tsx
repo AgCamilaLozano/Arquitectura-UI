@@ -50,7 +50,7 @@ const variantClasses: Record<CardVariant, string> = {
     default:
         "bg-background border border-border",
     outlined:
-        "bg-background border border-border-accent",
+        "bg-background border border-accent",
     elevated:
         "bg-background border-1 ",
     accent:
