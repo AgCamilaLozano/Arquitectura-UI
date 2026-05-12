@@ -34,7 +34,7 @@
   /* Color Marca */
   --primary: #2D2D2E;
   --primary-hover: #3A3A3C;
-  --accent: #5E17A6;
+  --accent: #7735d4;
   --accent-hover: rgba(124, 58, 237, 0.33);
   --accent-soft: rgba(94, 23, 166, 0.12);
 
@@ -54,7 +54,7 @@
 
   /* Color de gráficos */
   --chart-1: #7B3BC2;
-  --chart-2: #5E17A6;
+  --chart-2: #7e43b9ff;
   --chart-3: #A855F7;
   --chart-4: #C084FC;
   --chart-5: #E9D5FF;
@@ -94,8 +94,8 @@
   /* Color Marca */
   --primary: #FAFAFA;
   --primary-hover: #F4F4F5;
-  --accent: #7B3BC2;
-  --accent-hover: rgba(124, 58, 237, 0.18);
+  --accent: #9d70db;
+  --accent-hover: rgba(138, 95, 209, 0.18);
   --accent-soft: rgba(124, 58, 237, 0.12);
 
   /* Color Texto */
@@ -111,7 +111,7 @@
 
   /* Color de gráficos */
   --chart-1: #7B3BC2;
-  --chart-2: #5E17A6;
+  --chart-2: #7e43b9ff;
   --chart-3: #A855F7;
   --chart-4: #C084FC;
   --chart-5: #E9D5FF;
