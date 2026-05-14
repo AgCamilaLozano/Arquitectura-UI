@@ -48,15 +48,15 @@ export interface CardProps {
 /** Lógica clave: mapeo de variante → clases Tailwind usando tokens del sistema */
 const variantClasses: Record<CardVariant, string> = {
     default:
-        "bg-background border border-border",
+        "bg-background border border-border hover:border-accent/50",
     outlined:
         "bg-background border border-accent",
     elevated:
         "bg-background border-1 ",
     accent:
-        "bg-background border border-border border-l-2 border-l-accent shadow-[var(--shadow-surface)]",
+        "bg-background border-l-2 border-l-accent shadow-[var(--shadow-surface)]",
     ghost:
-        "bg-surface border-0 shadow-none",
+        "bg-surface border border-border shadow-none",
 };
 
 const paddingClasses: Record<CardPadding, string> = {
@@ -83,7 +83,7 @@ export function Card({
         <div
             onClick={onClick}
             className={`
-        rounded-xl overflow-hidden transition-all duration-200 shadow-sm
+        rounded-md overflow-hidden transition-all duration-200 shadow-sm
         ${variantClasses[variant]}
         ${paddingClasses[padding]}
         ${fullWidth ? "w-full" : ""}

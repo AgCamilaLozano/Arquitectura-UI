@@ -546,11 +546,11 @@ function StatusBadge({
 // components/ui/Compuesto/Modals/Card.tsx
 import { jsx as jsx8, jsxs as jsxs5 } from "react/jsx-runtime";
 var variantClasses = {
-  default: "bg-background border border-border",
+  default: "bg-background border border-border hover:border-accent/50",
   outlined: "bg-background border border-accent",
   elevated: "bg-background border-1 ",
-  accent: "bg-background border border-border border-l-2 border-l-accent shadow-[var(--shadow-surface)]",
-  ghost: "bg-surface border-0 shadow-none"
+  accent: "bg-background border-l-2 border-l-accent shadow-[var(--shadow-surface)]",
+  ghost: "bg-surface border border-border shadow-none"
 };
 var paddingClasses = {
   none: "",
@@ -573,7 +573,7 @@ function Card({
     {
       onClick,
       className: `
-        rounded-xl overflow-hidden transition-all duration-200 shadow-sm
+        rounded-md overflow-hidden transition-all duration-200 shadow-sm
         ${variantClasses[variant]}
         ${paddingClasses[padding]}
         ${fullWidth ? "w-full" : ""}
