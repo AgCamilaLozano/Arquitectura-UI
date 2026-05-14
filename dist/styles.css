@@ -3,21 +3,21 @@
 :root {
   --bg-surface: #f8f8f8;
   --bg-base: #FFFFFF;
-  --bg-muted: #EBEEF2;
+  --bg-muted: #F1F1F4;
   --primary: #2D2D2E;
   --primary-hover: #3A3A3C;
   --accent: #7735d4;
   --accent-hover: rgba(124, 58, 237, 0.33);
   --accent-soft: rgba(94, 23, 166, 0.12);
   --text-primary: #2D2D2E;
-  --text-secondary: #6B7280;
-  --text-muted: #737479;
+  --text-secondary: #71717A;
+  --text-muted: #9A9AA5;
   --text-disabled: #D1D5DB;
   --border-default: #E5E7EB;
   --border-strong: #C084FC;
-  --border-sidebar: #E0E0E0;
-  --shadow-surface: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --border-sidebar: #DDD6FE;
+  --shadow-surface: 0 1px 2px rgba(0, 0, 0, .35);
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, .45);
   --chart-1: #7B3BC2;
   --chart-2: #7e43b9ff;
   --chart-3: #A855F7;
@@ -42,18 +42,18 @@
 }
 .dark {
   --bg-base: #16141a;
-  --bg-surface: #1A1A1B;
-  --bg-muted: #2A2A2B;
+  --bg-surface: #1d1a23;
+  --bg-muted: #2A2533;
   --primary: #FAFAFA;
   --primary-hover: #F4F4F5;
   --accent: #9d70db;
   --accent-hover: rgba(138, 95, 209, 0.18);
   --accent-soft: rgba(124, 58, 237, 0.12);
   --text-primary: #EDEDED;
-  --text-secondary: #CACADB;
-  --text-muted: #B6B6C4;
+  --text-secondary: #B7B7C9;
+  --text-muted: #8C8C98;
   --text-disabled: #52525B;
-  --border-default: #262626;
+  --border-default: #312B3D;
   --border-strong: #C084FC;
   --border-sidebar: #301942;
   --chart-1: #7B3BC2;
@@ -67,10 +67,10 @@
   --alert-warning: rgba(133, 77, 14, 0.1);
   --alert-info: rgba(30, 64, 175, 0.1);
   --alert-success: rgba(22, 101, 52, 0.1);
-  --text-error: #e7000b;
-  --text-success: #00a63e;
-  --text-warning: #d08700;
-  --text-info: #155dfc;
+  --text-error: #ff6b7a;
+  --text-success: #4ade80;
+  --text-warning: #fbbf24;
+  --text-info: #60a5fa;
 }
 html,
 body {
@@ -147,4 +147,12 @@ h6 {
 .mascot-zoom {
   animation: zoom-breath 3s ease-in-out infinite;
   transform-origin: center;
+}
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+::-moz-selection {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
 }

@@ -236,3 +236,13 @@ h6 {
   animation: zoom-breath 3s ease-in-out infinite;
   transform-origin: center;
 }
+
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+::-moz-selection {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}

@@ -262,6 +262,36 @@ interface DialogFooterProps {
 }
 declare function DialogFooter({ align, withDivider, className, children, }: DialogFooterProps): react_jsx_runtime.JSX.Element;
 
+type AlertDialogVariant = "destructive" | "warning" | "success" | "info";
+type AlertDialogSize = "sm" | "md" | "lg";
+interface AlertDialogProps {
+    open: boolean;
+    onClose: () => void;
+    variant?: AlertDialogVariant;
+    size?: AlertDialogSize;
+    title: React__default.ReactNode;
+    description?: React__default.ReactNode;
+    confirmLabel?: string;
+    cancelLabel?: string;
+    onConfirm?: () => void;
+    onCancel?: () => void;
+    closeOnOverlay?: boolean;
+    hideCloseButton?: boolean;
+    className?: string;
+    children?: React__default.ReactNode;
+}
+declare const variantConfig: Record<AlertDialogVariant, {
+    icon: React__default.ReactNode;
+    iconBg: string;
+    confirmVariant: "primary" | "destructive";
+}>;
+declare function AlertDialog({ open, onClose, variant, size, title, description, confirmLabel, cancelLabel, onConfirm, onCancel, closeOnOverlay, hideCloseButton, className, children, }: AlertDialogProps): react_jsx_runtime.JSX.Element | null;
+interface AlertDialogContextValue {
+    variant: AlertDialogVariant;
+    config: typeof variantConfig["destructive"];
+}
+declare const useAlertDialogContext: () => AlertDialogContextValue;
+
 declare const Toaster: (props: ToasterProps) => react_jsx_runtime.JSX.Element;
 
 type TooltipSide = "top" | "bottom" | "left" | "right";
@@ -317,6 +347,118 @@ interface DropdownMenuProps {
     className?: string;
 }
 declare function DropdownMenu({ trigger, groups, align, width, disabled, className, }: DropdownMenuProps): react_jsx_runtime.JSX.Element;
+
+/**
+ * Componente: Calendar
+ * Propósito: Selector de fecha reutilizable con múltiples variantes y modos de selección.
+ *   - variant "full": Calendario grande tipo vista mensual
+ *   - variant "input": Campo con popover compacto para seleccionar fecha
+ *
+ * Modos de vista interna (CalendarMode):
+ *   - "days":   Grilla de días del mes (vista por defecto)
+ *   - "months": Grilla de los 12 meses del año
+ *   - "years":  Grilla de años navegable en rangos de 12
+ *
+ * Props:
+ *   - variant:       "full" | "input"           — Modo de visualización
+ *   - selectionMode: "date" | "month" | "year"  — Qué puede seleccionar el usuario
+ *   - value:         Date | null                — Fecha actualmente seleccionada
+ *   - onChange:      (date: Date) => void       — Callback al seleccionar
+ *   - minDate?:      Date                       — Fecha mínima seleccionable
+ *   - maxDate?:      Date                       — Fecha máxima seleccionable
+ *   - placeholder?:  string                     — Texto del input sin fecha seleccionada
+ *   - label?:        string                     — Etiqueta del input (solo variante "input")
+ *   - disabled?:     boolean                    — Deshabilita todo el componente
+ *   - className?:    string                     — Clases adicionales para el contenedor raíz
+ */
+
+/** Controla qué vista interna muestra el calendario */
+type CalendarMode = "days" | "months" | "years";
+/** Controla qué puede seleccionar finalmente el usuario */
+type SelectionMode = "date" | "month" | "year";
+interface CalendarProps {
+    variant?: "full" | "input";
+    selectionMode?: SelectionMode;
+    value?: Date | null;
+    onChange?: (date: Date) => void;
+    minDate?: Date;
+    maxDate?: Date;
+    placeholder?: string;
+    label?: string;
+    disabled?: boolean;
+    className?: string;
+}
+declare function getDiasDelMes(year: number, month: number): (number | null)[];
+declare function isSameDay(a: Date, b: Date): boolean;
+declare function isSameMonth(a: Date, b: Date): boolean;
+declare function isSameYear(a: Date, b: Date): boolean;
+declare function isWeekendDate(date: Date): boolean;
+declare function isDisabledDay(day: number, year: number, month: number, min?: Date, max?: Date): boolean;
+declare function isDisabledMonth(year: number, month: number, min?: Date, max?: Date): boolean;
+declare function isDisabledYear(year: number, min?: Date, max?: Date): boolean;
+declare function formatDate(date: Date, mode?: SelectionMode): string;
+/**
+ * Propósito: Grilla de años navegable en bloques de 12.
+ * Lógica clave: El rango se calcula a partir de yearBase (múltiplo de 12).
+ */
+interface YearGridProps {
+    yearBase: number;
+    selected: Date | null;
+    onSelectYear: (year: number) => void;
+    minDate?: Date;
+    maxDate?: Date;
+    size?: "sm" | "lg";
+}
+declare const YearGrid: React__default.FC<YearGridProps>;
+/**
+ * Propósito: Grilla de los 12 meses del año.
+ * Lógica clave: Marca el mes seleccionado y deshabilita meses fuera del rango min/max.
+ */
+interface MonthGridProps {
+    year: number;
+    selected: Date | null;
+    onSelectMonth: (month: number) => void;
+    minDate?: Date;
+    maxDate?: Date;
+    size?: "sm" | "lg";
+}
+declare const MonthGrid: React__default.FC<MonthGridProps>;
+/**
+ * Propósito: Grilla de días del mes.
+ * Lógica clave: Genera la cuadrícula con offset de lunes, marca festivos colombianos,
+ * fines de semana, el día actual y el seleccionado. Deshabilita días fuera del rango.
+ */
+interface CalendarGridProps {
+    year: number;
+    month: number;
+    selected: Date | null;
+    today: Date;
+    onSelectDay: (day: number) => void;
+    minDate?: Date;
+    maxDate?: Date;
+    size?: "sm" | "lg";
+}
+declare const CalendarGrid: React__default.FC<CalendarGridProps>;
+/**
+ * Propósito: Encabezado del calendario con mes/año/rango clickeable y navegación.
+ * Lógica clave: El botón central cambia el modo de vista al hacer clic.
+ *   - En modo "days"  → muestra "MES AÑO", clic abre "months"
+ *   - En modo "months"→ muestra "AÑO", clic abre "years"
+ *   - En modo "years" → muestra el rango de años, clic no hace nada
+ */
+interface CalendarHeaderProps {
+    year: number;
+    month: number;
+    mode: CalendarMode;
+    yearBase: number;
+    onPrev: () => void;
+    onNext: () => void;
+    onClickTitle: () => void;
+    selectionMode: SelectionMode;
+    size?: "sm" | "lg";
+}
+declare const CalendarHeader: React__default.FC<CalendarHeaderProps>;
+declare const Calendar: React__default.FC<CalendarProps>;
 
 interface BarSegment {
     label: string;
@@ -423,34 +565,4 @@ declare function ThemeProvider({ children, ...props }: ThemeProviderProps): reac
 
 declare function ThemeToggle(): react_jsx_runtime.JSX.Element;
 
-type AlertDialogVariant = "destructive" | "warning" | "success" | "info";
-type AlertDialogSize = "sm" | "md" | "lg";
-interface AlertDialogProps {
-    open: boolean;
-    onClose: () => void;
-    variant?: AlertDialogVariant;
-    size?: AlertDialogSize;
-    title: React__default.ReactNode;
-    description?: React__default.ReactNode;
-    confirmLabel?: string;
-    cancelLabel?: string;
-    onConfirm?: () => void;
-    onCancel?: () => void;
-    closeOnOverlay?: boolean;
-    hideCloseButton?: boolean;
-    className?: string;
-    children?: React__default.ReactNode;
-}
-declare const variantConfig: Record<AlertDialogVariant, {
-    icon: React__default.ReactNode;
-    iconBg: string;
-    confirmVariant: "primary" | "destructive";
-}>;
-declare function AlertDialog({ open, onClose, variant, size, title, description, confirmLabel, cancelLabel, onConfirm, onCancel, closeOnOverlay, hideCloseButton, className, children, }: AlertDialogProps): react_jsx_runtime.JSX.Element | null;
-interface AlertDialogContextValue {
-    variant: AlertDialogVariant;
-    config: typeof variantConfig["destructive"];
-}
-declare const useAlertDialogContext: () => AlertDialogContextValue;
-
-export { AlertDialog, type AlertDialogProps, type AlertDialogSize, type AlertDialogVariant, Breadcrumbs, Button, type ButtonProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, MultiSelect, type MultiSelectOption, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, useAlertDialogContext, useDialogContext };
+export { AlertDialog, type AlertDialogProps, type AlertDialogSize, type AlertDialogVariant, Breadcrumbs, Button, type ButtonProps, Calendar, CalendarGrid, CalendarHeader, type CalendarMode, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, MonthGrid, MultiSelect, type MultiSelectOption, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, type SelectionMode, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, YearGrid, buttonVariants, formatDate, getDiasDelMes, isDisabledDay, isDisabledMonth, isDisabledYear, isSameDay, isSameMonth, isSameYear, isWeekendDate, useAlertDialogContext, useDialogContext };
