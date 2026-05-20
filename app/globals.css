@@ -1,40 +1,17 @@
-@import '@agustin/ui/styles';
+/* 1. Inicializa Tailwind v4 */
+@import "tailwindcss";
 
-@source "../node_modules/@agustin/ui/dist/index.js";
+/* 2. Escanea tus componentes de la librería */
+@source "../lib/**/*.{ts,tsx}";
 
-@theme inline {
-  --color-background: var(--bg-base);
-  --color-surface: var(--bg-surface);
-  --color-muted: var(--bg-muted);
-  --color-border: var(--border-default);
-  --color-border-strong: var(--border-strong);
-  --color-border-sidebar: var(--border-sidebar);
-  --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
-  --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
-  --color-accent-soft: var(--accent-soft);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
-  --color-text-disabled: var(--text-disabled);
+/* 3. Trae TODO el tema, las variables :root, el @theme y las animaciones de la librería */
+@import "../lib/styles/globals.css";
 
-  --color-error: var(--alert-error);
-  --color-success: var(--alert-success);
-  --color-info: var(--alert-info);
-  --color-warning: var(--alert-warning);
-  --color-text-error: var(--text-error);
-  --color-text-success: var(--text-success);
-  --color-text-warning: var(--text-warning);
-  --color-text-info: var(--text-info);
-}
-
-/* Ocultar scrollbar */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-.scrollbar-hide {
+/* 4. Utilidades exclusivas de la app de pruebas (opcional) */
+@utility scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

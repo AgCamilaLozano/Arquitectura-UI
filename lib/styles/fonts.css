@@ -1,19 +1,27 @@
 @font-face {
-    font-family: 'NeuMontreal';
+    font-family: 'NeueMontreal';
     src: url('../fonts/NeueMontreal-Light.woff2') format('woff2');
     font-weight: 300;
+    font-style: normal;
 }
 
 @font-face {
-    font-family: 'NeuMontreal';
+    font-family: 'NeueMontreal';
     src: url('../fonts/NeueMontreal-Regular.woff2') format('woff2');
     font-weight: 400;
+    font-style: normal;
 }
 
 @font-face {
-    font-family: 'NeuMontreal';
+    font-family: 'NeueMontreal';
+    src: url('../fonts/NeueMontreal-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'NeueMontreal';
     src: url('../fonts/NeueMontreal-Bold.woff2') format('woff2');
-    font-weight: 700;
+    font-weight: 600 700;
 }
 
 @font-face {
@@ -25,13 +33,22 @@
 
 @font-face {
     font-family: 'Lato';
+    src: url('../fonts/Lato-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'Lato';
     src: url('../fonts/Lato-Bold.ttf') format('truetype');
-    font-weight: 700;
+    font-weight: 600 700;
+    font-style: normal;
 }
 
 /* ===== DESIGN TOKENS ===== */
 :root {
-    --font-heading: 'NeuMontreal';
+    --font-heading: 'NeueMontreal';
     --font-body: 'Lato';
 }
 
@@ -43,8 +60,6 @@ body {
 h1,
 h2,
 h3,
-h4,
-h5,
-h6 {
+h4{
     font-family: var(--font-heading), sans-serif;
 }

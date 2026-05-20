@@ -6,6 +6,6 @@ import 'react';
 import 'radix-ui';
 import 'class-variance-authority/types';
 import 'class-variance-authority';
-import 'sonner';
 import 'next-themes';
+import 'sonner';
 import 'clsx';

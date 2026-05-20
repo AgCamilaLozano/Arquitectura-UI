@@ -7,7 +7,7 @@
 
 import React, { useEffect, useCallback } from "react";
 import { X, AlertTriangle, AlertCircle, CheckCircle, Info } from "lucide-react";
-import { Button } from "@/components/ui/Base/Entradas";
+import { Button } from "@/lib/components/ui/Base/Entradas";
 
 export type AlertDialogVariant = "destructive" | "warning" | "success" | "info";
 

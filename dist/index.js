@@ -32,7 +32,7 @@ var __objRest = (source, exclude) => {
   return target;
 };
 
-// components/ui/Base/Selects/select.tsx
+// lib/components/ui/Base/Selects/select.tsx
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { Select as SelectPrimitive } from "radix-ui";
 
@@ -43,7 +43,7 @@ function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-// components/ui/Base/Selects/select.tsx
+// lib/components/ui/Base/Selects/select.tsx
 import { jsx, jsxs } from "react/jsx-runtime";
 function Select(_a) {
   var props = __objRest(_a, []);
@@ -224,7 +224,7 @@ function SelectScrollDownButton(_a) {
   );
 }
 
-// components/ui/Base/Selects/MultiSelect.tsx
+// lib/components/ui/Base/Selects/MultiSelect.tsx
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
@@ -299,7 +299,7 @@ function MultiSelect({
   ] });
 }
 
-// components/ui/Base/Entradas/button.tsx
+// lib/components/ui/Base/Entradas/button.tsx
 import React from "react";
 import { cva } from "class-variance-authority";
 import { jsx as jsx3 } from "react/jsx-runtime";
@@ -343,7 +343,7 @@ var Button = React.forwardRef(
 );
 Button.displayName = "Button";
 
-// components/ui/Base/Entradas/input.tsx
+// lib/components/ui/Base/Entradas/input.tsx
 import { jsx as jsx4 } from "react/jsx-runtime";
 function Input(_a) {
   var _b = _a, { className, type } = _b, props = __objRest(_b, ["className", "type"]);
@@ -362,7 +362,7 @@ function Input(_a) {
   );
 }
 
-// components/ui/Base/Entradas/textarea.tsx
+// lib/components/ui/Base/Entradas/textarea.tsx
 import React2 from "react";
 import { jsx as jsx5 } from "react/jsx-runtime";
 var Textarea = React2.forwardRef(
@@ -383,9 +383,103 @@ var Textarea = React2.forwardRef(
 );
 Textarea.displayName = "Textarea";
 
-// components/ui/Compuesto/Badges/LabelBadge.tsx
+// lib/components/ui/Tema/theme-provider.tsx
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { jsx as jsx6 } from "react/jsx-runtime";
+function ThemeProvider(_a) {
+  var _b = _a, { children } = _b, props = __objRest(_b, ["children"]);
+  return /* @__PURE__ */ jsx6(NextThemesProvider, __spreadProps(__spreadValues({}, props), { children }));
+}
+
+// lib/components/ui/Tema/ThemeToggle.tsx
+import * as React3 from "react";
+import { Moon, Sun, Laptop } from "lucide-react";
+import { useTheme } from "next-themes";
+
+// lib/components/ui/buttonIcons/fondoIcons.tsx
+import { useRef as useRef2 } from "react";
+import { jsx as jsx7, jsxs as jsxs3 } from "react/jsx-runtime";
+function AnimatedIconButton({ Icon, onClick }) {
+  const iconRef = useRef2(null);
+  return /* @__PURE__ */ jsx7("button", { onClick, className: "group", children: /* @__PURE__ */ jsxs3("div", { className: "relative bg-muted/50 rounded-full p-2 text-sm transition-all duration-300 transform group-hover:scale-110 active:scale-95 group-hover:shadow-2xl", children: [
+    /* @__PURE__ */ jsx7("div", { className: "absolute -bottom-1 right-5 rounded-full w-3 h-3 bg-muted/50" }),
+    /* @__PURE__ */ jsx7("div", { ref: iconRef, children: /* @__PURE__ */ jsx7(Icon, { className: "h-5 w-5 z-50" }) })
+  ] }) });
+}
+
+// lib/components/ui/Tema/ThemeToggle.tsx
+import { jsx as jsx8, jsxs as jsxs4 } from "react/jsx-runtime";
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React3.useState(false);
+  const [isOpen, setIsOpen] = React3.useState(false);
+  const menuRef = React3.useRef(null);
+  React3.useEffect(() => {
+    setMounted(true);
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  if (!mounted) {
+    return /* @__PURE__ */ jsxs4(
+      "button",
+      {
+        className: "inline-flex items-center justify-center rounded-md border border-border bg-transparent p-2 text-sm font-medium text-foreground transition-colors",
+        "aria-label": "Cargando tema",
+        disabled: true,
+        children: [
+          /* @__PURE__ */ jsx8(Sun, { className: "h-5 w-5" }),
+          /* @__PURE__ */ jsx8("span", { className: "sr-only", children: "Toggle theme" })
+        ]
+      }
+    );
+  }
+  const CurrentIcon = theme === "dark" ? Moon : theme === "system" ? Laptop : Sun;
+  return /* @__PURE__ */ jsxs4("div", { className: "relative", ref: menuRef, children: [
+    /* @__PURE__ */ jsx8(
+      AnimatedIconButton,
+      {
+        onClick: () => setIsOpen(!isOpen),
+        "aria-label": "Cambiar tema",
+        Icon: CurrentIcon
+      }
+    ),
+    /* @__PURE__ */ jsx8("span", { className: "sr-only", children: "Toggle theme" }),
+    isOpen && /* @__PURE__ */ jsx8("div", { className: "absolute top-full mt-2 right-0 w-40 rounded-md border border-border-sidebar bg-background text-text-primary shadow-lg z-[9999]", children: /* @__PURE__ */ jsxs4("div", { className: "py-1", role: "menu", "aria-orientation": "vertical", "aria-labelledby": "options-menu", children: [
+      /* @__PURE__ */ jsxs4("button", { onClick: () => {
+        setTheme("light");
+        setIsOpen(false);
+      }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
+        /* @__PURE__ */ jsx8(Sun, { className: "mr-2 h-4 w-4" }),
+        /* @__PURE__ */ jsx8("span", { children: "Claro" })
+      ] }),
+      /* @__PURE__ */ jsxs4("button", { onClick: () => {
+        setTheme("dark");
+        setIsOpen(false);
+      }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
+        /* @__PURE__ */ jsx8(Moon, { className: "mr-2 h-4 w-4" }),
+        /* @__PURE__ */ jsx8("span", { children: "Oscuro" })
+      ] }),
+      /* @__PURE__ */ jsxs4("button", { onClick: () => {
+        setTheme("system");
+        setIsOpen(false);
+      }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
+        /* @__PURE__ */ jsx8(Laptop, { className: "mr-2 h-4 w-4" }),
+        /* @__PURE__ */ jsx8("span", { children: "Sistema" })
+      ] })
+    ] }) })
+  ] });
+}
+
+// lib/components/ui/Compuesto/Badges/LabelBadge.tsx
 import { X } from "lucide-react";
-import { jsx as jsx6, jsxs as jsxs3 } from "react/jsx-runtime";
+import { jsx as jsx9, jsxs as jsxs5 } from "react/jsx-runtime";
 var colorVariantStyles = {
   neutral: {
     filled: "bg-primary text-background",
@@ -437,7 +531,7 @@ function LabelBadge({
   onRemove,
   className
 }) {
-  return /* @__PURE__ */ jsxs3(
+  return /* @__PURE__ */ jsxs5(
     "span",
     {
       className: cn(
@@ -447,16 +541,16 @@ function LabelBadge({
         className
       ),
       children: [
-        icon && /* @__PURE__ */ jsx6("span", { className: cn("flex-shrink-0", iconSizeStyles[size]), children: icon }),
+        icon && /* @__PURE__ */ jsx9("span", { className: cn("flex-shrink-0", iconSizeStyles[size]), children: icon }),
         label,
-        onRemove && /* @__PURE__ */ jsx6(
+        onRemove && /* @__PURE__ */ jsx9(
           "button",
           {
             type: "button",
             onClick: onRemove,
             className: "ml-0.5 flex-shrink-0 rounded-full opacity-60 hover:opacity-100 transition-opacity focus:outline-none",
             "aria-label": `Eliminar ${label}`,
-            children: /* @__PURE__ */ jsx6(X, { className: iconSizeStyles[size] })
+            children: /* @__PURE__ */ jsx9(X, { className: iconSizeStyles[size] })
           }
         )
       ]
@@ -464,8 +558,8 @@ function LabelBadge({
   );
 }
 
-// components/ui/Compuesto/Badges/StatusBadge.tsx
-import { jsx as jsx7, jsxs as jsxs4 } from "react/jsx-runtime";
+// lib/components/ui/Compuesto/Badges/StatusBadge.tsx
+import { jsx as jsx10, jsxs as jsxs6 } from "react/jsx-runtime";
 var variantStyles = {
   success: {
     container: "bg-success text-text-success border border-text-success/20",
@@ -505,7 +599,7 @@ function StatusBadge({
   className
 }) {
   const { container, dot } = variantStyles[status];
-  return /* @__PURE__ */ jsxs4(
+  return /* @__PURE__ */ jsxs6(
     "span",
     {
       className: cn(
@@ -515,8 +609,8 @@ function StatusBadge({
         className
       ),
       children: [
-        withDot && /* @__PURE__ */ jsxs4("span", { className: "relative flex items-center justify-center", children: [
-          animated && /* @__PURE__ */ jsx7(
+        withDot && /* @__PURE__ */ jsxs6("span", { className: "relative flex items-center justify-center", children: [
+          animated && /* @__PURE__ */ jsx10(
             "span",
             {
               className: cn(
@@ -526,7 +620,7 @@ function StatusBadge({
               )
             }
           ),
-          /* @__PURE__ */ jsx7(
+          /* @__PURE__ */ jsx10(
             "span",
             {
               className: cn(
@@ -543,8 +637,8 @@ function StatusBadge({
   );
 }
 
-// components/ui/Compuesto/Modals/Card.tsx
-import { jsx as jsx8, jsxs as jsxs5 } from "react/jsx-runtime";
+// lib/components/ui/Compuesto/Modals/Card.tsx
+import { jsx as jsx11, jsxs as jsxs7 } from "react/jsx-runtime";
 var variantClasses = {
   default: "bg-background border border-border hover:border-accent/50",
   outlined: "bg-background border border-accent",
@@ -568,7 +662,7 @@ function Card({
   children
 }) {
   const isInteractive = clickable || Boolean(onClick);
-  return /* @__PURE__ */ jsx8(
+  return /* @__PURE__ */ jsx11(
     "div",
     {
       onClick,
@@ -591,16 +685,16 @@ function CardHeader({
   withDivider = false,
   className = ""
 }) {
-  return /* @__PURE__ */ jsx8("div", { className: `${withDivider ? "pb-4 mb-4 border-b border-border" : "mb-3"} ${className}`, children: /* @__PURE__ */ jsxs5("div", { className: "flex items-start justify-between gap-3", children: [
-    /* @__PURE__ */ jsxs5("div", { children: [
-      /* @__PURE__ */ jsx8("h3", { className: "text-base text-lg font-semibold leading-snug", children: title }),
-      subtitle && /* @__PURE__ */ jsx8("p", { className: "mt-0.5 text-sm text-text-secondary", children: subtitle })
+  return /* @__PURE__ */ jsx11("div", { className: `${withDivider ? "pb-4 mb-4 border-b border-border" : "mb-3"} ${className}`, children: /* @__PURE__ */ jsxs7("div", { className: "flex items-start justify-between gap-3", children: [
+    /* @__PURE__ */ jsxs7("div", { children: [
+      /* @__PURE__ */ jsx11("h3", { className: "text-base text-lg font-semibold leading-snug", children: title }),
+      subtitle && /* @__PURE__ */ jsx11("p", { className: "mt-0.5 text-sm text-text-secondary", children: subtitle })
     ] }),
-    action && /* @__PURE__ */ jsx8("div", { className: "shrink-0", children: action })
+    action && /* @__PURE__ */ jsx11("div", { className: "shrink-0", children: action })
   ] }) });
 }
 function CardBody({ className = "", children }) {
-  return /* @__PURE__ */ jsx8("div", { className: `text-sm text-text-primary ${className}`, children });
+  return /* @__PURE__ */ jsx11("div", { className: `text-sm text-text-primary ${className}`, children });
 }
 var footerAlignClasses = {
   left: "justify-start",
@@ -614,7 +708,7 @@ function CardFooter({
   className = "",
   children
 }) {
-  return /* @__PURE__ */ jsx8(
+  return /* @__PURE__ */ jsx11(
     "div",
     {
       className: `
@@ -633,12 +727,12 @@ function CardImage({
   height = "200px",
   className = ""
 }) {
-  return /* @__PURE__ */ jsx8(
+  return /* @__PURE__ */ jsx11(
     "div",
     {
       className: `w-full overflow-hidden bg-muted ${className}`,
       style: { height },
-      children: /* @__PURE__ */ jsx8(
+      children: /* @__PURE__ */ jsx11(
         "img",
         {
           src,
@@ -650,10 +744,10 @@ function CardImage({
   );
 }
 
-// components/ui/Compuesto/Modals/Dialog.tsx
-import React3, { useEffect as useEffect2, useCallback } from "react";
+// lib/components/ui/Compuesto/Modals/Dialog.tsx
+import React4, { useEffect as useEffect3, useCallback } from "react";
 import { X as X2 } from "lucide-react";
-import { jsx as jsx9, jsxs as jsxs6 } from "react/jsx-runtime";
+import { jsx as jsx12, jsxs as jsxs8 } from "react/jsx-runtime";
 var sizeClasses = {
   sm: "max-w-sm",
   md: "max-w-md",
@@ -676,7 +770,7 @@ function Dialog({
     },
     [onClose]
   );
-  useEffect2(() => {
+  useEffect3(() => {
     if (open) {
       document.addEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "hidden";
@@ -689,14 +783,14 @@ function Dialog({
   if (!open) return null;
   return (
     /* Overlay */
-    /* @__PURE__ */ jsxs6(
+    /* @__PURE__ */ jsxs8(
       "div",
       {
         role: "dialog",
         "aria-modal": "true",
         className: "fixed inset-0 z-50 flex items-center justify-center p-4",
         children: [
-          /* @__PURE__ */ jsx9(
+          /* @__PURE__ */ jsx12(
             "div",
             {
               className: "absolute inset-0 bg-black/50 animate-in fade-in duration-200",
@@ -704,7 +798,7 @@ function Dialog({
               "aria-hidden": "true"
             }
           ),
-          /* @__PURE__ */ jsxs6(
+          /* @__PURE__ */ jsxs8(
             "div",
             {
               className: `
@@ -718,7 +812,7 @@ function Dialog({
           ${className}
         `,
               children: [
-                !hideCloseButton && /* @__PURE__ */ jsx9(
+                !hideCloseButton && /* @__PURE__ */ jsx12(
                   Button,
                   {
                     variant: "ghost",
@@ -726,10 +820,10 @@ function Dialog({
                     onClick: onClose,
                     "aria-label": "Cerrar",
                     className: "absolute top-3 right-3 text-text-muted hover:text-text-primary",
-                    children: /* @__PURE__ */ jsx9(X2, {})
+                    children: /* @__PURE__ */ jsx12(X2, {})
                   }
                 ),
-                /* @__PURE__ */ jsx9(DialogContext.Provider, { value: { variant }, children })
+                /* @__PURE__ */ jsx12(DialogContext.Provider, { value: { variant }, children })
               ]
             }
           )
@@ -738,10 +832,10 @@ function Dialog({
     )
   );
 }
-var DialogContext = React3.createContext({
+var DialogContext = React4.createContext({
   variant: "default"
 });
-var useDialogContext = () => React3.useContext(DialogContext);
+var useDialogContext = () => React4.useContext(DialogContext);
 var variantIconBg = {
   default: "bg-accent-soft text-accent",
   destructive: "bg-error text-text-error",
@@ -756,7 +850,7 @@ function DialogHeader({
   className = ""
 }) {
   const { variant } = useDialogContext();
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx12(
     "div",
     {
       className: `
@@ -764,8 +858,8 @@ function DialogHeader({
         ${withDivider ? "pb-4 border-b border-border" : "pb-2"}
         ${className}
       `,
-      children: /* @__PURE__ */ jsxs6("div", { className: "flex items-start gap-3", children: [
-        icon && /* @__PURE__ */ jsx9(
+      children: /* @__PURE__ */ jsxs8("div", { className: "flex items-start gap-3", children: [
+        icon && /* @__PURE__ */ jsx12(
           "span",
           {
             className: `
@@ -776,9 +870,9 @@ function DialogHeader({
             children: icon
           }
         ),
-        /* @__PURE__ */ jsxs6("div", { className: "flex-1 min-w-0 pr-6", children: [
-          /* @__PURE__ */ jsx9("h2", { className: "font-heading text-base font-semibold leading-snug text-text-primary", children: title }),
-          description && /* @__PURE__ */ jsx9("p", { className: "mt-1 text-sm text-text-secondary leading-relaxed", children: description })
+        /* @__PURE__ */ jsxs8("div", { className: "flex-1 min-w-0 pr-6", children: [
+          /* @__PURE__ */ jsx12("h2", { className: "font-heading text-base font-semibold leading-snug text-text-primary", children: title }),
+          description && /* @__PURE__ */ jsx12("p", { className: "mt-1 text-sm text-text-secondary leading-relaxed", children: description })
         ] })
       ] })
     }
@@ -789,7 +883,7 @@ function DialogBody({
   className = "",
   children
 }) {
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx12(
     "div",
     {
       className: `
@@ -813,7 +907,7 @@ function DialogFooter({
   className = "",
   children
 }) {
-  return /* @__PURE__ */ jsx9(
+  return /* @__PURE__ */ jsx12(
     "div",
     {
       className: `
@@ -827,10 +921,10 @@ function DialogFooter({
   );
 }
 
-// components/ui/Compuesto/Modals/AlertDialog.tsx
-import React4, { useEffect as useEffect3, useCallback as useCallback2 } from "react";
+// lib/components/ui/Compuesto/Modals/AlertDialog.tsx
+import React5, { useEffect as useEffect4, useCallback as useCallback2 } from "react";
 import { X as X3, AlertTriangle, AlertCircle, CheckCircle, Info } from "lucide-react";
-import { jsx as jsx10, jsxs as jsxs7 } from "react/jsx-runtime";
+import { jsx as jsx13, jsxs as jsxs9 } from "react/jsx-runtime";
 var sizeClasses2 = {
   sm: "max-w-sm",
   md: "max-w-md",
@@ -838,22 +932,22 @@ var sizeClasses2 = {
 };
 var variantConfig = {
   destructive: {
-    icon: /* @__PURE__ */ jsx10(AlertTriangle, { className: "w-5 h-5" }),
+    icon: /* @__PURE__ */ jsx13(AlertTriangle, { className: "w-5 h-5" }),
     iconBg: "bg-error/10 text-text-error",
     confirmVariant: "destructive"
   },
   warning: {
-    icon: /* @__PURE__ */ jsx10(AlertCircle, { className: "w-5 h-5" }),
+    icon: /* @__PURE__ */ jsx13(AlertCircle, { className: "w-5 h-5" }),
     iconBg: "bg-warning/10 text-text-warning",
     confirmVariant: "primary"
   },
   success: {
-    icon: /* @__PURE__ */ jsx10(CheckCircle, { className: "w-5 h-5" }),
+    icon: /* @__PURE__ */ jsx13(CheckCircle, { className: "w-5 h-5" }),
     iconBg: "bg-success/10 text-text-success",
     confirmVariant: "primary"
   },
   info: {
-    icon: /* @__PURE__ */ jsx10(Info, { className: "w-5 h-5" }),
+    icon: /* @__PURE__ */ jsx13(Info, { className: "w-5 h-5" }),
     iconBg: "bg-info/10 text-text-info",
     confirmVariant: "primary"
   }
@@ -880,7 +974,7 @@ function AlertDialog({
     },
     [onClose]
   );
-  useEffect3(() => {
+  useEffect4(() => {
     if (open) {
       document.addEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "hidden";
@@ -892,8 +986,8 @@ function AlertDialog({
   }, [open, handleKeyDown]);
   const config = variantConfig[variant];
   if (!open) return null;
-  return /* @__PURE__ */ jsxs7("div", { role: "alertdialog", "aria-modal": "true", className: "fixed inset-0 z-50 flex items-center justify-center p-4", children: [
-    /* @__PURE__ */ jsx10(
+  return /* @__PURE__ */ jsxs9("div", { role: "alertdialog", "aria-modal": "true", className: "fixed inset-0 z-50 flex items-center justify-center p-4", children: [
+    /* @__PURE__ */ jsx13(
       "div",
       {
         className: "absolute inset-0 bg-black/50 animate-in fade-in duration-200",
@@ -901,7 +995,7 @@ function AlertDialog({
         "aria-hidden": "true"
       }
     ),
-    /* @__PURE__ */ jsxs7(
+    /* @__PURE__ */ jsxs9(
       "div",
       {
         className: `
@@ -915,7 +1009,7 @@ function AlertDialog({
           ${className}
         `,
         children: [
-          !hideCloseButton && /* @__PURE__ */ jsx10(
+          !hideCloseButton && /* @__PURE__ */ jsx13(
             Button,
             {
               variant: "ghost",
@@ -923,20 +1017,20 @@ function AlertDialog({
               onClick: onClose,
               "aria-label": "Cerrar",
               className: "absolute top-3 right-3 text-text-muted hover:text-text-primary z-10",
-              children: /* @__PURE__ */ jsx10(X3, {})
+              children: /* @__PURE__ */ jsx13(X3, {})
             }
           ),
-          /* @__PURE__ */ jsxs7(AlertDialogContext.Provider, { value: { variant, config }, children: [
-            /* @__PURE__ */ jsx10("div", { className: "px-6 pt-6 pb-4", children: /* @__PURE__ */ jsxs7("div", { className: "flex items-start gap-3", children: [
-              /* @__PURE__ */ jsx10("span", { className: `flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${config.iconBg}`, children: config.icon }),
-              /* @__PURE__ */ jsxs7("div", { className: "flex-1 min-w-0 pr-6", children: [
-                /* @__PURE__ */ jsx10("h2", { className: "font-heading text-lg font-semibold leading-snug text-text-primary", children: title }),
-                description && /* @__PURE__ */ jsx10("p", { className: "mt-2 text-sm text-text-secondary leading-relaxed", children: description })
+          /* @__PURE__ */ jsxs9(AlertDialogContext.Provider, { value: { variant, config }, children: [
+            /* @__PURE__ */ jsx13("div", { className: "px-6 pt-6 pb-4", children: /* @__PURE__ */ jsxs9("div", { className: "flex items-start gap-3", children: [
+              /* @__PURE__ */ jsx13("span", { className: `flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${config.iconBg}`, children: config.icon }),
+              /* @__PURE__ */ jsxs9("div", { className: "flex-1 min-w-0 pr-6", children: [
+                /* @__PURE__ */ jsx13("h2", { className: "font-heading text-lg font-semibold leading-snug text-text-primary", children: title }),
+                description && /* @__PURE__ */ jsx13("p", { className: "mt-2 text-sm text-text-secondary leading-relaxed", children: description })
               ] })
             ] }) }),
-            (children || onConfirm || onCancel) && /* @__PURE__ */ jsx10("div", { className: "border-t border-border px-6 py-4", children: children || /* @__PURE__ */ jsxs7("div", { className: "flex items-center justify-end gap-2", children: [
-              onCancel && /* @__PURE__ */ jsx10(Button, { variant: "secondary", onClick: onCancel, children: cancelLabel }),
-              onConfirm && /* @__PURE__ */ jsx10(Button, { variant: "default", onClick: onConfirm, children: confirmLabel })
+            (children || onConfirm || onCancel) && /* @__PURE__ */ jsx13("div", { className: "border-t border-border px-6 py-4", children: children || /* @__PURE__ */ jsxs9("div", { className: "flex items-center justify-end gap-2", children: [
+              onCancel && /* @__PURE__ */ jsx13(Button, { variant: "secondary", onClick: onCancel, children: cancelLabel }),
+              onConfirm && /* @__PURE__ */ jsx13(Button, { variant: "default", onClick: onConfirm, children: confirmLabel })
             ] }) })
           ] })
         ]
@@ -944,14 +1038,14 @@ function AlertDialog({
     )
   ] });
 }
-var AlertDialogContext = React4.createContext({
+var AlertDialogContext = React5.createContext({
   variant: "info",
   config: variantConfig["info"]
 });
-var useAlertDialogContext = () => React4.useContext(AlertDialogContext);
+var useAlertDialogContext = () => React5.useContext(AlertDialogContext);
 
-// components/ui/Compuesto/Toaster.tsx
-import { useTheme } from "next-themes";
+// lib/components/ui/Compuesto/Toaster.tsx
+import { useTheme as useTheme2 } from "next-themes";
 import { Toaster as Sonner } from "sonner";
 import {
   CircleCheckIcon,
@@ -960,10 +1054,10 @@ import {
   OctagonXIcon,
   Loader2Icon
 } from "lucide-react";
-import { jsx as jsx11 } from "react/jsx-runtime";
+import { jsx as jsx14 } from "react/jsx-runtime";
 var Toaster = (props) => {
-  const { theme = "system" } = useTheme();
-  return /* @__PURE__ */ jsx11(
+  const { theme = "system" } = useTheme2();
+  return /* @__PURE__ */ jsx14(
     Sonner,
     __spreadValues({
       theme,
@@ -971,11 +1065,11 @@ var Toaster = (props) => {
       closeButton: true,
       className: "toaster !z-[999]",
       icons: {
-        success: /* @__PURE__ */ jsx11(CircleCheckIcon, { className: "size-5 !text-text-success" }),
-        error: /* @__PURE__ */ jsx11(OctagonXIcon, { className: "size-5 !text-text-error" }),
-        warning: /* @__PURE__ */ jsx11(TriangleAlertIcon, { className: "size-5 !text-text-warning" }),
-        info: /* @__PURE__ */ jsx11(InfoIcon, { className: "size-5 !text-text-info" }),
-        loading: /* @__PURE__ */ jsx11(Loader2Icon, { className: "size-5 animate-spin" })
+        success: /* @__PURE__ */ jsx14(CircleCheckIcon, { className: "size-5 !text-text-success" }),
+        error: /* @__PURE__ */ jsx14(OctagonXIcon, { className: "size-5 !text-text-error" }),
+        warning: /* @__PURE__ */ jsx14(TriangleAlertIcon, { className: "size-5 !text-text-warning" }),
+        info: /* @__PURE__ */ jsx14(InfoIcon, { className: "size-5 !text-text-info" }),
+        loading: /* @__PURE__ */ jsx14(Loader2Icon, { className: "size-5 animate-spin" })
       },
       style: {
         "--normal-bg": "var(--popover)",
@@ -1000,9 +1094,9 @@ var Toaster = (props) => {
   );
 };
 
-// components/ui/Compuesto/Tooltip.tsx
-import { useState as useState2, useEffect as useEffect4, useRef as useRef2 } from "react";
-import { jsx as jsx12, jsxs as jsxs8 } from "react/jsx-runtime";
+// lib/components/ui/Compuesto/Tooltip.tsx
+import { useState as useState3, useEffect as useEffect5, useRef as useRef4 } from "react";
+import { jsx as jsx15, jsxs as jsxs10 } from "react/jsx-runtime";
 var sideClasses = {
   top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
   bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
@@ -1046,8 +1140,8 @@ var Tooltip = ({
   size,
   disabled = false
 }) => {
-  const [visible, setVisible] = useState2(false);
-  const timerRef = useRef2(null);
+  const [visible, setVisible] = useState3(false);
+  const timerRef = useRef4(null);
   const show = () => {
     if (disabled) return;
     timerRef.current = setTimeout(() => setVisible(true), 300);
@@ -1056,7 +1150,7 @@ var Tooltip = ({
     if (timerRef.current) clearTimeout(timerRef.current);
     setVisible(false);
   };
-  useEffect4(() => {
+  useEffect5(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") hide();
     };
@@ -1065,7 +1159,7 @@ var Tooltip = ({
   }, []);
   const resolvedSizeClass = size ? sizeClasses3[size] : "";
   const accessibleLabel = ariaLabel != null ? ariaLabel : typeof content === "string" ? content : void 0;
-  return /* @__PURE__ */ jsxs8(
+  return /* @__PURE__ */ jsxs10(
     "div",
     {
       className: "relative inline-flex items-center",
@@ -1076,7 +1170,7 @@ var Tooltip = ({
       "aria-label": accessibleLabel,
       children: [
         children,
-        visible && !disabled && /* @__PURE__ */ jsx12(
+        visible && !disabled && /* @__PURE__ */ jsx15(
           "div",
           {
             role: "tooltip",
@@ -1100,9 +1194,9 @@ var Tooltip = ({
   );
 };
 
-// components/ui/Compuesto/dropdown-menu.tsx
-import { useEffect as useEffect5, useRef as useRef3, useState as useState3 } from "react";
-import { jsx as jsx13, jsxs as jsxs9 } from "react/jsx-runtime";
+// lib/components/ui/Compuesto/dropdown-menu.tsx
+import { useEffect as useEffect6, useRef as useRef5, useState as useState4 } from "react";
+import { jsx as jsx16, jsxs as jsxs11 } from "react/jsx-runtime";
 var alignMap = {
   left: "left-0",
   right: "right-0",
@@ -1116,9 +1210,9 @@ function DropdownMenu({
   disabled = false,
   className = ""
 }) {
-  const [open, setOpen] = useState3(false);
-  const containerRef = useRef3(null);
-  useEffect5(() => {
+  const [open, setOpen] = useState4(false);
+  const containerRef = useRef5(null);
+  useEffect6(() => {
     const handleOutsideClick = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
         setOpen(false);
@@ -1127,7 +1221,7 @@ function DropdownMenu({
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
-  useEffect5(() => {
+  useEffect6(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") setOpen(false);
     };
@@ -1140,8 +1234,8 @@ function DropdownMenu({
     (_a = item.onClick) == null ? void 0 : _a.call(item);
     setOpen(false);
   };
-  return /* @__PURE__ */ jsxs9("div", { ref: containerRef, className: `relative  inline-block ${className}`, children: [
-    /* @__PURE__ */ jsxs9(
+  return /* @__PURE__ */ jsxs11("div", { ref: containerRef, className: `relative  inline-block ${className}`, children: [
+    /* @__PURE__ */ jsxs11(
       "button",
       {
         type: "button",
@@ -1159,7 +1253,7 @@ function DropdownMenu({
         ].filter(Boolean).join(" "),
         children: [
           trigger,
-          /* @__PURE__ */ jsx13(
+          /* @__PURE__ */ jsx16(
             "svg",
             {
               xmlns: "http://www.w3.org/2000/svg",
@@ -1173,13 +1267,13 @@ function DropdownMenu({
               strokeLinejoin: "round",
               className: `text-text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`,
               "aria-hidden": "true",
-              children: /* @__PURE__ */ jsx13("polyline", { points: "6 9 12 15 18 9" })
+              children: /* @__PURE__ */ jsx16("polyline", { points: "6 9 12 15 18 9" })
             }
           )
         ]
       }
     ),
-    open && /* @__PURE__ */ jsx13(
+    open && /* @__PURE__ */ jsx16(
       "div",
       {
         role: "menu",
@@ -1192,10 +1286,10 @@ function DropdownMenu({
           "shadow-[var(--shadow-card)]",
           "animate-in fade-in-0 zoom-in-95 duration-150"
         ].join(" "),
-        children: groups.map((group, gIdx) => /* @__PURE__ */ jsxs9("div", { children: [
-          group.groupLabel && /* @__PURE__ */ jsx13("p", { className: "px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted select-none", children: group.groupLabel }),
-          group.items.map((item, iIdx) => /* @__PURE__ */ jsxs9("div", { children: [
-            /* @__PURE__ */ jsxs9(
+        children: groups.map((group, gIdx) => /* @__PURE__ */ jsxs11("div", { children: [
+          group.groupLabel && /* @__PURE__ */ jsx16("p", { className: "px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted select-none", children: group.groupLabel }),
+          group.items.map((item, iIdx) => /* @__PURE__ */ jsxs11("div", { children: [
+            /* @__PURE__ */ jsxs11(
               "button",
               {
                 role: "menuitem",
@@ -1208,33 +1302,33 @@ function DropdownMenu({
                   item.disabled ? "cursor-not-allowed text-text-disabled" : item.variant === "danger" ? "cursor-pointer text-text-error hover:bg-error" : "cursor-pointer text-text-primary hover:bg-accent-soft hover:text-accent"
                 ].filter(Boolean).join(" "),
                 children: [
-                  item.icon && /* @__PURE__ */ jsx13("span", { className: "shrink-0 text-current", "aria-hidden": "true", children: item.icon }),
-                  /* @__PURE__ */ jsx13("span", { className: "flex-1", children: item.label }),
-                  item.trailingIcon && /* @__PURE__ */ jsx13("span", { className: "shrink-0 text-text-muted", "aria-hidden": "true", children: item.trailingIcon })
+                  item.icon && /* @__PURE__ */ jsx16("span", { className: "shrink-0 text-current", "aria-hidden": "true", children: item.icon }),
+                  /* @__PURE__ */ jsx16("span", { className: "flex-1", children: item.label }),
+                  item.trailingIcon && /* @__PURE__ */ jsx16("span", { className: "shrink-0 text-text-muted", "aria-hidden": "true", children: item.trailingIcon })
                 ]
               }
             ),
-            item.separator && /* @__PURE__ */ jsx13("hr", { className: "my-1 border-border" })
+            item.separator && /* @__PURE__ */ jsx16("hr", { className: "my-1 border-border" })
           ] }, iIdx)),
-          gIdx < groups.length - 1 && /* @__PURE__ */ jsx13("hr", { className: "my-1 border-border" })
+          gIdx < groups.length - 1 && /* @__PURE__ */ jsx16("hr", { className: "my-1 border-border" })
         ] }, gIdx))
       }
     )
   ] });
 }
 
-// components/ui/Compuesto/Calendario.tsx
+// lib/components/ui/Compuesto/Calendario.tsx
 import {
-  useState as useState4,
-  useRef as useRef4,
-  useEffect as useEffect6,
+  useState as useState5,
+  useRef as useRef6,
+  useEffect as useEffect7,
   useCallback as useCallback3,
   useMemo
 } from "react";
 import { ChevronLeft, ChevronRight, CalendarDays, X as X4 } from "lucide-react";
 import Holidays from "date-holidays";
 import { createPortal } from "react-dom";
-import { Fragment, jsx as jsx14, jsxs as jsxs10 } from "react/jsx-runtime";
+import { Fragment, jsx as jsx17, jsxs as jsxs12 } from "react/jsx-runtime";
 var DIAS_SEMANA = ["Lun", "Mar", "Mi\xE9", "Jue", "Vie", "S\xE1b", "Dom"];
 var MESES_LARGO = {
   0: "ENERO",
@@ -1318,11 +1412,11 @@ var YearGrid = ({
 }) => {
   const years = Array.from({ length: 12 }, (_, i) => yearBase + i);
   const today = /* @__PURE__ */ new Date();
-  return /* @__PURE__ */ jsx14("div", { className: "grid grid-cols-4 gap-1", children: years.map((year) => {
+  return /* @__PURE__ */ jsx17("div", { className: "grid grid-cols-4 gap-1", children: years.map((year) => {
     const isSelected = selected ? selected.getFullYear() === year : false;
     const isCurrentYear = today.getFullYear() === year;
     const disabled = isDisabledYear(year, minDate, maxDate);
-    return /* @__PURE__ */ jsx14(
+    return /* @__PURE__ */ jsx17(
       "button",
       {
         type: "button",
@@ -1348,12 +1442,12 @@ var MonthGrid = ({
   size = "lg"
 }) => {
   const today = /* @__PURE__ */ new Date();
-  return /* @__PURE__ */ jsx14("div", { className: "grid grid-cols-3 gap-1", children: Object.entries(MESES_CORTO).map(([key, label]) => {
+  return /* @__PURE__ */ jsx17("div", { className: "grid grid-cols-3 gap-1", children: Object.entries(MESES_CORTO).map(([key, label]) => {
     const month = Number(key);
     const isSelected = selected ? selected.getFullYear() === year && selected.getMonth() === month : false;
     const isCurrentMonth = today.getMonth() === month && today.getFullYear() === year;
     const disabled = isDisabledMonth(year, month, minDate, maxDate);
-    return /* @__PURE__ */ jsx14(
+    return /* @__PURE__ */ jsx17(
       "button",
       {
         type: "button",
@@ -1387,8 +1481,8 @@ var CalendarGrid = ({
   }, [year]);
   const cellBase = "flex items-center justify-center font-body border border-border cursor-pointer select-none transition-all duration-150";
   const cellSize = size === "lg" ? "h-16 w-full" : "h-9 w-9 mx-auto";
-  return /* @__PURE__ */ jsxs10(Fragment, { children: [
-    /* @__PURE__ */ jsx14("div", { className: `grid grid-cols-7 ${size === "lg" ? "mb-2" : "mb-1"}`, children: DIAS_SEMANA.map((d, i) => /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsxs12(Fragment, { children: [
+    /* @__PURE__ */ jsx17("div", { className: `grid grid-cols-7 ${size === "lg" ? "mb-2" : "mb-1"}`, children: DIAS_SEMANA.map((d, i) => /* @__PURE__ */ jsx17(
       "div",
       {
         className: `text-center font-body font-medium border-b border-border text-text-muted ${size === "lg" ? "text-sm py-2" : "text-[12px] py-1"}`,
@@ -1396,8 +1490,8 @@ var CalendarGrid = ({
       },
       i
     )) }),
-    /* @__PURE__ */ jsx14("div", { className: "grid grid-cols-7", children: dias.map((day, i) => {
-      if (!day) return /* @__PURE__ */ jsx14("div", { className: cellSize }, `empty-${i}`);
+    /* @__PURE__ */ jsx17("div", { className: "grid grid-cols-7", children: dias.map((day, i) => {
+      if (!day) return /* @__PURE__ */ jsx17("div", { className: cellSize }, `empty-${i}`);
       const date = new Date(year, month, day);
       const isSelected = selected ? isSameDay(date, selected) : false;
       const isToday = isSameDay(date, today);
@@ -1405,18 +1499,18 @@ var CalendarGrid = ({
       const isHolidayDay = holidays.some((h) => isSameDay(date, h));
       const isWeekendDayValue = !isHolidayDay && isWeekendDate(date);
       const dayClasses = isSelected ? "bg-accent text-white shadow-lg shadow-accent/30 scale-105" : isToday ? "border border-border-strong bg-accent-soft text-accent font-medium" : disabled ? "text-text-muted bg-muted/50 cursor-not-allowed" : isHolidayDay ? "border border-text-error/50 bg-error/50 text-text-error/70" : isWeekendDayValue ? "bg-muted/40 text-text-muted hover:bg-muted/50" : "text-text-primary hover:bg-accent-soft hover:text-accent";
-      return /* @__PURE__ */ jsx14(
+      return /* @__PURE__ */ jsx17(
         "div",
         {
           className: `${cellBase} ${size === "lg" ? "h-16" : "h-9 w-9 mx-auto"}`,
           onClick: () => !disabled && onSelectDay(day),
-          children: /* @__PURE__ */ jsxs10(
+          children: /* @__PURE__ */ jsxs12(
             "span",
             {
               className: `flex flex-col h-full w-full justify-center rounded-sm font-body transition-all duration-150 ${dayClasses}`,
               children: [
-                /* @__PURE__ */ jsx14("p", { className: `text-center ${size === "lg" ? "text-base" : "text-xs"}`, children: day }),
-                size === "lg" && /* @__PURE__ */ jsx14("p", { className: "text-[12px] pl-1", children: isHolidayDay ? "Festivo" : isToday ? "Hoy" : void 0 })
+                /* @__PURE__ */ jsx17("p", { className: `text-center ${size === "lg" ? "text-base" : "text-xs"}`, children: day }),
+                size === "lg" && /* @__PURE__ */ jsx17("p", { className: "text-[12px] pl-1", children: isHolidayDay ? "Festivo" : isToday ? "Hoy" : void 0 })
               ]
             }
           )
@@ -1440,9 +1534,9 @@ var CalendarHeader = ({
   const btnClass = size === "lg" ? "flex items-center justify-center w-9 h-9 rounded-lg border border-border text-text-secondary hover:border-border-strong hover:text-accent hover:bg-accent-soft transition-all duration-150 cursor-pointer" : "flex items-center justify-center w-7 h-7 rounded-md border border-border text-text-secondary hover:border-border-strong hover:text-accent hover:bg-accent-soft transition-all duration-150 cursor-pointer";
   const canDrillUp = mode === "days" && selectionMode === "date" || mode === "months" && (selectionMode === "date" || selectionMode === "month") || mode === "days" && selectionMode === "month";
   const titleLabel = mode === "years" ? `${yearBase} \u2013 ${yearBase + 11}` : mode === "months" ? String(year) : `${MESES_LARGO[month]} ${year}`;
-  return /* @__PURE__ */ jsxs10("div", { className: `flex items-center justify-between ${size === "lg" ? "mb-6 px-1" : "mb-3 px-0"}`, children: [
-    /* @__PURE__ */ jsx14("button", { className: btnClass, onClick: onPrev, "aria-label": "Anterior", children: /* @__PURE__ */ jsx14(ChevronLeft, { size: size === "lg" ? 16 : 10 }) }),
-    /* @__PURE__ */ jsxs10(
+  return /* @__PURE__ */ jsxs12("div", { className: `flex items-center justify-between ${size === "lg" ? "mb-6 px-1" : "mb-3 px-0"}`, children: [
+    /* @__PURE__ */ jsx17("button", { className: btnClass, onClick: onPrev, "aria-label": "Anterior", children: /* @__PURE__ */ jsx17(ChevronLeft, { size: size === "lg" ? 16 : 10 }) }),
+    /* @__PURE__ */ jsxs12(
       "button",
       {
         type: "button",
@@ -1453,18 +1547,18 @@ var CalendarHeader = ({
         `,
         "aria-label": canDrillUp ? "Cambiar vista" : void 0,
         children: [
-          /* @__PURE__ */ jsx14(
+          /* @__PURE__ */ jsx17(
             "span",
             {
               className: `font-heading font-semibold tracking-widest text-text-primary ${size === "lg" ? "text-sm" : "text-xs"}`,
               children: titleLabel
             }
           ),
-          canDrillUp && /* @__PURE__ */ jsx14("span", { className: `text-accent font-body ${size === "lg" ? "text-[10px]" : "text-[9px]"}`, children: "\u25B2 cambiar" })
+          canDrillUp && /* @__PURE__ */ jsx17("span", { className: `text-accent font-body ${size === "lg" ? "text-[10px]" : "text-[9px]"}`, children: "\u25B2 cambiar" })
         ]
       }
     ),
-    /* @__PURE__ */ jsx14("button", { className: btnClass, onClick: onNext, "aria-label": "Siguiente", children: /* @__PURE__ */ jsx14(ChevronRight, { size: size === "lg" ? 16 : 14 }) })
+    /* @__PURE__ */ jsx17("button", { className: btnClass, onClick: onNext, "aria-label": "Siguiente", children: /* @__PURE__ */ jsx17(ChevronRight, { size: size === "lg" ? 16 : 14 }) })
   ] });
 };
 var Calendar = ({
@@ -1480,23 +1574,23 @@ var Calendar = ({
   className = ""
 }) => {
   const today = /* @__PURE__ */ new Date();
-  const [viewDate, setViewDate] = useState4(() => {
+  const [viewDate, setViewDate] = useState5(() => {
     const base = value != null ? value : /* @__PURE__ */ new Date();
     return new Date(base.getFullYear(), base.getMonth(), 1);
   });
   const viewYear = viewDate.getFullYear();
   const viewMonth = viewDate.getMonth();
   const initialMode = selectionMode === "year" ? "years" : selectionMode === "month" ? "months" : "days";
-  const [mode, setMode] = useState4(initialMode);
-  const [yearBase, setYearBase] = useState4(() => {
+  const [mode, setMode] = useState5(initialMode);
+  const [yearBase, setYearBase] = useState5(() => {
     const y = (value != null ? value : /* @__PURE__ */ new Date()).getFullYear();
     return Math.floor(y / 12) * 12;
   });
-  const [open, setOpen] = useState4(false);
-  const popoverRef = useRef4(null);
-  const triggerRef = useRef4(null);
-  const [coords, setCoords] = useState4({ top: 0, left: 0, placement: "bottom" });
-  useEffect6(() => {
+  const [open, setOpen] = useState5(false);
+  const popoverRef = useRef6(null);
+  const triggerRef = useRef6(null);
+  const [coords, setCoords] = useState5({ top: 0, left: 0, placement: "bottom" });
+  useEffect7(() => {
     if (!open) return;
     const handleClick = (e) => {
       if (popoverRef.current && !popoverRef.current.contains(e.target) && triggerRef.current && !triggerRef.current.contains(e.target)) {
@@ -1506,7 +1600,7 @@ var Calendar = ({
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, [open]);
-  useEffect6(() => {
+  useEffect7(() => {
     if (open && triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
       const calendarHeight = 300;
@@ -1583,8 +1677,8 @@ var Calendar = ({
     e.stopPropagation();
     onChange == null ? void 0 : onChange(null);
   };
-  const renderBody = (size) => /* @__PURE__ */ jsxs10(Fragment, { children: [
-    /* @__PURE__ */ jsx14(
+  const renderBody = (size) => /* @__PURE__ */ jsxs12(Fragment, { children: [
+    /* @__PURE__ */ jsx17(
       CalendarHeader,
       {
         year: viewYear,
@@ -1598,7 +1692,7 @@ var Calendar = ({
         size
       }
     ),
-    mode === "years" && /* @__PURE__ */ jsx14(
+    mode === "years" && /* @__PURE__ */ jsx17(
       YearGrid,
       {
         yearBase,
@@ -1609,7 +1703,7 @@ var Calendar = ({
         size
       }
     ),
-    mode === "months" && /* @__PURE__ */ jsx14(
+    mode === "months" && /* @__PURE__ */ jsx17(
       MonthGrid,
       {
         year: viewYear,
@@ -1620,7 +1714,7 @@ var Calendar = ({
         size
       }
     ),
-    mode === "days" && /* @__PURE__ */ jsx14(
+    mode === "days" && /* @__PURE__ */ jsx17(
       CalendarGrid,
       {
         year: viewYear,
@@ -1635,7 +1729,7 @@ var Calendar = ({
     )
   ] });
   if (variant === "full") {
-    return /* @__PURE__ */ jsx14(
+    return /* @__PURE__ */ jsx17(
       "div",
       {
         className: `bg-background rounded-md border border-border p-6 w-full max-w-2xl ${className}`,
@@ -1643,9 +1737,9 @@ var Calendar = ({
       }
     );
   }
-  return /* @__PURE__ */ jsxs10("div", { className: `relative inline-flex flex-col gap-1 ${className}`, children: [
-    label && /* @__PURE__ */ jsx14("label", { className: "text-sm font-body text-text-secondary font-medium", children: label }),
-    /* @__PURE__ */ jsxs10(
+  return /* @__PURE__ */ jsxs12("div", { className: `relative inline-flex flex-col gap-1 ${className}`, children: [
+    label && /* @__PURE__ */ jsx17("label", { className: "text-sm font-body text-text-secondary font-medium", children: label }),
+    /* @__PURE__ */ jsxs12(
       "button",
       {
         ref: triggerRef,
@@ -1662,23 +1756,23 @@ var Calendar = ({
           ${value ? "text-text-primary" : "text-text-muted"}
         `,
         children: [
-          /* @__PURE__ */ jsx14(CalendarDays, { size: 16, className: open ? "text-accent" : "text-text-muted" }),
-          /* @__PURE__ */ jsx14("span", { className: "flex-1", children: value ? formatDate(value, selectionMode) : placeholder }),
-          value && !disabled && /* @__PURE__ */ jsx14(
+          /* @__PURE__ */ jsx17(CalendarDays, { size: 16, className: open ? "text-accent" : "text-text-muted" }),
+          /* @__PURE__ */ jsx17("span", { className: "flex-1", children: value ? formatDate(value, selectionMode) : placeholder }),
+          value && !disabled && /* @__PURE__ */ jsx17(
             "span",
             {
               role: "button",
               onClick: handleClear,
               className: "text-text-muted hover:text-text-primary transition-colors",
               "aria-label": "Limpiar fecha",
-              children: /* @__PURE__ */ jsx14(X4, { size: 14 })
+              children: /* @__PURE__ */ jsx17(X4, { size: 14 })
             }
           )
         ]
       }
     ),
     open && typeof document !== "undefined" && createPortal(
-      /* @__PURE__ */ jsx14(
+      /* @__PURE__ */ jsx17(
         "div",
         {
           ref: popoverRef,
@@ -1698,9 +1792,9 @@ var Calendar = ({
   ] });
 };
 
-// components/ui/DataDisplay/Graficas/GraficaBar.tsx
-import { useState as useState5, useRef as useRef5 } from "react";
-import { jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
+// lib/components/ui/DataDisplay/Graficas/GraficaBar.tsx
+import { useState as useState6, useRef as useRef7 } from "react";
+import { jsx as jsx18, jsxs as jsxs13 } from "react/jsx-runtime";
 var chartColors = [
   "var(--chart-1)",
   "var(--chart-2)",
@@ -1719,8 +1813,8 @@ var GraficaBar = ({
   legendLabel,
   yLabel
 }) => {
-  const [hoveredIndex, setHoveredIndex] = useState5(null);
-  const containerRef = useRef5(null);
+  const [hoveredIndex, setHoveredIndex] = useState6(null);
+  const containerRef = useRef7(null);
   const maxValue = Math.max(...data.map((d) => d.value), 1);
   const ceilMax = Math.ceil(maxValue * 1.15);
   const padding = { top: 16, bottom: 36, left: 52, right: 16 };
@@ -1732,8 +1826,8 @@ var GraficaBar = ({
     if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
     return n.toString();
   };
-  const [tooltip, setTooltip] = useState5(null);
-  return /* @__PURE__ */ jsxs11(
+  const [tooltip, setTooltip] = useState6(null);
+  return /* @__PURE__ */ jsxs13(
     "div",
     {
       ref: containerRef,
@@ -1743,11 +1837,11 @@ var GraficaBar = ({
         setTooltip(null);
       },
       children: [
-        title && /* @__PURE__ */ jsx15("p", { className: "text-sm font-semibold text-text-primary", children: title }),
-        description && /* @__PURE__ */ jsx15("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
-        /* @__PURE__ */ jsxs11("div", { className: "w-full relative overflow-hidden", children: [
-          /* @__PURE__ */ jsxs11("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "select-none relative z-0", children: [
-            yLabel && /* @__PURE__ */ jsx15(
+        title && /* @__PURE__ */ jsx18("p", { className: "text-sm font-semibold text-text-primary", children: title }),
+        description && /* @__PURE__ */ jsx18("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
+        /* @__PURE__ */ jsxs13("div", { className: "w-full relative overflow-hidden", children: [
+          /* @__PURE__ */ jsxs13("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "select-none relative z-0", children: [
+            yLabel && /* @__PURE__ */ jsx18(
               "text",
               {
                 x: 10,
@@ -1758,11 +1852,11 @@ var GraficaBar = ({
                 children: yLabel
               }
             ),
-            /* @__PURE__ */ jsxs11("g", { transform: `translate(${padding.left}, ${padding.top + 10})`, children: [
+            /* @__PURE__ */ jsxs13("g", { transform: `translate(${padding.left}, ${padding.top + 10})`, children: [
               yTicks.map((tick) => {
                 const y = chartH - tick / ceilMax * chartH;
-                return /* @__PURE__ */ jsxs11("g", { children: [
-                  /* @__PURE__ */ jsx15(
+                return /* @__PURE__ */ jsxs13("g", { children: [
+                  /* @__PURE__ */ jsx18(
                     "line",
                     {
                       x1: 0,
@@ -1773,15 +1867,15 @@ var GraficaBar = ({
                       strokeDasharray: "4 3"
                     }
                   ),
-                  /* @__PURE__ */ jsx15("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(tick) })
+                  /* @__PURE__ */ jsx18("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(tick) })
                 ] }, tick);
               }),
               data.map((item, i) => {
                 const barH = item.value / ceilMax * chartH;
                 const x = i * 72 + 16;
                 const isHov = hoveredIndex === i;
-                return /* @__PURE__ */ jsxs11("g", { children: [
-                  /* @__PURE__ */ jsx15(
+                return /* @__PURE__ */ jsxs13("g", { children: [
+                  /* @__PURE__ */ jsx18(
                     "rect",
                     {
                       x: x - 4,
@@ -1805,7 +1899,7 @@ var GraficaBar = ({
                       }
                     }
                   ),
-                  isHov && /* @__PURE__ */ jsx15(
+                  isHov && /* @__PURE__ */ jsx18(
                     "rect",
                     {
                       x: x - 6,
@@ -1818,7 +1912,7 @@ var GraficaBar = ({
                       className: "transition-all duration-300"
                     }
                   ),
-                  /* @__PURE__ */ jsx15(
+                  /* @__PURE__ */ jsx18(
                     "rect",
                     {
                       x,
@@ -1834,7 +1928,7 @@ var GraficaBar = ({
                       }
                     }
                   ),
-                  /* @__PURE__ */ jsx15(
+                  /* @__PURE__ */ jsx18(
                     "text",
                     {
                       x: x + 14,
@@ -1849,16 +1943,16 @@ var GraficaBar = ({
                   )
                 ] }, i);
               }),
-              /* @__PURE__ */ jsx15("line", { x1: 0, y1: chartH, x2: svgW - padding.left - padding.right, y2: chartH, stroke: "var(--border-strong)" })
+              /* @__PURE__ */ jsx18("line", { x1: 0, y1: chartH, x2: svgW - padding.left - padding.right, y2: chartH, stroke: "var(--border-strong)" })
             ] }),
-            /* @__PURE__ */ jsx15("style", { children: `
+            /* @__PURE__ */ jsx18("style", { children: `
                         @keyframes barGrow {
                             from { transform: scaleY(0); opacity: 0; }
                             to   { transform: scaleY(1); opacity: 1; }
                         }
                     ` })
           ] }),
-          tooltip && /* @__PURE__ */ jsx15(
+          tooltip && /* @__PURE__ */ jsx18(
             "div",
             {
               className: "absolute z-50 pointer-events-none transition-all duration-150",
@@ -1867,22 +1961,22 @@ var GraficaBar = ({
                 top: tooltip.y,
                 transform: "translate(calc(-50% - 10px), calc(-50% - 10px))"
               },
-              children: /* @__PURE__ */ jsxs11("div", { className: "relative bg-[#0A0A0B] text-white text-xs rounded-lg px-3 py-2 shadow-2xl border border-white/10 backdrop-blur-sm whitespace-nowrap", children: [
-                /* @__PURE__ */ jsx15("p", { className: "text-[11px] text-center", children: tooltip.label }),
-                /* @__PURE__ */ jsx15("p", { className: "text-sm font-semibold", children: formatVal(tooltip.value) })
+              children: /* @__PURE__ */ jsxs13("div", { className: "relative bg-[#0A0A0B] text-white text-xs rounded-lg px-3 py-2 shadow-2xl border border-white/10 backdrop-blur-sm whitespace-nowrap", children: [
+                /* @__PURE__ */ jsx18("p", { className: "text-[11px] text-center", children: tooltip.label }),
+                /* @__PURE__ */ jsx18("p", { className: "text-sm font-semibold", children: formatVal(tooltip.value) })
               ] })
             }
           )
         ] }),
-        legendLabel && /* @__PURE__ */ jsx15("div", { className: "flex justify-center items-center gap-2 mt-4 px-2", children: /* @__PURE__ */ jsxs11("div", { className: "flex items-center gap-1.5", children: [
-          /* @__PURE__ */ jsx15(
+        legendLabel && /* @__PURE__ */ jsx18("div", { className: "flex justify-center items-center gap-2 mt-4 px-2", children: /* @__PURE__ */ jsxs13("div", { className: "flex items-center gap-1.5", children: [
+          /* @__PURE__ */ jsx18(
             "div",
             {
               className: "w-3 h-3 rounded-sm",
               style: { backgroundColor: chartColors[0] }
             }
           ),
-          /* @__PURE__ */ jsx15("span", { className: "text-sm font-medium", children: legendLabel })
+          /* @__PURE__ */ jsx18("span", { className: "text-sm font-medium", children: legendLabel })
         ] }) })
       ]
     }
@@ -1890,9 +1984,9 @@ var GraficaBar = ({
 };
 var GraficaBar_default = GraficaBar;
 
-// components/ui/DataDisplay/Graficas/GraficaDonut.tsx
-import { useState as useState6 } from "react";
-import { Fragment as Fragment2, jsx as jsx16, jsxs as jsxs12 } from "react/jsx-runtime";
+// lib/components/ui/DataDisplay/Graficas/GraficaDonut.tsx
+import { useState as useState7 } from "react";
+import { Fragment as Fragment2, jsx as jsx19, jsxs as jsxs14 } from "react/jsx-runtime";
 var chartColors2 = [
   "var(--chart-1)",
   "var(--chart-2)",
@@ -1911,7 +2005,7 @@ var GraficaDonut = ({
   totalValue,
   formatValue = (v) => `${v}%`
 }) => {
-  const [hoveredIndex, setHoveredIndex] = useState6(null);
+  const [hoveredIndex, setHoveredIndex] = useState7(null);
   const total = data.reduce((acc, item) => acc + item.value, 0);
   const center = size / 2;
   const radius = center - strokeWidth;
@@ -1930,23 +2024,23 @@ var GraficaDonut = ({
     });
   });
   if (loading) {
-    return /* @__PURE__ */ jsxs12("div", { className: "p-6 rounded-2xl bg-background border border-border animate-pulse", children: [
-      /* @__PURE__ */ jsx16("div", { className: "h-4 w-32 bg-muted rounded mb-4" }),
-      /* @__PURE__ */ jsx16("div", { className: "h-[180px] w-[180px] bg-muted rounded-full mx-auto" })
+    return /* @__PURE__ */ jsxs14("div", { className: "p-6 rounded-2xl bg-background border border-border animate-pulse", children: [
+      /* @__PURE__ */ jsx19("div", { className: "h-4 w-32 bg-muted rounded mb-4" }),
+      /* @__PURE__ */ jsx19("div", { className: "h-[180px] w-[180px] bg-muted rounded-full mx-auto" })
     ] });
   }
   if (!data.length) {
-    return /* @__PURE__ */ jsx16("div", { className: "p-6 rounded-2xl bg-surface border border-border text-center", children: /* @__PURE__ */ jsx16("p", { className: "text-sm text-text-muted", children: "No hay datos disponibles" }) });
+    return /* @__PURE__ */ jsx19("div", { className: "p-6 rounded-2xl bg-surface border border-border text-center", children: /* @__PURE__ */ jsx19("p", { className: "text-sm text-text-muted", children: "No hay datos disponibles" }) });
   }
-  return /* @__PURE__ */ jsxs12("div", { className: "rounded-2xl bg-background border border-border shadow-md p-6", children: [
-    (title || description) && /* @__PURE__ */ jsxs12("div", { className: "mb-4", children: [
-      title && /* @__PURE__ */ jsx16("p", { className: "text-sm font-semibold text-text-primary", children: title }),
-      description && /* @__PURE__ */ jsx16("p", { className: "text-xs text-text-muted mt-1", children: description })
+  return /* @__PURE__ */ jsxs14("div", { className: "rounded-2xl bg-background border border-border shadow-md p-6", children: [
+    (title || description) && /* @__PURE__ */ jsxs14("div", { className: "mb-4", children: [
+      title && /* @__PURE__ */ jsx19("p", { className: "text-sm font-semibold text-text-primary", children: title }),
+      description && /* @__PURE__ */ jsx19("p", { className: "text-xs text-text-muted mt-1", children: description })
     ] }),
-    /* @__PURE__ */ jsxs12("div", { className: "flex flex-col items-center gap-8 justify-center", children: [
-      /* @__PURE__ */ jsxs12("div", { style: { width: size, height: size }, className: "relative mx-auto md:mx-0", children: [
-        /* @__PURE__ */ jsxs12("svg", { className: "w-full h-full -rotate-90", children: [
-          /* @__PURE__ */ jsx16(
+    /* @__PURE__ */ jsxs14("div", { className: "flex flex-col items-center gap-8 justify-center", children: [
+      /* @__PURE__ */ jsxs14("div", { style: { width: size, height: size }, className: "relative mx-auto md:mx-0", children: [
+        /* @__PURE__ */ jsxs14("svg", { className: "w-full h-full -rotate-90", children: [
+          /* @__PURE__ */ jsx19(
             "circle",
             {
               cx: center,
@@ -1967,7 +2061,7 @@ var GraficaDonut = ({
             const tooltipRadius = radius + strokeWidth / 2 + 16;
             const tx = center + tooltipRadius * Math.cos(midAngleRad);
             const ty = center + tooltipRadius * Math.sin(midAngleRad);
-            return /* @__PURE__ */ jsx16("g", { children: /* @__PURE__ */ jsx16(
+            return /* @__PURE__ */ jsx19("g", { children: /* @__PURE__ */ jsx19(
               "circle",
               {
                 cx: center,
@@ -1992,7 +2086,7 @@ var GraficaDonut = ({
             ) }, seg.index);
           })
         ] }),
-        hoveredIndex !== null && /* @__PURE__ */ jsx16(
+        hoveredIndex !== null && /* @__PURE__ */ jsx19(
           "div",
           {
             className: "absolute pointer-events-none z-10",
@@ -2017,20 +2111,20 @@ var GraficaDonut = ({
               })(),
               transform: "translate(-50%, -50%)"
             },
-            children: /* @__PURE__ */ jsxs12("div", { className: "bg-[#0A0A0B] text-white text-xs rounded-md px-3 py-1 shadow-xl whitespace-nowrap", children: [
-              /* @__PURE__ */ jsx16("p", { className: "font-semibold", children: segmentMeta[hoveredIndex].label }),
-              /* @__PURE__ */ jsx16("p", { className: "text-center", children: formatValue(segmentMeta[hoveredIndex].value) })
+            children: /* @__PURE__ */ jsxs14("div", { className: "bg-[#0A0A0B] text-white text-xs rounded-md px-3 py-1 shadow-xl whitespace-nowrap", children: [
+              /* @__PURE__ */ jsx19("p", { className: "font-semibold", children: segmentMeta[hoveredIndex].label }),
+              /* @__PURE__ */ jsx19("p", { className: "text-center", children: formatValue(segmentMeta[hoveredIndex].value) })
             ] })
           }
         ),
-        /* @__PURE__ */ jsx16("div", { className: "absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none", children: showTotal ? /* @__PURE__ */ jsxs12(Fragment2, { children: [
-          /* @__PURE__ */ jsx16("span", { className: "text-xs text-text-muted", children: "Total" }),
-          /* @__PURE__ */ jsx16("span", { className: "text-xl font-bold text-accent", children: formatValue(total) })
+        /* @__PURE__ */ jsx19("div", { className: "absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none", children: showTotal ? /* @__PURE__ */ jsxs14(Fragment2, { children: [
+          /* @__PURE__ */ jsx19("span", { className: "text-xs text-text-muted", children: "Total" }),
+          /* @__PURE__ */ jsx19("span", { className: "text-xl font-bold text-accent", children: formatValue(total) })
         ] }) : null })
       ] }),
-      /* @__PURE__ */ jsx16("div", { className: "flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4", children: segmentMeta.map((item, i) => {
+      /* @__PURE__ */ jsx19("div", { className: "flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4", children: segmentMeta.map((item, i) => {
         const isActive = hoveredIndex === i;
-        return /* @__PURE__ */ jsxs12(
+        return /* @__PURE__ */ jsxs14(
           "div",
           {
             onMouseEnter: () => setHoveredIndex(i),
@@ -2039,7 +2133,7 @@ var GraficaDonut = ({
                                   ${isActive ? "opacity-100 scale-100" : "opacity-80"}
                                 `,
             children: [
-              /* @__PURE__ */ jsx16(
+              /* @__PURE__ */ jsx19(
                 "div",
                 {
                   className: "w-2.5 h-2.5 rounded-full",
@@ -2049,7 +2143,7 @@ var GraficaDonut = ({
                   }
                 }
               ),
-              /* @__PURE__ */ jsx16("span", { className: "text-text-primary", children: item.label })
+              /* @__PURE__ */ jsx19("span", { className: "text-text-primary", children: item.label })
             ]
           },
           i
@@ -2060,9 +2154,9 @@ var GraficaDonut = ({
 };
 var GraficaDonut_default = GraficaDonut;
 
-// components/ui/DataDisplay/Graficas/GraficaLine.tsx
-import { useState as useState7, useRef as useRef6 } from "react";
-import { Fragment as Fragment3, jsx as jsx17, jsxs as jsxs13 } from "react/jsx-runtime";
+// lib/components/ui/DataDisplay/Graficas/GraficaLine.tsx
+import { useState as useState8, useRef as useRef8 } from "react";
+import { Fragment as Fragment3, jsx as jsx20, jsxs as jsxs15 } from "react/jsx-runtime";
 var PureLineChart = ({
   data,
   title,
@@ -2074,9 +2168,9 @@ var PureLineChart = ({
   legendLabel,
   yLabel
 }) => {
-  const [hoveredIndex, setHoveredIndex] = useState7(null);
-  const [tooltip, setTooltip] = useState7(null);
-  const containerRef = useRef6(null);
+  const [hoveredIndex, setHoveredIndex] = useState8(null);
+  const [tooltip, setTooltip] = useState8(null);
+  const containerRef = useRef8(null);
   const maxValue = Math.max(...data.map((d) => d.value), 1) * 1.15;
   const padding = { top: 16, bottom: 36, left: 52, right: 24 };
   const svgW = Math.max(data.length * 80 + padding.left + padding.right, 360);
@@ -2126,7 +2220,7 @@ var PureLineChart = ({
     const clampedIdx = Math.max(0, Math.min(data.length - 1, idx));
     setHoveredIndex(clampedIdx);
   };
-  return /* @__PURE__ */ jsxs13(
+  return /* @__PURE__ */ jsxs15(
     "div",
     {
       ref: containerRef,
@@ -2136,11 +2230,11 @@ var PureLineChart = ({
         setTooltip(null);
       },
       children: [
-        title && /* @__PURE__ */ jsx17("p", { className: "text-sm font-semibold text-text-primary", children: title }),
-        description && /* @__PURE__ */ jsx17("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
-        /* @__PURE__ */ jsxs13("div", { className: "w-full overflow-x-auto relative", children: [
-          /* @__PURE__ */ jsxs13("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "select-none", children: [
-            yLabel && /* @__PURE__ */ jsx17(
+        title && /* @__PURE__ */ jsx20("p", { className: "text-sm font-semibold text-text-primary", children: title }),
+        description && /* @__PURE__ */ jsx20("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
+        /* @__PURE__ */ jsxs15("div", { className: "w-full overflow-x-auto relative", children: [
+          /* @__PURE__ */ jsxs15("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "select-none", children: [
+            yLabel && /* @__PURE__ */ jsx20(
               "text",
               {
                 x: 10,
@@ -2151,15 +2245,15 @@ var PureLineChart = ({
                 children: yLabel
               }
             ),
-            /* @__PURE__ */ jsx17("defs", { children: showArea && /* @__PURE__ */ jsxs13("linearGradient", { id: gradientId, x1: "0", y1: "0", x2: "0", y2: "1", children: [
-              /* @__PURE__ */ jsx17("stop", { offset: "0%", stopColor: lineColor, stopOpacity: 0.3 }),
-              /* @__PURE__ */ jsx17("stop", { offset: "100%", stopColor: lineColor, stopOpacity: 0.02 })
+            /* @__PURE__ */ jsx20("defs", { children: showArea && /* @__PURE__ */ jsxs15("linearGradient", { id: gradientId, x1: "0", y1: "0", x2: "0", y2: "1", children: [
+              /* @__PURE__ */ jsx20("stop", { offset: "0%", stopColor: lineColor, stopOpacity: 0.3 }),
+              /* @__PURE__ */ jsx20("stop", { offset: "100%", stopColor: lineColor, stopOpacity: 0.02 })
             ] }) }),
-            /* @__PURE__ */ jsxs13("g", { transform: `translate(${padding.left}, ${padding.top + 15})`, children: [
+            /* @__PURE__ */ jsxs15("g", { transform: `translate(${padding.left}, ${padding.top + 15})`, children: [
               yTicks.map((tick) => {
                 const y = scaleY(tick);
-                return /* @__PURE__ */ jsxs13("g", { children: [
-                  /* @__PURE__ */ jsx17(
+                return /* @__PURE__ */ jsxs15("g", { children: [
+                  /* @__PURE__ */ jsx20(
                     "line",
                     {
                       x1: 0,
@@ -2170,11 +2264,11 @@ var PureLineChart = ({
                       strokeDasharray: "4 3"
                     }
                   ),
-                  /* @__PURE__ */ jsx17("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(Math.round(tick)) })
+                  /* @__PURE__ */ jsx20("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(Math.round(tick)) })
                 ] }, tick);
               }),
-              showArea && /* @__PURE__ */ jsx17("path", { d: areaPath, fill: `url(#${gradientId})` }),
-              /* @__PURE__ */ jsx17(
+              showArea && /* @__PURE__ */ jsx20("path", { d: areaPath, fill: `url(#${gradientId})` }),
+              /* @__PURE__ */ jsx20(
                 "path",
                 {
                   d: smoothLine,
@@ -2190,8 +2284,8 @@ var PureLineChart = ({
                   } : void 0
                 }
               ),
-              hoveredIndex !== null && /* @__PURE__ */ jsxs13(Fragment3, { children: [
-                /* @__PURE__ */ jsx17(
+              hoveredIndex !== null && /* @__PURE__ */ jsxs15(Fragment3, { children: [
+                /* @__PURE__ */ jsx20(
                   "line",
                   {
                     x1: scaleX(hoveredIndex),
@@ -2204,7 +2298,7 @@ var PureLineChart = ({
                     opacity: 0.4
                   }
                 ),
-                /* @__PURE__ */ jsx17(
+                /* @__PURE__ */ jsx20(
                   "circle",
                   {
                     cx: scaleX(hoveredIndex),
@@ -2218,8 +2312,8 @@ var PureLineChart = ({
               data.map((d, i) => {
                 const cx = scaleX(i), cy = scaleY(d.value);
                 const isHov = hoveredIndex === i;
-                return /* @__PURE__ */ jsxs13("g", { children: [
-                  /* @__PURE__ */ jsx17(
+                return /* @__PURE__ */ jsxs15("g", { children: [
+                  /* @__PURE__ */ jsx20(
                     "circle",
                     {
                       cx,
@@ -2231,10 +2325,10 @@ var PureLineChart = ({
                       className: "transition-all duration-200 pointer-events-none"
                     }
                   ),
-                  /* @__PURE__ */ jsx17("circle", { cx, cy, r: 14, fill: "transparent" })
+                  /* @__PURE__ */ jsx20("circle", { cx, cy, r: 14, fill: "transparent" })
                 ] }, i);
               }),
-              data.map((d, i) => /* @__PURE__ */ jsx17(
+              data.map((d, i) => /* @__PURE__ */ jsx20(
                 "text",
                 {
                   x: scaleX(i),
@@ -2248,7 +2342,7 @@ var PureLineChart = ({
                 },
                 i
               )),
-              /* @__PURE__ */ jsx17(
+              /* @__PURE__ */ jsx20(
                 "rect",
                 {
                   x: 0,
@@ -2275,13 +2369,13 @@ var PureLineChart = ({
                   }
                 }
               ),
-              /* @__PURE__ */ jsx17("line", { x1: 0, y1: chartH, x2: chartW, y2: chartH, stroke: "var(--border-strong)" })
+              /* @__PURE__ */ jsx20("line", { x1: 0, y1: chartH, x2: chartW, y2: chartH, stroke: "var(--border-strong)" })
             ] }),
-            /* @__PURE__ */ jsx17("style", { children: `
+            /* @__PURE__ */ jsx20("style", { children: `
                         @keyframes drawLine { to { stroke-dashoffset: 0; } }
                     ` })
           ] }),
-          tooltip && /* @__PURE__ */ jsx17(
+          tooltip && /* @__PURE__ */ jsx20(
             "div",
             {
               className: "absolute z-50 pointer-events-none transition-all duration-150",
@@ -2290,22 +2384,22 @@ var PureLineChart = ({
                 top: tooltip.y,
                 transform: "translate(-90%, -70%)"
               },
-              children: /* @__PURE__ */ jsxs13("div", { className: "relative bg-[#0A0A0B] text-white text-sm rounded-lg px-8 py-2 shadow-2xl border border-white/10 whitespace-nowrap", children: [
-                /* @__PURE__ */ jsx17("p", { className: "text-[11px] text-center", children: tooltip.label }),
-                /* @__PURE__ */ jsx17("p", { className: "text-sm font-semibold text-center", children: formatVal(tooltip.value) })
+              children: /* @__PURE__ */ jsxs15("div", { className: "relative bg-[#0A0A0B] text-white text-sm rounded-lg px-8 py-2 shadow-2xl border border-white/10 whitespace-nowrap", children: [
+                /* @__PURE__ */ jsx20("p", { className: "text-[11px] text-center", children: tooltip.label }),
+                /* @__PURE__ */ jsx20("p", { className: "text-sm font-semibold text-center", children: formatVal(tooltip.value) })
               ] })
             }
           )
         ] }),
-        legendLabel && /* @__PURE__ */ jsx17("div", { className: "flex justify-center items-center gap-2 mt-4 px-2", children: /* @__PURE__ */ jsxs13("div", { className: "flex items-center gap-1.5", children: [
-          /* @__PURE__ */ jsx17(
+        legendLabel && /* @__PURE__ */ jsx20("div", { className: "flex justify-center items-center gap-2 mt-4 px-2", children: /* @__PURE__ */ jsxs15("div", { className: "flex items-center gap-1.5", children: [
+          /* @__PURE__ */ jsx20(
             "div",
             {
               className: "w-3 h-1 rounded-sm",
               style: { backgroundColor: lineColor }
             }
           ),
-          /* @__PURE__ */ jsx17("span", { className: "text-sm font-medium", children: legendLabel })
+          /* @__PURE__ */ jsx20("span", { className: "text-sm font-medium", children: legendLabel })
         ] }) })
       ]
     }
@@ -2313,9 +2407,9 @@ var PureLineChart = ({
 };
 var GraficaLine_default = PureLineChart;
 
-// components/ui/DataDisplay/Tabs.tsx
-import { useState as useState8 } from "react";
-import { jsx as jsx18, jsxs as jsxs14 } from "react/jsx-runtime";
+// lib/components/ui/DataDisplay/Tabs.tsx
+import { useState as useState9 } from "react";
+import { jsx as jsx21, jsxs as jsxs16 } from "react/jsx-runtime";
 var triggerBase = "inline-flex items-center gap-2 text-sm font-medium transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 var variantStyles2 = {
   underline: {
@@ -2353,7 +2447,7 @@ function Tabs({
   align = "start"
 }) {
   var _a, _b;
-  const [internalActive, setInternalActive] = useState8(
+  const [internalActive, setInternalActive] = useState9(
     (_b = defaultTab != null ? defaultTab : (_a = tabs[0]) == null ? void 0 : _a.id) != null ? _b : ""
   );
   const isControlled = controlledTab !== void 0;
@@ -2363,15 +2457,15 @@ function Tabs({
     onChange == null ? void 0 : onChange(id);
   };
   const styles = variantStyles2[variant];
-  return /* @__PURE__ */ jsxs14("div", { className: `flex flex-col w-full ${className}`, children: [
-    /* @__PURE__ */ jsx18(
+  return /* @__PURE__ */ jsxs16("div", { className: `flex flex-col w-full ${className}`, children: [
+    /* @__PURE__ */ jsx21(
       "div",
       {
         role: "tablist",
         className: `${styles.list} ${alignClass[align]}`,
         children: tabs.map((tab) => {
           const isActive = tab.id === active;
-          return /* @__PURE__ */ jsxs14(
+          return /* @__PURE__ */ jsxs16(
             "button",
             {
               role: "tab",
@@ -2385,7 +2479,7 @@ function Tabs({
                 isActive ? styles.active : styles.inactive
               ].join(" "),
               children: [
-                tab.icon && /* @__PURE__ */ jsx18("span", { className: "shrink-0 size-4", children: tab.icon }),
+                tab.icon && /* @__PURE__ */ jsx21("span", { className: "shrink-0 size-4", children: tab.icon }),
                 tab.label
               ]
             },
@@ -2394,7 +2488,7 @@ function Tabs({
         })
       }
     ),
-    tabs.map((tab) => /* @__PURE__ */ jsx18(
+    tabs.map((tab) => /* @__PURE__ */ jsx21(
       "div",
       {
         role: "tabpanel",
@@ -2409,9 +2503,9 @@ function Tabs({
   ] });
 }
 
-// components/ui/DataDisplay/Table.tsx
-import React9 from "react";
-import { jsx as jsx19, jsxs as jsxs15 } from "react/jsx-runtime";
+// lib/components/ui/DataDisplay/Table.tsx
+import React10 from "react";
+import { jsx as jsx22, jsxs as jsxs17 } from "react/jsx-runtime";
 function getCellValue(row, col) {
   if (col.render) return col.render(row);
   if (!col.accessor) return null;
@@ -2440,7 +2534,7 @@ function DataTable({
   size = "md"
 }) {
   var _a, _b;
-  const groupedHeaders = React9.useMemo(() => {
+  const groupedHeaders = React10.useMemo(() => {
     const result = [];
     let i = 0;
     while (i < columns.length) {
@@ -2467,7 +2561,7 @@ function DataTable({
   const headerText = headerVariant === "accent" ? "#ffffff" : "var(--text-secondary)";
   const groupLabelColor = headerVariant === "accent" ? "#f7f4f4ff" : "var(--accent)";
   const groupBorderColor = headerVariant === "accent" ? "var(--border-default)" : "var(--border-strong)";
-  const groupStyles = React9.useMemo(() => {
+  const groupStyles = React10.useMemo(() => {
     const map = /* @__PURE__ */ new Map();
     columns.forEach((col) => {
       if (col.group && col.groupStyle && !map.has(col.group)) {
@@ -2476,7 +2570,7 @@ function DataTable({
     });
     return map;
   }, [columns]);
-  return /* @__PURE__ */ jsxs15(
+  return /* @__PURE__ */ jsxs17(
     "div",
     {
       className,
@@ -2488,12 +2582,12 @@ function DataTable({
         boxShadow: "var(--shadow-card)"
       },
       children: [
-        /* @__PURE__ */ jsx19(
+        /* @__PURE__ */ jsx22(
           "div",
           {
             className: "scrollbar-soft",
             style: { overflowX: "auto", overflowY: "auto", maxHeight },
-            children: /* @__PURE__ */ jsxs15(
+            children: /* @__PURE__ */ jsxs17(
               "table",
               {
                 style: {
@@ -2505,7 +2599,7 @@ function DataTable({
                   fontFamily: "var(--font-body), sans-serif"
                 },
                 children: [
-                  /* @__PURE__ */ jsxs15(
+                  /* @__PURE__ */ jsxs17(
                     "thead",
                     {
                       style: {
@@ -2515,10 +2609,10 @@ function DataTable({
                         background: headerBg
                       },
                       children: [
-                        hasGroups && /* @__PURE__ */ jsx19("tr", { children: groupedHeaders.map((g, idx) => {
+                        hasGroups && /* @__PURE__ */ jsx22("tr", { children: groupedHeaders.map((g, idx) => {
                           var _a2, _b2;
                           const style = groupStyles.get(g.label);
-                          return g.label ? /* @__PURE__ */ jsx19(
+                          return g.label ? /* @__PURE__ */ jsx22(
                             "th",
                             {
                               colSpan: g.span,
@@ -2539,7 +2633,7 @@ function DataTable({
                               children: g.label
                             },
                             `group-${g.label}-${idx}`
-                          ) : /* @__PURE__ */ jsx19(
+                          ) : /* @__PURE__ */ jsx22(
                             "th",
                             {
                               style: {
@@ -2550,11 +2644,11 @@ function DataTable({
                             `empty-${g.start}`
                           );
                         }) }),
-                        /* @__PURE__ */ jsx19("tr", { children: columns.map((col, i) => {
+                        /* @__PURE__ */ jsx22("tr", { children: columns.map((col, i) => {
                           var _a2, _b2, _c;
                           const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
                           const style = col.group ? groupStyles.get(col.group) : void 0;
-                          return /* @__PURE__ */ jsx19(
+                          return /* @__PURE__ */ jsx22(
                             "th",
                             {
                               style: {
@@ -2579,14 +2673,14 @@ function DataTable({
                       ]
                     }
                   ),
-                  /* @__PURE__ */ jsx19("tbody", { children: isLoading ? Array.from({ length: 5 }).map((_, rowIdx) => /* @__PURE__ */ jsx19("tr", { children: columns.map((col) => /* @__PURE__ */ jsx19(
+                  /* @__PURE__ */ jsx22("tbody", { children: isLoading ? Array.from({ length: 5 }).map((_, rowIdx) => /* @__PURE__ */ jsx22("tr", { children: columns.map((col) => /* @__PURE__ */ jsx22(
                     "td",
                     {
                       style: {
                         padding: cellPadding,
                         borderBottom: "0.5px solid var(--border-default)"
                       },
-                      children: /* @__PURE__ */ jsx19(
+                      children: /* @__PURE__ */ jsx22(
                         "div",
                         {
                           style: {
@@ -2600,7 +2694,7 @@ function DataTable({
                       )
                     },
                     col.key
-                  )) }, `skeleton-${rowIdx}`)) : data.length === 0 ? /* @__PURE__ */ jsx19("tr", { children: /* @__PURE__ */ jsx19(
+                  )) }, `skeleton-${rowIdx}`)) : data.length === 0 ? /* @__PURE__ */ jsx22("tr", { children: /* @__PURE__ */ jsx22(
                     "td",
                     {
                       colSpan: columns.length,
@@ -2614,7 +2708,7 @@ function DataTable({
                     }
                   ) }) : data.map((row, rowIdx) => {
                     const key = String(row[rowKey]);
-                    return /* @__PURE__ */ jsx19(
+                    return /* @__PURE__ */ jsx22(
                       "tr",
                       {
                         style: {
@@ -2623,7 +2717,7 @@ function DataTable({
                         children: columns.map((col, i) => {
                           var _a2;
                           const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
-                          return /* @__PURE__ */ jsx19(
+                          return /* @__PURE__ */ jsx22(
                             "td",
                             {
                               style: {
@@ -2648,7 +2742,7 @@ function DataTable({
             )
           }
         ),
-        /* @__PURE__ */ jsx19("style", { children: `
+        /* @__PURE__ */ jsx22("style", { children: `
                 @keyframes dt-pulse {
                     0%, 100% { opacity: 1; }
                     50%       { opacity: 0.35; }
@@ -2659,144 +2753,62 @@ function DataTable({
   );
 }
 
-// components/ui/Navegacion/Breadcrumbs.tsx
+// lib/components/ui/Navegacion/Breadcrumbs.tsx
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { jsx as jsx20, jsxs as jsxs16 } from "react/jsx-runtime";
+import { jsx as jsx23, jsxs as jsxs18 } from "react/jsx-runtime";
 function Breadcrumbs() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter((segment) => segment !== "");
-  return /* @__PURE__ */ jsxs16("nav", { className: "flex items-center space-x-2 text-xs tracking-widest font-semibold text-text-muted whitespace-nowrap overflow-x-auto scrollbar-hide", children: [
-    segments.length === 0 ? /* @__PURE__ */ jsx20("span", { className: "text-text-primary", children: "INICIO" }) : /* @__PURE__ */ jsx20(Link, { href: "/", className: "hover:text-text-primary transition-colors flex items-center", children: "INICIO" }),
+  return /* @__PURE__ */ jsxs18("nav", { className: "flex items-center space-x-2 text-xs tracking-widest font-semibold text-text-muted whitespace-nowrap overflow-x-auto scrollbar-hide", children: [
+    segments.length === 0 ? /* @__PURE__ */ jsx23("span", { className: "text-text-primary", children: "INICIO" }) : /* @__PURE__ */ jsx23(Link, { href: "/", className: "hover:text-text-primary transition-colors flex items-center", children: "INICIO" }),
     segments.map((segment, index) => {
       const href = `/${segments.slice(0, index + 1).join("/")}`;
       const isLast = index === segments.length - 1;
       let name = decodeURIComponent(segment).replace(/[-_]/g, " ").toUpperCase();
-      return /* @__PURE__ */ jsxs16("div", { className: "flex items-center space-x-2", children: [
-        /* @__PURE__ */ jsx20("span", { className: "text-text-muted/50", children: "/" }),
-        isLast ? /* @__PURE__ */ jsx20("span", { className: "text-text-primary", children: name }) : /* @__PURE__ */ jsx20(Link, { href, className: "hover:text-text-primary transition-colors", children: name })
+      return /* @__PURE__ */ jsxs18("div", { className: "flex items-center space-x-2", children: [
+        /* @__PURE__ */ jsx23("span", { className: "text-text-muted/50", children: "/" }),
+        isLast ? /* @__PURE__ */ jsx23("span", { className: "text-text-primary", children: name }) : /* @__PURE__ */ jsx23(Link, { href, className: "hover:text-text-primary transition-colors", children: name })
       ] }, href);
     })
-  ] });
-}
-
-// components/ui/Tema/theme-provider.tsx
-import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { jsx as jsx21 } from "react/jsx-runtime";
-function ThemeProvider(_a) {
-  var _b = _a, { children } = _b, props = __objRest(_b, ["children"]);
-  return /* @__PURE__ */ jsx21(NextThemesProvider, __spreadProps(__spreadValues({}, props), { children }));
-}
-
-// components/ui/Tema/ThemeToggle.tsx
-import * as React10 from "react";
-import { Moon, Sun, Laptop } from "lucide-react";
-import { useTheme as useTheme2 } from "next-themes";
-
-// components/ui/buttonIcons/fondoIcons.tsx
-import { useRef as useRef7 } from "react";
-import { jsx as jsx22, jsxs as jsxs17 } from "react/jsx-runtime";
-function AnimatedIconButton({ Icon, onClick }) {
-  const iconRef = useRef7(null);
-  return /* @__PURE__ */ jsx22("button", { onClick, className: "group", children: /* @__PURE__ */ jsxs17("div", { className: "relative bg-muted/50 rounded-full p-2 text-sm transition-all duration-300 transform group-hover:scale-110 active:scale-95 group-hover:shadow-2xl", children: [
-    /* @__PURE__ */ jsx22("div", { className: "absolute -bottom-1 right-5 rounded-full w-3 h-3 bg-muted/50" }),
-    /* @__PURE__ */ jsx22("div", { ref: iconRef, children: /* @__PURE__ */ jsx22(Icon, { className: "h-5 w-5 z-50" }) })
-  ] }) });
-}
-
-// components/ui/Tema/ThemeToggle.tsx
-import { jsx as jsx23, jsxs as jsxs18 } from "react/jsx-runtime";
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme2();
-  const [mounted, setMounted] = React10.useState(false);
-  const [isOpen, setIsOpen] = React10.useState(false);
-  const menuRef = React10.useRef(null);
-  React10.useEffect(() => {
-    setMounted(true);
-    function handleClickOutside(event) {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-  if (!mounted) {
-    return /* @__PURE__ */ jsxs18(
-      "button",
-      {
-        className: "inline-flex items-center justify-center rounded-md border border-border bg-transparent p-2 text-sm font-medium text-foreground transition-colors",
-        "aria-label": "Cargando tema",
-        disabled: true,
-        children: [
-          /* @__PURE__ */ jsx23(Sun, { className: "h-5 w-5" }),
-          /* @__PURE__ */ jsx23("span", { className: "sr-only", children: "Toggle theme" })
-        ]
-      }
-    );
-  }
-  const CurrentIcon = theme === "dark" ? Moon : theme === "system" ? Laptop : Sun;
-  return /* @__PURE__ */ jsxs18("div", { className: "relative", ref: menuRef, children: [
-    /* @__PURE__ */ jsx23(
-      AnimatedIconButton,
-      {
-        onClick: () => setIsOpen(!isOpen),
-        "aria-label": "Cambiar tema",
-        Icon: CurrentIcon
-      }
-    ),
-    /* @__PURE__ */ jsx23("span", { className: "sr-only", children: "Toggle theme" }),
-    isOpen && /* @__PURE__ */ jsx23("div", { className: "absolute top-full mt-2 right-0 w-40 rounded-md border border-border-sidebar bg-background text-text-primary shadow-lg z-[9999]", children: /* @__PURE__ */ jsxs18("div", { className: "py-1", role: "menu", "aria-orientation": "vertical", "aria-labelledby": "options-menu", children: [
-      /* @__PURE__ */ jsxs18("button", { onClick: () => {
-        setTheme("light");
-        setIsOpen(false);
-      }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
-        /* @__PURE__ */ jsx23(Sun, { className: "mr-2 h-4 w-4" }),
-        /* @__PURE__ */ jsx23("span", { children: "Claro" })
-      ] }),
-      /* @__PURE__ */ jsxs18("button", { onClick: () => {
-        setTheme("dark");
-        setIsOpen(false);
-      }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
-        /* @__PURE__ */ jsx23(Moon, { className: "mr-2 h-4 w-4" }),
-        /* @__PURE__ */ jsx23("span", { children: "Oscuro" })
-      ] }),
-      /* @__PURE__ */ jsxs18("button", { onClick: () => {
-        setTheme("system");
-        setIsOpen(false);
-      }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
-        /* @__PURE__ */ jsx23(Laptop, { className: "mr-2 h-4 w-4" }),
-        /* @__PURE__ */ jsx23("span", { children: "Sistema" })
-      ] })
-    ] }) })
   ] });
 }
 
 // lib/toast.ts
 import { toast as sonnerToast } from "sonner";
 var toast = {
-  success: (title, options) => sonnerToast.success(title, {
-    description: options == null ? void 0 : options.description,
-    duration: options == null ? void 0 : options.duration,
-    action: options == null ? void 0 : options.action
-  }),
-  error: (title, options) => sonnerToast.error(title, {
-    description: options == null ? void 0 : options.description,
-    duration: options == null ? void 0 : options.duration,
-    action: options == null ? void 0 : options.action
-  }),
-  warning: (title, options) => sonnerToast.warning(title, {
-    description: options == null ? void 0 : options.description,
-    duration: options == null ? void 0 : options.duration,
-    action: options == null ? void 0 : options.action
-  }),
-  info: (title, options) => sonnerToast.info(title, {
-    description: options == null ? void 0 : options.description,
-    duration: options == null ? void 0 : options.duration,
-    action: options == null ? void 0 : options.action
-  }),
+  success: (title, options) => {
+    var _a;
+    return sonnerToast.success(title, {
+      description: options == null ? void 0 : options.description,
+      duration: (_a = options == null ? void 0 : options.duration) != null ? _a : 4e3,
+      action: options == null ? void 0 : options.action
+    });
+  },
+  error: (title, options) => {
+    var _a;
+    return sonnerToast.error(title, {
+      description: options == null ? void 0 : options.description,
+      duration: (_a = options == null ? void 0 : options.duration) != null ? _a : Infinity,
+      action: options == null ? void 0 : options.action
+    });
+  },
+  warning: (title, options) => {
+    var _a;
+    return sonnerToast.warning(title, {
+      description: options == null ? void 0 : options.description,
+      duration: (_a = options == null ? void 0 : options.duration) != null ? _a : 6e3,
+      action: options == null ? void 0 : options.action
+    });
+  },
+  info: (title, options) => {
+    var _a;
+    return sonnerToast.info(title, {
+      description: options == null ? void 0 : options.description,
+      duration: (_a = options == null ? void 0 : options.duration) != null ? _a : 4e3,
+      action: options == null ? void 0 : options.action
+    });
+  },
   loading: (title, options) => sonnerToast.loading(title, {
     description: options == null ? void 0 : options.description
   }),

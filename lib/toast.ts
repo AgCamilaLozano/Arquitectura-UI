@@ -13,28 +13,28 @@ export const toast = {
     success: (title: string, options?: ToastOptions) =>
         sonnerToast.success(title, {
             description: options?.description,
-            duration: options?.duration,
+            duration: options?.duration ?? 4000,
             action: options?.action,
         }),
 
     error: (title: string, options?: ToastOptions) =>
         sonnerToast.error(title, {
             description: options?.description,
-            duration: options?.duration,
+            duration: options?.duration ?? Infinity,
             action: options?.action,
         }),
 
     warning: (title: string, options?: ToastOptions) =>
         sonnerToast.warning(title, {
             description: options?.description,
-            duration: options?.duration,
+            duration: options?.duration ?? 6000,
             action: options?.action,
         }),
 
     info: (title: string, options?: ToastOptions) =>
         sonnerToast.info(title, {
             description: options?.description,
-            duration: options?.duration,
+            duration: options?.duration ?? 4000,
             action: options?.action,
         }),
 

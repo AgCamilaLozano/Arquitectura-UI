@@ -1,8 +1,8 @@
 /* lib/styles/globals.css */
-@theme inline { --color-background: var(--bg-base); --color-surface: var(--bg-surface); --color-muted: var(--bg-muted); --color-border: var(--border-default); --color-border-strong: var(--border-strong); --color-border-sidebar: var(--border-sidebar); --color-primary: var(--primary); --color-primary-hover: var(--primary-hover); --color-accent: var(--accent); --color-accent-hover: var(--accent-hover); --color-accent-soft: var(--accent-soft); --color-text-primary: var(--text-primary); --color-text-secondary: var(--text-secondary); --color-text-muted: var(--text-muted); --color-text-disabled: var(--text-disabled); --color-error: var(--alert-error); --color-success: var(--alert-success); --color-info: var(--alert-info); --color-warning: var(--alert-warning); --color-text-error: var(--text-error); --color-text-success: var(--text-success); --color-text-warning: var(--text-warning); --color-text-info: var(--text-info); }
+@theme inline { --color-background: var(--bg-background); --color-surface: var(--bg-surface); --color-muted: var(--bg-muted); --color-border: var(--border-default); --color-border-strong: var(--border-strong); --color-border-sidebar: var(--border-sidebar); --color-primary: var(--primary); --color-primary-hover: var(--primary-hover); --color-accent: var(--accent); --color-accent-hover: var(--accent-hover); --color-accent-soft: var(--accent-soft); --color-text-primary: var(--text-primary); --color-text-secondary: var(--text-secondary); --color-text-muted: var(--text-muted); --color-text-disabled: var(--text-disabled); --color-error: var(--alert-error); --color-success: var(--alert-success); --color-info: var(--alert-info); --color-warning: var(--alert-warning); --color-text-error: var(--text-error); --color-text-success: var(--text-success); --color-text-warning: var(--text-warning); --color-text-info: var(--text-info); }
 :root {
   --bg-surface: #f8f8f8;
-  --bg-base: #FFFFFF;
+  --bg-background: #FFFFFF;
   --bg-muted: #F1F1F4;
   --primary: #2D2D2E;
   --primary-hover: #3A3A3C;
@@ -41,7 +41,7 @@
   --font-body: "Lato";
 }
 .dark {
-  --bg-base: #16141a;
+  --bg-background: #16141a;
   --bg-surface: #1d1a23;
   --bg-muted: #2A2533;
   --primary: #FAFAFA;
@@ -76,7 +76,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: var(--font-body), sans-serif;
+  font-family: var(--font-body);
   line-height: 1.6;
   min-height: 100vh;
   scroll-behavior: smooth;
@@ -88,6 +88,22 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading), sans-serif;
+}
+h1 {
+  font-size: 40px;
+  font-weight: 700;
+}
+h2 {
+  font-size: 32px;
+  font-weight: 600;
+}
+h3 {
+  font-size: 24px;
+  font-weight: 500;
+}
+h4 {
+  font-size: 20px;
+  font-weight: 500;
 }
 .scrollbar-soft::-webkit-scrollbar {
   width: 6px;

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Moon, Sun, Laptop } from "lucide-react";
 import { useTheme } from "next-themes";
-import AnimatedIconButton from "@/components/ui/buttonIcons/fondoIcons";
+import AnimatedIconButton from "@/lib/components/ui/buttonIcons/fondoIcons";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();

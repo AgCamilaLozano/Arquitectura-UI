@@ -10,10 +10,13 @@
     },
     "include": [
         "lib/**/*.ts",
-        "lib/**/*.tsx"
+        "lib/**/*.tsx",
+        "lib/**/*.css",
+        "lib/**/*"
     ],
     "exclude": [
         "node_modules",
-        "dist"
+        "dist",
+        "app/**/*"
     ]
 }

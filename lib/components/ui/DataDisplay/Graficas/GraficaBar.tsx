@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useRef } from 'react'
-import { Tooltip } from '@/components/ui/Compuesto/Tooltip'
+import { Tooltip } from '@/lib/components/ui/Compuesto/Tooltip'
 import { ChevronDown } from 'lucide-react'
 
 // ─── Tipos ───────────────────────────────────────────────────────

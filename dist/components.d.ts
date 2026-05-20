@@ -4,8 +4,8 @@ import React__default, { ReactNode } from 'react';
 import { Select as Select$1 } from 'radix-ui';
 import * as class_variance_authority_types from 'class-variance-authority/types';
 import { VariantProps } from 'class-variance-authority';
-import { ToasterProps } from 'sonner';
 import { ThemeProviderProps } from 'next-themes';
+import { ToasterProps } from 'sonner';
 
 declare function Select({ ...props }: React$1.ComponentProps<typeof Select$1.Root>): react_jsx_runtime.JSX.Element;
 declare function SelectGroup({ ...props }: React$1.ComponentProps<typeof Select$1.Group>): react_jsx_runtime.JSX.Element;
@@ -45,6 +45,10 @@ declare function Input({ className, type, ...props }: React.ComponentProps<"inpu
 
 type TextareaProps = React__default.TextareaHTMLAttributes<HTMLTextAreaElement>;
 declare const Textarea: React__default.ForwardRefExoticComponent<TextareaProps & React__default.RefAttributes<HTMLTextAreaElement>>;
+
+declare function ThemeProvider({ children, ...props }: ThemeProviderProps): react_jsx_runtime.JSX.Element;
+
+declare function ThemeToggle(): react_jsx_runtime.JSX.Element;
 
 /**
  * Propósito: Badge de etiqueta/categoría configurable.
@@ -560,9 +564,5 @@ interface DataTableProps<T> {
 declare function DataTable<T>({ data, columns, maxHeight, rowKey, emptyState, isLoading, className, headerVariant, size, }: DataTableProps<T>): react_jsx_runtime.JSX.Element;
 
 declare function Breadcrumbs(): react_jsx_runtime.JSX.Element;
-
-declare function ThemeProvider({ children, ...props }: ThemeProviderProps): react_jsx_runtime.JSX.Element;
-
-declare function ThemeToggle(): react_jsx_runtime.JSX.Element;
 
 export { AlertDialog, type AlertDialogProps, type AlertDialogSize, type AlertDialogVariant, Breadcrumbs, Button, type ButtonProps, Calendar, CalendarGrid, CalendarHeader, type CalendarMode, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, MonthGrid, MultiSelect, type MultiSelectOption, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, type SelectionMode, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, YearGrid, buttonVariants, formatDate, getDiasDelMes, isDisabledDay, isDisabledMonth, isDisabledYear, isSameDay, isSameMonth, isSameYear, isWeekendDate, useAlertDialogContext, useDialogContext };

@@ -27,6 +27,7 @@ Componentes UI
 
 
 ## Importacion Css
+
 @import "tailwindcss";
 
 @import '@agustin/ui/styles';

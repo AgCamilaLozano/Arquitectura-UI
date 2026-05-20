@@ -1,257 +1,385 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
+import { Button, Input, Textarea } from "@/lib/components/ui/Base/Entradas";
 import {
-    Plus,
-    Settings,
-    User,
-    Bell,
-    Mail,
-    Search,
-    Info,
-    AlertTriangle,
-    CheckCircle2,
-    XCircle
-} from "lucide-react";
-
-// Importación de componentes siguiendo la estructura del proyecto
-import { Tabs } from "@/components/ui/DataDisplay/Tabs";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/lib/components/ui/Base/Selects/select";
+import { MultiSelect } from "@/lib/components/ui/Base/Selects/MultiSelect";
+import { DropdownMenu } from "@/lib/components/ui/Compuesto/dropdown-menu";
+import { Tooltip } from "@/lib/components/ui/Compuesto/Tooltip";
+import { Breadcrumbs } from "@/lib/components/ui/Navegacion/Breadcrumbs";
+import { DataTable } from "@/lib/components/ui/DataDisplay/Table";
+import { Tabs } from "@/lib/components/ui/DataDisplay/Tabs";
+import GraficaBar from "@/lib/components/ui/DataDisplay/Graficas/GraficaBar";
+import GraficaDonut from "@/lib/components/ui/DataDisplay/Graficas/GraficaDonut";
+import GraficaLine from "@/lib/components/ui/DataDisplay/Graficas/GraficaLine";
+import { LabelBadge, StatusBadge } from "@/lib/components/ui/Compuesto/Badges";
+import Dialog, {
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+} from "@/lib/components/ui/Compuesto/Modals/Dialog";
+import AlertDialog from "@/lib/components/ui/Compuesto/Modals/AlertDialog";
 import {
-    Card,
-    CardHeader,
-    CardBody,
-    CardFooter
-} from "@/components/ui/Compuesto/Modals/Card";
-import {
-    Dialog,
-    DialogHeader,
-    DialogBody,
-    DialogFooter
-} from "@/components/ui/Compuesto/Modals/Dialog";
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+} from "@/lib/components/ui/Compuesto/Modals/Card";
+import { ChatWidget } from "@/lib/components/Idt-Mascota/ChatBox";
+import { Calendar } from "@/lib/components/ui/Compuesto/Calendario";
+import { Info } from "lucide-react";
 
-// Nota: Asumiendo que estos componentes están exportados según el .d.ts y README
-import {
-    Button,
-    Input,
-    Textarea
-} from "@/components/ui/Base";
-import {
-    LabelBadge,
-    StatusBadge,
-} from "@/components/ui/Compuesto/Badges";
-import {
-    DataTable,
-    GraficaBar,
-    GraficaDonut,
-} from "@/components/ui/DataDisplay";
-import {
-    ThemeToggle
-} from "@/components/ui/Tema/ThemeToggle";
+const sampleTableData: Array<{ id: string; name: string; role: string; status: string }> = [
+  { id: "1", name: "Alicia", role: "Diseñadora", status: "Activo" },
+  { id: "2", name: "Bruno", role: "Desarrollador", status: "Revisión" },
+  { id: "3", name: "Carolina", role: "PM", status: "Completado" },
+];
 
-export default function ShowcasePage() {
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+const tableColumns: Array<{
+  key: string;
+  header: string;
+  accessor: keyof (typeof sampleTableData)[number];
+}> = [
+  { key: "name", header: "Nombre", accessor: "name" },
+  { key: "role", header: "Rol", accessor: "role" },
+  { key: "status", header: "Estado", accessor: "status" },
+];
 
-    // Mock Data para componentes de datos
-    const chartData = [
-        { label: "Ene", value: 400 },
-        { label: "Feb", value: 300 },
-        { label: "Mar", value: 600 },
-        { label: "Abr", value: 800 },
-    ];
+const barData = [
+  { label: "Ene", value: 420 },
+  { label: "Feb", value: 310 },
+  { label: "Mar", value: 520 },
+  { label: "Abr", value: 410 },
+  { label: "May", value: 590 },
+];
 
-    const tableColumns = [
-        { key: "id", header: "ID" },
-        { key: "name", header: "Usuario" },
-        { key: "role", header: "Rol" },
-        {
-            key: "status",
-            header: "Estado",
-            render: (row: any) => (
-                <StatusBadge
-                    status={row.status === 'Activo' ? 'success' : 'idle'}
-                    label={row.status}
-                />
-            )
-        },
-    ];
+const donutData = [
+  { label: "Ventas", value: 35 },
+  { label: "Marketing", value: 25 },
+  { label: "Soporte", value: 20 },
+  { label: "Infra", value: 20 },
+];
 
-    const tableData = [
-        { id: "1", name: "Agustín AI", role: "Arquitecto", status: "Activo" },
-        { id: "2", name: "Camila", role: "Admin", status: "Inactivo" },
-    ];
+const lineData = [
+  { label: "Lun", value: 30 },
+  { label: "Mar", value: 70 },
+  { label: "Mié", value: 45 },
+  { label: "Jue", value: 90 },
+  { label: "Vie", value: 60 },
+];
 
-    return (
-        <main className="min-h-screen bg-background p-8 space-y-12">
-            {/* --- HEADER --- */}
-            <header className="flex justify-between items-center border-b pb-6">
-                <div>
-                    <h1 className="text-4xl font-bold font-heading text-text-primary">UI Component Library</h1>
-                    <p className="text-text-secondary">Showcase de componentes y variantes para captura de diseño.</p>
-                </div>
-                <div className="flex items-center gap-4">
-                    <ThemeToggle />
-                </div>
-            </header>
+const tabItems = [
+  {
+    id: "principales",
+    label: "Principales",
+    content: (
+      <div className="space-y-3 text-sm text-text-secondary">
+        <p>Esta pestaña muestra el contenido principal de la página de demo.</p>
+        <p>Usa los botones, inputs y toggles para validar la interfaz.</p>
+      </div>
+    ),
+  },
+  {
+    id: "informacion",
+    label: "Información",
+    content: (
+      <div className="space-y-3 text-sm text-text-secondary">
+        <p>Prueba aquí la interacción con selectores y modales.</p>
+        <p>Los estados activos se ven con badges y cards.</p>
+      </div>
+    ),
+  },
+  {
+    id: "extras",
+    label: "Extras",
+    content: (
+      <div className="space-y-3 text-sm text-text-secondary">
+        <p>El calendario y el chat permiten validar componentes más complejos.</p>
+      </div>
+    ),
+  },
+];
 
-            {/* --- SECCIÓN: BOTONES --- */}
-            <section className="space-y-4">
-                <h2 className="text-2xl font-semibold font-heading">Base: Buttons</h2>
-                <div className="p-6 bg-surface rounded-xl border space-y-6">
-                    <div className="flex flex-wrap gap-4 items-center">
-                        <Button variant="default">Primary</Button>
-                        <Button variant="secondary">Secondary</Button>
-                        <Button variant="outline">Outline</Button>
-                        <Button variant="ghost">Ghost</Button>
-                        <Button variant="link">Link</Button>
+export default function HomePage() {
+  const [inputValue, setInputValue] = useState("Texto de ejemplo");
+  const [textareaValue, setTextareaValue] = useState("Una nota rápida...");
+  const [selectValue, setSelectValue] = useState("opcion-2");
+  const [multiSelected, setMultiSelected] = useState<string[]>(["frontend"]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [calendarValue, setCalendarValue] = useState<Date | null>(new Date());
+
+  const selectedMultiLabel = useMemo(
+    () => (multiSelected.length ? multiSelected.join(", ") : "Sin selección"),
+    [multiSelected]
+  );
+
+  return (
+    <main className="min-h-screen bg-background px-4 py-6 md:px-8 lg:px-12">
+      <div className="max-w-[1600px] mx-auto space-y-6">
+        <section className="space-y-4">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <Breadcrumbs />
+              <h1 className="mt-4 text-3xl font-semibold text-text-primary">
+                Página de prueba de la librería UI
+              </h1>
+              <p className="mt-2 max-w-2xl text-sm text-text-secondary">
+                Verifica botones, formularios, cards, gráficos, tablas, modales, calendario y chat.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button variant="default" onClick={() => toast.success("Toast de éxito mostrado")}>Toast exitosa</Button>
+              <Button variant="outline" onClick={() => toast.error("Error simulado")}>Toast error</Button>
+              <Tooltip content="Abrir diálogo de ejemplo" side="bottom">
+                <Button variant="secondary" onClick={() => setDialogOpen(true)}>
+                  Abrir diálogo
+                </Button>
+              </Tooltip>
+            </div>
+          </div>
+        </section>
+
+        <section className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
+          <div className="space-y-6">
+            <Card padding="lg" className="space-y-6">
+              <CardHeader title="Controles básicos" subtitle="Botones, inputs y selectores" />
+              <CardBody className="space-y-5">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-3">
+                    <p className="font-semibold text-text-primary">Botones</p>
+                    <div className="flex flex-wrap gap-3">
+                      <Button variant="default">Default</Button>
+                      <Button variant="outline">Outline</Button>
+                      <Button variant="secondary">Secondary</Button>
+                      <Button variant="ghost">Ghost</Button>
+                      <Button variant="link">Link</Button>
                     </div>
-                    <div className="flex flex-wrap gap-4 items-center">
-                        <Button size="sm">Small</Button>
-                        <Button size="default">Medium</Button>
-                        <Button size="lg">Large</Button>
-                        <Button size="icon"><Settings size={18} /></Button>
-                        <Button variant="outline" className="gap-2"><Plus size={16} /> New Project</Button>
-                    </div>
-                </div>
-            </section>
+                  </div>
 
-            {/* --- SECCIÓN: BADGES --- */}
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                    <h3 className="text-xl font-medium flex items-center gap-2"><CheckCircle2 className="size-5 text-success" /> Status Badges</h3>
-                    <div className="flex flex-wrap gap-3 p-4 border rounded-xl bg-background">
-                        <StatusBadge status="success" label="Online" animated />
-                        <StatusBadge status="error" label="Error" />
-                        <StatusBadge status="warning" label="Warning" />
-                        <StatusBadge status="info" label="Info" />
-                        <StatusBadge status="idle" label="Offline" />
+                  <div className="space-y-3">
+                    <p className="font-semibold text-text-primary">Inputs</p>
+                    <div className="grid gap-3">
+                      <Input
+                        value={inputValue}
+                        onChange={(event) => setInputValue(event.target.value)}
+                        placeholder="Ingresa texto"
+                      />
+                      <Textarea
+                        value={textareaValue}
+                        onChange={(event) => setTextareaValue(event.target.value)}
+                        rows={4}
+                        placeholder="Descripción breve"
+                      />
                     </div>
+                  </div>
                 </div>
-                <div className="space-y-4">
-                    <h3 className="text-xl font-medium flex items-center gap-2"><Info className="size-5 text-accent" /> Label Badges</h3>
-                    <div className="flex flex-wrap gap-3 p-4 border rounded-xl bg-background">
-                        <LabelBadge label="Default" />
-                        <LabelBadge label="Accent Filled" variant="filled" color="accent" />
-                        <LabelBadge label="Success Soft" variant="soft" color="success" icon={<CheckCircle2 size={12} />} />
-                        <LabelBadge label="Warning Outline" variant="outline" color="warning" />
-                        <LabelBadge label="Removible" variant="soft" color="error" onRemove={() => alert('Remove')} />
-                    </div>
-                </div>
-            </section>
 
-            {/* --- SECCIÓN: TABS --- */}
-            <section className="space-y-4">
-                <h2 className="text-2xl font-semibold font-heading">Navigation: Tabs</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <Tabs
-                        variant="underline"
-                        tabs={[
-                            { id: "1", label: "Profile", icon: <User />, content: <div className="p-4 border rounded-lg bg-surface">Contenido de Perfil (Underline)</div> },
-                            { id: "2", label: "Settings", icon: <Settings />, content: "Settings Content" }
-                        ]}
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-3">
+                    <p className="font-semibold text-text-primary">Select</p>
+                    <Select value={selectValue} onValueChange={setSelectValue}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Selecciona una opción" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="opcion-1">Opción 1</SelectItem>
+                        <SelectItem value="opcion-2">Opción 2</SelectItem>
+                        <SelectItem value="opcion-3">Opción 3</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-text-muted">Valor seleccionado: {selectValue}</p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <p className="font-semibold text-text-primary">MultiSelect</p>
+                    <MultiSelect
+                      options={["frontend", "backend", "diseño", "qa"]}
+                      selected={multiSelected}
+                      onChange={setMultiSelected}
+                      placeholder="Áreas"
                     />
-                    <Tabs
-                        variant="pill"
-                        tabs={[
-                            { id: "1", label: "Overview", content: <div className="p-4 bg-muted/30 rounded-lg">Vista General (Pill)</div> },
-                            { id: "2", label: "Analytics", content: "Analytics Content" }
-                        ]}
-                    />
+                    <p className="text-xs text-text-muted">Seleccionado: {selectedMultiLabel}</p>
+                  </div>
                 </div>
-            </section>
 
-            {/* --- SECCIÓN: CARDS --- */}
-            <section className="space-y-4">
-                <h2 className="text-2xl font-semibold font-heading">Compuesto: Cards</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* Card Default */}
-                    <Card variant="default" clickable>
-                        <CardHeader title="Default Card" subtitle="Variante básica del sistema" />
-                        <CardBody>Borde sutil y fondo blanco. Ideal para listas de contenido regular.</CardBody>
-                        <CardFooter withDivider><Button variant="outline" size="sm">Configurar</Button></CardFooter>
-                    </Card>
-
-                    {/* Card Outlined */}
-                    <Card variant="outlined">
-                        <CardHeader title="Outlined Strong" action={<StatusBadge status="info" label="Sugerencia" />} />
-                        <CardBody>Usa un borde más grueso con el color primario/fuerte del tema.</CardBody>
-                        <CardFooter align="left"><Button size="sm">Entendido</Button></CardFooter>
-                    </Card>
-
-                    {/* Card Accent */}
-                    <Card variant="accent">
-                        <CardHeader
-                            title="Brand Accent"
-                            subtitle="Borde lateral de marca"
-                        />
-                        <CardBody>Destaca visualmente mediante un borde a la izquierda con el color accent.</CardBody>
-                        <CardFooter align="between" className="pt-2">
-                            <span className="text-xs text-text-muted italic">Última actualización: Hoy</span>
-                            <Settings className="size-4 text-text-muted" />
-                        </CardFooter>
-                    </Card>
+                <div className="space-y-3">
+                  <p className="font-semibold text-text-primary">Dropdown Menu</p>
+                  <DropdownMenu
+                    trigger={<span className="font-medium">Abrir menú</span>}
+                    groups={[
+                      {
+                        groupLabel: "Acciones",
+                        items: [
+                          {
+                            label: "Editar",
+                            onClick: () => toast(`Seleccionaste editar`),
+                          },
+                          {
+                            label: "Duplicar",
+                            onClick: () => toast(`Seleccionaste duplicar`),
+                          },
+                        ],
+                      },
+                      {
+                        groupLabel: "Peligro",
+                        items: [
+                          {
+                            label: "Eliminar",
+                            variant: "danger",
+                            onClick: () => toast.error("Eliminar acción") ,
+                          },
+                        ],
+                      },
+                    ]}
+                  />
                 </div>
-            </section>
+              </CardBody>
+            </Card>
 
-            {/* --- SECCIÓN: DATA & FORMS --- */}
-            <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card className="h-full">
-                    <CardHeader title="Data Visualization" subtitle="DataTable & Charts" withDivider />
-                    <CardBody className="flex flex-col gap-6">
-                        <div className="h-48 w-full bg-muted/10 rounded-xl flex items-center justify-center border border-dashed">
-                            <GraficaBar data={chartData} height={150} animated />
-                        </div>
-                        <DataTable
-                            columns={tableColumns}
-                            data={tableData}
-                            rowKey="id"
-                            size="sm"
-                        />
-                    </CardBody>
-                </Card>
+            <Card padding="lg" className="space-y-6">
+              <CardHeader title="Datos y visualizaciones" subtitle="Tablas, badges y gráficas" />
+              <CardBody className="space-y-6">
+                <div className="space-y-4">
+                  <p className="text-sm font-semibold text-text-primary">Badges</p>
+                  <div className="flex flex-wrap gap-3">
+                    <LabelBadge label="Nuevo" color="accent" variant="filled" />
+                    <LabelBadge label="Revisión" color="warning" variant="soft" />
+                    <LabelBadge label="Activo" color="success" variant="outline" />
+                    <StatusBadge status="success" label="Operativo" animated />
+                    <StatusBadge status="warning" label="Atención" />
+                    <StatusBadge status="error" label="Error" />
+                  </div>
+                </div>
 
-                <Card>
-                    <CardHeader title="Form Inputs" subtitle="Variaciones de entrada" withDivider />
-                    <CardBody className="space-y-4">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium">Búsqueda</label>
-                            <div className="relative">
-                                <Search className="absolute left-3 top-2.5 size-4 text-text-muted" />
-                                <Input className="pl-10" placeholder="Buscar registros..." />
-                            </div>
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium">Comentarios</label>
-                            <Textarea placeholder="Escribe aquí tu mensaje..." rows={4} />
-                        </div>
-                        <div className="pt-4">
-                            <Button onClick={() => setIsDialogOpen(true)} className="w-full gap-2">
-                                Probar Modal (Dialog)
-                            </Button>
-                        </div>
-                    </CardBody>
-                </Card>
-            </section>
+                <div className="space-y-4">
+                  <p className="text-sm font-semibold text-text-primary">Tabs</p>
+                  <Tabs tabs={tabItems} defaultTab="principales" />
+                </div>
 
-            {/* --- DIALOG DEMO --- */}
-            <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} variant="info" size="md">
-                <DialogHeader
-                    title="Confirmación de Sistema"
-                    description="¿Estás seguro de que deseas aplicar estos cambios a la biblioteca?"
-                    icon={<Info />}
-                    withDivider
+                <div className="space-y-4">
+                  <p className="text-sm font-semibold text-text-primary">Tabla de ejemplo</p>
+                  <DataTable
+                    data={sampleTableData}
+                    columns={tableColumns}
+                    rowKey="id"
+                    maxHeight="280px"
+                    headerVariant="accent"
+                    size="md"
+                  />
+                </div>
+              </CardBody>
+            </Card>
+          </div>
+
+          <div className="space-y-6">
+            <Card padding="lg" className="space-y-5">
+              <CardHeader title="Gráficas" subtitle="Barr, donut y línea" />
+              <CardBody className="grid gap-5">
+                <GraficaBar title="Ventas mensuales" description="Valores en miles" data={barData} />
+                <GraficaDonut title="Distribución" description="Porcentaje por categoría" data={donutData} />
+                <GraficaLine
+                  title="Tendencia semanal"
+                  description="Interacción por día"
+                  data={lineData}
+                  showArea
+                  legendLabel="Usuarios"
                 />
-                <DialogBody scrollable>
-                    <p>Al confirmar, se actualizarán todos los tokens de diseño en el archivo `globals.css` y se refrescará el caché de los componentes.</p>
-                    <div className="mt-4 p-3 bg-accent-soft rounded-lg text-accent border border-accent/20">
-                        Esta acción es reversible desde el panel de administración.
-                    </div>
-                </DialogBody>
-                <DialogFooter withDivider>
-                    <Button variant="ghost" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
-                    <Button onClick={() => setIsDialogOpen(false)}>Aceptar</Button>
-                </DialogFooter>
-            </Dialog>
+              </CardBody>
+            </Card>
 
-        </main>
-    );
+            <Card padding="lg" className="space-y-5">
+              <CardHeader title="Componentes avanzados" subtitle="Modales, calendario y chat" />
+              <CardBody className="space-y-5">
+                <div className="grid gap-4">
+                  <div className="flex flex-wrap gap-3">
+                    <Button variant="default" onClick={() => setDialogOpen(true)}>
+                      Abrir Dialog
+                    </Button>
+                    <Button variant="secondary" onClick={() => setAlertOpen(true)}>
+                      Abrir AlertDialog
+                    </Button>
+                    <Button variant="ghost" onClick={() => toast("¡Ejemplo ghost!")}>Ghost toast</Button>
+                  </div>
+
+                  <div className="space-y-3">
+                    <p className="font-semibold text-text-primary">Calendario</p>
+                    <Calendar
+                      variant="full"
+                      value={calendarValue}
+                      onChange={setCalendarValue}
+                      selectionMode="date"
+                      minDate={new Date(2023, 0, 1)}
+                      maxDate={new Date(2026, 11, 31)}
+                    />
+                    <p className="text-xs text-text-muted">
+                      Fecha seleccionada:{' '}
+                      {calendarValue ? calendarValue.toLocaleDateString('es-CO') : 'Ninguna'}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <p className="font-semibold text-text-primary">Chat widget</p>
+                    <div className="rounded-2xl border border-border p-4 bg-surface">
+                      <ChatWidget />
+                    </div>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+          </div>
+        </section>
+      </div>
+
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} size="lg">
+        <DialogHeader
+          title="Diálogo de prueba"
+          description="Este diálogo utiliza Header, Body y Footer del componente Dialog."
+          icon={<Info className="w-5 h-5" />}
+          withDivider
+        />
+        <DialogBody>
+          <p className="text-sm text-text-secondary">
+            Aquí puedes validar el render del modal y cerrar con Escape o clic fuera.
+          </p>
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="secondary" onClick={() => setDialogOpen(false)}>
+            Cancelar
+          </Button>
+          <Button variant="default" onClick={() => {
+            setDialogOpen(false);
+            toast.success("Dialog confirmado");
+          }}>
+            Confirmar
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      <AlertDialog
+        open={alertOpen}
+        onClose={() => setAlertOpen(false)}
+        variant="warning"
+        title="Atención requerida"
+        description="Confirma o cancela esta acción de prueba."
+        confirmLabel="Sí, continuar"
+        cancelLabel="No, cerrar"
+        onConfirm={() => {
+          setAlertOpen(false);
+          toast.success("Acción confirmada");
+        }}
+        onCancel={() => {
+          setAlertOpen(false);
+          toast("Cancelado");
+        }}
+      />
+    </main>
+  );
 }

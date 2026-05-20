@@ -1,5 +1,5 @@
 @theme inline {
-  --color-background: var(--bg-base);
+  --color-background: var(--bg-background);
   --color-surface: var(--bg-surface);
   --color-muted: var(--bg-muted);
   --color-border: var(--border-default);
@@ -28,7 +28,7 @@
 :root {
   /* Fondos */
   --bg-surface: #f8f8f8;
-  --bg-base: #FFFFFF;
+  --bg-background: #FFFFFF;
   --bg-muted: #F1F1F4;
 
   /* Color Marca */
@@ -87,7 +87,7 @@
 
 .dark {
   /* Fondos */
-  --bg-base: #16141a;
+  --bg-background: #16141a;
   --bg-surface: #1d1a23;
   --bg-muted: #2A2533;
 
@@ -137,7 +137,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: var(--font-body), sans-serif;
+  font-family: var(--font-body);
   line-height: 1.6;
   min-height: 100vh;
   scroll-behavior: smooth;
@@ -152,6 +152,26 @@ h6 {
   font-family: var(--font-heading), sans-serif;
 }
 
+h1 {
+  font-size: 40px;      /* text-4xl */
+  font-weight: 700;    /* Bold */
+}
+
+h2 {
+  font-size: 32px;      /* text-2xl */
+  font-weight: 600;    /* SemiBold */
+}
+
+h3 {
+  font-size: 24px;      /* text-lg */
+  font-weight: 500;    /* Medium */
+}
+
+h4 {
+  font-size: 20px;      /* text-md */
+  font-weight: 500;    /* Medium */
+}
+ 
 .scrollbar-soft::-webkit-scrollbar {
   width: 6px;
   height: 6px;
