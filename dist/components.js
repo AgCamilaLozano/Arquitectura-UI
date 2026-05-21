@@ -2274,6 +2274,96 @@ function Breadcrumbs({ className }) {
     }
   );
 }
+
+// lib/components/ui/Navegacion/SideBar.tsx
+import { useState as useState8 } from "react";
+import { ChevronLeft as ChevronLeft2, ChevronRight as ChevronRight2, Folder, ChevronDown as ChevronDown2 } from "lucide-react";
+import { Fragment as Fragment4, jsx as jsx23, jsxs as jsxs19 } from "react/jsx-runtime";
+function Sidebar({
+  links,
+  subLinks = [],
+  subLinksTitle = "Secci\xF3n",
+  userName = "Usuario",
+  userRole = "Miembro",
+  userInitials = "US",
+  className
+}) {
+  const [isCollapsed, setIsCollapsed] = useState8(false);
+  const [isSubOpen, setIsSubOpen] = useState8(true);
+  return /* @__PURE__ */ jsxs19(
+    "aside",
+    {
+      className: cn(
+        "h-screen bg-surface border-r border-border flex flex-col justify-between transition-all duration-300 ease-in-out relative select-none font-body text-text-primary shrink-0",
+        isCollapsed ? "w-16" : "w-64",
+        className
+      ),
+      children: [
+        /* @__PURE__ */ jsxs19("div", { className: cn("p-4 flex items-center justify-between border-b border-border/40 h-16 shrink-0", isCollapsed && "justify-center px-2"), children: [
+          !isCollapsed && /* @__PURE__ */ jsx23("div", { className: "flex items-center gap-1.5 truncate animate-in fade-in duration-200", children: /* @__PURE__ */ jsx23("span", { className: "font-bold text-base tracking-tight text-text-primary uppercase", children: "Agustin" }) }),
+          /* @__PURE__ */ jsx23(Tooltip, { content: isCollapsed ? "Expandir" : "Colapsar", side: "right", children: /* @__PURE__ */ jsx23(
+            "button",
+            {
+              type: "button",
+              onClick: () => setIsCollapsed(!isCollapsed),
+              className: "p-1.5 rounded-lg border border-border bg-background hover:bg-muted text-text-secondary hover:text-text-primary outline-none cursor-pointer transition-colors",
+              children: isCollapsed ? /* @__PURE__ */ jsx23(ChevronRight2, { className: "size-4" }) : /* @__PURE__ */ jsx23(ChevronLeft2, { className: "size-4" })
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ jsxs19("div", { className: "flex-1 overflow-y-auto p-3 space-y-4 scrollbar-none", children: [
+          /* @__PURE__ */ jsx23("nav", { className: "space-y-1", children: links.map((item) => {
+            const Icon = item.icon;
+            return /* @__PURE__ */ jsxs19(
+              "button",
+              {
+                type: "button",
+                onClick: item.onClick,
+                className: cn(
+                  "w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all outline-none cursor-pointer",
+                  item.active ? "bg-accent-soft text-accent font-semibold" : "text-text-secondary hover:bg-muted hover:text-text-primary",
+                  isCollapsed && "justify-center px-0 h-9"
+                ),
+                children: [
+                  /* @__PURE__ */ jsx23(Icon, { className: cn("size-4 shrink-0", item.active ? "text-accent" : "text-text-muted") }),
+                  !isCollapsed ? /* @__PURE__ */ jsx23("span", { className: "truncate animate-in fade-in duration-200", children: item.label }) : /* @__PURE__ */ jsx23("span", { className: "text-[11px] font-bold tracking-tighter uppercase md:hidden", children: item.short })
+                ]
+              },
+              item.id
+            );
+          }) }),
+          subLinks.length > 0 && /* @__PURE__ */ jsx23("div", { className: "space-y-1", children: !isCollapsed ? /* @__PURE__ */ jsxs19(Fragment4, { children: [
+            /* @__PURE__ */ jsxs19(
+              "button",
+              {
+                type: "button",
+                onClick: () => setIsSubOpen(!isSubOpen),
+                className: "w-full flex items-center justify-between px-3 py-2 text-[11px] font-bold tracking-wider text-text-muted uppercase hover:text-text-primary transition-colors cursor-pointer outline-none",
+                children: [
+                  /* @__PURE__ */ jsx23("span", { children: subLinksTitle }),
+                  /* @__PURE__ */ jsx23(ChevronDown2, { className: cn("size-3 transition-transform duration-200", !isSubOpen && "-rotate-90") })
+                ]
+              }
+            ),
+            isSubOpen && /* @__PURE__ */ jsx23("div", { className: "pl-4 space-y-0.5 animate-in slide-in-from-top-1 duration-150", children: subLinks.map((p, idx) => /* @__PURE__ */ jsxs19(
+              "a",
+              {
+                href: p.href,
+                className: "flex items-center gap-2 px-3 py-1.5 text-sm text-text-secondary hover:text-text-primary rounded-md hover:bg-muted/50 transition-colors truncate",
+                children: [
+                  p.isDot && /* @__PURE__ */ jsx23("span", { className: "size-2 rounded-full bg-text-success shrink-0" }),
+                  /* @__PURE__ */ jsx23("span", { className: "truncate", children: p.label })
+                ]
+              },
+              idx
+            )) })
+          ] }) : /* @__PURE__ */ jsx23("div", { className: "flex justify-center py-2 border-t border-border/40 text-text-muted", children: /* @__PURE__ */ jsx23(Folder, { className: "size-4" }) }) })
+        ] }),
+        /* @__PURE__ */ jsx23("div", { className: cn("p-4 border-t border-border/40 flex items-center gap-3 h-16 shrink-0", isCollapsed && "justify-center px-2"), children: /* @__PURE__ */ jsx23("div", { className: "shrink-0", children: /* @__PURE__ */ jsx23(ThemeToggle, {}) }) })
+      ]
+    }
+  );
+}
 export {
   Breadcrumbs,
   Button,
@@ -2305,6 +2395,7 @@ export {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
+  Sidebar,
   StatusBadge,
   Tabs,
   Textarea,
