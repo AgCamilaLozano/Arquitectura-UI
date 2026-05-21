@@ -73,7 +73,7 @@ function SelectTrigger(_a) {
       type: "button",
       "data-size": size,
       className: cn(
-        "border-border data-[placeholder]:text-text-muted [&_svg:not([class*='text-'])]:text-text-muted focus-visible:border-ring focus-visible:ring-border-soft/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-background dark:hover:bg-backgraund flex w-fit items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "border-border data-[placeholder]:text-text-muted [&_svg:not([class*='text-'])]:text-text-muted focus-visible:border-ring focus-visible:ring-border-accent-soft/50 aria-invalid:ring-text-error/20 dark:aria-invalid:ring-text-error/40 aria-invalid:border-text-error dark:bg-background dark:hover:bg-background flex w-full items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )
     }, props), {
@@ -101,7 +101,7 @@ function SelectContent(_a) {
     __spreadProps(__spreadValues({
       "data-slot": "select-content",
       className: cn(
-        "bg-background text-primary data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border border-border shadow-md",
+        "bg-background text-text-primary data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border border-border shadow-sm",
         position === "popper" && "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
         className
       ),
@@ -135,7 +135,7 @@ function SelectLabel(_a) {
     SelectPrimitive.Label,
     __spreadValues({
       "data-slot": "select-label",
-      className: cn("text-muted-foreground px-2 py-1.5 text-xs border-b", className)
+      className: cn("text-text-muted px-2 py-1.5 text-xs border-b border-border", className)
     }, props)
   );
 }
@@ -152,7 +152,7 @@ function SelectItem(_a) {
     __spreadProps(__spreadValues({
       "data-slot": "select-item",
       className: cn(
-        "focus:bg-accent-hover focus:text-accent [&_svg:not([class*='text-'])]:text-text-muted relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+        "focus:bg-muted/50 focus:text-text-primary [&_svg:not([class*='text-'])]:text-text-muted relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className
       )
     }, props), {
@@ -224,7 +224,7 @@ function SelectScrollDownButton(_a) {
 }
 
 // lib/components/ui/Base/Selects/MultiSelect.tsx
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
 function MultiSelect({
@@ -250,46 +250,56 @@ function MultiSelect({
       selected.includes(value) ? selected.filter((v) => v !== value) : [...selected, value]
     );
   };
-  const normalized = options.map(
-    (opt) => typeof opt === "string" ? { label: opt, value: opt } : opt
-  );
-  const selectedLabels = normalized.filter((o) => selected.includes(o.value)).map((o) => o.label);
-  return /* @__PURE__ */ jsxs2("div", { ref, className: cn("relative", className), children: [
+  const normalized = useMemo(() => {
+    return options.map(
+      (opt) => typeof opt === "string" ? { label: opt, value: opt } : opt
+    );
+  }, [options]);
+  const hasSelected = selected.length > 0;
+  return /* @__PURE__ */ jsxs2("div", { ref, className: cn("relative w-full min-w-[180px]", className), children: [
     /* @__PURE__ */ jsxs2(
       "button",
       {
         type: "button",
         onClick: () => setOpen((prev) => !prev),
         className: cn(
-          "flex items-center justify-between gap-2 min-w-[180px] opacity-100 h-9 rounded-md border border-border px-3 py-2 text-sm shadow-sm",
-          "text-muted-foreground hover:opacity-70"
+          // Base del botón (Unificado con tus inputs y botones previos)
+          "flex items-center justify-between gap-2 w-full h-9 rounded-md border border-border px-3 py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none",
+          "focus-visible:border-accent focus-visible:ring-accent-soft focus-visible:ring-[3px]",
+          "disabled:cursor-not-allowed disabled:opacity-50",
+          // CORREGIDO: Cambia de color dinámicamente si hay elementos elegidos
+          hasSelected ? "text-text-primary font-medium" : "text-text-muted"
         ),
         children: [
-          /* @__PURE__ */ jsx2("span", { children: selected.length === 0 ? placeholder : `${placeholder} (${selected.length})` }),
-          /* @__PURE__ */ jsx2(ChevronDown, { className: cn("h-4 w-4 shrink-0 transition-transform", open && "rotate-180") })
+          /* @__PURE__ */ jsx2("span", { className: "truncate", children: !hasSelected ? placeholder : `${placeholder} (${selected.length})` }),
+          /* @__PURE__ */ jsx2(ChevronDown, { className: cn("h-4 w-4 shrink-0 text-text-muted transition-transform duration-200", open && "rotate-180") })
         ]
       }
     ),
-    open && /* @__PURE__ */ jsx2("div", { className: "absolute z-50 mt-1 min-w-[180px] max-h-[250px] overflow-y-auto scrollbar-soft rounded-md border border-border shadow-md bg-surface dark:bg-background", children: /* @__PURE__ */ jsx2("div", { className: "p-1 flex flex-col", children: normalized.map((option) => {
+    open && /* @__PURE__ */ jsx2("div", { className: "absolute z-50 mt-1 w-full max-h-[250px] overflow-y-auto scrollbar-soft rounded-md border border-border shadow-md bg-surface", children: /* @__PURE__ */ jsx2("div", { className: "p-1 flex flex-col gap-0.5", children: normalized.map((option) => {
       const isSelected = selected.includes(option.value);
       return /* @__PURE__ */ jsxs2(
         "button",
         {
           type: "button",
           onClick: () => toggle(option.value),
-          className: "group flex items-center gap-2 px-2 py-1.5 rounded-sm text-sm text-left hover:bg-accent-hover/20 hover:border-accent hover:text-accent w-full",
+          className: cn(
+            "group flex items-center gap-2 px-2 py-1.5 rounded-sm text-sm text-left w-full outline-none transition-colors",
+            // CORREGIDO: Uso de tus tokens bg-muted para consistencia visual con el Select
+            "hover:bg-muted text-text-primary focus:bg-muted"
+          ),
           children: [
             /* @__PURE__ */ jsx2(
               "span",
               {
                 className: cn(
-                  "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border border-border group-hover:border-accent",
+                  "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border border-border transition-colors group-hover:border-accent",
                   isSelected ? "bg-accent text-white border-accent" : "bg-transparent"
                 ),
-                children: isSelected && /* @__PURE__ */ jsx2(Check, { className: "h-3 w-3" })
+                children: isSelected && /* @__PURE__ */ jsx2(Check, { className: "h-3 w-3 stroke-[3]" })
               }
             ),
-            option.label
+            /* @__PURE__ */ jsx2("span", { className: "truncate", children: option.label })
           ]
         },
         option.value
@@ -311,7 +321,8 @@ var buttonVariants = cva(
         outline: "border bg-background border-border shadow-xs hover:bg-accent/10",
         secondary: "bg-muted/90 text-secondary dark:text-primary shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)]",
         ghost: "hover:bg-accent/20 hover:text-purple-900 dark:hover:text-accent",
-        link: "text-secondary-foreground hover:text-purple-900 dark:hover:text-accent underline-offset-6 decoration-[var(--border-accent)] hover:underline"
+        link: "text-secondary-foreground hover:text-purple-900 dark:hover:text-accent underline-offset-6 decoration-[var(--border-accent)] hover:underline",
+        destructive: "bg-text-error text-white hover:bg-text-error/90"
       },
       size: {
         default: "h-9 px-4 py-2 ",
@@ -343,28 +354,68 @@ var Button = React.forwardRef(
 Button.displayName = "Button";
 
 // lib/components/ui/Base/Entradas/input.tsx
-import { jsx as jsx4 } from "react/jsx-runtime";
-function Input(_a) {
-  var _b = _a, { className, type } = _b, props = __objRest(_b, ["className", "type"]);
-  return /* @__PURE__ */ jsx4(
-    "input",
-    __spreadValues({
-      type,
-      "data-slot": "input",
-      className: cn(
-        "file:text-text-secondary placeholder:text-text-muted selection:bg-accent-soft selection:text-accent border-border h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-        "focus:border-accent focus:shadow-[0_0_0_3px_var(--accent-soft)]",
-        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-        className
-      )
-    }, props)
-  );
-}
+import React2 from "react";
+import { cva as cva2 } from "class-variance-authority";
+import { jsx as jsx4, jsxs as jsxs3 } from "react/jsx-runtime";
+var inputVariants = cva2(
+  "file:text-text-secondary placeholder:text-text-muted selection:bg-accent-soft selection:text-accent h-9 w-full min-w-0 rounded-md border bg-transparent py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+  {
+    variants: {
+      variant: {
+        default: "border-border focus:border-accent focus:shadow-[0_0_0_3px_var(--accent-soft)]",
+        // Variante para cuando el campo tiene un error crítico o es destructivo
+        destructive: "border-text-error focus:border-text-error focus:shadow-[0_0_0_3px_rgba(231,0,11,0.15)] text-text-error placeholder:text-text-error/50"
+      },
+      // Ajustamos el padding izquierdo o derecho si lleva icono
+      withIcon: {
+        none: "px-3",
+        left: "pl-10 pr-3",
+        right: "pl-3 pr-10",
+        both: "px-10"
+      }
+    },
+    defaultVariants: {
+      variant: "default",
+      withIcon: "none"
+    }
+  }
+);
+var Input = React2.forwardRef(
+  (_a, ref) => {
+    var _b = _a, { className, type = "text", variant, iconLeft, iconRight } = _b, props = __objRest(_b, ["className", "type", "variant", "iconLeft", "iconRight"]);
+    const iconPosition = iconLeft && iconRight ? "both" : iconLeft ? "left" : iconRight ? "right" : "none";
+    return /* @__PURE__ */ jsxs3("div", { className: "relative RussoOne-Normal w-full flex items-center", children: [
+      iconLeft && /* @__PURE__ */ jsx4("div", { className: cn(
+        "absolute left-3 flex items-center justify-center pointer-events-none text-text-muted [&_svg]:size-4",
+        variant === "destructive" && "text-text-error"
+      ), children: iconLeft }),
+      /* @__PURE__ */ jsx4(
+        "input",
+        __spreadValues({
+          ref,
+          type,
+          "data-slot": "input",
+          className: inputVariants({
+            variant,
+            withIcon: iconPosition,
+            className
+          }),
+          "aria-invalid": variant === "destructive" || void 0
+        }, props)
+      ),
+      iconRight && /* @__PURE__ */ jsx4("div", { className: cn(
+        "absolute right-3 flex items-center justify-center pointer-events-none text-text-muted [&_svg]:size-4",
+        variant === "destructive" && "text-text-error"
+      ), children: iconRight })
+    ] });
+  }
+);
+Input.displayName = "Input";
 
 // lib/components/ui/Base/Entradas/textarea.tsx
-import React2 from "react";
+import React3 from "react";
 import { jsx as jsx5 } from "react/jsx-runtime";
-var Textarea = React2.forwardRef(
+var Textarea = React3.forwardRef(
   (_a, ref) => {
     var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
     return /* @__PURE__ */ jsx5(
@@ -372,8 +423,9 @@ var Textarea = React2.forwardRef(
       __spreadValues({
         ref,
         className: cn(
-          "w-full px-3 py-1 border border-border rounded-md text-sm",
-          "focus:outline-none focus:shadow-[0_0_0_3px_var(--accent-soft)] focus:border-accent resize-none transition-all duration-200",
+          "w-full min-h-[80px] px-3 py-2 border border-border rounded-md text-sm bg-transparent placeholder:text-text-muted transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+          "focus:border-accent focus:shadow-[0_0_0_3px_var(--accent-soft)]",
+          "aria-invalid:ring-text-error/20 dark:aria-invalid:ring-text-error/40 aria-invalid:border-text-error",
           className
         )
       }, props)
@@ -391,122 +443,134 @@ function ThemeProvider(_a) {
 }
 
 // lib/components/ui/Tema/ThemeToggle.tsx
-import * as React3 from "react";
+import * as React4 from "react";
 import { Moon, Sun, Laptop } from "lucide-react";
 import { useTheme } from "next-themes";
+import { DropdownMenu as DropdownPrimitive } from "radix-ui";
 
 // lib/components/ui/buttonIcons/fondoIcons.tsx
 import { useRef as useRef2 } from "react";
-import { jsx as jsx7, jsxs as jsxs3 } from "react/jsx-runtime";
+import { jsx as jsx7, jsxs as jsxs4 } from "react/jsx-runtime";
 function AnimatedIconButton({ Icon, onClick }) {
   const iconRef = useRef2(null);
-  return /* @__PURE__ */ jsx7("button", { onClick, className: "group", children: /* @__PURE__ */ jsxs3("div", { className: "relative bg-muted/50 rounded-full p-2 text-sm transition-all duration-300 transform group-hover:scale-110 active:scale-95 group-hover:shadow-2xl", children: [
+  return /* @__PURE__ */ jsx7("button", { onClick, className: "group", children: /* @__PURE__ */ jsxs4("div", { className: "relative bg-muted/50 rounded-full p-2 text-sm transition-all duration-300 transform group-hover:scale-110 active:scale-95 group-hover:shadow-2xl", children: [
     /* @__PURE__ */ jsx7("div", { className: "absolute -bottom-1 right-5 rounded-full w-3 h-3 bg-muted/50" }),
     /* @__PURE__ */ jsx7("div", { ref: iconRef, children: /* @__PURE__ */ jsx7(Icon, { className: "h-5 w-5 z-50" }) })
   ] }) });
 }
 
 // lib/components/ui/Tema/ThemeToggle.tsx
-import { jsx as jsx8, jsxs as jsxs4 } from "react/jsx-runtime";
+import { jsx as jsx8, jsxs as jsxs5 } from "react/jsx-runtime";
 function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = React3.useState(false);
-  const [isOpen, setIsOpen] = React3.useState(false);
-  const menuRef = React3.useRef(null);
-  React3.useEffect(() => {
+  const [mounted, setMounted] = React4.useState(false);
+  React4.useEffect(() => {
     setMounted(true);
-    function handleClickOutside(event) {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
   }, []);
   if (!mounted) {
-    return /* @__PURE__ */ jsxs4(
+    return /* @__PURE__ */ jsx8(
       "button",
       {
-        className: "inline-flex items-center justify-center rounded-md border border-border bg-transparent p-2 text-sm font-medium text-foreground transition-colors",
+        className: "inline-flex items-center justify-center rounded-lg border border-border bg-transparent p-2 text-sm font-medium text-text-muted transition-colors opacity-60",
         "aria-label": "Cargando tema",
         disabled: true,
-        children: [
-          /* @__PURE__ */ jsx8(Sun, { className: "h-5 w-5" }),
-          /* @__PURE__ */ jsx8("span", { className: "sr-only", children: "Toggle theme" })
-        ]
+        children: /* @__PURE__ */ jsx8(Sun, { className: "size-5 animate-pulse" })
       }
     );
   }
   const CurrentIcon = theme === "dark" ? Moon : theme === "system" ? Laptop : Sun;
-  return /* @__PURE__ */ jsxs4("div", { className: "relative", ref: menuRef, children: [
-    /* @__PURE__ */ jsx8(
-      AnimatedIconButton,
-      {
-        onClick: () => setIsOpen(!isOpen),
-        "aria-label": "Cambiar tema",
-        Icon: CurrentIcon
-      }
-    ),
-    /* @__PURE__ */ jsx8("span", { className: "sr-only", children: "Toggle theme" }),
-    isOpen && /* @__PURE__ */ jsx8("div", { className: "absolute top-full mt-2 right-0 w-40 rounded-md border border-border-sidebar bg-background text-text-primary shadow-lg z-[9999]", children: /* @__PURE__ */ jsxs4("div", { className: "py-1", role: "menu", "aria-orientation": "vertical", "aria-labelledby": "options-menu", children: [
-      /* @__PURE__ */ jsxs4("button", { onClick: () => {
-        setTheme("light");
-        setIsOpen(false);
-      }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
-        /* @__PURE__ */ jsx8(Sun, { className: "mr-2 h-4 w-4" }),
-        /* @__PURE__ */ jsx8("span", { children: "Claro" })
-      ] }),
-      /* @__PURE__ */ jsxs4("button", { onClick: () => {
-        setTheme("dark");
-        setIsOpen(false);
-      }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
-        /* @__PURE__ */ jsx8(Moon, { className: "mr-2 h-4 w-4" }),
-        /* @__PURE__ */ jsx8("span", { children: "Oscuro" })
-      ] }),
-      /* @__PURE__ */ jsxs4("button", { onClick: () => {
-        setTheme("system");
-        setIsOpen(false);
-      }, className: "flex w-full items-center px-4 py-2 text-sm hover:bg-accent-hover/20 hover:text-accent", children: [
-        /* @__PURE__ */ jsx8(Laptop, { className: "mr-2 h-4 w-4" }),
-        /* @__PURE__ */ jsx8("span", { children: "Sistema" })
-      ] })
-    ] }) })
-  ] });
+  return (
+    // 2. Encapsulamos con Radix para un comportamiento flotante perfecto
+    /* @__PURE__ */ jsxs5(DropdownPrimitive.Root, { children: [
+      /* @__PURE__ */ jsx8(DropdownPrimitive.Trigger, { asChild: true, children: /* @__PURE__ */ jsx8("div", { className: "inline-block outline-none", children: /* @__PURE__ */ jsx8(
+        AnimatedIconButton,
+        {
+          "aria-label": "Cambiar tema",
+          Icon: CurrentIcon
+        }
+      ) }) }),
+      /* @__PURE__ */ jsx8(DropdownPrimitive.Portal, { children: /* @__PURE__ */ jsxs5(
+        DropdownPrimitive.Content,
+        {
+          align: "end",
+          sideOffset: 8,
+          className: cn(
+            "bg-surface text-text-primary border border-border rounded-md p-1 z-[9999] w-36 outline-none",
+            "shadow-xl",
+            "data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-150"
+          ),
+          children: [
+            /* @__PURE__ */ jsxs5(
+              DropdownPrimitive.Item,
+              {
+                onClick: () => setTheme("light"),
+                className: "flex w-full items-center px-3 py-2 text-sm rounded-md outline-none select-none cursor-pointer transition-colors text-text-secondary focus:bg-accent-soft focus:text-accent",
+                children: [
+                  /* @__PURE__ */ jsx8(Sun, { className: "mr-2.5 size-4" }),
+                  /* @__PURE__ */ jsx8("span", { children: "Claro" })
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxs5(
+              DropdownPrimitive.Item,
+              {
+                onClick: () => setTheme("dark"),
+                className: "flex w-full items-center px-3 py-2 text-sm rounded-md outline-none select-none cursor-pointer transition-colors text-text-secondary focus:bg-accent-soft focus:text-accent",
+                children: [
+                  /* @__PURE__ */ jsx8(Moon, { className: "mr-2.5 size-4" }),
+                  /* @__PURE__ */ jsx8("span", { children: "Oscuro" })
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxs5(
+              DropdownPrimitive.Item,
+              {
+                onClick: () => setTheme("system"),
+                className: "flex w-full items-center px-3 py-2 text-sm rounded-md outline-none select-none cursor-pointer transition-colors text-text-secondary focus:bg-accent-soft focus:text-accent",
+                children: [
+                  /* @__PURE__ */ jsx8(Laptop, { className: "mr-2.5 size-4" }),
+                  /* @__PURE__ */ jsx8("span", { children: "Sistema" })
+                ]
+              }
+            )
+          ]
+        }
+      ) })
+    ] })
+  );
 }
 
 // lib/components/ui/Compuesto/Badges/LabelBadge.tsx
 import { X } from "lucide-react";
-import { jsx as jsx9, jsxs as jsxs5 } from "react/jsx-runtime";
+import { jsx as jsx9, jsxs as jsxs6 } from "react/jsx-runtime";
 var colorVariantStyles = {
   neutral: {
-    filled: "bg-primary text-background",
+    filled: "bg-primary text-background border border-transparent",
     soft: "bg-muted text-text-primary border border-border",
     outline: "border border-border text-text-primary bg-transparent"
   },
   accent: {
-    filled: "bg-accent text-white",
+    filled: "bg-accent text-white border border-transparent",
     soft: "bg-accent-soft text-accent border border-accent/30",
     outline: "border border-accent text-accent bg-transparent"
   },
   success: {
-    filled: "bg-text-success text-white",
+    filled: "bg-text-success text-white border border-transparent",
     soft: "bg-success text-text-success border border-text-success/25",
     outline: "border border-text-success text-text-success bg-transparent"
   },
   error: {
-    filled: "bg-text-error text-white",
+    filled: "bg-text-error text-white border border-transparent",
     soft: "bg-error text-text-error border border-text-error/25",
     outline: "border border-text-error text-text-error bg-transparent"
   },
   warning: {
-    filled: "bg-text-warning text-white",
+    filled: "bg-text-warning text-white border border-transparent",
     soft: "bg-warning text-text-warning border border-text-warning/25",
     outline: "border border-text-warning text-text-warning bg-transparent"
   },
   info: {
-    filled: "bg-text-info text-white",
+    filled: "bg-text-info text-white border border-transparent",
     soft: "bg-info text-text-info border border-text-info/25",
     outline: "border border-text-info text-text-info bg-transparent"
   }
@@ -517,9 +581,9 @@ var sizeStyles = {
   lg: "text-sm px-3 py-1.5 gap-2"
 };
 var iconSizeStyles = {
-  sm: "w-3 h-3",
-  md: "w-3.5 h-3.5",
-  lg: "w-4 h-4"
+  sm: "size-3",
+  md: "size-3.5",
+  lg: "size-4"
 };
 function LabelBadge({
   label,
@@ -530,24 +594,27 @@ function LabelBadge({
   onRemove,
   className
 }) {
-  return /* @__PURE__ */ jsxs5(
+  return /* @__PURE__ */ jsxs6(
     "span",
     {
       className: cn(
-        "inline-flex items-center rounded-md font-medium",
+        "inline-flex items-center rounded-md font-medium select-none",
         colorVariantStyles[color][variant],
         sizeStyles[size],
         className
       ),
       children: [
-        icon && /* @__PURE__ */ jsx9("span", { className: cn("flex-shrink-0", iconSizeStyles[size]), children: icon }),
-        label,
+        icon && /* @__PURE__ */ jsx9("span", { className: cn("flex-shrink-0 [&_svg]:size-full", iconSizeStyles[size]), children: icon }),
+        /* @__PURE__ */ jsx9("span", { className: "truncate", children: label }),
         onRemove && /* @__PURE__ */ jsx9(
           "button",
           {
             type: "button",
             onClick: onRemove,
-            className: "ml-0.5 flex-shrink-0 rounded-full opacity-60 hover:opacity-100 transition-opacity focus:outline-none",
+            className: cn(
+              "flex items-center justify-center rounded-full opacity-60 hover:opacity-100 transition-all outline-none cursor-pointer",
+              "focus-visible:ring-1 focus-visible:ring-current"
+            ),
             "aria-label": `Eliminar ${label}`,
             children: /* @__PURE__ */ jsx9(X, { className: iconSizeStyles[size] })
           }
@@ -558,7 +625,7 @@ function LabelBadge({
 }
 
 // lib/components/ui/Compuesto/Badges/StatusBadge.tsx
-import { jsx as jsx10, jsxs as jsxs6 } from "react/jsx-runtime";
+import { jsx as jsx10, jsxs as jsxs7 } from "react/jsx-runtime";
 var variantStyles = {
   success: {
     container: "bg-success text-text-success border border-text-success/20",
@@ -586,8 +653,8 @@ var sizeStylesStatus = {
   md: "text-sm px-2.5 py-1 gap-2"
 };
 var dotSizeStyles = {
-  sm: "w-1.5 h-1.5",
-  md: "w-2 h-2"
+  sm: "size-1.5",
+  md: "size-2"
 };
 function StatusBadge({
   status,
@@ -598,17 +665,17 @@ function StatusBadge({
   className
 }) {
   const { container, dot } = variantStyles[status];
-  return /* @__PURE__ */ jsxs6(
+  return /* @__PURE__ */ jsxs7(
     "span",
     {
       className: cn(
-        "inline-flex items-center rounded-md font-medium",
+        "inline-flex items-center rounded-md font-medium select-none",
         container,
         sizeStylesStatus[size],
         className
       ),
       children: [
-        withDot && /* @__PURE__ */ jsxs6("span", { className: "relative flex items-center justify-center", children: [
+        withDot && /* @__PURE__ */ jsxs7("span", { className: "relative flex items-center justify-center shrink-0", children: [
           animated && /* @__PURE__ */ jsx10(
             "span",
             {
@@ -630,30 +697,24 @@ function StatusBadge({
             }
           )
         ] }),
-        label
+        /* @__PURE__ */ jsx10("span", { className: "truncate", children: label })
       ]
     }
   );
 }
 
-// lib/components/ui/Compuesto/Modals/Card.tsx
-import { jsx as jsx11, jsxs as jsxs7 } from "react/jsx-runtime";
+// lib/components/ui/Compuesto/Contenedores/Card.tsx
+import { jsx as jsx11, jsxs as jsxs8 } from "react/jsx-runtime";
 var variantClasses = {
   default: "bg-background border border-border hover:border-accent/50",
   outlined: "bg-background border border-accent",
-  elevated: "bg-background border-1 ",
-  accent: "bg-background border-l-2 border-l-accent shadow-[var(--shadow-surface)]",
+  elevated: "bg-background border border-border shadow-md",
+  // Ajustado para dar sensación de elevación
+  accent: "bg-background border border-border border-l-4 border-l-accent shadow-xs",
   ghost: "bg-surface border border-border shadow-none"
-};
-var paddingClasses = {
-  none: "",
-  sm: "p-3",
-  md: "p-5",
-  lg: "p-7"
 };
 function Card({
   variant = "default",
-  padding = "md",
   clickable = false,
   onClick,
   fullWidth = false,
@@ -661,18 +722,23 @@ function Card({
   children
 }) {
   const isInteractive = clickable || Boolean(onClick);
+  const Component = isInteractive ? "button" : "div";
   return /* @__PURE__ */ jsx11(
-    "div",
+    Component,
     {
       onClick,
-      className: `
-        rounded-md overflow-hidden transition-all duration-200 shadow-sm
-        ${variantClasses[variant]}
-        ${paddingClasses[padding]}
-        ${fullWidth ? "w-full" : ""}
-        ${isInteractive ? "cursor-pointer hover:border-accent hover:shadow-accent hover:-translate-y-0.5 active:scale-[0.99]" : ""}
-        ${className}
-      `,
+      type: isInteractive ? "button" : void 0,
+      tabIndex: isInteractive ? 0 : void 0,
+      className: cn(
+        "rounded-xl overflow-hidden transition-all duration-200 text-left block flex flex-col w-fit",
+        variantClasses[variant],
+        fullWidth && "w-full",
+        isInteractive && [
+          "cursor-pointer focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-accent-soft focus-visible:border-accent",
+          "hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99]"
+        ],
+        className
+      ),
       children
     }
   );
@@ -684,16 +750,19 @@ function CardHeader({
   withDivider = false,
   className = ""
 }) {
-  return /* @__PURE__ */ jsx11("div", { className: `${withDivider ? "pb-4 mb-4 border-b border-border" : "mb-3"} ${className}`, children: /* @__PURE__ */ jsxs7("div", { className: "flex items-start justify-between gap-3", children: [
-    /* @__PURE__ */ jsxs7("div", { children: [
-      /* @__PURE__ */ jsx11("h3", { className: "text-base text-lg font-semibold leading-snug", children: title }),
-      subtitle && /* @__PURE__ */ jsx11("p", { className: "mt-0.5 text-sm text-text-secondary", children: subtitle })
+  return /* @__PURE__ */ jsx11("div", { className: cn("p-5 pb-3", withDivider && "border-b border-border mb-3", className), children: /* @__PURE__ */ jsxs8("div", { className: "flex items-start justify-between gap-3", children: [
+    /* @__PURE__ */ jsxs8("div", { className: "min-w-0", children: [
+      /* @__PURE__ */ jsx11("h3", { className: "font-semibold leading-snug text-text-primary truncate", children: title }),
+      subtitle && /* @__PURE__ */ jsx11("p", { className: "mt-0.5 text-sm text-text-secondary truncate", children: subtitle })
     ] }),
     action && /* @__PURE__ */ jsx11("div", { className: "shrink-0", children: action })
   ] }) });
 }
 function CardBody({ className = "", children }) {
-  return /* @__PURE__ */ jsx11("div", { className: `text-sm text-text-primary ${className}`, children });
+  return (
+    // Se añade el padding nativo aquí para aislarlo de CardImage
+    /* @__PURE__ */ jsx11("div", { className: cn("px-5 py-3 text-sm text-text-primary flex-1", className), children })
+  );
 }
 var footerAlignClasses = {
   left: "justify-start",
@@ -710,12 +779,12 @@ function CardFooter({
   return /* @__PURE__ */ jsx11(
     "div",
     {
-      className: `
-        flex items-center gap-2 mt-4
-        ${withDivider ? "pt-4 border-t border-border" : ""}
-        ${footerAlignClasses[align]}
-        ${className}
-      `,
+      className: cn(
+        "flex items-center gap-2 p-5 pt-3 mt-auto",
+        withDivider && "border-t border-border",
+        footerAlignClasses[align],
+        className
+      ),
       children
     }
   );
@@ -729,30 +798,34 @@ function CardImage({
   return /* @__PURE__ */ jsx11(
     "div",
     {
-      className: `w-full overflow-hidden bg-muted ${className}`,
+      className: cn("w-full overflow-hidden bg-muted shrink-0", className),
       style: { height },
       children: /* @__PURE__ */ jsx11(
         "img",
         {
           src,
           alt,
-          className: "w-full h-full object-cover"
+          className: "w-full h-full object-cover",
+          loading: "lazy"
         }
       )
     }
   );
 }
 
-// lib/components/ui/Compuesto/Modals/Dialog.tsx
-import React4, { useEffect as useEffect3, useCallback } from "react";
+// lib/components/ui/Compuesto/Contenedores/Dialog.tsx
+import React5 from "react";
 import { X as X2 } from "lucide-react";
-import { jsx as jsx12, jsxs as jsxs8 } from "react/jsx-runtime";
+import { Dialog as DialogPrimitive } from "radix-ui";
+import { jsx as jsx12, jsxs as jsxs9 } from "react/jsx-runtime";
 var sizeClasses = {
   sm: "max-w-sm",
   md: "max-w-md",
   lg: "max-w-lg",
   xl: "max-w-2xl"
 };
+var DialogContext = React5.createContext({ variant: "default" });
+var useDialogContext = () => React5.useContext(DialogContext);
 function Dialog({
   open,
   onClose,
@@ -763,78 +836,44 @@ function Dialog({
   className = "",
   children
 }) {
-  const handleKeyDown = useCallback(
-    (e) => {
-      if (e.key === "Escape") onClose();
-    },
-    [onClose]
-  );
-  useEffect3(() => {
-    if (open) {
-      document.addEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "hidden";
-    }
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
-    };
-  }, [open, handleKeyDown]);
-  if (!open) return null;
   return (
-    /* Overlay */
-    /* @__PURE__ */ jsxs8(
-      "div",
-      {
-        role: "dialog",
-        "aria-modal": "true",
-        className: "fixed inset-0 z-50 flex items-center justify-center p-4",
-        children: [
-          /* @__PURE__ */ jsx12(
-            "div",
-            {
-              className: "absolute inset-0 bg-black/50 animate-in fade-in duration-200",
-              onClick: closeOnOverlay ? onClose : void 0,
-              "aria-hidden": "true"
-            }
+    // Radix controla el estado abierto y el disparo del cierre de forma nativa
+    /* @__PURE__ */ jsx12(DialogPrimitive.Root, { open, onOpenChange: (isOpen) => !isOpen && onClose(), children: /* @__PURE__ */ jsxs9(DialogPrimitive.Portal, { children: [
+      /* @__PURE__ */ jsx12(
+        DialogPrimitive.Overlay,
+        {
+          onClick: !closeOnOverlay ? (e) => e.preventDefault() : void 0,
+          className: "fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=open]:fade-in duration-200"
+        }
+      ),
+      /* @__PURE__ */ jsx12("div", { className: "fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none", children: /* @__PURE__ */ jsxs9(
+        DialogPrimitive.Content,
+        {
+          className: cn(
+            "relative w-full pointer-events-auto",
+            "bg-surface dark:bg-background rounded-md overflow-hidden border border-border shadow-[var(--shadow-card)]",
+            "data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-200",
+            sizeClasses[size],
+            className
           ),
-          /* @__PURE__ */ jsxs8(
-            "div",
-            {
-              className: `
-          relative z-10 w-full
-          bg-surface dark:bg-background
-          rounded-xl overflow-hidden
-          border border-border
-          shadow-[var(--shadow-card)]
-          animate-in fade-in zoom-in-95 duration-200
-          ${sizeClasses[size]}
-          ${className}
-        `,
-              children: [
-                !hideCloseButton && /* @__PURE__ */ jsx12(
-                  Button,
-                  {
-                    variant: "ghost",
-                    size: "icon-sm",
-                    onClick: onClose,
-                    "aria-label": "Cerrar",
-                    className: "absolute top-3 right-3 text-text-muted hover:text-text-primary",
-                    children: /* @__PURE__ */ jsx12(X2, {})
-                  }
-                ),
-                /* @__PURE__ */ jsx12(DialogContext.Provider, { value: { variant }, children })
-              ]
-            }
-          )
-        ]
-      }
-    )
+          children: [
+            !hideCloseButton && /* @__PURE__ */ jsx12(DialogPrimitive.Close, { asChild: true, children: /* @__PURE__ */ jsx12(
+              Button,
+              {
+                variant: "ghost",
+                size: "icon-sm",
+                "aria-label": "Cerrar",
+                className: "absolute top-3 right-3 text-text-muted hover:text-text-primary z-20",
+                children: /* @__PURE__ */ jsx12(X2, {})
+              }
+            ) }),
+            /* @__PURE__ */ jsx12(DialogContext.Provider, { value: { variant }, children })
+          ]
+        }
+      ) })
+    ] }) })
   );
 }
-var DialogContext = React4.createContext({
-  variant: "default"
-});
-var useDialogContext = () => React4.useContext(DialogContext);
 var variantIconBg = {
   default: "bg-accent-soft text-accent",
   destructive: "bg-error text-text-error",
@@ -849,50 +888,16 @@ function DialogHeader({
   className = ""
 }) {
   const { variant } = useDialogContext();
-  return /* @__PURE__ */ jsx12(
-    "div",
-    {
-      className: `
-        px-6 pt-6
-        ${withDivider ? "pb-4 border-b border-border" : "pb-2"}
-        ${className}
-      `,
-      children: /* @__PURE__ */ jsxs8("div", { className: "flex items-start gap-3", children: [
-        icon && /* @__PURE__ */ jsx12(
-          "span",
-          {
-            className: `
-              mt-0.5 flex items-center justify-center
-              w-9 h-9 rounded-lg shrink-0
-              ${variantIconBg[variant]}
-            `,
-            children: icon
-          }
-        ),
-        /* @__PURE__ */ jsxs8("div", { className: "flex-1 min-w-0 pr-6", children: [
-          /* @__PURE__ */ jsx12("h2", { className: "font-heading text-base font-semibold leading-snug text-text-primary", children: title }),
-          description && /* @__PURE__ */ jsx12("p", { className: "mt-1 text-sm text-text-secondary leading-relaxed", children: description })
-        ] })
-      ] })
-    }
-  );
+  return /* @__PURE__ */ jsx12("div", { className: cn("px-6 pt-6", withDivider ? "pb-4 border-b border-border" : "pb-2", className), children: /* @__PURE__ */ jsxs9("div", { className: "flex items-start gap-3", children: [
+    icon && /* @__PURE__ */ jsx12("span", { className: cn("mt-0.5 flex items-center justify-center w-9 h-9 rounded-md shrink-0", variantIconBg[variant]), children: icon }),
+    /* @__PURE__ */ jsxs9("div", { className: "flex-1 min-w-0 pr-6", children: [
+      /* @__PURE__ */ jsx12(DialogPrimitive.Title, { asChild: true, children: /* @__PURE__ */ jsx12("h3", { className: "semibold leading-snug text-text-primary", children: title }) }),
+      description && /* @__PURE__ */ jsx12(DialogPrimitive.Description, { asChild: true, children: /* @__PURE__ */ jsx12("p", { className: "mt-1 text-sm text-text-secondary leading-relaxed", children: description }) })
+    ] })
+  ] }) });
 }
-function DialogBody({
-  scrollable = false,
-  className = "",
-  children
-}) {
-  return /* @__PURE__ */ jsx12(
-    "div",
-    {
-      className: `
-        px-6 py-4 text-sm text-text-primary
-        ${scrollable ? "overflow-y-auto max-h-[60vh] scrollbar-soft" : ""}
-        ${className}
-      `,
-      children
-    }
-  );
+function DialogBody({ scrollable = false, className = "", children }) {
+  return /* @__PURE__ */ jsx12("div", { className: cn("px-6 py-4 text-sm text-text-primary", scrollable && "overflow-y-auto max-h-[60vh] scrollbar-soft", className), children });
 }
 var footerAlignClasses2 = {
   left: "justify-start",
@@ -900,148 +905,9 @@ var footerAlignClasses2 = {
   right: "justify-end",
   between: "justify-between"
 };
-function DialogFooter({
-  align = "right",
-  withDivider = true,
-  className = "",
-  children
-}) {
-  return /* @__PURE__ */ jsx12(
-    "div",
-    {
-      className: `
-        flex items-center flex-wrap gap-2 px-6 pb-5 pt-4
-        ${withDivider ? "border-t border-border" : ""}
-        ${footerAlignClasses2[align]}
-        ${className}
-      `,
-      children
-    }
-  );
+function DialogFooter({ align = "right", withDivider = true, className = "", children }) {
+  return /* @__PURE__ */ jsx12("div", { className: cn("flex items-center flex-wrap gap-2 px-6 pb-5 pt-4", withDivider && "border-t border-border", footerAlignClasses2[align], className), children });
 }
-
-// lib/components/ui/Compuesto/Modals/AlertDialog.tsx
-import React5, { useEffect as useEffect4, useCallback as useCallback2 } from "react";
-import { X as X3, AlertTriangle, AlertCircle, CheckCircle, Info } from "lucide-react";
-import { jsx as jsx13, jsxs as jsxs9 } from "react/jsx-runtime";
-var sizeClasses2 = {
-  sm: "max-w-sm",
-  md: "max-w-md",
-  lg: "max-w-lg"
-};
-var variantConfig = {
-  destructive: {
-    icon: /* @__PURE__ */ jsx13(AlertTriangle, { className: "w-5 h-5" }),
-    iconBg: "bg-error/10 text-text-error",
-    confirmVariant: "destructive"
-  },
-  warning: {
-    icon: /* @__PURE__ */ jsx13(AlertCircle, { className: "w-5 h-5" }),
-    iconBg: "bg-warning/10 text-text-warning",
-    confirmVariant: "primary"
-  },
-  success: {
-    icon: /* @__PURE__ */ jsx13(CheckCircle, { className: "w-5 h-5" }),
-    iconBg: "bg-success/10 text-text-success",
-    confirmVariant: "primary"
-  },
-  info: {
-    icon: /* @__PURE__ */ jsx13(Info, { className: "w-5 h-5" }),
-    iconBg: "bg-info/10 text-text-info",
-    confirmVariant: "primary"
-  }
-};
-function AlertDialog({
-  open,
-  onClose,
-  variant = "info",
-  size = "md",
-  title,
-  description,
-  confirmLabel = "Confirmar",
-  cancelLabel = "Cancelar",
-  onConfirm,
-  onCancel,
-  closeOnOverlay = true,
-  hideCloseButton = false,
-  className = "",
-  children
-}) {
-  const handleKeyDown = useCallback2(
-    (e) => {
-      if (e.key === "Escape") onClose();
-    },
-    [onClose]
-  );
-  useEffect4(() => {
-    if (open) {
-      document.addEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "hidden";
-    }
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
-    };
-  }, [open, handleKeyDown]);
-  const config = variantConfig[variant];
-  if (!open) return null;
-  return /* @__PURE__ */ jsxs9("div", { role: "alertdialog", "aria-modal": "true", className: "fixed inset-0 z-50 flex items-center justify-center p-4", children: [
-    /* @__PURE__ */ jsx13(
-      "div",
-      {
-        className: "absolute inset-0 bg-black/50 animate-in fade-in duration-200",
-        onClick: closeOnOverlay ? onClose : void 0,
-        "aria-hidden": "true"
-      }
-    ),
-    /* @__PURE__ */ jsxs9(
-      "div",
-      {
-        className: `
-          relative z-10 w-full
-          bg-surface dark:bg-background
-          rounded-xl overflow-hidden
-          border border-border
-          shadow-[var(--shadow-card)]
-          animate-in fade-in zoom-in-95 duration-200
-          ${sizeClasses2[size]}
-          ${className}
-        `,
-        children: [
-          !hideCloseButton && /* @__PURE__ */ jsx13(
-            Button,
-            {
-              variant: "ghost",
-              size: "icon-sm",
-              onClick: onClose,
-              "aria-label": "Cerrar",
-              className: "absolute top-3 right-3 text-text-muted hover:text-text-primary z-10",
-              children: /* @__PURE__ */ jsx13(X3, {})
-            }
-          ),
-          /* @__PURE__ */ jsxs9(AlertDialogContext.Provider, { value: { variant, config }, children: [
-            /* @__PURE__ */ jsx13("div", { className: "px-6 pt-6 pb-4", children: /* @__PURE__ */ jsxs9("div", { className: "flex items-start gap-3", children: [
-              /* @__PURE__ */ jsx13("span", { className: `flex items-center justify-center w-10 h-10 rounded-lg shrink-0 ${config.iconBg}`, children: config.icon }),
-              /* @__PURE__ */ jsxs9("div", { className: "flex-1 min-w-0 pr-6", children: [
-                /* @__PURE__ */ jsx13("h2", { className: "font-heading text-lg font-semibold leading-snug text-text-primary", children: title }),
-                description && /* @__PURE__ */ jsx13("p", { className: "mt-2 text-sm text-text-secondary leading-relaxed", children: description })
-              ] })
-            ] }) }),
-            (children || onConfirm || onCancel) && /* @__PURE__ */ jsx13("div", { className: "border-t border-border px-6 py-4", children: children || /* @__PURE__ */ jsxs9("div", { className: "flex items-center justify-end gap-2", children: [
-              onCancel && /* @__PURE__ */ jsx13(Button, { variant: "secondary", onClick: onCancel, children: cancelLabel }),
-              onConfirm && /* @__PURE__ */ jsx13(Button, { variant: "default", onClick: onConfirm, children: confirmLabel })
-            ] }) })
-          ] })
-        ]
-      }
-    )
-  ] });
-}
-var AlertDialogContext = React5.createContext({
-  variant: "info",
-  config: variantConfig["info"]
-});
-var useAlertDialogContext = () => React5.useContext(AlertDialogContext);
 
 // lib/components/ui/Compuesto/Toaster.tsx
 import { useTheme as useTheme2 } from "next-themes";
@@ -1053,10 +919,10 @@ import {
   OctagonXIcon,
   Loader2Icon
 } from "lucide-react";
-import { jsx as jsx14 } from "react/jsx-runtime";
+import { jsx as jsx13 } from "react/jsx-runtime";
 var Toaster = (props) => {
   const { theme = "system" } = useTheme2();
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx13(
     Sonner,
     __spreadValues({
       theme,
@@ -1064,11 +930,11 @@ var Toaster = (props) => {
       closeButton: true,
       className: "toaster !z-[999]",
       icons: {
-        success: /* @__PURE__ */ jsx14(CircleCheckIcon, { className: "size-5 !text-text-success" }),
-        error: /* @__PURE__ */ jsx14(OctagonXIcon, { className: "size-5 !text-text-error" }),
-        warning: /* @__PURE__ */ jsx14(TriangleAlertIcon, { className: "size-5 !text-text-warning" }),
-        info: /* @__PURE__ */ jsx14(InfoIcon, { className: "size-5 !text-text-info" }),
-        loading: /* @__PURE__ */ jsx14(Loader2Icon, { className: "size-5 animate-spin" })
+        success: /* @__PURE__ */ jsx13(CircleCheckIcon, { className: "size-5 !text-text-success" }),
+        error: /* @__PURE__ */ jsx13(OctagonXIcon, { className: "size-5 !text-text-error" }),
+        warning: /* @__PURE__ */ jsx13(TriangleAlertIcon, { className: "size-5 !text-text-warning" }),
+        info: /* @__PURE__ */ jsx13(InfoIcon, { className: "size-5 !text-text-info" }),
+        loading: /* @__PURE__ */ jsx13(Loader2Icon, { className: "size-5 animate-spin" })
       },
       style: {
         "--normal-bg": "var(--popover)",
@@ -1076,7 +942,6 @@ var Toaster = (props) => {
         "--border-radius": "var(--radius)"
       },
       toastOptions: {
-        duration: 3e3,
         classNames: {
           title: "!text-md !font-bold uppercase",
           toast: "!border shadow-md !transition-all !rounded-md ",
@@ -1094,37 +959,13 @@ var Toaster = (props) => {
 };
 
 // lib/components/ui/Compuesto/Tooltip.tsx
-import { useState as useState3, useEffect as useEffect5, useRef as useRef4 } from "react";
-import { jsx as jsx15, jsxs as jsxs10 } from "react/jsx-runtime";
-var sideClasses = {
-  top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
-  bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
-  left: "right-full top-1/2 -translate-y-1/2 mr-2",
-  right: "left-full top-1/2 -translate-y-1/2 ml-2"
-};
-var alignClasses = {
-  start: "left-0 -translate-x-0",
-  center: "left-1/2 -translate-x-1/2",
-  end: "right-0 translate-x-0"
-};
+import { Tooltip as TooltipPrimitive } from "radix-ui";
+import { jsx as jsx14, jsxs as jsxs10 } from "react/jsx-runtime";
 var variantClasses2 = {
-  default: `
-        bg-primary text-background
-        rounded-md
-        px-3 py-1.5
-        text-xs
-        shadow-lg
-    `,
-  rich: `
-        bg-surface text-primary
-        border border-border
-        rounded-lg
-        px-4 py-3
-        text-sm
-        shadow-card
-    `
+  default: "bg-primary text-background rounded-md shadow-lg",
+  rich: "bg-surface text-text-primary border border-border rounded-lg shadow-card"
 };
-var sizeClasses3 = {
+var sizeClasses2 = {
   small: "max-w-[160px] px-2 py-1 text-xs",
   default: "max-w-[200px] px-3 py-1.5 text-xs",
   rich: "max-w-[280px] px-4 py-3 text-sm"
@@ -1139,195 +980,158 @@ var Tooltip = ({
   size,
   disabled = false
 }) => {
-  const [visible, setVisible] = useState3(false);
-  const timerRef = useRef4(null);
-  const show = () => {
-    if (disabled) return;
-    timerRef.current = setTimeout(() => setVisible(true), 300);
-  };
-  const hide = () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    setVisible(false);
-  };
-  useEffect5(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") hide();
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, []);
-  const resolvedSizeClass = size ? sizeClasses3[size] : "";
-  const accessibleLabel = ariaLabel != null ? ariaLabel : typeof content === "string" ? content : void 0;
-  return /* @__PURE__ */ jsxs10(
-    "div",
-    {
-      className: "relative inline-flex items-center",
-      onMouseEnter: show,
-      onMouseLeave: hide,
-      onFocus: show,
-      onBlur: hide,
-      "aria-label": accessibleLabel,
-      children: [
-        children,
-        visible && !disabled && /* @__PURE__ */ jsx15(
-          "div",
-          {
-            role: "tooltip",
-            className: `
-                        absolute ${sideClasses[side]} ${alignClasses[align]}
-                        w-max
-                        font-normal leading-relaxed
-                        z-50
-                        transition-opacity duration-150
-                        animate-in fade-in
-                        pointer-events-none
-                        break-words
-                        ${variantClasses2[variant]}
-                        ${resolvedSizeClass}
-                    `,
-            children: content
-          }
-        )
-      ]
-    }
+  const resolvedSize = size != null ? size : variant === "rich" ? "rich" : "default";
+  return (
+    // Provider global de Radix para controlar el delay (300ms como tenías en tu timeout)
+    /* @__PURE__ */ jsx14(TooltipPrimitive.Provider, { delayDuration: 300, children: /* @__PURE__ */ jsxs10(TooltipPrimitive.Root, { children: [
+      /* @__PURE__ */ jsx14(TooltipPrimitive.Trigger, { asChild: true, children: /* @__PURE__ */ jsx14(
+        "span",
+        {
+          className: "inline-flex items-center",
+          "aria-label": ariaLabel != null ? ariaLabel : typeof content === "string" ? content : void 0,
+          children
+        }
+      ) }),
+      /* @__PURE__ */ jsx14(TooltipPrimitive.Portal, { children: !disabled && /* @__PURE__ */ jsxs10(
+        TooltipPrimitive.Content,
+        {
+          side,
+          align,
+          sideOffset: 8,
+          className: cn(
+            "z-[9999] w-max font-normal leading-relaxed break-words pointer-events-none select-none",
+            // Animaciones nativas de Radix acopladas a Tailwind v4
+            "data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in",
+            "data-[state=closed]:animate-out data-[state=closed]:fade-out",
+            variantClasses2[variant],
+            sizeClasses2[resolvedSize]
+          ),
+          children: [
+            content,
+            /* @__PURE__ */ jsx14(
+              TooltipPrimitive.Arrow,
+              {
+                className: cn(
+                  "fill-current",
+                  variant === "default" ? "text-primary" : "text-surface"
+                ),
+                width: 10,
+                height: 5
+              }
+            )
+          ]
+        }
+      ) })
+    ] }) })
   );
 };
 
 // lib/components/ui/Compuesto/dropdown-menu.tsx
-import { useEffect as useEffect6, useRef as useRef5, useState as useState4 } from "react";
-import { jsx as jsx16, jsxs as jsxs11 } from "react/jsx-runtime";
-var alignMap = {
-  left: "left-0",
-  right: "right-0",
-  center: "left-1/2 -translate-x-1/2"
-};
+import { DropdownMenu as DropdownPrimitive2 } from "radix-ui";
+import { jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
 function DropdownMenu({
   trigger,
   groups,
-  align = "left",
+  align = "start",
+  // Por defecto a la izquierda
   width = "w-52",
   disabled = false,
   className = ""
 }) {
-  const [open, setOpen] = useState4(false);
-  const containerRef = useRef5(null);
-  useEffect6(() => {
-    const handleOutsideClick = (e) => {
-      if (containerRef.current && !containerRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
-  }, []);
-  useEffect6(() => {
-    const handleEsc = (e) => {
-      if (e.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
-  }, []);
   const handleItemClick = (item) => {
     var _a;
     if (item.disabled) return;
     (_a = item.onClick) == null ? void 0 : _a.call(item);
-    setOpen(false);
   };
-  return /* @__PURE__ */ jsxs11("div", { ref: containerRef, className: `relative  inline-block ${className}`, children: [
-    /* @__PURE__ */ jsxs11(
-      "button",
-      {
-        type: "button",
-        onClick: () => !disabled && setOpen((prev) => !prev),
-        disabled,
-        "aria-haspopup": "menu",
-        "aria-expanded": open,
-        className: [
-          "inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium",
-          "border border-border bg-surface text-text-primary",
-          "transition-colors duration-150",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent",
-          disabled ? "cursor-not-allowed opacity-50" : "hover:bg-muted cursor-pointer",
-          open ? "ring-2 ring-accent" : ""
-        ].filter(Boolean).join(" "),
-        children: [
-          trigger,
-          /* @__PURE__ */ jsx16(
-            "svg",
-            {
-              xmlns: "http://www.w3.org/2000/svg",
-              width: "14",
-              height: "14",
-              viewBox: "0 0 24 24",
-              fill: "none",
-              stroke: "currentColor",
-              strokeWidth: "2",
-              strokeLinecap: "round",
-              strokeLinejoin: "round",
-              className: `text-text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`,
-              "aria-hidden": "true",
-              children: /* @__PURE__ */ jsx16("polyline", { points: "6 9 12 15 18 9" })
-            }
-          )
-        ]
-      }
-    ),
-    open && /* @__PURE__ */ jsx16(
-      "div",
-      {
-        role: "menu",
-        "aria-orientation": "vertical",
-        className: [
-          "absolute  z-[9999] mt-2",
-          alignMap[align],
-          width,
-          "rounded-xl border border-border bg-surface py-1",
-          "shadow-[var(--shadow-card)]",
-          "animate-in fade-in-0 zoom-in-95 duration-150"
-        ].join(" "),
-        children: groups.map((group, gIdx) => /* @__PURE__ */ jsxs11("div", { children: [
-          group.groupLabel && /* @__PURE__ */ jsx16("p", { className: "px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted select-none", children: group.groupLabel }),
-          group.items.map((item, iIdx) => /* @__PURE__ */ jsxs11("div", { children: [
-            /* @__PURE__ */ jsxs11(
-              "button",
+  return (
+    // 1. Contenedor Raíz de Radix
+    /* @__PURE__ */ jsxs11(DropdownPrimitive2.Root, { children: [
+      /* @__PURE__ */ jsx15(DropdownPrimitive2.Trigger, { asChild: true, disabled, children: /* @__PURE__ */ jsxs11(
+        "button",
+        {
+          type: "button",
+          className: cn(
+            "inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium",
+            "border border-border bg-surface text-text-primary shadow-xs",
+            "transition-colors duration-150 outline-none cursor-pointer",
+            "focus-visible:ring-[3px] focus-visible:ring-accent-soft focus-visible:border-accent",
+            "data-[state=open]:ring-[3px] data-[state=open]:ring-accent-soft data-[state=open]:border-accent",
+            disabled && "cursor-not-allowed opacity-50",
+            className
+          ),
+          children: [
+            trigger,
+            /* @__PURE__ */ jsx15(
+              "svg",
               {
-                role: "menuitem",
-                type: "button",
-                disabled: item.disabled,
-                onClick: () => handleItemClick(item),
-                className: [
-                  "flex w-full items-center gap-2.5 px-3 py-2 text-sm text-left",
-                  "transition-colors duration-100",
-                  item.disabled ? "cursor-not-allowed text-text-disabled" : item.variant === "danger" ? "cursor-pointer text-text-error hover:bg-error" : "cursor-pointer text-text-primary hover:bg-accent-soft hover:text-accent"
-                ].filter(Boolean).join(" "),
-                children: [
-                  item.icon && /* @__PURE__ */ jsx16("span", { className: "shrink-0 text-current", "aria-hidden": "true", children: item.icon }),
-                  /* @__PURE__ */ jsx16("span", { className: "flex-1", children: item.label }),
-                  item.trailingIcon && /* @__PURE__ */ jsx16("span", { className: "shrink-0 text-text-muted", "aria-hidden": "true", children: item.trailingIcon })
-                ]
+                xmlns: "http://www.w3.org/2000/svg",
+                width: "14",
+                height: "14",
+                viewBox: "0 0 24 24",
+                fill: "none",
+                stroke: "currentColor",
+                strokeWidth: "2",
+                strokeLinecap: "round",
+                strokeLinejoin: "round",
+                className: "text-text-muted transition-transform duration-200 group-data-[state=open]:rotate-180 data-[state=open]:rotate-180",
+                "aria-hidden": "true",
+                children: /* @__PURE__ */ jsx15("polyline", { points: "6 9 12 15 18 9" })
               }
-            ),
-            item.separator && /* @__PURE__ */ jsx16("hr", { className: "my-1 border-border" })
-          ] }, iIdx)),
-          gIdx < groups.length - 1 && /* @__PURE__ */ jsx16("hr", { className: "my-1 border-border" })
-        ] }, gIdx))
-      }
-    )
-  ] });
+            )
+          ]
+        }
+      ) }),
+      /* @__PURE__ */ jsx15(DropdownPrimitive2.Portal, { children: /* @__PURE__ */ jsx15(
+        DropdownPrimitive2.Content,
+        {
+          align,
+          sideOffset: 8,
+          className: cn(
+            // Estilos del panel (Copiados de tu SelectContent para consistencia total)
+            "bg-surface text-text-primary border border-border rounded-xl p-1 z-[9999]",
+            "shadow-[var(--shadow-card)] outline-none",
+            "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
+            width
+          ),
+          children: groups.map((group, gIdx) => (
+            // Agrupador nativo de Radix
+            /* @__PURE__ */ jsxs11(DropdownPrimitive2.Group, { className: "flex flex-col gap-0.5", children: [
+              group.groupLabel && /* @__PURE__ */ jsx15(DropdownPrimitive2.Label, { className: "px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted select-none", children: group.groupLabel }),
+              group.items.map((item, iIdx) => /* @__PURE__ */ jsxs11("div", { children: [
+                /* @__PURE__ */ jsxs11(
+                  DropdownPrimitive2.Item,
+                  {
+                    disabled: item.disabled,
+                    onSelect: () => handleItemClick(item),
+                    className: cn(
+                      "flex w-full items-center gap-2.5 px-3 py-2 text-sm text-left rounded-lg outline-none select-none transition-colors duration-100",
+                      "data-[disabled]:cursor-not-allowed data-[disabled]:text-text-disabled data-[disabled]:pointer-events-none",
+                      item.variant === "danger" ? "text-text-error focus:bg-error/20 focus:text-text-error cursor-pointer" : "text-text-primary focus:bg-muted focus:text-text-primary cursor-pointer"
+                    ),
+                    children: [
+                      item.icon && /* @__PURE__ */ jsx15("span", { className: "shrink-0 text-current [&_svg]:size-4", "aria-hidden": "true", children: item.icon }),
+                      /* @__PURE__ */ jsx15("span", { className: "flex-1 truncate", children: item.label }),
+                      item.trailingIcon && /* @__PURE__ */ jsx15("span", { className: "shrink-0 text-text-muted [&_svg]:size-4", "aria-hidden": "true", children: item.trailingIcon })
+                    ]
+                  }
+                ),
+                item.separator && /* @__PURE__ */ jsx15(DropdownPrimitive2.Separator, { className: "my-1 h-px bg-border -mx-1" })
+              ] }, iIdx)),
+              gIdx < groups.length - 1 && /* @__PURE__ */ jsx15(DropdownPrimitive2.Separator, { className: "my-1 h-px bg-border -mx-1" })
+            ] }, gIdx)
+          ))
+        }
+      ) })
+    ] })
+  );
 }
 
 // lib/components/ui/Compuesto/Calendario.tsx
-import {
-  useState as useState5,
-  useRef as useRef6,
-  useEffect as useEffect7,
-  useCallback as useCallback3,
-  useMemo
-} from "react";
-import { ChevronLeft, ChevronRight, CalendarDays, X as X4 } from "lucide-react";
+import { useState as useState3, useCallback, useMemo as useMemo2, useEffect as useEffect3 } from "react";
+import { ChevronLeft, ChevronRight, CalendarDays, X as X3 } from "lucide-react";
 import Holidays from "date-holidays";
-import { createPortal } from "react-dom";
-import { Fragment, jsx as jsx17, jsxs as jsxs12 } from "react/jsx-runtime";
+import { Popover as PopoverPrimitive } from "radix-ui";
+import { Fragment, jsx as jsx16, jsxs as jsxs12 } from "react/jsx-runtime";
 var DIAS_SEMANA = ["Lun", "Mar", "Mi\xE9", "Jue", "Vie", "S\xE1b", "Dom"];
 var MESES_LARGO = {
   0: "ENERO",
@@ -1368,12 +1172,6 @@ function getDiasDelMes(year, month) {
 function isSameDay(a, b) {
   return a.getDate() === b.getDate() && a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear();
 }
-function isSameMonth(a, b) {
-  return a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear();
-}
-function isSameYear(a, b) {
-  return a.getFullYear() === b.getFullYear();
-}
 function isWeekendDate(date) {
   return date.getDay() === 0 || date.getDay() === 6;
 }
@@ -1397,167 +1195,104 @@ function isDisabledYear(year, min, max) {
 }
 function formatDate(date, mode = "date") {
   if (mode === "year") return String(date.getFullYear());
-  if (mode === "month")
-    return date.toLocaleDateString("es-CO", { month: "long", year: "numeric" });
+  if (mode === "month") return date.toLocaleDateString("es-CO", { month: "long", year: "numeric" });
   return date.toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" });
 }
-var YearGrid = ({
-  yearBase,
-  selected,
-  onSelectYear,
-  minDate,
-  maxDate,
-  size = "lg"
-}) => {
+var YearGrid = ({ yearBase, selected, onSelectYear, minDate, maxDate, size = "lg" }) => {
   const years = Array.from({ length: 12 }, (_, i) => yearBase + i);
   const today = /* @__PURE__ */ new Date();
-  return /* @__PURE__ */ jsx17("div", { className: "grid grid-cols-4 gap-1", children: years.map((year) => {
+  return /* @__PURE__ */ jsx16("div", { className: "grid grid-cols-4 gap-1", children: years.map((year) => {
     const isSelected = selected ? selected.getFullYear() === year : false;
     const isCurrentYear = today.getFullYear() === year;
     const disabled = isDisabledYear(year, minDate, maxDate);
-    return /* @__PURE__ */ jsx17(
+    return /* @__PURE__ */ jsx16(
       "button",
       {
         type: "button",
         disabled,
         onClick: () => !disabled && onSelectYear(year),
-        className: `
-              flex items-center justify-center rounded-md border font-body transition-all duration-150
-              ${size === "lg" ? "h-10 text-sm" : "h-8 text-xs"}
-              ${isSelected ? "bg-accent text-white border-accent shadow-md" : isCurrentYear ? "border-accent/50 bg-accent-soft text-accent font-medium" : disabled ? "text-text-muted bg-muted/50 cursor-not-allowed border-border" : "border-border text-text-primary hover:bg-accent-soft hover:text-accent hover:border-border-strong cursor-pointer"}
-            `,
+        className: cn(
+          "flex items-center justify-center rounded-md border transition-all duration-150 outline-none",
+          size === "lg" ? "h-10 text-sm" : "h-8 text-xs",
+          isSelected ? "bg-accent text-white border-accent shadow-xs" : isCurrentYear ? "border-accent bg-accent-soft text-accent font-medium" : disabled ? "text-text-disabled bg-muted/50 cursor-not-allowed border-border" : "border-border text-text-primary hover:bg-accent-soft hover:text-accent hover:border-accent cursor-pointer"
+        ),
         children: year
       },
       year
     );
   }) });
 };
-var MonthGrid = ({
-  year,
-  selected,
-  onSelectMonth,
-  minDate,
-  maxDate,
-  size = "lg"
-}) => {
+var MonthGrid = ({ year, selected, onSelectMonth, minDate, maxDate, size = "lg" }) => {
   const today = /* @__PURE__ */ new Date();
-  return /* @__PURE__ */ jsx17("div", { className: "grid grid-cols-3 gap-1", children: Object.entries(MESES_CORTO).map(([key, label]) => {
+  return /* @__PURE__ */ jsx16("div", { className: "grid grid-cols-3 gap-1", children: Object.entries(MESES_CORTO).map(([key, label]) => {
     const month = Number(key);
     const isSelected = selected ? selected.getFullYear() === year && selected.getMonth() === month : false;
     const isCurrentMonth = today.getMonth() === month && today.getFullYear() === year;
     const disabled = isDisabledMonth(year, month, minDate, maxDate);
-    return /* @__PURE__ */ jsx17(
+    return /* @__PURE__ */ jsx16(
       "button",
       {
         type: "button",
         disabled,
         onClick: () => !disabled && onSelectMonth(month),
-        className: `
-              flex items-center justify-center rounded-md border font-body transition-all duration-150
-              ${size === "lg" ? "h-12 text-sm" : "h-9 text-xs"}
-              ${isSelected ? "bg-accent text-white border-accent shadow-md" : isCurrentMonth ? "border-accent/50 bg-accent-soft text-accent font-medium" : disabled ? "text-text-muted bg-muted/50 cursor-not-allowed border-border" : "border-border text-text-primary hover:bg-accent-soft hover:text-accent hover:border-border-strong cursor-pointer"}
-            `,
+        className: cn(
+          "flex items-center justify-center rounded-md border transition-all duration-150 outline-none",
+          size === "lg" ? "h-12 text-sm" : "h-9 text-xs",
+          isSelected ? "bg-accent text-white border-accent shadow-xs" : isCurrentMonth ? "border-accent bg-accent-soft text-accent font-medium" : disabled ? "text-text-disabled bg-muted/50 cursor-not-allowed border-border" : "border-border text-text-primary hover:bg-accent-soft hover:text-accent hover:border-accent cursor-pointer"
+        ),
         children: label
       },
       month
     );
   }) });
 };
-var CalendarGrid = ({
-  year,
-  month,
-  selected,
-  today,
-  onSelectDay,
-  minDate,
-  maxDate,
-  size = "lg"
-}) => {
+var CalendarGrid = ({ year, month, selected, today, onSelectDay, minDate, maxDate, size = "lg" }) => {
   const dias = getDiasDelMes(year, month);
-  const holidays = useMemo(() => {
+  const holidays = useMemo2(() => {
     const hd = new Holidays("CO");
     return hd.getHolidays(year).map((h) => new Date(h.date));
   }, [year]);
-  const cellBase = "flex items-center justify-center font-body border border-border cursor-pointer select-none transition-all duration-150";
-  const cellSize = size === "lg" ? "h-16 w-full" : "h-9 w-9 mx-auto";
   return /* @__PURE__ */ jsxs12(Fragment, { children: [
-    /* @__PURE__ */ jsx17("div", { className: `grid grid-cols-7 ${size === "lg" ? "mb-2" : "mb-1"}`, children: DIAS_SEMANA.map((d, i) => /* @__PURE__ */ jsx17(
-      "div",
-      {
-        className: `text-center font-body font-medium border-b border-border text-text-muted ${size === "lg" ? "text-sm py-2" : "text-[12px] py-1"}`,
-        children: d
-      },
-      i
-    )) }),
-    /* @__PURE__ */ jsx17("div", { className: "grid grid-cols-7", children: dias.map((day, i) => {
-      if (!day) return /* @__PURE__ */ jsx17("div", { className: cellSize }, `empty-${i}`);
+    /* @__PURE__ */ jsx16("div", { className: cn("grid grid-cols-7", size === "lg" ? "mb-2" : "mb-1"), children: DIAS_SEMANA.map((d, i) => /* @__PURE__ */ jsx16("div", { className: cn("text-center font-medium border-b border-border text-text-muted select-none", size === "lg" ? "text-sm py-2" : "text-[12px] py-1"), children: d }, i)) }),
+    /* @__PURE__ */ jsx16("div", { className: "grid grid-cols-7", children: dias.map((day, i) => {
+      if (!day) return /* @__PURE__ */ jsx16("div", { className: size === "lg" ? "h-14 w-full" : "h-8 w-8 mx-auto" }, `empty-${i}`);
       const date = new Date(year, month, day);
       const isSelected = selected ? isSameDay(date, selected) : false;
       const isToday = isSameDay(date, today);
       const disabled = isDisabledDay(day, year, month, minDate, maxDate);
       const isHolidayDay = holidays.some((h) => isSameDay(date, h));
       const isWeekendDayValue = !isHolidayDay && isWeekendDate(date);
-      const dayClasses = isSelected ? "bg-accent text-white shadow-lg shadow-accent/30 scale-105" : isToday ? "border border-border-strong bg-accent-soft text-accent font-medium" : disabled ? "text-text-muted bg-muted/50 cursor-not-allowed" : isHolidayDay ? "border border-text-error/50 bg-error/50 text-text-error/70" : isWeekendDayValue ? "bg-muted/40 text-text-muted hover:bg-muted/50" : "text-text-primary hover:bg-accent-soft hover:text-accent";
-      return /* @__PURE__ */ jsx17(
-        "div",
+      return /* @__PURE__ */ jsxs12(
+        "button",
         {
-          className: `${cellBase} ${size === "lg" ? "h-16" : "h-9 w-9 mx-auto"}`,
+          type: "button",
+          disabled,
           onClick: () => !disabled && onSelectDay(day),
-          children: /* @__PURE__ */ jsxs12(
-            "span",
-            {
-              className: `flex flex-col h-full w-full justify-center rounded-sm font-body transition-all duration-150 ${dayClasses}`,
-              children: [
-                /* @__PURE__ */ jsx17("p", { className: `text-center ${size === "lg" ? "text-base" : "text-xs"}`, children: day }),
-                size === "lg" && /* @__PURE__ */ jsx17("p", { className: "text-[12px] pl-1", children: isHolidayDay ? "Festivo" : isToday ? "Hoy" : void 0 })
-              ]
-            }
-          )
+          className: cn(
+            "flex flex-col items-center justify-center border border-border select-none transition-all duration-150 outline-none",
+            size === "lg" ? "h-14 w-full p-1" : "h-8 w-8 mx-auto rounded-md",
+            isSelected ? "bg-accent text-white border-accent shadow-xs scale-102" : isToday ? "border-accent bg-accent-soft text-accent font-semibold" : disabled ? "text-text-disabled bg-muted/40 cursor-not-allowed" : isHolidayDay ? "bg-error/40 text-text-error border-text-error/20" : isWeekendDayValue ? "bg-muted/20 text-text-muted hover:bg-muted/40" : "text-text-primary hover:bg-accent-soft hover:text-accent"
+          ),
+          children: [
+            /* @__PURE__ */ jsx16("span", { className: cn("text-center block", size === "lg" ? "text-sm font-medium" : "text-xs"), children: day }),
+            size === "lg" && /* @__PURE__ */ jsx16("span", { className: "text-[10px] block opacity-80 truncate", children: isHolidayDay ? "Festivo" : isToday ? "Hoy" : "" })
+          ]
         },
         `day-${day}`
       );
     }) })
   ] });
 };
-var CalendarHeader = ({
-  year,
-  month,
-  mode,
-  yearBase,
-  onPrev,
-  onNext,
-  onClickTitle,
-  selectionMode,
-  size = "lg"
-}) => {
-  const btnClass = size === "lg" ? "flex items-center justify-center w-9 h-9 rounded-lg border border-border text-text-secondary hover:border-border-strong hover:text-accent hover:bg-accent-soft transition-all duration-150 cursor-pointer" : "flex items-center justify-center w-7 h-7 rounded-md border border-border text-text-secondary hover:border-border-strong hover:text-accent hover:bg-accent-soft transition-all duration-150 cursor-pointer";
+var CalendarHeader = ({ year, month, mode, yearBase, onPrev, onNext, onClickTitle, selectionMode, size = "lg" }) => {
   const canDrillUp = mode === "days" && selectionMode === "date" || mode === "months" && (selectionMode === "date" || selectionMode === "month") || mode === "days" && selectionMode === "month";
   const titleLabel = mode === "years" ? `${yearBase} \u2013 ${yearBase + 11}` : mode === "months" ? String(year) : `${MESES_LARGO[month]} ${year}`;
-  return /* @__PURE__ */ jsxs12("div", { className: `flex items-center justify-between ${size === "lg" ? "mb-6 px-1" : "mb-3 px-0"}`, children: [
-    /* @__PURE__ */ jsx17("button", { className: btnClass, onClick: onPrev, "aria-label": "Anterior", children: /* @__PURE__ */ jsx17(ChevronLeft, { size: size === "lg" ? 16 : 10 }) }),
-    /* @__PURE__ */ jsxs12(
-      "button",
-      {
-        type: "button",
-        onClick: canDrillUp ? onClickTitle : void 0,
-        className: `
-          flex flex-col items-center gap-0 px-2 py-1 rounded-md transition-all duration-150
-          ${canDrillUp ? "cursor-pointer hover:bg-accent-soft hover:text-accent" : "cursor-default"}
-        `,
-        "aria-label": canDrillUp ? "Cambiar vista" : void 0,
-        children: [
-          /* @__PURE__ */ jsx17(
-            "span",
-            {
-              className: `font-heading font-semibold tracking-widest text-text-primary ${size === "lg" ? "text-sm" : "text-xs"}`,
-              children: titleLabel
-            }
-          ),
-          canDrillUp && /* @__PURE__ */ jsx17("span", { className: `text-accent font-body ${size === "lg" ? "text-[10px]" : "text-[9px]"}`, children: "\u25B2 cambiar" })
-        ]
-      }
-    ),
-    /* @__PURE__ */ jsx17("button", { className: btnClass, onClick: onNext, "aria-label": "Siguiente", children: /* @__PURE__ */ jsx17(ChevronRight, { size: size === "lg" ? 16 : 14 }) })
+  return /* @__PURE__ */ jsxs12("div", { className: cn("flex items-center justify-between", size === "lg" ? "mb-4 px-1" : "mb-2 px-0"), children: [
+    /* @__PURE__ */ jsx16("button", { type: "button", className: cn("flex items-center justify-center rounded-lg border border-border text-text-secondary hover:border-accent hover:text-accent hover:bg-accent-soft transition-all duration-150 cursor-pointer outline-none", size === "lg" ? "size-9" : "size-7"), onClick: onPrev, children: /* @__PURE__ */ jsx16(ChevronLeft, { size: size === "lg" ? 16 : 14 }) }),
+    /* @__PURE__ */ jsxs12("button", { type: "button", onClick: canDrillUp ? onClickTitle : void 0, className: cn("flex flex-col items-center px-3 py-1 rounded-md transition-all duration-150 outline-none", canDrillUp ? "cursor-pointer hover:bg-accent-soft hover:text-accent" : "cursor-default"), children: [
+      /* @__PURE__ */ jsx16("span", { className: cn("font-semibold tracking-wider text-text-primary", size === "lg" ? "text-sm" : "text-xs"), children: titleLabel }),
+      canDrillUp && /* @__PURE__ */ jsx16("span", { className: "text-accent text-[9px] font-medium mt-0.5", children: "\u25B2 cambiar vista" })
+    ] }),
+    /* @__PURE__ */ jsx16("button", { type: "button", className: cn("flex items-center justify-center rounded-lg border border-border text-text-secondary hover:border-accent hover:text-accent hover:bg-accent-soft transition-all duration-150 cursor-pointer outline-none", size === "lg" ? "size-9" : "size-7"), onClick: onNext, children: /* @__PURE__ */ jsx16(ChevronRight, { size: size === "lg" ? 16 : 14 }) })
   ] });
 };
 var Calendar = ({
@@ -1572,112 +1307,61 @@ var Calendar = ({
   disabled = false,
   className = ""
 }) => {
-  const today = /* @__PURE__ */ new Date();
-  const [viewDate, setViewDate] = useState5(() => {
+  const today = useMemo2(() => /* @__PURE__ */ new Date(), []);
+  const [isMounted, setIsMounted] = useState3(false);
+  useEffect3(() => {
+    setIsMounted(true);
+  }, []);
+  const [viewDate, setViewDate] = useState3(() => {
     const base = value != null ? value : /* @__PURE__ */ new Date();
     return new Date(base.getFullYear(), base.getMonth(), 1);
   });
   const viewYear = viewDate.getFullYear();
   const viewMonth = viewDate.getMonth();
   const initialMode = selectionMode === "year" ? "years" : selectionMode === "month" ? "months" : "days";
-  const [mode, setMode] = useState5(initialMode);
-  const [yearBase, setYearBase] = useState5(() => {
+  const [mode, setMode] = useState3(initialMode);
+  const [yearBase, setYearBase] = useState3(() => {
     const y = (value != null ? value : /* @__PURE__ */ new Date()).getFullYear();
     return Math.floor(y / 12) * 12;
   });
-  const [open, setOpen] = useState5(false);
-  const popoverRef = useRef6(null);
-  const triggerRef = useRef6(null);
-  const [coords, setCoords] = useState5({ top: 0, left: 0, placement: "bottom" });
-  useEffect7(() => {
-    if (!open) return;
-    const handleClick = (e) => {
-      if (popoverRef.current && !popoverRef.current.contains(e.target) && triggerRef.current && !triggerRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [open]);
-  useEffect7(() => {
-    if (open && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      const calendarHeight = 300;
-      const windowHeight = window.innerHeight;
-      const spaceBelow = windowHeight - rect.bottom;
-      const shouldShowUp = spaceBelow < calendarHeight && rect.top > calendarHeight;
-      const newPlacement = shouldShowUp ? "top" : "bottom";
-      setCoords({
-        top: shouldShowUp ? rect.top + window.scrollY - calendarHeight - 0 : rect.bottom + window.scrollY + 0,
-        // Posición abajo
-        left: rect.left + window.scrollX,
-        placement: newPlacement
-      });
-    }
-  }, [open]);
-  const handlePrev = useCallback3(() => {
-    if (mode === "years") {
-      setYearBase((b) => b - 12);
-    } else if (mode === "months") {
-      setViewDate((d) => new Date(d.getFullYear() - 1, d.getMonth(), 1));
-    } else {
-      setViewDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1));
-    }
+  const handlePrev = useCallback(() => {
+    if (mode === "years") setYearBase((b) => b - 12);
+    else if (mode === "months") setViewDate((d) => new Date(d.getFullYear() - 1, d.getMonth(), 1));
+    else setViewDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1));
   }, [mode]);
-  const handleNext = useCallback3(() => {
-    if (mode === "years") {
-      setYearBase((b) => b + 12);
-    } else if (mode === "months") {
-      setViewDate((d) => new Date(d.getFullYear() + 1, d.getMonth(), 1));
-    } else {
-      setViewDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1));
-    }
+  const handleNext = useCallback(() => {
+    if (mode === "years") setYearBase((b) => b + 12);
+    else if (mode === "months") setViewDate((d) => new Date(d.getFullYear() + 1, d.getMonth(), 1));
+    else setViewDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1));
   }, [mode]);
-  const handleClickTitle = useCallback3(() => {
+  const handleClickTitle = useCallback(() => {
     if (mode === "days") setMode("months");
     else if (mode === "months") {
       setYearBase(Math.floor(viewYear / 12) * 12);
       setMode("years");
     }
   }, [mode, viewYear]);
-  const handleSelectYear = useCallback3(
-    (year) => {
-      setViewDate(new Date(year, viewMonth, 1));
-      if (selectionMode === "year") {
-        onChange == null ? void 0 : onChange(new Date(year, 0, 1));
-        if (variant === "input") setOpen(false);
-      } else {
-        setMode("months");
-      }
-    },
-    [viewMonth, selectionMode, onChange, variant]
-  );
-  const handleSelectMonth = useCallback3(
-    (month) => {
-      setViewDate(new Date(viewYear, month, 1));
-      if (selectionMode === "month" || selectionMode === "year") {
-        onChange == null ? void 0 : onChange(new Date(viewYear, month, 1));
-        if (variant === "input") setOpen(false);
-      } else {
-        setMode("days");
-      }
-    },
-    [viewYear, selectionMode, onChange, variant]
-  );
-  const handleSelectDay = useCallback3(
-    (day) => {
-      const selected = new Date(viewYear, viewMonth, day);
-      onChange == null ? void 0 : onChange(selected);
-      if (variant === "input") setOpen(false);
-    },
-    [viewYear, viewMonth, onChange, variant]
-  );
+  const handleSelectYear = useCallback((year) => {
+    setViewDate(new Date(year, viewMonth, 1));
+    if (selectionMode === "year") {
+      onChange == null ? void 0 : onChange(new Date(year, 0, 1));
+    } else setMode("months");
+  }, [viewMonth, selectionMode, onChange]);
+  const handleSelectMonth = useCallback((month) => {
+    setViewDate(new Date(viewYear, month, 1));
+    if (selectionMode === "month" || selectionMode === "year") {
+      onChange == null ? void 0 : onChange(new Date(viewYear, month, 1));
+    } else setMode("days");
+  }, [viewYear, selectionMode, onChange]);
+  const handleSelectDay = useCallback((day) => {
+    onChange == null ? void 0 : onChange(new Date(viewYear, viewMonth, day));
+  }, [viewYear, viewMonth, onChange]);
   const handleClear = (e) => {
     e.stopPropagation();
     onChange == null ? void 0 : onChange(null);
   };
-  const renderBody = (size) => /* @__PURE__ */ jsxs12(Fragment, { children: [
-    /* @__PURE__ */ jsx17(
+  const renderBody = (size) => /* @__PURE__ */ jsxs12("div", { className: "flex flex-col gap-1.5", children: [
+    /* @__PURE__ */ jsx16(
       CalendarHeader,
       {
         year: viewYear,
@@ -1691,109 +1375,54 @@ var Calendar = ({
         size
       }
     ),
-    mode === "years" && /* @__PURE__ */ jsx17(
-      YearGrid,
-      {
-        yearBase,
-        selected: value != null ? value : null,
-        onSelectYear: handleSelectYear,
-        minDate,
-        maxDate,
-        size
-      }
-    ),
-    mode === "months" && /* @__PURE__ */ jsx17(
-      MonthGrid,
-      {
-        year: viewYear,
-        selected: value != null ? value : null,
-        onSelectMonth: handleSelectMonth,
-        minDate,
-        maxDate,
-        size
-      }
-    ),
-    mode === "days" && /* @__PURE__ */ jsx17(
-      CalendarGrid,
-      {
-        year: viewYear,
-        month: viewMonth,
-        selected: value != null ? value : null,
-        today,
-        onSelectDay: handleSelectDay,
-        minDate,
-        maxDate,
-        size
-      }
-    )
+    mode === "years" && /* @__PURE__ */ jsx16(YearGrid, { yearBase, selected: value, onSelectYear: handleSelectYear, minDate, maxDate, size }),
+    mode === "months" && /* @__PURE__ */ jsx16(MonthGrid, { year: viewYear, selected: value, onSelectMonth: handleSelectMonth, minDate, maxDate, size }),
+    mode === "days" && /* @__PURE__ */ jsx16(CalendarGrid, { year: viewYear, month: viewMonth, selected: value, today, onSelectDay: handleSelectDay, minDate, maxDate, size })
   ] });
+  if (!isMounted) return /* @__PURE__ */ jsx16("div", { className: "h-10 min-w-[220px] bg-muted/20 animate-pulse rounded-md" });
   if (variant === "full") {
-    return /* @__PURE__ */ jsx17(
-      "div",
-      {
-        className: `bg-background rounded-md border border-border p-6 w-full max-w-2xl ${className}`,
-        children: renderBody("lg")
-      }
-    );
+    return /* @__PURE__ */ jsx16("div", { className: cn("bg-background rounded-xl border border-border p-5 w-full max-w-xl shadow-xs", className), children: renderBody("lg") });
   }
-  return /* @__PURE__ */ jsxs12("div", { className: `relative inline-flex flex-col gap-1 ${className}`, children: [
-    label && /* @__PURE__ */ jsx17("label", { className: "text-sm font-body text-text-secondary font-medium", children: label }),
-    /* @__PURE__ */ jsxs12(
-      "button",
-      {
-        ref: triggerRef,
-        type: "button",
-        disabled,
-        onClick: () => !disabled && setOpen((o) => !o),
-        "aria-haspopup": "true",
-        "aria-expanded": open,
-        className: `
-          inline-flex items-center gap-2 h-10 px-3 rounded-md border
-          font-body text-sm transition-all duration-150 min-w-[220px] text-left
-          ${open ? "border-border-strong ring-2 ring-border-strong/30 bg-background" : "border-border bg-background hover:border-border-strong"}
-          ${disabled ? "opacity-50 cursor-not-allowed bg-muted" : "cursor-pointer"}
-          ${value ? "text-text-primary" : "text-text-muted"}
-        `,
-        children: [
-          /* @__PURE__ */ jsx17(CalendarDays, { size: 16, className: open ? "text-accent" : "text-text-muted" }),
-          /* @__PURE__ */ jsx17("span", { className: "flex-1", children: value ? formatDate(value, selectionMode) : placeholder }),
-          value && !disabled && /* @__PURE__ */ jsx17(
-            "span",
-            {
-              role: "button",
-              onClick: handleClear,
-              className: "text-text-muted hover:text-text-primary transition-colors",
-              "aria-label": "Limpiar fecha",
-              children: /* @__PURE__ */ jsx17(X4, { size: 14 })
-            }
-          )
-        ]
-      }
-    ),
-    open && typeof document !== "undefined" && createPortal(
-      /* @__PURE__ */ jsx17(
-        "div",
+  return /* @__PURE__ */ jsxs12("div", { className: cn("flex flex-col gap-1.5 w-fit", className), children: [
+    label && /* @__PURE__ */ jsx16("label", { className: "text-sm text-text-secondary font-medium select-none", children: label }),
+    /* @__PURE__ */ jsxs12(PopoverPrimitive.Root, { children: [
+      /* @__PURE__ */ jsx16(PopoverPrimitive.Trigger, { asChild: true, disabled, children: /* @__PURE__ */ jsxs12(
+        "button",
         {
-          ref: popoverRef,
-          role: "dialog",
-          "aria-label": "Selector de fecha",
-          style: {
-            position: "absolute",
-            top: `${coords.top}px`,
-            left: `${coords.left}px`
-          },
-          className: "z-[9999] bg-background border border-border rounded-md p-4 w-auto min-w-64 shadow-lg",
+          type: "button",
+          className: cn(
+            "inline-flex items-center gap-2 h-10 px-3 rounded-md border text-sm transition-all duration-150 min-w-[220px] text-left bg-background outline-none shadow-xs",
+            "border-border text-text-primary hover:border-accent cursor-pointer",
+            "data-[state=open]:border-accent data-[state=open]:ring-[3px] data-[state=open]:ring-accent-soft",
+            disabled && "opacity-50 cursor-not-allowed bg-muted"
+          ),
+          children: [
+            /* @__PURE__ */ jsx16(CalendarDays, { size: 16, className: "text-text-muted shrink-0" }),
+            /* @__PURE__ */ jsx16("span", { className: cn("flex-1 truncate", !value && "text-text-muted"), children: value ? formatDate(value, selectionMode) : placeholder }),
+            value && !disabled && /* @__PURE__ */ jsx16("span", { role: "button", onClick: handleClear, className: "text-text-muted hover:text-text-primary transition-colors shrink-0 p-0.5", "aria-label": "Limpiar fecha", children: /* @__PURE__ */ jsx16(X3, { size: 14 }) })
+          ]
+        }
+      ) }),
+      /* @__PURE__ */ jsx16(PopoverPrimitive.Portal, { children: /* @__PURE__ */ jsx16(
+        PopoverPrimitive.Content,
+        {
+          side: "bottom",
+          sideOffset: 6,
+          align: "start",
+          className: cn(
+            "z-[9999] bg-background border border-border rounded-xl p-4 w-auto min-w-64 shadow-[var(--shadow-card)] outline-none",
+            "data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-150"
+          ),
           children: renderBody("sm")
         }
-      ),
-      document.body
-    )
+      ) })
+    ] })
   ] });
 };
 
 // lib/components/ui/DataDisplay/Graficas/GraficaBar.tsx
-import { useState as useState6, useRef as useRef7 } from "react";
-import { jsx as jsx18, jsxs as jsxs13 } from "react/jsx-runtime";
+import { useState as useState4, useRef as useRef3 } from "react";
+import { jsx as jsx17, jsxs as jsxs13 } from "react/jsx-runtime";
 var chartColors = [
   "var(--chart-1)",
   "var(--chart-2)",
@@ -1807,13 +1436,12 @@ var GraficaBar = ({
   title,
   description,
   height = 240,
-  barRadius = 2,
-  animated = true,
+  barRadius = 4,
   legendLabel,
   yLabel
 }) => {
-  const [hoveredIndex, setHoveredIndex] = useState6(null);
-  const containerRef = useRef7(null);
+  const [hoveredIndex, setHoveredIndex] = useState4(null);
+  const containerRef = useRef3(null);
   const maxValue = Math.max(...data.map((d) => d.value), 1);
   const ceilMax = Math.ceil(maxValue * 1.15);
   const padding = { top: 16, bottom: 36, left: 52, right: 16 };
@@ -1825,37 +1453,27 @@ var GraficaBar = ({
     if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
     return n.toString();
   };
-  const [tooltip, setTooltip] = useState6(null);
+  const [tooltip, setTooltip] = useState4(null);
   return /* @__PURE__ */ jsxs13(
     "div",
     {
       ref: containerRef,
-      className: "relative rounded-2xl border border-border bg-background shadow-sm p-5",
+      className: cn("relative rounded-md border border-border  shadow-xs p-5 select-none", className),
       onMouseLeave: () => {
         setHoveredIndex(null);
         setTooltip(null);
       },
       children: [
-        title && /* @__PURE__ */ jsx18("p", { className: "text-sm font-semibold text-text-primary", children: title }),
-        description && /* @__PURE__ */ jsx18("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
+        title && /* @__PURE__ */ jsx17("p", { className: "text-sm font-semibold text-text-primary", children: title }),
+        description && /* @__PURE__ */ jsx17("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
         /* @__PURE__ */ jsxs13("div", { className: "w-full relative overflow-hidden", children: [
-          /* @__PURE__ */ jsxs13("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "select-none relative z-0", children: [
-            yLabel && /* @__PURE__ */ jsx18(
-              "text",
-              {
-                x: 10,
-                y: padding.top - 5,
-                fill: "var(--text-muted)",
-                fontSize: 10,
-                fontWeight: 600,
-                children: yLabel
-              }
-            ),
+          /* @__PURE__ */ jsxs13("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "relative z-0 overflow-visible", children: [
+            yLabel && /* @__PURE__ */ jsx17("text", { x: 10, y: padding.top - 5, fill: "var(--text-muted)", fontSize: 10, fontWeight: 600, children: yLabel }),
             /* @__PURE__ */ jsxs13("g", { transform: `translate(${padding.left}, ${padding.top + 10})`, children: [
               yTicks.map((tick) => {
                 const y = chartH - tick / ceilMax * chartH;
                 return /* @__PURE__ */ jsxs13("g", { children: [
-                  /* @__PURE__ */ jsx18(
+                  /* @__PURE__ */ jsx17(
                     "line",
                     {
                       x1: 0,
@@ -1863,10 +1481,11 @@ var GraficaBar = ({
                       x2: svgW - padding.left - padding.right,
                       y2: y,
                       stroke: "var(--border-default)",
-                      strokeDasharray: "4 3"
+                      strokeDasharray: "4 3",
+                      strokeWidth: 0.5
                     }
                   ),
-                  /* @__PURE__ */ jsx18("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(tick) })
+                  /* @__PURE__ */ jsx17("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(tick) })
                 ] }, tick);
               }),
               data.map((item, i) => {
@@ -1874,109 +1493,95 @@ var GraficaBar = ({
                 const x = i * 72 + 16;
                 const isHov = hoveredIndex === i;
                 return /* @__PURE__ */ jsxs13("g", { children: [
-                  /* @__PURE__ */ jsx18(
+                  /* @__PURE__ */ jsx17(
                     "rect",
                     {
-                      x: x - 4,
+                      x: x - 10,
                       y: 0,
-                      width: 28,
+                      width: 48,
                       height: chartH,
                       fill: "transparent",
-                      style: { cursor: "pointer" },
+                      className: "cursor-pointer",
                       onMouseEnter: (e) => {
                         var _a;
                         setHoveredIndex(i);
                         const containerRect = (_a = containerRef.current) == null ? void 0 : _a.getBoundingClientRect();
-                        const svgEl = e.currentTarget.closest("svg");
-                        const svgRect = svgEl == null ? void 0 : svgEl.getBoundingClientRect();
-                        if (!containerRect || !svgRect) return;
-                        const scaleX = svgRect.width / svgW;
-                        const scaleY = svgRect.height / height;
-                        const xCenter = (x + 35 + padding.left) * scaleX + (svgRect.left - containerRect.left);
-                        const yTop = (chartH - barH + padding.top) * scaleY + (svgRect.top - containerRect.top);
+                        if (!containerRect) return;
+                        const xCenter = e.clientX - containerRect.left;
+                        const yTop = e.clientY - containerRect.top - 20;
                         setTooltip({ x: xCenter, y: yTop, label: item.label, value: item.value });
+                      },
+                      onMouseMove: (e) => {
+                        var _a;
+                        const containerRect = (_a = containerRef.current) == null ? void 0 : _a.getBoundingClientRect();
+                        if (!containerRect) return;
+                        setTooltip((prev) => prev ? __spreadProps(__spreadValues({}, prev), { x: e.clientX - containerRect.left, y: e.clientY - containerRect.top - 20 }) : null);
                       }
                     }
                   ),
-                  isHov && /* @__PURE__ */ jsx18(
+                  isHov && /* @__PURE__ */ jsx17(
                     "rect",
                     {
                       x: x - 6,
                       y: 0,
                       width: 42,
                       height: chartH,
-                      rx: 8,
+                      rx: 6,
                       fill: chartColors[i % chartColors.length],
-                      opacity: 0.08,
-                      className: "transition-all duration-300"
+                      opacity: 0.06
                     }
                   ),
-                  /* @__PURE__ */ jsx18(
+                  /* @__PURE__ */ jsx17(
                     "rect",
                     {
                       x,
                       y: chartH - barH,
-                      width: 28,
+                      width: 30,
                       height: barH,
                       rx: barRadius,
                       fill: chartColors[i % chartColors.length],
                       opacity: isHov ? 1 : 0.85,
-                      className: "transition-all duration-300 ease-out pointer-events-none",
+                      className: "transition-all duration-200 ease-out pointer-events-none",
                       style: {
-                        filter: isHov ? `drop-shadow(0 4px 8px ${chartColors[i % chartColors.length]}40)` : "none"
+                        transformOrigin: `0px ${chartH}px`,
+                        filter: isHov ? `drop-shadow(0 4px 12px ${chartColors[i % chartColors.length]}40)` : "none"
                       }
                     }
                   ),
-                  /* @__PURE__ */ jsx18(
+                  /* @__PURE__ */ jsx17(
                     "text",
                     {
-                      x: x + 14,
-                      y: chartH + 18,
+                      x: x + 15,
+                      y: chartH + 20,
                       textAnchor: "middle",
                       fill: isHov ? "var(--text-primary)" : "var(--text-muted)",
                       fontSize: 11,
                       fontWeight: isHov ? 600 : 400,
-                      className: "pointer-events-none transition-all duration-200",
+                      className: "transition-colors duration-150",
                       children: item.label
                     }
                   )
                 ] }, i);
               }),
-              /* @__PURE__ */ jsx18("line", { x1: 0, y1: chartH, x2: svgW - padding.left - padding.right, y2: chartH, stroke: "var(--border-strong)" })
-            ] }),
-            /* @__PURE__ */ jsx18("style", { children: `
-                        @keyframes barGrow {
-                            from { transform: scaleY(0); opacity: 0; }
-                            to   { transform: scaleY(1); opacity: 1; }
-                        }
-                    ` })
+              /* @__PURE__ */ jsx17("line", { x1: 0, y1: chartH, x2: svgW - padding.left - padding.right, y2: chartH, stroke: "var(--border-strong)" })
+            ] })
           ] }),
-          tooltip && /* @__PURE__ */ jsx18(
+          tooltip && /* @__PURE__ */ jsx17(
             "div",
             {
-              className: "absolute z-50 pointer-events-none transition-all duration-150",
-              style: {
-                left: tooltip.x,
-                top: tooltip.y,
-                transform: "translate(calc(-50% - 10px), calc(-50% - 10px))"
-              },
-              children: /* @__PURE__ */ jsxs13("div", { className: "relative bg-[#0A0A0B] text-white text-xs rounded-lg px-3 py-2 shadow-2xl border border-white/10 backdrop-blur-sm whitespace-nowrap", children: [
-                /* @__PURE__ */ jsx18("p", { className: "text-[11px] text-center", children: tooltip.label }),
-                /* @__PURE__ */ jsx18("p", { className: "text-sm font-semibold", children: formatVal(tooltip.value) })
+              className: "absolute z-50 pointer-events-none -translate-x-1/2 -translate-y-full transition-all duration-75",
+              style: { left: tooltip.x, top: tooltip.y },
+              children: /* @__PURE__ */ jsxs13("div", { className: "bg-primary text-background text-xs rounded-lg px-3 py-2 shadow-xl border border-border/10 whitespace-nowrap text-center", children: [
+                /* @__PURE__ */ jsx17("p", { className: "opacity-80 text-[10px] uppercase tracking-wider", children: tooltip.label }),
+                /* @__PURE__ */ jsx17("p", { className: "text-sm font-bold mt-0.5", children: formatVal(tooltip.value) })
               ] })
             }
           )
         ] }),
-        legendLabel && /* @__PURE__ */ jsx18("div", { className: "flex justify-center items-center gap-2 mt-4 px-2", children: /* @__PURE__ */ jsxs13("div", { className: "flex items-center gap-1.5", children: [
-          /* @__PURE__ */ jsx18(
-            "div",
-            {
-              className: "w-3 h-3 rounded-sm",
-              style: { backgroundColor: chartColors[0] }
-            }
-          ),
-          /* @__PURE__ */ jsx18("span", { className: "text-sm font-medium", children: legendLabel })
-        ] }) })
+        legendLabel && /* @__PURE__ */ jsxs13("div", { className: "flex justify-center items-center gap-2 mt-4", children: [
+          /* @__PURE__ */ jsx17("div", { className: "w-3 h-3 rounded-xs", style: { backgroundColor: chartColors[0] } }),
+          /* @__PURE__ */ jsx17("span", { className: "text-xs text-text-secondary font-medium", children: legendLabel })
+        ] })
       ]
     }
   );
@@ -1984,8 +1589,8 @@ var GraficaBar = ({
 var GraficaBar_default = GraficaBar;
 
 // lib/components/ui/DataDisplay/Graficas/GraficaDonut.tsx
-import { useState as useState7 } from "react";
-import { Fragment as Fragment2, jsx as jsx19, jsxs as jsxs14 } from "react/jsx-runtime";
+import { useState as useState5 } from "react";
+import { Fragment as Fragment2, jsx as jsx18, jsxs as jsxs14 } from "react/jsx-runtime";
 var chartColors2 = [
   "var(--chart-1)",
   "var(--chart-2)",
@@ -2004,7 +1609,7 @@ var GraficaDonut = ({
   totalValue,
   formatValue = (v) => `${v}%`
 }) => {
-  const [hoveredIndex, setHoveredIndex] = useState7(null);
+  const [hoveredIndex, setHoveredIndex] = useState5(null);
   const total = data.reduce((acc, item) => acc + item.value, 0);
   const center = size / 2;
   const radius = center - strokeWidth;
@@ -2024,22 +1629,22 @@ var GraficaDonut = ({
   });
   if (loading) {
     return /* @__PURE__ */ jsxs14("div", { className: "p-6 rounded-2xl bg-background border border-border animate-pulse", children: [
-      /* @__PURE__ */ jsx19("div", { className: "h-4 w-32 bg-muted rounded mb-4" }),
-      /* @__PURE__ */ jsx19("div", { className: "h-[180px] w-[180px] bg-muted rounded-full mx-auto" })
+      /* @__PURE__ */ jsx18("div", { className: "h-4 w-32 bg-muted rounded mb-4" }),
+      /* @__PURE__ */ jsx18("div", { className: "h-[180px] w-[180px] bg-muted rounded-full mx-auto" })
     ] });
   }
   if (!data.length) {
-    return /* @__PURE__ */ jsx19("div", { className: "p-6 rounded-2xl bg-surface border border-border text-center", children: /* @__PURE__ */ jsx19("p", { className: "text-sm text-text-muted", children: "No hay datos disponibles" }) });
+    return /* @__PURE__ */ jsx18("div", { className: "p-6 rounded-2xl bg-surface border border-border text-center", children: /* @__PURE__ */ jsx18("p", { className: "text-sm text-text-muted", children: "No hay datos disponibles" }) });
   }
-  return /* @__PURE__ */ jsxs14("div", { className: "rounded-2xl bg-background border border-border shadow-md p-6", children: [
+  return /* @__PURE__ */ jsxs14("div", { className: "rounded-md bg-background border border-border shadow-xs p-6", children: [
     (title || description) && /* @__PURE__ */ jsxs14("div", { className: "mb-4", children: [
-      title && /* @__PURE__ */ jsx19("p", { className: "text-sm font-semibold text-text-primary", children: title }),
-      description && /* @__PURE__ */ jsx19("p", { className: "text-xs text-text-muted mt-1", children: description })
+      title && /* @__PURE__ */ jsx18("p", { className: "text-sm font-semibold text-text-primary", children: title }),
+      description && /* @__PURE__ */ jsx18("p", { className: "text-xs text-text-muted mt-1", children: description })
     ] }),
     /* @__PURE__ */ jsxs14("div", { className: "flex flex-col items-center gap-8 justify-center", children: [
       /* @__PURE__ */ jsxs14("div", { style: { width: size, height: size }, className: "relative mx-auto md:mx-0", children: [
         /* @__PURE__ */ jsxs14("svg", { className: "w-full h-full -rotate-90", children: [
-          /* @__PURE__ */ jsx19(
+          /* @__PURE__ */ jsx18(
             "circle",
             {
               cx: center,
@@ -2060,7 +1665,7 @@ var GraficaDonut = ({
             const tooltipRadius = radius + strokeWidth / 2 + 16;
             const tx = center + tooltipRadius * Math.cos(midAngleRad);
             const ty = center + tooltipRadius * Math.sin(midAngleRad);
-            return /* @__PURE__ */ jsx19("g", { children: /* @__PURE__ */ jsx19(
+            return /* @__PURE__ */ jsx18("g", { children: /* @__PURE__ */ jsx18(
               "circle",
               {
                 cx: center,
@@ -2085,7 +1690,7 @@ var GraficaDonut = ({
             ) }, seg.index);
           })
         ] }),
-        hoveredIndex !== null && /* @__PURE__ */ jsx19(
+        hoveredIndex !== null && /* @__PURE__ */ jsx18(
           "div",
           {
             className: "absolute pointer-events-none z-10",
@@ -2111,17 +1716,17 @@ var GraficaDonut = ({
               transform: "translate(-50%, -50%)"
             },
             children: /* @__PURE__ */ jsxs14("div", { className: "bg-[#0A0A0B] text-white text-xs rounded-md px-3 py-1 shadow-xl whitespace-nowrap", children: [
-              /* @__PURE__ */ jsx19("p", { className: "font-semibold", children: segmentMeta[hoveredIndex].label }),
-              /* @__PURE__ */ jsx19("p", { className: "text-center", children: formatValue(segmentMeta[hoveredIndex].value) })
+              /* @__PURE__ */ jsx18("p", { className: "font-semibold", children: segmentMeta[hoveredIndex].label }),
+              /* @__PURE__ */ jsx18("p", { className: "text-center", children: formatValue(segmentMeta[hoveredIndex].value) })
             ] })
           }
         ),
-        /* @__PURE__ */ jsx19("div", { className: "absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none", children: showTotal ? /* @__PURE__ */ jsxs14(Fragment2, { children: [
-          /* @__PURE__ */ jsx19("span", { className: "text-xs text-text-muted", children: "Total" }),
-          /* @__PURE__ */ jsx19("span", { className: "text-xl font-bold text-accent", children: formatValue(total) })
+        /* @__PURE__ */ jsx18("div", { className: "absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none", children: showTotal ? /* @__PURE__ */ jsxs14(Fragment2, { children: [
+          /* @__PURE__ */ jsx18("span", { className: "text-xs text-text-muted", children: "Total" }),
+          /* @__PURE__ */ jsx18("span", { className: "text-xl font-bold text-accent", children: formatValue(total) })
         ] }) : null })
       ] }),
-      /* @__PURE__ */ jsx19("div", { className: "flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4", children: segmentMeta.map((item, i) => {
+      /* @__PURE__ */ jsx18("div", { className: "flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4", children: segmentMeta.map((item, i) => {
         const isActive = hoveredIndex === i;
         return /* @__PURE__ */ jsxs14(
           "div",
@@ -2132,7 +1737,7 @@ var GraficaDonut = ({
                                   ${isActive ? "opacity-100 scale-100" : "opacity-80"}
                                 `,
             children: [
-              /* @__PURE__ */ jsx19(
+              /* @__PURE__ */ jsx18(
                 "div",
                 {
                   className: "w-2.5 h-2.5 rounded-full",
@@ -2142,7 +1747,7 @@ var GraficaDonut = ({
                   }
                 }
               ),
-              /* @__PURE__ */ jsx19("span", { className: "text-text-primary", children: item.label })
+              /* @__PURE__ */ jsx18("span", { className: "text-text-primary", children: item.label })
             ]
           },
           i
@@ -2154,22 +1759,22 @@ var GraficaDonut = ({
 var GraficaDonut_default = GraficaDonut;
 
 // lib/components/ui/DataDisplay/Graficas/GraficaLine.tsx
-import { useState as useState8, useRef as useRef8 } from "react";
-import { Fragment as Fragment3, jsx as jsx20, jsxs as jsxs15 } from "react/jsx-runtime";
+import { useState as useState6, useRef as useRef4 } from "react";
+import { Fragment as Fragment3, jsx as jsx19, jsxs as jsxs15 } from "react/jsx-runtime";
 var PureLineChart = ({
+  className,
   data,
   title,
   description,
   height = 240,
-  lineColor = "#7c3aed",
-  showArea = false,
-  animated = true,
+  lineColor = "var(--accent)",
+  showArea = true,
   legendLabel,
   yLabel
 }) => {
-  const [hoveredIndex, setHoveredIndex] = useState8(null);
-  const [tooltip, setTooltip] = useState8(null);
-  const containerRef = useRef8(null);
+  const [hoveredIndex, setHoveredIndex] = useState6(null);
+  const [tooltip, setTooltip] = useState6(null);
+  const containerRef = useRef4(null);
   const maxValue = Math.max(...data.map((d) => d.value), 1) * 1.15;
   const padding = { top: 16, bottom: 36, left: 52, right: 24 };
   const svgW = Math.max(data.length * 80 + padding.left + padding.right, 360);
@@ -2191,100 +1796,43 @@ var PureLineChart = ({
   const smoothLine = buildSmoothPath();
   const areaPath = smoothLine + ` L${scaleX(data.length - 1)},${chartH} L${scaleX(0)},${chartH} Z`;
   const yTicks = Array.from({ length: 5 }, (_, i) => Math.round(maxValue / 4 * i));
-  const gradientId = `area-grad-${lineColor.replace("#", "")}`;
+  const gradientId = `area-grad-${lineColor.replace(/[^a-zA-Z0-9]/g, "")}`;
   const formatVal = (n) => {
     if (n >= 1e6) return `${(n / 1e6).toFixed(1)}M`;
     if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
     return Number.isInteger(n) ? n.toString() : n.toFixed(1);
   };
-  const updateTooltip = (e, i) => {
-    var _a;
-    const containerRect = (_a = containerRef.current) == null ? void 0 : _a.getBoundingClientRect();
-    const svgEl = e.currentTarget.closest("svg");
-    const svgRect = svgEl == null ? void 0 : svgEl.getBoundingClientRect();
-    if (!containerRect || !svgRect) return;
-    const scaleFactorX = svgRect.width / svgW;
-    const scaleFactorY = svgRect.height / height;
-    const xPx = (scaleX(i) + padding.left) * scaleFactorX + (svgRect.left - containerRect.left);
-    const yPx = (scaleY(data[i].value) + padding.top) * scaleFactorY + (svgRect.top - containerRect.top);
-    setTooltip({ x: xPx, y: yPx, label: data[i].label, value: data[i].value });
-  };
-  const handleMouseMove = (e) => {
-    const svgEl = e.currentTarget.closest("svg");
-    const svgRect = svgEl == null ? void 0 : svgEl.getBoundingClientRect();
-    if (!svgRect) return;
-    const scaleFactorX = svgRect.width / svgW;
-    const mouseX = e.clientX - svgRect.left - padding.left * scaleFactorX;
-    const idx = Math.round(mouseX / (chartW * scaleFactorX) * (data.length - 1));
-    const clampedIdx = Math.max(0, Math.min(data.length - 1, idx));
-    setHoveredIndex(clampedIdx);
-  };
   return /* @__PURE__ */ jsxs15(
     "div",
     {
       ref: containerRef,
-      className: "relative rounded-2xl border border-border bg-surface shadow-sm p-5",
+      className: cn("relative rounded-md border border-border shadow-xs p-5 select-none", className),
       onMouseLeave: () => {
         setHoveredIndex(null);
         setTooltip(null);
       },
       children: [
-        title && /* @__PURE__ */ jsx20("p", { className: "text-sm font-semibold text-text-primary", children: title }),
-        description && /* @__PURE__ */ jsx20("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
-        /* @__PURE__ */ jsxs15("div", { className: "w-full overflow-x-auto relative", children: [
-          /* @__PURE__ */ jsxs15("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "select-none", children: [
-            yLabel && /* @__PURE__ */ jsx20(
-              "text",
-              {
-                x: 10,
-                y: padding.top - 8,
-                fill: "var(--text-muted)",
-                fontSize: 10,
-                fontWeight: 600,
-                children: yLabel
-              }
-            ),
-            /* @__PURE__ */ jsx20("defs", { children: showArea && /* @__PURE__ */ jsxs15("linearGradient", { id: gradientId, x1: "0", y1: "0", x2: "0", y2: "1", children: [
-              /* @__PURE__ */ jsx20("stop", { offset: "0%", stopColor: lineColor, stopOpacity: 0.3 }),
-              /* @__PURE__ */ jsx20("stop", { offset: "100%", stopColor: lineColor, stopOpacity: 0.02 })
+        title && /* @__PURE__ */ jsx19("p", { className: "text-sm font-semibold text-text-primary", children: title }),
+        description && /* @__PURE__ */ jsx19("p", { className: "text-xs text-text-muted mt-0.5 mb-2", children: description }),
+        /* @__PURE__ */ jsxs15("div", { className: "w-full overflow-x-auto relative scrollbar-none", children: [
+          /* @__PURE__ */ jsxs15("svg", { width: "100%", viewBox: `0 0 ${svgW} ${height}`, className: "overflow-visible", children: [
+            yLabel && /* @__PURE__ */ jsx19("text", { x: 10, y: padding.top - 8, fill: "var(--text-muted)", fontSize: 10, fontWeight: 600, children: yLabel }),
+            /* @__PURE__ */ jsx19("defs", { children: showArea && /* @__PURE__ */ jsxs15("linearGradient", { id: gradientId, x1: "0", y1: "0", x2: "0", y2: "1", children: [
+              /* @__PURE__ */ jsx19("stop", { offset: "0%", stopColor: lineColor, stopOpacity: 0.25 }),
+              /* @__PURE__ */ jsx19("stop", { offset: "100%", stopColor: lineColor, stopOpacity: 0 })
             ] }) }),
             /* @__PURE__ */ jsxs15("g", { transform: `translate(${padding.left}, ${padding.top + 15})`, children: [
               yTicks.map((tick) => {
                 const y = scaleY(tick);
                 return /* @__PURE__ */ jsxs15("g", { children: [
-                  /* @__PURE__ */ jsx20(
-                    "line",
-                    {
-                      x1: 0,
-                      y1: y,
-                      x2: chartW,
-                      y2: y,
-                      stroke: "var(--border-default)",
-                      strokeDasharray: "4 3"
-                    }
-                  ),
-                  /* @__PURE__ */ jsx20("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(Math.round(tick)) })
+                  /* @__PURE__ */ jsx19("line", { x1: 0, y1: y, x2: chartW, y2: y, stroke: "var(--border-default)", strokeDasharray: "4 3", strokeWidth: 0.5 }),
+                  /* @__PURE__ */ jsx19("text", { x: -10, y: y + 4, textAnchor: "end", fill: "var(--text-muted)", fontSize: 10, children: formatVal(Math.round(tick)) })
                 ] }, tick);
               }),
-              showArea && /* @__PURE__ */ jsx20("path", { d: areaPath, fill: `url(#${gradientId})` }),
-              /* @__PURE__ */ jsx20(
-                "path",
-                {
-                  d: smoothLine,
-                  fill: "none",
-                  stroke: lineColor,
-                  strokeWidth: 2.5,
-                  strokeLinecap: "round",
-                  strokeLinejoin: "round",
-                  style: animated ? {
-                    strokeDasharray: 2e3,
-                    strokeDashoffset: 2e3,
-                    animation: `drawLine 1.2s ease-out forwards`
-                  } : void 0
-                }
-              ),
+              showArea && /* @__PURE__ */ jsx19("path", { d: areaPath, fill: `url(#${gradientId})` }),
+              /* @__PURE__ */ jsx19("path", { d: smoothLine, fill: "none", stroke: lineColor, strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round" }),
               hoveredIndex !== null && /* @__PURE__ */ jsxs15(Fragment3, { children: [
-                /* @__PURE__ */ jsx20(
+                /* @__PURE__ */ jsx19(
                   "line",
                   {
                     x1: scaleX(hoveredIndex),
@@ -2293,55 +1841,44 @@ var PureLineChart = ({
                     y2: chartH,
                     stroke: lineColor,
                     strokeWidth: 1,
-                    strokeDasharray: "3 3",
-                    opacity: 0.4
+                    strokeDasharray: "4 3",
+                    className: "opacity-40"
                   }
                 ),
-                /* @__PURE__ */ jsx20(
-                  "circle",
-                  {
-                    cx: scaleX(hoveredIndex),
-                    cy: scaleY(data[hoveredIndex].value),
-                    r: 7,
-                    fill: lineColor,
-                    opacity: 0.15
-                  }
-                )
+                /* @__PURE__ */ jsx19("circle", { cx: scaleX(hoveredIndex), cy: scaleY(data[hoveredIndex].value), r: 6, fill: lineColor, className: "opacity-20" })
               ] }),
               data.map((d, i) => {
                 const cx = scaleX(i), cy = scaleY(d.value);
                 const isHov = hoveredIndex === i;
-                return /* @__PURE__ */ jsxs15("g", { children: [
-                  /* @__PURE__ */ jsx20(
-                    "circle",
-                    {
-                      cx,
-                      cy,
-                      r: isHov ? 5.5 : 3.5,
-                      fill: "var(--bg-surface)",
-                      stroke: lineColor,
-                      strokeWidth: 2.5,
-                      className: "transition-all duration-200 pointer-events-none"
-                    }
-                  ),
-                  /* @__PURE__ */ jsx20("circle", { cx, cy, r: 14, fill: "transparent" })
-                ] }, i);
+                return /* @__PURE__ */ jsx19(
+                  "circle",
+                  {
+                    cx,
+                    cy,
+                    r: isHov ? 5 : 3,
+                    fill: "var(--bg-surface)",
+                    stroke: lineColor,
+                    strokeWidth: 2,
+                    className: "transition-all duration-150"
+                  },
+                  i
+                );
               }),
-              data.map((d, i) => /* @__PURE__ */ jsx20(
+              data.map((d, i) => /* @__PURE__ */ jsx19(
                 "text",
                 {
                   x: scaleX(i),
-                  y: chartH + 18,
+                  y: chartH + 20,
                   textAnchor: "middle",
-                  fill: "var(--text-muted)",
+                  fill: hoveredIndex === i ? "var(--text-primary)" : "var(--text-muted)",
                   fontSize: 11,
                   fontWeight: hoveredIndex === i ? 600 : 400,
-                  className: "pointer-events-none",
+                  className: "transition-colors duration-150",
                   children: d.label
                 },
                 i
               )),
-              /* @__PURE__ */ jsx20(
+              /* @__PURE__ */ jsx19(
                 "rect",
                 {
                   x: 0,
@@ -2349,57 +1886,49 @@ var PureLineChart = ({
                   width: chartW,
                   height: chartH,
                   fill: "transparent",
+                  className: "cursor-crosshair",
                   onMouseMove: (e) => {
+                    var _a;
+                    const containerRect = (_a = containerRef.current) == null ? void 0 : _a.getBoundingClientRect();
                     const svgEl = e.currentTarget.closest("svg");
                     const svgRect = svgEl == null ? void 0 : svgEl.getBoundingClientRect();
-                    if (!svgRect) return;
-                    const scaleFactorX = svgRect.width / svgW;
-                    const mouseX = e.clientX - svgRect.left - padding.left * scaleFactorX;
+                    if (!containerRect || !svgRect) return;
+                    const svgLeftPadding = padding.left * (svgRect.width / svgW);
+                    const activeChartWidth = chartW * (svgRect.width / svgW);
+                    const mouseXOnChart = e.clientX - svgRect.left - svgLeftPadding;
                     const idx = Math.max(0, Math.min(
                       data.length - 1,
-                      Math.round(mouseX / (chartW * scaleFactorX) * (data.length - 1))
+                      Math.round(mouseXOnChart / activeChartWidth * (data.length - 1))
                     ));
                     setHoveredIndex(idx);
-                    updateTooltip(e, idx);
-                  },
-                  onMouseLeave: () => {
-                    setHoveredIndex(null);
-                    setTooltip(null);
+                    setTooltip({
+                      x: e.clientX - containerRect.left,
+                      y: e.clientY - containerRect.top - 16,
+                      label: data[idx].label,
+                      value: data[idx].value
+                    });
                   }
                 }
               ),
-              /* @__PURE__ */ jsx20("line", { x1: 0, y1: chartH, x2: chartW, y2: chartH, stroke: "var(--border-strong)" })
-            ] }),
-            /* @__PURE__ */ jsx20("style", { children: `
-                        @keyframes drawLine { to { stroke-dashoffset: 0; } }
-                    ` })
+              /* @__PURE__ */ jsx19("line", { x1: 0, y1: chartH, x2: chartW, y2: chartH, stroke: "var(--border-strong)" })
+            ] })
           ] }),
-          tooltip && /* @__PURE__ */ jsx20(
+          tooltip && /* @__PURE__ */ jsx19(
             "div",
             {
-              className: "absolute z-50 pointer-events-none transition-all duration-150",
-              style: {
-                left: tooltip.x,
-                top: tooltip.y,
-                transform: "translate(-90%, -70%)"
-              },
-              children: /* @__PURE__ */ jsxs15("div", { className: "relative bg-[#0A0A0B] text-white text-sm rounded-lg px-8 py-2 shadow-2xl border border-white/10 whitespace-nowrap", children: [
-                /* @__PURE__ */ jsx20("p", { className: "text-[11px] text-center", children: tooltip.label }),
-                /* @__PURE__ */ jsx20("p", { className: "text-sm font-semibold text-center", children: formatVal(tooltip.value) })
+              className: "absolute z-50 pointer-events-none -translate-x-1/2 -translate-y-full transition-all duration-75",
+              style: { left: tooltip.x, top: tooltip.y },
+              children: /* @__PURE__ */ jsxs15("div", { className: "bg-primary text-background text-xs rounded-lg px-3 py-1.5 shadow-md border border-border/10 text-center", children: [
+                /* @__PURE__ */ jsx19("p", { className: "opacity-80 text-[10px] uppercase tracking-wider", children: tooltip.label }),
+                /* @__PURE__ */ jsx19("p", { className: "text-sm font-bold mt-0.5", children: formatVal(tooltip.value) })
               ] })
             }
           )
         ] }),
-        legendLabel && /* @__PURE__ */ jsx20("div", { className: "flex justify-center items-center gap-2 mt-4 px-2", children: /* @__PURE__ */ jsxs15("div", { className: "flex items-center gap-1.5", children: [
-          /* @__PURE__ */ jsx20(
-            "div",
-            {
-              className: "w-3 h-1 rounded-sm",
-              style: { backgroundColor: lineColor }
-            }
-          ),
-          /* @__PURE__ */ jsx20("span", { className: "text-sm font-medium", children: legendLabel })
-        ] }) })
+        legendLabel && /* @__PURE__ */ jsxs15("div", { className: "flex justify-center items-center gap-2 mt-3", children: [
+          /* @__PURE__ */ jsx19("div", { className: "w-4 h-0.5 rounded-sm", style: { backgroundColor: lineColor } }),
+          /* @__PURE__ */ jsx19("span", { className: "text-xs text-text-secondary font-medium", children: legendLabel })
+        ] })
       ]
     }
   );
@@ -2407,34 +1936,34 @@ var PureLineChart = ({
 var GraficaLine_default = PureLineChart;
 
 // lib/components/ui/DataDisplay/Tabs.tsx
-import { useState as useState9 } from "react";
-import { jsx as jsx21, jsxs as jsxs16 } from "react/jsx-runtime";
-var triggerBase = "inline-flex items-center gap-2 text-sm font-medium transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
+import { useState as useState7 } from "react";
+import { jsx as jsx20, jsxs as jsxs16 } from "react/jsx-runtime";
+var triggerBase = "inline-flex items-center gap-2 text-sm font-medium transition-all duration-200 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-accent-soft focus-visible:border-accent";
 var variantStyles2 = {
   underline: {
     list: "flex border-b border-border gap-1",
-    trigger: "px-4 py-2.5 border-b-2 -mb-px",
+    trigger: "px-4 py-2.5 border-b-2 -mb-px outline-none",
     active: "border-accent text-accent",
-    inactive: "border-transparent text-text-secondary hover:text-text-primary hover:border-border-strong"
+    inactive: "border-transparent text-text-secondary hover:text-text-primary hover:border-accent"
   },
   pill: {
-    list: "flex gap-1 bg-muted p-1 rounded-xl",
-    trigger: "px-4 py-2 rounded-lg",
-    active: "bg-surface text-text-primary shadow-[var(--shadow-surface)]",
-    inactive: "text-text-muted hover:text-text-primary hover:bg-accent-hover"
+    list: "flex gap-1 bg-muted p-1 rounded-xl w-fit",
+    trigger: "px-4 py-2 rounded-lg outline-none",
+    active: "bg-surface text-text-primary shadow-xs",
+    inactive: "text-text-muted hover:text-text-primary hover:bg-muted/60"
   },
   card: {
-    list: "flex gap-2",
-    trigger: "px-4 py-2.5 rounded-t-lg border border-b-0",
+    list: "flex gap-1.5",
+    trigger: "px-4 py-2.5 rounded-t-xl border border-b-0 outline-none",
     active: "border-border bg-surface text-text-primary",
-    inactive: "border-transparent bg-muted text-text-muted hover:text-text-primary hover:bg-accent-soft"
+    inactive: "border-transparent bg-muted/50 text-text-muted hover:text-text-primary hover:bg-accent-soft"
   }
 };
 var alignClass = {
   start: "justify-start",
   center: "justify-center",
   end: "justify-end",
-  stretch: "[&>button]:flex-1 [&>button]:justify-center"
+  stretch: "[&>button]:flex-1 [&>button]:justify-center w-full"
 };
 function Tabs({
   tabs,
@@ -2446,7 +1975,7 @@ function Tabs({
   align = "start"
 }) {
   var _a, _b;
-  const [internalActive, setInternalActive] = useState9(
+  const [internalActive, setInternalActive] = useState7(
     (_b = defaultTab != null ? defaultTab : (_a = tabs[0]) == null ? void 0 : _a.id) != null ? _b : ""
   );
   const isControlled = controlledTab !== void 0;
@@ -2456,30 +1985,33 @@ function Tabs({
     onChange == null ? void 0 : onChange(id);
   };
   const styles = variantStyles2[variant];
-  return /* @__PURE__ */ jsxs16("div", { className: `flex flex-col w-full ${className}`, children: [
-    /* @__PURE__ */ jsx21(
+  return /* @__PURE__ */ jsxs16("div", { className: cn("flex flex-col w-full", className), children: [
+    /* @__PURE__ */ jsx20(
       "div",
       {
         role: "tablist",
-        className: `${styles.list} ${alignClass[align]}`,
+        "aria-orientation": "horizontal",
+        className: cn(styles.list, alignClass[align]),
         children: tabs.map((tab) => {
           const isActive = tab.id === active;
           return /* @__PURE__ */ jsxs16(
             "button",
             {
+              id: `tab-trigger-${tab.id}`,
               role: "tab",
+              type: "button",
               "aria-selected": isActive,
               "aria-controls": `tabpanel-${tab.id}`,
               disabled: tab.disabled,
               onClick: () => !tab.disabled && handleSelect(tab.id),
-              className: [
+              className: cn(
                 triggerBase,
                 styles.trigger,
                 isActive ? styles.active : styles.inactive
-              ].join(" "),
+              ),
               children: [
-                tab.icon && /* @__PURE__ */ jsx21("span", { className: "shrink-0 size-4", children: tab.icon }),
-                tab.label
+                tab.icon && /* @__PURE__ */ jsx20("span", { className: "shrink-0 size-4 [&_svg]:size-full", children: tab.icon }),
+                /* @__PURE__ */ jsx20("span", { children: tab.label })
               ]
             },
             tab.id
@@ -2487,39 +2019,37 @@ function Tabs({
         })
       }
     ),
-    tabs.map((tab) => /* @__PURE__ */ jsx21(
-      "div",
-      {
-        role: "tabpanel",
-        id: `tabpanel-${tab.id}`,
-        "aria-labelledby": tab.id,
-        hidden: tab.id !== active,
-        className: "mt-4 text-text-primary",
-        children: tab.content
-      },
-      tab.id
-    ))
+    tabs.map((tab) => {
+      const isActive = tab.id === active;
+      if (!isActive) return null;
+      return /* @__PURE__ */ jsx20(
+        "div",
+        {
+          role: "tabpanel",
+          id: `tabpanel-${tab.id}`,
+          "aria-labelledby": `tab-trigger-${tab.id}`,
+          className: "mt-4 text-text-primary animate-in fade-in duration-200 outline-none",
+          children: tab.content
+        },
+        tab.id
+      );
+    })
   ] });
 }
 
 // lib/components/ui/DataDisplay/Table.tsx
 import React10 from "react";
-import { jsx as jsx22, jsxs as jsxs17 } from "react/jsx-runtime";
+import { jsx as jsx21, jsxs as jsxs17 } from "react/jsx-runtime";
 function getCellValue(row, col) {
   if (col.render) return col.render(row);
   if (!col.accessor) return null;
   if (typeof col.accessor === "function") return col.accessor(row);
   return row[col.accessor];
 }
-var CELL_PADDING = {
-  sm: "6px 10px",
-  md: "10px 12px",
-  lg: "14px 16px"
-};
-var FONT_SIZE = {
-  sm: "12px",
-  md: "13px",
-  lg: "14px"
+var paddingClasses = {
+  sm: "py-1.5 px-2.5 text-xs",
+  md: "py-2.5 px-3 text-sm",
+  lg: "py-3.5 px-4 text-base"
 };
 function DataTable({
   data,
@@ -2532,7 +2062,7 @@ function DataTable({
   headerVariant = "default",
   size = "md"
 }) {
-  var _a, _b;
+  var _a;
   const groupedHeaders = React10.useMemo(() => {
     const result = [];
     let i = 0;
@@ -2554,12 +2084,11 @@ function DataTable({
     return result;
   }, [columns]);
   const hasGroups = columns.some((c) => c.group);
-  const cellPadding = (_a = CELL_PADDING[size]) != null ? _a : CELL_PADDING.md;
-  const fontSize = (_b = FONT_SIZE[size]) != null ? _b : FONT_SIZE.md;
-  const headerBg = headerVariant === "accent" ? "var(--accent)" : "var(--bg-muted)";
-  const headerText = headerVariant === "accent" ? "#ffffff" : "var(--text-secondary)";
-  const groupLabelColor = headerVariant === "accent" ? "#f7f4f4ff" : "var(--accent)";
-  const groupBorderColor = headerVariant === "accent" ? "var(--border-default)" : "var(--border-strong)";
+  const cellPaddingClass = (_a = paddingClasses[size]) != null ? _a : paddingClasses.md;
+  const isAccent = headerVariant === "accent";
+  const headerBgClass = isAccent ? "bg-accent text-white" : "bg-muted text-text-secondary";
+  const groupLabelColorClass = isAccent ? "text-background/90" : "text-accent";
+  const groupBorderClass = isAccent ? "border-border" : "border-border-strong";
   const groupStyles = React10.useMemo(() => {
     const map = /* @__PURE__ */ new Map();
     columns.forEach((col) => {
@@ -2572,176 +2101,115 @@ function DataTable({
   return /* @__PURE__ */ jsxs17(
     "div",
     {
-      className,
-      style: {
-        border: "0.5px solid var(--border-default)",
-        borderRadius: "var(--r-lg)",
-        overflow: "hidden",
-        background: "var(--bg-surface)",
-        boxShadow: "var(--shadow-card)"
-      },
+      className: cn(
+        "border border-border rounded-xl overflow-hidden bg-surface shadow-xs w-full flex flex-col",
+        className
+      ),
       children: [
-        /* @__PURE__ */ jsx22(
+        /* @__PURE__ */ jsx21(
           "div",
           {
-            className: "scrollbar-soft",
-            style: { overflowX: "auto", overflowY: "auto", maxHeight },
-            children: /* @__PURE__ */ jsxs17(
-              "table",
-              {
-                style: {
-                  width: "100%",
-                  borderCollapse: "separate",
-                  borderSpacing: 0,
-                  fontSize,
-                  minWidth: "600px",
-                  fontFamily: "var(--font-body), sans-serif"
-                },
-                children: [
-                  /* @__PURE__ */ jsxs17(
-                    "thead",
+            className: "scrollbar-soft overflow-auto w-full",
+            style: { maxHeight },
+            children: /* @__PURE__ */ jsxs17("table", { className: "w-full border-separate border-spacing-0 min-w-[600px] font-body", children: [
+              /* @__PURE__ */ jsxs17("thead", { className: cn("sticky top-0 z-10 font-semibold select-none", headerBgClass), children: [
+                hasGroups && /* @__PURE__ */ jsx21("tr", { children: groupedHeaders.map((g, idx) => {
+                  var _a2, _b;
+                  const style = groupStyles.get(g.label);
+                  return g.label ? /* @__PURE__ */ jsx21(
+                    "th",
                     {
+                      colSpan: g.span,
+                      className: cn(
+                        "py-1.5 px-3 text-center font-bold text-[10px] tracking-wider uppercase whitespace-nowrap border-b",
+                        groupLabelColorClass
+                      ),
                       style: {
-                        position: "sticky",
-                        top: 0,
-                        zIndex: 10,
-                        background: headerBg
+                        borderBottomColor: (_a2 = style == null ? void 0 : style.border) != null ? _a2 : isAccent ? "var(--border-default)" : "var(--border-strong)",
+                        backgroundColor: (_b = style == null ? void 0 : style.bg) != null ? _b : void 0,
+                        borderLeft: idx !== 0 ? "0.5px solid var(--border-default)" : void 0
                       },
-                      children: [
-                        hasGroups && /* @__PURE__ */ jsx22("tr", { children: groupedHeaders.map((g, idx) => {
-                          var _a2, _b2;
-                          const style = groupStyles.get(g.label);
-                          return g.label ? /* @__PURE__ */ jsx22(
-                            "th",
-                            {
-                              colSpan: g.span,
-                              style: {
-                                padding: "5px 12px",
-                                textAlign: "center",
-                                fontWeight: 600,
-                                fontSize: "10px",
-                                letterSpacing: "0.08em",
-                                textTransform: "uppercase",
-                                color: groupLabelColor,
-                                borderBottom: `0.5px solid ${(_a2 = style == null ? void 0 : style.border) != null ? _a2 : groupBorderColor}`,
-                                background: (_b2 = style == null ? void 0 : style.bg) != null ? _b2 : headerBg,
-                                borderLeft: idx !== 0 ? "0.5px solid var(--border-default)" : void 0,
-                                borderRight: idx === groupedHeaders.length - 1 ? "2px solid var(--border-default)" : "2px solid transparent",
-                                whiteSpace: "nowrap"
-                              },
-                              children: g.label
-                            },
-                            `group-${g.label}-${idx}`
-                          ) : /* @__PURE__ */ jsx22(
-                            "th",
-                            {
-                              style: {
-                                padding: 0,
-                                borderBottom: "0.5px solid var(--border-default)"
-                              }
-                            },
-                            `empty-${g.start}`
-                          );
-                        }) }),
-                        /* @__PURE__ */ jsx22("tr", { children: columns.map((col, i) => {
-                          var _a2, _b2, _c;
-                          const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
-                          const style = col.group ? groupStyles.get(col.group) : void 0;
-                          return /* @__PURE__ */ jsx22(
-                            "th",
-                            {
-                              style: {
-                                padding: cellPadding,
-                                textAlign: (_a2 = col.align) != null ? _a2 : "left",
-                                fontWeight: 600,
-                                fontSize: "11px",
-                                letterSpacing: "0.04em",
-                                color: headerText,
-                                background: (_b2 = style == null ? void 0 : style.bg) != null ? _b2 : headerBg,
-                                borderBottom: "0.5px solid var(--border-default)",
-                                borderLeft: isFirstInGroup && i !== 0 ? `1px solid ${(_c = style == null ? void 0 : style.border) != null ? _c : "var(--border-default)"}` : void 0,
-                                whiteSpace: "nowrap",
-                                width: col.width !== void 0 ? typeof col.width === "number" ? `${col.width}px` : col.width : void 0,
-                                minWidth: col.width !== void 0 ? typeof col.width === "number" ? `${col.width}px` : col.width : "100px"
-                              },
-                              children: col.header
-                            },
-                            col.key
-                          );
-                        }) })
-                      ]
-                    }
-                  ),
-                  /* @__PURE__ */ jsx22("tbody", { children: isLoading ? Array.from({ length: 5 }).map((_, rowIdx) => /* @__PURE__ */ jsx22("tr", { children: columns.map((col) => /* @__PURE__ */ jsx22(
-                    "td",
+                      children: g.label
+                    },
+                    `group-${g.label}-${idx}`
+                  ) : /* @__PURE__ */ jsx21(
+                    "th",
                     {
+                      className: "p-0 border-b border-border"
+                    },
+                    `empty-${g.start}`
+                  );
+                }) }),
+                /* @__PURE__ */ jsx21("tr", { children: columns.map((col, i) => {
+                  var _a2, _b, _c, _d, _e;
+                  const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
+                  const style = col.group ? groupStyles.get(col.group) : void 0;
+                  return /* @__PURE__ */ jsx21(
+                    "th",
+                    {
+                      className: cn(
+                        "font-semibold text-[11px] tracking-wide whitespace-nowrap border-b border-border",
+                        cellPaddingClass
+                      ),
                       style: {
-                        padding: cellPadding,
-                        borderBottom: "0.5px solid var(--border-default)"
+                        textAlign: (_a2 = col.align) != null ? _a2 : "left",
+                        backgroundColor: (_b = style == null ? void 0 : style.bg) != null ? _b : void 0,
+                        borderLeft: isFirstInGroup && i !== 0 ? `1px solid ${(_c = style == null ? void 0 : style.border) != null ? _c : "var(--border-default)"}` : void 0,
+                        width: (_d = col.width) != null ? _d : "auto",
+                        minWidth: (_e = col.width) != null ? _e : "100px"
                       },
-                      children: /* @__PURE__ */ jsx22(
-                        "div",
-                        {
-                          style: {
-                            height: "12px",
-                            borderRadius: "var(--r-sm)",
-                            background: "var(--bg-muted)",
-                            width: `${60 + Math.random() * 30}%`,
-                            animation: "dt-pulse 1.5s ease-in-out infinite"
-                          }
-                        }
-                      )
+                      children: col.header
                     },
                     col.key
-                  )) }, `skeleton-${rowIdx}`)) : data.length === 0 ? /* @__PURE__ */ jsx22("tr", { children: /* @__PURE__ */ jsx22(
-                    "td",
-                    {
-                      colSpan: columns.length,
-                      style: {
-                        padding: "48px 16px",
-                        textAlign: "center",
-                        color: "var(--text-muted)",
-                        fontFamily: "var(--font-body), sans-serif"
-                      },
-                      children: emptyState != null ? emptyState : "Sin resultados"
-                    }
-                  ) }) : data.map((row, rowIdx) => {
-                    const key = String(row[rowKey]);
-                    return /* @__PURE__ */ jsx22(
-                      "tr",
-                      {
-                        style: {
-                          background: "var(--bg-base)"
+                  );
+                }) })
+              ] }),
+              /* @__PURE__ */ jsx21("tbody", { children: isLoading ? Array.from({ length: 5 }).map((_, rowIdx) => /* @__PURE__ */ jsx21("tr", { className: "hover:bg-muted/30 transition-colors", children: columns.map((col) => /* @__PURE__ */ jsx21("td", { className: cn("border-b border-border", cellPaddingClass), children: /* @__PURE__ */ jsx21(
+                "div",
+                {
+                  className: "h-3 bg-muted rounded-xs animate-pulse",
+                  style: { width: `${60 + Math.random() * 30}%` }
+                }
+              ) }, col.key)) }, `skeleton-${rowIdx}`)) : data.length === 0 ? /* @__PURE__ */ jsx21("tr", { children: /* @__PURE__ */ jsx21(
+                "td",
+                {
+                  colSpan: columns.length,
+                  className: "py-12 px-4 text-center text-text-muted font-normal",
+                  children: emptyState != null ? emptyState : "Sin resultados"
+                }
+              ) }) : data.map((row, rowIdx) => {
+                const key = String(row[rowKey]);
+                return /* @__PURE__ */ jsx21(
+                  "tr",
+                  {
+                    className: "hover:bg-muted/20 active:bg-muted/40 transition-colors border-b border-border",
+                    children: columns.map((col, i) => {
+                      var _a2;
+                      const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
+                      return /* @__PURE__ */ jsx21(
+                        "td",
+                        {
+                          className: cn(
+                            "text-text-primary border-b border-border font-normal text-sm",
+                            cellPaddingClass
+                          ),
+                          style: {
+                            textAlign: (_a2 = col.align) != null ? _a2 : "left",
+                            borderLeft: isFirstInGroup && i !== 0 ? "0.5px solid var(--border-default)" : void 0
+                          },
+                          children: getCellValue(row, col)
                         },
-                        children: columns.map((col, i) => {
-                          var _a2;
-                          const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
-                          return /* @__PURE__ */ jsx22(
-                            "td",
-                            {
-                              style: {
-                                padding: cellPadding,
-                                textAlign: (_a2 = col.align) != null ? _a2 : "left",
-                                borderBottom: "0.5px solid var(--border-default)",
-                                borderLeft: isFirstInGroup && i !== 0 ? "0.5px solid var(--border-default)" : void 0,
-                                color: "var(--text-primary)",
-                                whiteSpace: "nowrap"
-                              },
-                              children: getCellValue(row, col)
-                            },
-                            col.key
-                          );
-                        })
-                      },
-                      key
-                    );
-                  }) })
-                ]
-              }
-            )
+                        col.key
+                      );
+                    })
+                  },
+                  key
+                );
+              }) })
+            ] })
           }
         ),
-        /* @__PURE__ */ jsx22("style", { children: `
+        /* @__PURE__ */ jsx21("style", { children: `
                 @keyframes dt-pulse {
                     0%, 100% { opacity: 1; }
                     50%       { opacity: 0.35; }
@@ -2755,30 +2223,61 @@ function DataTable({
 // lib/components/ui/Navegacion/Breadcrumbs.tsx
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { jsx as jsx23, jsxs as jsxs18 } from "react/jsx-runtime";
-function Breadcrumbs() {
+import { jsx as jsx22, jsxs as jsxs18 } from "react/jsx-runtime";
+function Breadcrumbs({ className }) {
   const pathname = usePathname();
   const segments = pathname.split("/").filter((segment) => segment !== "");
-  return /* @__PURE__ */ jsxs18("nav", { className: "flex items-center space-x-2 text-xs tracking-widest font-semibold text-text-muted whitespace-nowrap overflow-x-auto scrollbar-hide", children: [
-    segments.length === 0 ? /* @__PURE__ */ jsx23("span", { className: "text-text-primary", children: "INICIO" }) : /* @__PURE__ */ jsx23(Link, { href: "/", className: "hover:text-text-primary transition-colors flex items-center", children: "INICIO" }),
-    segments.map((segment, index) => {
-      const href = `/${segments.slice(0, index + 1).join("/")}`;
-      const isLast = index === segments.length - 1;
-      let name = decodeURIComponent(segment).replace(/[-_]/g, " ").toUpperCase();
-      return /* @__PURE__ */ jsxs18("div", { className: "flex items-center space-x-2", children: [
-        /* @__PURE__ */ jsx23("span", { className: "text-text-muted/50", children: "/" }),
-        isLast ? /* @__PURE__ */ jsx23("span", { className: "text-text-primary", children: name }) : /* @__PURE__ */ jsx23(Link, { href, className: "hover:text-text-primary transition-colors", children: name })
-      ] }, href);
-    })
-  ] });
+  return /* @__PURE__ */ jsxs18(
+    "nav",
+    {
+      "aria-label": "Breadcrumb",
+      className: cn(
+        "flex items-center space-x-2 text-xs tracking-widest font-semibold text-text-muted whitespace-nowrap overflow-x-auto scrollbar-none py-1",
+        className
+      ),
+      children: [
+        segments.length === 0 ? /* @__PURE__ */ jsx22("span", { className: "text-text-primary", "aria-current": "page", children: "INICIO" }) : /* @__PURE__ */ jsx22(Link, { href: "/", className: "hover:text-text-primary text-text-muted transition-colors flex items-center outline-none focus-visible:text-accent", children: "INICIO" }),
+        segments.map((segment, index) => {
+          const href = `/${segments.slice(0, index + 1).join("/")}`;
+          const isLast = index === segments.length - 1;
+          const name = decodeURIComponent(segment).replace(/[-_]/g, " ").toUpperCase();
+          return /* @__PURE__ */ jsxs18("div", { className: "flex items-center space-x-2", children: [
+            /* @__PURE__ */ jsx22(
+              "span",
+              {
+                className: "text-text-muted/40 select-none text-md",
+                "aria-hidden": "true",
+                children: "\u203A"
+              }
+            ),
+            isLast ? /* @__PURE__ */ jsx22(
+              "span",
+              {
+                className: "text-text-primary font-bold",
+                "aria-current": "page",
+                children: name
+              }
+            ) : (
+              // Elementos intermedios navegables
+              /* @__PURE__ */ jsx22(
+                Link,
+                {
+                  href,
+                  className: "hover:text-text-primary text-text-muted transition-colors outline-none focus-visible:text-accent",
+                  children: name
+                }
+              )
+            )
+          ] }, href);
+        })
+      ]
+    }
+  );
 }
 export {
-  AlertDialog,
   Breadcrumbs,
   Button,
   Calendar,
-  CalendarGrid,
-  CalendarHeader,
   Card,
   CardBody,
   CardFooter,
@@ -2795,7 +2294,6 @@ export {
   GraficaLine_default as GraficaLine,
   Input,
   LabelBadge,
-  MonthGrid,
   MultiSelect,
   Select,
   SelectContent,
@@ -2814,17 +2312,14 @@ export {
   ThemeToggle,
   Toaster,
   Tooltip,
-  YearGrid,
   buttonVariants,
   formatDate,
   getDiasDelMes,
+  inputVariants,
   isDisabledDay,
   isDisabledMonth,
   isDisabledYear,
   isSameDay,
-  isSameMonth,
-  isSameYear,
   isWeekendDate,
-  useAlertDialogContext,
   useDialogContext
 };

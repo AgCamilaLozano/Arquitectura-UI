@@ -34,7 +34,6 @@ export const Toaster = (props: ToasterProps) => {
                 } as React.CSSProperties
             }
             toastOptions={{
-                duration: 3000,
                 classNames: {
                     title:
                         "!text-md !font-bold uppercase",

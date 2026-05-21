@@ -1,9 +1,7 @@
 'use client'
 import React, { useState, useRef } from 'react'
-import { Tooltip } from '@/lib/components/ui/Compuesto/Tooltip'
-import { ChevronDown } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
-// ─── Tipos ───────────────────────────────────────────────────────
 interface BarSegment {
     label: string
     value: number
@@ -16,10 +14,10 @@ interface PureBarChartProps {
     description?: string
     height?: number
     barRadius?: number
-    animated?: boolean
     legendLabel?: string
     yLabel?: string
 }
+
 const chartColors = [
     'var(--chart-1)',
     'var(--chart-2)',
@@ -28,16 +26,13 @@ const chartColors = [
     'var(--chart-5)',
 ]
 
-
-// ─── Componente ──────────────────────────────────────────────────
-const GraficaBar = ({
+export const GraficaBar = ({
     className,
     data,
     title,
     description,
     height = 240,
-    barRadius = 2,
-    animated = true,
+    barRadius = 4,
     legendLabel,
     yLabel,
 }: PureBarChartProps) => {
@@ -57,33 +52,25 @@ const GraficaBar = ({
         if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`
         return n.toString()
     }
-    const [tooltip, setTooltip] = useState<{
-        x: number
-        y: number
-        label: string
-        value: number
-    } | null>(null)
+
+    const [tooltip, setTooltip] = useState<{ x: number; y: number; label: string; value: number } | null>(null)
 
     return (
-        <div ref={containerRef} className="relative rounded-2xl border border-border bg-background shadow-sm p-5"
+        <div 
+            ref={containerRef} 
+            className={cn("relative rounded-md border border-border  shadow-xs p-5 select-none", className)}
             onMouseLeave={() => {
                 setHoveredIndex(null)
                 setTooltip(null)
-            }}>
+            }}
+        >
             {title && <p className="text-sm font-semibold text-text-primary">{title}</p>}
             {description && <p className="text-xs text-text-muted mt-0.5 mb-2">{description}</p>}
 
             <div className="w-full relative overflow-hidden">
-                <svg width="100%" viewBox={`0 0 ${svgW} ${height}`} className="select-none relative z-0">
+                <svg width="100%" viewBox={`0 0 ${svgW} ${height}`} className="relative z-0 overflow-visible">
                     {yLabel && (
-                        <text
-                            x={10}
-                            y={padding.top - 5}
-                            fill="var(--text-muted)"
-                            fontSize={10}
-                            fontWeight={600}
-
-                        >
+                        <text x={10} y={padding.top - 5} fill="var(--text-muted)" fontSize={10} fontWeight={600}>
                             {yLabel}
                         </text>
                     )}
@@ -95,7 +82,7 @@ const GraficaBar = ({
                             return (
                                 <g key={tick}>
                                     <line x1={0} y1={y} x2={svgW - padding.left - padding.right} y2={y}
-                                        stroke="var(--border-default)" strokeDasharray="4 3" />
+                                        stroke="var(--border-default)" strokeDasharray="4 3" strokeWidth={0.5} />
                                     <text x={-10} y={y + 4} textAnchor="end" fill="var(--text-muted)" fontSize={10}>
                                         {formatVal(tick)}
                                     </text>
@@ -103,7 +90,7 @@ const GraficaBar = ({
                             )
                         })}
 
-                        {/* Barras SVG puras */}
+                        {/* Barras */}
                         {data.map((item, i) => {
                             const barH = (item.value / ceilMax) * chartH
                             const x = i * 72 + 16
@@ -111,72 +98,49 @@ const GraficaBar = ({
 
                             return (
                                 <g key={i}>
+                                    {/* Zona interactiva invisible agrandada */}
                                     <rect
-                                        x={x - 4}
-                                        y={0}
-                                        width={28}
-                                        height={chartH}
-                                        fill="transparent"
-                                        style={{ cursor: 'pointer' }}
+                                        x={x - 10} y={0} width={48} height={chartH}
+                                        fill="transparent" className="cursor-pointer"
                                         onMouseEnter={(e) => {
                                             setHoveredIndex(i)
-
                                             const containerRect = containerRef.current?.getBoundingClientRect()
-                                            const svgEl = (e.currentTarget as Element).closest('svg')
-                                            const svgRect = svgEl?.getBoundingClientRect()
-                                            if (!containerRect || !svgRect) return
-
-                                            const scaleX = svgRect.width / svgW
-                                            const scaleY = svgRect.height / height
-
-                                            const xCenter = (x + 35 + padding.left) * scaleX + (svgRect.left - containerRect.left)
-                                            const yTop = (chartH - barH + padding.top) * scaleY + (svgRect.top - containerRect.top)
-
+                                            if (!containerRect) return
+                                            
+                                            // CORREGIDO: Coordenadas relativas al contenedor exactas
+                                            const xCenter = e.clientX - containerRect.left
+                                            const yTop = e.clientY - containerRect.top - 20
                                             setTooltip({ x: xCenter, y: yTop, label: item.label, value: item.value })
                                         }}
-
-                                    />
-
-                                    {/* Highlight */}
-                                    {isHov && (
-                                        <rect
-                                            x={x - 6}
-                                            y={0}
-                                            width={42}
-                                            height={chartH}
-                                            rx={8}
-                                            fill={chartColors[i % chartColors.length]}
-                                            opacity={0.08}
-                                            className="transition-all duration-300"
-                                        />
-                                    )}
-
-                                    {/* Barra */}
-                                    <rect
-                                        x={x}
-                                        y={chartH - barH}
-                                        width={28}
-                                        height={barH}
-                                        rx={barRadius}
-                                        fill={chartColors[i % chartColors.length]}
-                                        opacity={isHov ? 1 : 0.85}
-                                        className="transition-all duration-300 ease-out pointer-events-none"
-                                        style={{
-                                            filter: isHov
-                                                ? `drop-shadow(0 4px 8px ${chartColors[i % chartColors.length]}40)`
-                                                : 'none',
+                                        onMouseMove={(e) => {
+                                            const containerRect = containerRef.current?.getBoundingClientRect()
+                                            if (!containerRect) return
+                                            setTooltip(prev => prev ? { ...prev, x: e.clientX - containerRect.left, y: e.clientY - containerRect.top - 20 } : null)
                                         }}
                                     />
 
-                                    {/* Label */}
-                                    <text
-                                        x={x + 14}
-                                        y={chartH + 18}
-                                        textAnchor={'middle'}
+                                    {/* Highlight de fondo */}
+                                    {isHov && (
+                                        <rect x={x - 6} y={0} width={42} height={chartH} rx={6}
+                                            fill={chartColors[i % chartColors.length]} opacity={0.06} />
+                                    )}
+
+                                    {/* Barra Real */}
+                                    <rect
+                                        x={x} y={chartH - barH} width={30} height={barH} rx={barRadius}
+                                        fill={chartColors[i % chartColors.length]}
+                                        opacity={isHov ? 1 : 0.85}
+                                        className="transition-all duration-200 ease-out pointer-events-none"
+                                        style={{
+                                            transformOrigin: `0px ${chartH}px`,
+                                            filter: isHov ? `drop-shadow(0 4px 12px ${chartColors[i % chartColors.length]}40)` : 'none'
+                                        }}
+                                    />
+
+                                    {/* Texto Eje X */}
+                                    <text x={x + 15} y={chartH + 20} textAnchor="middle"
                                         fill={isHov ? "var(--text-primary)" : "var(--text-muted)"}
-                                        fontSize={11}
-                                        fontWeight={isHov ? 600 : 400}
-                                        className="pointer-events-none transition-all duration-200"
+                                        fontSize={11} fontWeight={isHov ? 600 : 400} className="transition-colors duration-150"
                                     >
                                         {item.label}
                                     </text>
@@ -184,53 +148,31 @@ const GraficaBar = ({
                             )
                         })}
 
-                        {/* Eje base */}
                         <line x1={0} y1={chartH} x2={svgW - padding.left - padding.right} y2={chartH} stroke="var(--border-strong)" />
                     </g>
-
-                    <style>{`
-                        @keyframes barGrow {
-                            from { transform: scaleY(0); opacity: 0; }
-                            to   { transform: scaleY(1); opacity: 1; }
-                        }
-                    `}</style>
                 </svg>
+
+                {/* Tooltip unificado con tus variables globales */}
                 {tooltip && (
                     <div
-                        className="absolute z-50 pointer-events-none transition-all duration-150"
-                        style={{
-                            left: tooltip.x,
-                            top: tooltip.y,
-                            transform: 'translate(calc(-50% - 10px), calc(-50% - 10px))',
-                        }}
+                        className="absolute z-50 pointer-events-none -translate-x-1/2 -translate-y-full transition-all duration-75"
+                        style={{ left: tooltip.x, top: tooltip.y }}
                     >
-                        <div className="relative bg-[#0A0A0B] text-white text-xs rounded-lg px-3 py-2 shadow-2xl border border-white/10 backdrop-blur-sm whitespace-nowrap">
-                            <p className="text-[11px] text-center">
-                                {tooltip.label}
-                            </p>
-                            <p className="text-sm font-semibold">
-                                {formatVal(tooltip.value)}
-                            </p>
+                        <div className="bg-primary text-background text-xs rounded-lg px-3 py-2 shadow-xl border border-border/10 whitespace-nowrap text-center">
+                            <p className="opacity-80 text-[10px] uppercase tracking-wider">{tooltip.label}</p>
+                            <p className="text-sm font-bold mt-0.5">{formatVal(tooltip.value)}</p>
                         </div>
                     </div>
                 )}
             </div>
 
-            {/* Leyenda simple */}
             {legendLabel && (
-                <div className="flex justify-center items-center gap-2 mt-4 px-2">
-                    <div className="flex items-center gap-1.5">
-                        <div
-                            className="w-3 h-3 rounded-sm"
-                            style={{ backgroundColor: chartColors[0] }}
-                        />
-                        <span className="text-sm font-medium">
-                            {legendLabel}
-                        </span>
-                    </div>
+                <div className="flex justify-center items-center gap-2 mt-4">
+                    <div className="w-3 h-3 rounded-xs" style={{ backgroundColor: chartColors[0] }} />
+                    <span className="text-xs text-text-secondary font-medium">{legendLabel}</span>
                 </div>
             )}
-        </div >
+        </div>
     )
 }
 

@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/lib/components/ui/Base/Selects/select";
 import { MultiSelect } from "@/lib/components/ui/Base/Selects/MultiSelect";
-import { DropdownMenu } from "@/lib/components/ui/Compuesto/dropdown-menu";
+import { DropdownMenu, type DropdownGroup } from "@/lib/components/ui/Compuesto/dropdown-menu";
 import { Tooltip } from "@/lib/components/ui/Compuesto/Tooltip";
 import { Breadcrumbs } from "@/lib/components/ui/Navegacion/Breadcrumbs";
 import { DataTable } from "@/lib/components/ui/DataDisplay/Table";
@@ -24,17 +24,26 @@ import Dialog, {
   DialogBody,
   DialogFooter,
   DialogHeader,
-} from "@/lib/components/ui/Compuesto/Modals/Dialog";
-import AlertDialog from "@/lib/components/ui/Compuesto/Modals/AlertDialog";
+} from "@/lib/components/ui/Compuesto/Contenedores/Dialog";
 import {
   Card,
   CardBody,
   CardFooter,
   CardHeader,
-} from "@/lib/components/ui/Compuesto/Modals/Card";
+} from "@/lib/components/ui/Compuesto/Contenedores/Card";
 import { ChatWidget } from "@/lib/components/Idt-Mascota/ChatBox";
 import { Calendar } from "@/lib/components/ui/Compuesto/Calendario";
 import { Info } from "lucide-react";
+import { Mail, AlertCircle, Search } from "lucide-react"; 
+import { 
+  User, 
+  Settings, 
+  CreditCard, 
+  LogOut, 
+  Trash2, 
+  ChevronRight, 
+  HelpCircle 
+} from "lucide-react";
 
 const sampleTableData: Array<{ id: string; name: string; role: string; status: string }> = [
   { id: "1", name: "Alicia", role: "Diseñadora", status: "Activo" },
@@ -120,15 +129,65 @@ export default function HomePage() {
     () => (multiSelected.length ? multiSelected.join(", ") : "Sin selección"),
     [multiSelected]
   );
+  
+  const menuConfig: DropdownGroup[] = [
+    {
+      groupLabel: "Mi Cuenta",
+      items: [
+        {
+          label: "Perfil",
+          icon: <User className="size-4" />,
+          trailingIcon: <span className="text-xs opacity-50">⌘P</span>,
+          onClick: () => console.log("Ir al perfil"),
+        },
+        {
+          label: "Facturación",
+          icon: <CreditCard className="size-4" />,
+          onClick: () => console.log("Ver facturas"),
+          separator: true, // Deja una línea sutil debajo de este ítem
+        },
+      ],
+    },
+    {
+      groupLabel: "Configuración",
+      items: [
+        {
+          label: "Ajustes del Sistema",
+          icon: <Settings className="size-4" />,
+          onClick: () => console.log("Abrir ajustes"),
+        },
+        {
+          label: "Soporte Técnico",
+          icon: <HelpCircle className="size-4" />,
+          disabled: true, // Ítem deshabilitado automáticamente estilizado
+        },
+      ],
+    },
+    {
+      // Grupo sin etiqueta para acciones peligrosas al final
+      items: [
+        {
+          label: "Eliminar Espacio",
+          icon: <Trash2 className="size-4" />,
+          variant: "danger", // Aplica automáticamente tus tokens de error corporativos
+          onClick: () => alert("¿Seguro que deseas eliminar?"),
+        },
+        {
+          label: "Cerrar Sesión",
+          icon: <LogOut className="size-4" />,
+          onClick: () => console.log("Logout"),
+        },
+      ],
+    },
+  ];
 
   return (
-    <main className="min-h-screen bg-background px-4 py-6 md:px-8 lg:px-12">
-      <div className="max-w-[1600px] mx-auto space-y-6">
+    <main className="">
+      <div className="mx-auto space-y-6">
         <section className="space-y-4">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <Breadcrumbs />
-              <h1 className="mt-4 text-3xl font-semibold text-text-primary">
+              <h1 className="font-semibold text-text-primary">
                 Página de prueba de la librería UI
               </h1>
               <p className="mt-2 max-w-2xl text-sm text-text-secondary">
@@ -149,7 +208,7 @@ export default function HomePage() {
 
         <section className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
           <div className="space-y-6">
-            <Card padding="lg" className="space-y-6">
+            <Card className="space-y-6">
               <CardHeader title="Controles básicos" subtitle="Botones, inputs y selectores" />
               <CardBody className="space-y-5">
                 <div className="grid gap-4 md:grid-cols-2">
@@ -161,6 +220,7 @@ export default function HomePage() {
                       <Button variant="secondary">Secondary</Button>
                       <Button variant="ghost">Ghost</Button>
                       <Button variant="link">Link</Button>
+                      <Button variant="destructive">Destructive</Button>
                     </div>
                   </div>
 
@@ -172,6 +232,27 @@ export default function HomePage() {
                         onChange={(event) => setInputValue(event.target.value)}
                         placeholder="Ingresa texto"
                       />
+
+                      <Input 
+        type="email" 
+        placeholder="Tu correo" 
+        iconLeft={<Mail />} 
+      />
+
+      <Input 
+        type="text" 
+        placeholder="Nombre de usuario" 
+        variant="destructive"
+        iconRight={<AlertCircle />} 
+        defaultValue="Agustin!!"
+      />
+
+      <Input 
+        type="search" 
+        placeholder="Buscar en el dashboard..." 
+        iconLeft={<Search />} 
+      />
+
                       <Textarea
                         value={textareaValue}
                         onChange={(event) => setTextareaValue(event.target.value)}
@@ -214,37 +295,14 @@ export default function HomePage() {
                   <p className="font-semibold text-text-primary">Dropdown Menu</p>
                   <DropdownMenu
                     trigger={<span className="font-medium">Abrir menú</span>}
-                    groups={[
-                      {
-                        groupLabel: "Acciones",
-                        items: [
-                          {
-                            label: "Editar",
-                            onClick: () => toast(`Seleccionaste editar`),
-                          },
-                          {
-                            label: "Duplicar",
-                            onClick: () => toast(`Seleccionaste duplicar`),
-                          },
-                        ],
-                      },
-                      {
-                        groupLabel: "Peligro",
-                        items: [
-                          {
-                            label: "Eliminar",
-                            variant: "danger",
-                            onClick: () => toast.error("Eliminar acción") ,
-                          },
-                        ],
-                      },
-                    ]}
+                    width="w-64"
+                    groups={menuConfig}
                   />
                 </div>
               </CardBody>
             </Card>
 
-            <Card padding="lg" className="space-y-6">
+            <Card className="space-y-6">
               <CardHeader title="Datos y visualizaciones" subtitle="Tablas, badges y gráficas" />
               <CardBody className="space-y-6">
                 <div className="space-y-4">
@@ -280,7 +338,7 @@ export default function HomePage() {
           </div>
 
           <div className="space-y-6">
-            <Card padding="lg" className="space-y-5">
+            <Card className="space-y-5">
               <CardHeader title="Gráficas" subtitle="Barr, donut y línea" />
               <CardBody className="grid gap-5">
                 <GraficaBar title="Ventas mensuales" description="Valores en miles" data={barData} />
@@ -295,16 +353,13 @@ export default function HomePage() {
               </CardBody>
             </Card>
 
-            <Card padding="lg" className="space-y-5">
+            <Card className="space-y-5">
               <CardHeader title="Componentes avanzados" subtitle="Modales, calendario y chat" />
               <CardBody className="space-y-5">
                 <div className="grid gap-4">
                   <div className="flex flex-wrap gap-3">
                     <Button variant="default" onClick={() => setDialogOpen(true)}>
                       Abrir Dialog
-                    </Button>
-                    <Button variant="secondary" onClick={() => setAlertOpen(true)}>
-                      Abrir AlertDialog
                     </Button>
                     <Button variant="ghost" onClick={() => toast("¡Ejemplo ghost!")}>Ghost toast</Button>
                   </div>
@@ -323,13 +378,6 @@ export default function HomePage() {
                       Fecha seleccionada:{' '}
                       {calendarValue ? calendarValue.toLocaleDateString('es-CO') : 'Ninguna'}
                     </p>
-                  </div>
-
-                  <div className="space-y-3">
-                    <p className="font-semibold text-text-primary">Chat widget</p>
-                    <div className="rounded-2xl border border-border p-4 bg-surface">
-                      <ChatWidget />
-                    </div>
                   </div>
                 </div>
               </CardBody>
@@ -362,24 +410,6 @@ export default function HomePage() {
           </Button>
         </DialogFooter>
       </Dialog>
-
-      <AlertDialog
-        open={alertOpen}
-        onClose={() => setAlertOpen(false)}
-        variant="warning"
-        title="Atención requerida"
-        description="Confirma o cancela esta acción de prueba."
-        confirmLabel="Sí, continuar"
-        cancelLabel="No, cerrar"
-        onConfirm={() => {
-          setAlertOpen(false);
-          toast.success("Acción confirmada");
-        }}
-        onCancel={() => {
-          setAlertOpen(false);
-          toast("Cancelado");
-        }}
-      />
     </main>
   );
 }

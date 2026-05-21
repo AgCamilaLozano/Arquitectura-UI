@@ -1,17 +1,7 @@
-/* 1. Inicializa Tailwind v4 */
 @import "tailwindcss";
 
-/* 2. Escanea tus componentes de la librería */
+/* 1. Le decimos al Tailwind de tu App de pruebas que escanee tus componentes en desarrollo */
 @source "../lib/**/*.{ts,tsx}";
 
-/* 3. Trae TODO el tema, las variables :root, el @theme y las animaciones de la librería */
+/* 2. Importamos tu archivo de tokens y estilos base que definiste antes */
 @import "../lib/styles/globals.css";
-
-/* 4. Utilidades exclusivas de la app de pruebas (opcional) */
-@utility scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}

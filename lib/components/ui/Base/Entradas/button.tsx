@@ -17,6 +17,8 @@ const buttonVariants = cva(
                     "hover:bg-accent/20 hover:text-purple-900 dark:hover:text-accent",
                 link:
                     "text-secondary-foreground hover:text-purple-900 dark:hover:text-accent underline-offset-6 decoration-[var(--border-accent)] hover:underline",
+                destructive: 
+                    "bg-text-error text-white hover:bg-text-error/90",
             },
             size: {
                 default: "h-9 px-4 py-2 ",

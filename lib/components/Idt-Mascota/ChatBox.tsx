@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Textarea } from '@/lib/components/ui/Base/Entradas'
-import { Card, CardHeader, CardBody } from "@/lib/components/ui/Compuesto/Modals/Card";
+import { Card, CardHeader, CardBody } from "@/lib/components/ui/Compuesto/Contenedores/Card";
 import { Cpu, Mic, Send, X, Loader2, AudioLines, Maximize2, Minimize2 } from 'lucide-react';
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Base/Selects/select';

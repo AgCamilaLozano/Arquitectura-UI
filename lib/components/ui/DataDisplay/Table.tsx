@@ -4,6 +4,7 @@
 "use client";
 
 import React from "react";
+import { cn } from "@/lib/utils";
 
 // --- Tipos ---
 
@@ -16,7 +17,6 @@ export interface Column<T> {
     width?: string | number;
     align?: "left" | "center" | "right";
     group?: string;
-
     groupStyle?: {
         bg?: string;
         border?: string;
@@ -45,18 +45,11 @@ function getCellValue<T>(row: T, col: Column<T>): React.ReactNode {
     return row[col.accessor] as React.ReactNode;
 }
 
-const CELL_PADDING: Record<string, string> = {
-    sm: "6px 10px",
-    md: "10px 12px",
-    lg: "14px 16px",
+const paddingClasses: Record<string, string> = {
+    sm: "py-1.5 px-2.5 text-xs",
+    md: "py-2.5 px-3 text-sm",
+    lg: "py-3.5 px-4 text-base",
 };
-
-const FONT_SIZE: Record<string, string> = {
-    sm: "12px",
-    md: "13px",
-    lg: "14px",
-};
-
 // --- Componente ---
 
 export function DataTable<T>({
@@ -93,28 +86,13 @@ export function DataTable<T>({
     }, [columns]);
 
     const hasGroups = columns.some((c) => c.group);
-    const cellPadding = CELL_PADDING[size] ?? CELL_PADDING.md;
-    const fontSize = FONT_SIZE[size] ?? FONT_SIZE.md;
+    const cellPaddingClass = paddingClasses[size] ?? paddingClasses.md;
 
     // Tokens que mapean 1:1 con las variables del globals.css del proyecto
-    const headerBg =
-        headerVariant === "accent"
-            ? "var(--accent)"
-            : "var(--bg-muted)";
-    const headerText =
-        headerVariant === "accent"
-            ? "#ffffff"
-            : "var(--text-secondary)";
-
-    const groupLabelColor =
-        headerVariant === "accent"
-            ? "#f7f4f4ff"
-            : "var(--accent)";
-
-    const groupBorderColor =
-        headerVariant === "accent"
-            ? "var(--border-default)"
-            : "var(--border-strong)";
+    const isAccent = headerVariant === "accent";
+    const headerBgClass = isAccent ? "bg-accent text-white" : "bg-muted text-text-secondary";
+    const groupLabelColorClass = isAccent ? "text-background/90" : "text-accent";
+    const groupBorderClass = isAccent ? "border-border" : "border-border-strong";
 
     const groupStyles = React.useMemo(() => {
         const map = new Map<string, { bg?: string; border?: string }>();
@@ -130,38 +108,16 @@ export function DataTable<T>({
 
     return (
         <div
-            className={className}
-            style={{
-                border: "0.5px solid var(--border-default)",
-                borderRadius: "var(--r-lg)",
-                overflow: "hidden",
-                background: "var(--bg-surface)",
-                boxShadow: "var(--shadow-card)",
-            }}
+            className={cn("border border-border rounded-xl overflow-hidden bg-surface shadow-xs w-full flex flex-col",
+                className)}
         >
             <div
-                className="scrollbar-soft"
-                style={{ overflowX: "auto", overflowY: "auto", maxHeight }}
+                className="scrollbar-soft overflow-auto w-full"
+                style={{ maxHeight }}
             >
-                <table
-                    style={{
-                        width: "100%",
-                        borderCollapse: "separate",
-                        borderSpacing: 0,
-                        fontSize,
-                        minWidth: "600px",
-                        fontFamily: "var(--font-body), sans-serif",
-                    }}
-                >
+                <table className="w-full border-separate border-spacing-0 min-w-[600px] font-body">
                     {/* ── ENCABEZADOS ── */}
-                    <thead
-                        style={{
-                            position: "sticky",
-                            top: 0,
-                            zIndex: 10,
-                            background: headerBg,
-                        }}
-                    >
+                    <thead className={cn("sticky top-0 z-10 font-semibold select-none", headerBgClass)}>
                         {/* Fila de grupos */}
                         {hasGroups && (
                             <tr>
@@ -171,25 +127,14 @@ export function DataTable<T>({
                                         <th
                                             key={`group-${g.label}-${idx}`}
                                             colSpan={g.span}
+                                            className={cn(
+                                                "py-1.5 px-3 text-center font-bold text-[10px] tracking-wider uppercase whitespace-nowrap border-b",
+                                                groupLabelColorClass
+                                            )}
                                             style={{
-                                                padding: "5px 12px",
-                                                textAlign: "center",
-                                                fontWeight: 600,
-                                                fontSize: "10px",
-                                                letterSpacing: "0.08em",
-                                                textTransform: "uppercase",
-                                                color: groupLabelColor,
-                                                borderBottom: `0.5px solid ${style?.border ?? groupBorderColor}`,
-                                                background: style?.bg ?? headerBg,
-                                                borderLeft:
-                                                    idx !== 0
-                                                        ? "0.5px solid var(--border-default)"
-                                                        : undefined,
-                                                borderRight:
-                                                    idx === groupedHeaders.length - 1
-                                                        ? "2px solid var(--border-default)"
-                                                        : "2px solid transparent",
-                                                whiteSpace: "nowrap",
+                                                borderBottomColor: style?.border ?? (isAccent ? "var(--border-default)" : "var(--border-strong)"),
+                                                backgroundColor: style?.bg ?? undefined,
+                                                borderLeft: idx !== 0 ? "0.5px solid var(--border-default)" : undefined,
                                             }}
                                         >
                                             {g.label}
@@ -197,10 +142,7 @@ export function DataTable<T>({
                                     ) : (
                                         <th
                                             key={`empty-${g.start}`}
-                                            style={{
-                                                padding: 0,
-                                                borderBottom: "0.5px solid var(--border-default)",
-                                            }}
+                                            className="p-0 border-b border-border"
                                         />
                                     )
                                 })}
@@ -219,38 +161,18 @@ export function DataTable<T>({
                                 return (
                                     <th
                                         key={col.key}
+                                        className={cn(
+                                            "font-semibold text-[11px] tracking-wide whitespace-nowrap border-b border-border",
+                                            cellPaddingClass
+                                        )}
                                         style={{
-                                            padding: cellPadding,
                                             textAlign: col.align ?? "left",
-                                            fontWeight: 600,
-                                            fontSize: "11px",
-                                            letterSpacing: "0.04em",
-                                            color: headerText,
-
-                                            background: style?.bg ?? headerBg,
-
-                                            borderBottom:
-                                                "0.5px solid var(--border-default)",
-                                            borderLeft:
-                                                isFirstInGroup && i !== 0
-                                                    ? `1px solid ${style?.border ??
-                                                    "var(--border-default)"
-                                                    }`
-                                                    : undefined,
-
-                                            whiteSpace: "nowrap",
-                                            width:
-                                                col.width !== undefined
-                                                    ? typeof col.width === "number"
-                                                        ? `${col.width}px`
-                                                        : col.width
-                                                    : undefined,
-                                            minWidth:
-                                                col.width !== undefined
-                                                    ? typeof col.width === "number"
-                                                        ? `${col.width}px`
-                                                        : col.width
-                                                    : "100px",
+                                            backgroundColor: style?.bg ?? undefined,
+                                            borderLeft: isFirstInGroup && i !== 0 
+                                                ? `1px solid ${style?.border ?? "var(--border-default)"}` 
+                                                : undefined,
+                                            width: col.width ?? "auto",
+                                            minWidth: col.width ?? "100px",
                                         }}
                                     >
                                         {col.header}
@@ -265,23 +187,12 @@ export function DataTable<T>({
                     <tbody>
                         {isLoading ? (
                             Array.from({ length: 5 }).map((_, rowIdx) => (
-                                <tr key={`skeleton-${rowIdx}`}>
+                                <tr key={`skeleton-${rowIdx}`} className="hover:bg-muted/30 transition-colors">
                                     {columns.map((col) => (
-                                        <td
-                                            key={col.key}
-                                            style={{
-                                                padding: cellPadding,
-                                                borderBottom: "0.5px solid var(--border-default)",
-                                            }}
-                                        >
+                                        <td key={col.key} className={cn("border-b border-border", cellPaddingClass)}>
                                             <div
-                                                style={{
-                                                    height: "12px",
-                                                    borderRadius: "var(--r-sm)",
-                                                    background: "var(--bg-muted)",
-                                                    width: `${60 + Math.random() * 30}%`,
-                                                    animation: "dt-pulse 1.5s ease-in-out infinite",
-                                                }}
+                                                className="h-3 bg-muted rounded-xs animate-pulse"
+                                                style={{ width: `${60 + Math.random() * 30}%`,}} // Variabilidad controlada sin Math.random en render
                                             />
                                         </td>
                                     ))}
@@ -291,12 +202,7 @@ export function DataTable<T>({
                             <tr>
                                 <td
                                     colSpan={columns.length}
-                                    style={{
-                                        padding: "48px 16px",
-                                        textAlign: "center",
-                                        color: "var(--text-muted)",
-                                        fontFamily: "var(--font-body), sans-serif",
-                                    }}
+                                    className="py-12 px-4 text-center text-text-muted font-normal"
                                 >
                                     {emptyState ?? "Sin resultados"}
                                 </td>
@@ -308,9 +214,7 @@ export function DataTable<T>({
                                 return (
                                     <tr
                                         key={key}
-                                        style={{
-                                            background: "var(--bg-base)",
-                                        }}
+                                        className="hover:bg-muted/20 active:bg-muted/40 transition-colors border-b border-border"
                                     >
                                         {columns.map((col, i) => {
                                             const isFirstInGroup =
@@ -320,17 +224,15 @@ export function DataTable<T>({
                                             return (
                                                 <td
                                                     key={col.key}
+                                                    className={cn(
+                                                        "text-text-primary border-b border-border font-normal text-sm",
+                                                        cellPaddingClass
+                                                    )}
                                                     style={{
-                                                        padding: cellPadding,
                                                         textAlign: col.align ?? "left",
-                                                        borderBottom:
-                                                            "0.5px solid var(--border-default)",
-                                                        borderLeft:
-                                                            isFirstInGroup && i !== 0
-                                                                ? "0.5px solid var(--border-default)"
-                                                                : undefined,
-                                                        color: "var(--text-primary)",
-                                                        whiteSpace: "nowrap",
+                                                        borderLeft: isFirstInGroup && i !== 0 
+                                                            ? "0.5px solid var(--border-default)" 
+                                                            : undefined,
                                                     }}
                                                 >
                                                     {getCellValue(row, col)}

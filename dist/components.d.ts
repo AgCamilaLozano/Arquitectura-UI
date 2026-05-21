@@ -1,5 +1,5 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
-import * as React$1 from 'react';
+import * as React from 'react';
 import React__default, { ReactNode } from 'react';
 import { Select as Select$1 } from 'radix-ui';
 import * as class_variance_authority_types from 'class-variance-authority/types';
@@ -7,18 +7,18 @@ import { VariantProps } from 'class-variance-authority';
 import { ThemeProviderProps } from 'next-themes';
 import { ToasterProps } from 'sonner';
 
-declare function Select({ ...props }: React$1.ComponentProps<typeof Select$1.Root>): react_jsx_runtime.JSX.Element;
-declare function SelectGroup({ ...props }: React$1.ComponentProps<typeof Select$1.Group>): react_jsx_runtime.JSX.Element;
-declare function SelectValue({ ...props }: React$1.ComponentProps<typeof Select$1.Value>): react_jsx_runtime.JSX.Element;
-declare function SelectTrigger({ className, size, children, ...props }: React$1.ComponentProps<typeof Select$1.Trigger> & {
+declare function Select({ ...props }: React.ComponentProps<typeof Select$1.Root>): react_jsx_runtime.JSX.Element;
+declare function SelectGroup({ ...props }: React.ComponentProps<typeof Select$1.Group>): react_jsx_runtime.JSX.Element;
+declare function SelectValue({ ...props }: React.ComponentProps<typeof Select$1.Value>): react_jsx_runtime.JSX.Element;
+declare function SelectTrigger({ className, size, children, ...props }: React.ComponentProps<typeof Select$1.Trigger> & {
     size?: "sm" | "default";
 }): react_jsx_runtime.JSX.Element;
-declare function SelectContent({ className, children, position, align, ...props }: React$1.ComponentProps<typeof Select$1.Content>): react_jsx_runtime.JSX.Element;
-declare function SelectLabel({ className, ...props }: React$1.ComponentProps<typeof Select$1.Label>): react_jsx_runtime.JSX.Element;
-declare function SelectItem({ className, children, ...props }: React$1.ComponentProps<typeof Select$1.Item>): react_jsx_runtime.JSX.Element;
-declare function SelectSeparator({ className, ...props }: React$1.ComponentProps<typeof Select$1.Separator>): react_jsx_runtime.JSX.Element;
-declare function SelectScrollUpButton({ className, ...props }: React$1.ComponentProps<typeof Select$1.ScrollUpButton>): react_jsx_runtime.JSX.Element;
-declare function SelectScrollDownButton({ className, ...props }: React$1.ComponentProps<typeof Select$1.ScrollDownButton>): react_jsx_runtime.JSX.Element;
+declare function SelectContent({ className, children, position, align, ...props }: React.ComponentProps<typeof Select$1.Content>): react_jsx_runtime.JSX.Element;
+declare function SelectLabel({ className, ...props }: React.ComponentProps<typeof Select$1.Label>): react_jsx_runtime.JSX.Element;
+declare function SelectItem({ className, children, ...props }: React.ComponentProps<typeof Select$1.Item>): react_jsx_runtime.JSX.Element;
+declare function SelectSeparator({ className, ...props }: React.ComponentProps<typeof Select$1.Separator>): react_jsx_runtime.JSX.Element;
+declare function SelectScrollUpButton({ className, ...props }: React.ComponentProps<typeof Select$1.ScrollUpButton>): react_jsx_runtime.JSX.Element;
+declare function SelectScrollDownButton({ className, ...props }: React.ComponentProps<typeof Select$1.ScrollDownButton>): react_jsx_runtime.JSX.Element;
 
 type MultiSelectOption = string | {
     label: string;
@@ -34,35 +34,31 @@ interface MultiSelectProps {
 declare function MultiSelect({ options, selected, onChange, placeholder, className, }: MultiSelectProps): react_jsx_runtime.JSX.Element;
 
 declare const buttonVariants: (props?: ({
-    variant?: "link" | "default" | "outline" | "secondary" | "ghost" | null | undefined;
+    variant?: "link" | "default" | "outline" | "secondary" | "ghost" | "destructive" | null | undefined;
     size?: "sm" | "default" | "lg" | "icon" | "icon-sm" | "icon-lg" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface ButtonProps extends React__default.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
 }
 declare const Button: React__default.ForwardRefExoticComponent<ButtonProps & React__default.RefAttributes<HTMLButtonElement>>;
 
-declare function Input({ className, type, ...props }: React.ComponentProps<"input">): react_jsx_runtime.JSX.Element;
+declare const inputVariants: (props?: ({
+    variant?: "default" | "destructive" | null | undefined;
+    withIcon?: "none" | "left" | "right" | "both" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+interface InputProps extends Omit<React__default.ComponentProps<"input">, "size">, VariantProps<typeof inputVariants> {
+    iconLeft?: React__default.ReactNode;
+    iconRight?: React__default.ReactNode;
+}
+declare const Input: React__default.ForwardRefExoticComponent<Omit<InputProps, "ref"> & React__default.RefAttributes<HTMLInputElement>>;
 
-type TextareaProps = React__default.TextareaHTMLAttributes<HTMLTextAreaElement>;
+interface TextareaProps extends React__default.TextareaHTMLAttributes<HTMLTextAreaElement> {
+}
 declare const Textarea: React__default.ForwardRefExoticComponent<TextareaProps & React__default.RefAttributes<HTMLTextAreaElement>>;
 
 declare function ThemeProvider({ children, ...props }: ThemeProviderProps): react_jsx_runtime.JSX.Element;
 
 declare function ThemeToggle(): react_jsx_runtime.JSX.Element;
 
-/**
- * Propósito: Badge de etiqueta/categoría configurable.
- * Sirve para clasificar, etiquetar o destacar contenido con estilos visuales distintos.
- *
- * Props:
- * - label: texto del badge
- * - variant: estilo visual (filled | soft | outline | accent)
- * - color: color base semántico o de marca (neutral | accent | success | error | warning | info)
- * - size: tamaño del badge (sm | md | lg)
- * - icon: icono React a mostrar a la izquierda (opcional)
- * - onRemove: callback para mostrar botón de eliminar (opcional)
- * - className: clases adicionales
- */
 type LabelColor = "neutral" | "accent" | "success" | "error" | "warning" | "info";
 type LabelVariant = "filled" | "soft" | "outline";
 interface LabelBadgeProps {
@@ -70,24 +66,12 @@ interface LabelBadgeProps {
     variant?: LabelVariant;
     color?: LabelColor;
     size?: "sm" | "md" | "lg";
-    icon?: React.ReactNode;
+    icon?: React__default.ReactNode;
     onRemove?: () => void;
     className?: string;
 }
 declare function LabelBadge({ label, variant, color, size, icon, onRemove, className, }: LabelBadgeProps): react_jsx_runtime.JSX.Element;
 
-/**
- * Propósito: Badge de estado semántico con punto de indicador animado opcional.
- * Comunica el estado de una entidad (activo, error, advertencia, info, inactivo).
- *
- * Props:
- * - status: variante semántica del badge
- * - label: texto visible del badge
- * - withDot: muestra el punto indicador (por defecto true)
- * - animated: el punto pulsa con animación (solo cuando withDot=true)
- * - size: tamaño del badge (sm | md)
- * - className: clases adicionales
- */
 type StatusVariant = "success" | "error" | "warning" | "info" | "idle";
 interface StatusBadgeProps {
     status: StatusVariant;
@@ -99,47 +83,16 @@ interface StatusBadgeProps {
 }
 declare function StatusBadge({ status, label, withDot, animated, size, className, }: StatusBadgeProps): react_jsx_runtime.JSX.Element;
 
-/**
- * Variantes visuales disponibles para la tarjeta:
- * - default   → superficie blanca con borde sutil
- * - outlined  → borde más marcado, sin sombra
- * - elevated  → sombra prominente, sin borde
- * - accent    → borde izquierdo de color accent
- * - ghost     → sin borde ni sombra, fondo muted
- */
 type CardVariant = "default" | "outlined" | "elevated" | "accent" | "ghost";
-/**
- * Tamaños de padding interno disponibles
- */
-type CardPadding = "none" | "sm" | "md" | "lg";
-/**
- * Props del componente Card principal
- */
 interface CardProps {
-    /** Variante visual de la tarjeta */
     variant?: CardVariant;
-    /** Padding interno de la tarjeta */
-    padding?: CardPadding;
-    /** Hace la tarjeta interactiva (hover + cursor pointer) */
     clickable?: boolean;
-    /** Callback al hacer click (activa modo clickable automáticamente) */
     onClick?: () => void;
-    /** Ancho completo del contenedor padre */
     fullWidth?: boolean;
-    /** Clases adicionales */
     className?: string;
     children: React__default.ReactNode;
 }
-declare function Card({ variant, padding, clickable, onClick, fullWidth, className, children, }: CardProps): react_jsx_runtime.JSX.Element;
-/**
- * Propósito: Sección de encabezado de la tarjeta.
- *
- * Props:
- *  - title        → texto principal del encabezado
- *  - subtitle     → texto secundario debajo del título
- *  - action       → nodo opcional alineado a la derecha (botón, badge, etc.)
- *  - withDivider  → agrega línea separadora debajo
- */
+declare function Card({ variant, clickable, onClick, fullWidth, className, children, }: CardProps): react_jsx_runtime.JSX.Element;
 interface CardHeaderProps {
     title: React__default.ReactNode;
     subtitle?: React__default.ReactNode;
@@ -148,22 +101,11 @@ interface CardHeaderProps {
     className?: string;
 }
 declare function CardHeader({ title, subtitle, action, withDivider, className, }: CardHeaderProps): react_jsx_runtime.JSX.Element;
-/**
- * Propósito: Área de contenido principal de la tarjeta.
- * Acepta cualquier nodo como children.
- */
 interface CardBodyProps {
     className?: string;
     children: React__default.ReactNode;
 }
 declare function CardBody({ className, children }: CardBodyProps): react_jsx_runtime.JSX.Element;
-/**
- * Propósito: Sección de pie de la tarjeta, alineación configurable.
- *
- * Props:
- *  - align      → alineación horizontal del contenido
- *  - withDivider → agrega línea separadora arriba
- */
 interface CardFooterProps {
     align?: "left" | "center" | "right" | "between";
     withDivider?: boolean;
@@ -171,15 +113,6 @@ interface CardFooterProps {
     children: React__default.ReactNode;
 }
 declare function CardFooter({ align, withDivider, className, children, }: CardFooterProps): react_jsx_runtime.JSX.Element;
-/**
- * Propósito: Imagen de cabecera de la tarjeta, diseñada para salir
- * de los márgenes del padding (uso recomendado: Card con padding="none").
- *
- * Props:
- *  - src    → URL de la imagen
- *  - alt    → texto alternativo
- *  - height → altura fija del contenedor de imagen
- */
 interface CardImageProps {
     src: string;
     alt: string;
@@ -188,49 +121,23 @@ interface CardImageProps {
 }
 declare function CardImage({ src, alt, height, className, }: CardImageProps): react_jsx_runtime.JSX.Element;
 
-/**
- * Variantes visuales del dialog:
- * - default     → encabezado neutro, acciones primarias en accent
- * - destructive → indica acción irreversible (eliminar, revocar)
- * - warning     → requiere confirmación con precaución
- * - info        → informativo, sin acción destructiva
- */
 type DialogVariant = "default" | "destructive" | "warning" | "info";
-/**
- * Tamaños del panel modal
- */
 type DialogSize = "sm" | "md" | "lg" | "xl";
 interface DialogProps {
-    /** Controla visibilidad del dialog */
     open: boolean;
-    /** Callback al cerrar (overlay click, tecla Escape o botón ✕) */
     onClose: () => void;
-    /** Variante semántica */
     variant?: DialogVariant;
-    /** Tamaño del panel */
     size?: DialogSize;
-    /** Permite cerrar al hacer clic en el overlay */
     closeOnOverlay?: boolean;
-    /** Oculta el botón de cierre (✕) */
     hideCloseButton?: boolean;
-    /** Clases adicionales para el panel */
     className?: string;
     children: React__default.ReactNode;
 }
-declare function Dialog({ open, onClose, variant, size, closeOnOverlay, hideCloseButton, className, children, }: DialogProps): react_jsx_runtime.JSX.Element | null;
 interface DialogContextValue {
     variant: DialogVariant;
 }
 declare const useDialogContext: () => DialogContextValue;
-/**
- * Propósito: Encabezado del dialog con ícono opcional y separador.
- *
- * Props:
- * - title      → título principal
- * - description → texto de apoyo debajo del título
- * - icon       → nodo React (ícono) alineado al título
- * - withDivider → línea separadora debajo
- */
+declare function Dialog({ open, onClose, variant, size, closeOnOverlay, hideCloseButton, className, children, }: DialogProps): react_jsx_runtime.JSX.Element;
 interface DialogHeaderProps {
     title: React__default.ReactNode;
     description?: React__default.ReactNode;
@@ -239,62 +146,19 @@ interface DialogHeaderProps {
     className?: string;
 }
 declare function DialogHeader({ title, description, icon, withDivider, className, }: DialogHeaderProps): react_jsx_runtime.JSX.Element;
-/**
- * Propósito: Área de contenido principal del dialog.
- * Soporta scroll interno cuando el contenido excede la altura máxima.
- */
 interface DialogBodyProps {
-    /** Habilita scroll interno con altura máxima */
     scrollable?: boolean;
     className?: string;
     children: React__default.ReactNode;
 }
-declare function DialogBody({ scrollable, className, children, }: DialogBodyProps): react_jsx_runtime.JSX.Element;
-/**
- * Propósito: Pie del dialog con alineación configurable.
- * Contiene las acciones principales (botones).
- *
- * Props:
- * - align      → alineación horizontal de las acciones
- * - withDivider → línea separadora arriba
- */
+declare function DialogBody({ scrollable, className, children }: DialogBodyProps): react_jsx_runtime.JSX.Element;
 interface DialogFooterProps {
     align?: "left" | "center" | "right" | "between";
     withDivider?: boolean;
     className?: string;
     children: React__default.ReactNode;
 }
-declare function DialogFooter({ align, withDivider, className, children, }: DialogFooterProps): react_jsx_runtime.JSX.Element;
-
-type AlertDialogVariant = "destructive" | "warning" | "success" | "info";
-type AlertDialogSize = "sm" | "md" | "lg";
-interface AlertDialogProps {
-    open: boolean;
-    onClose: () => void;
-    variant?: AlertDialogVariant;
-    size?: AlertDialogSize;
-    title: React__default.ReactNode;
-    description?: React__default.ReactNode;
-    confirmLabel?: string;
-    cancelLabel?: string;
-    onConfirm?: () => void;
-    onCancel?: () => void;
-    closeOnOverlay?: boolean;
-    hideCloseButton?: boolean;
-    className?: string;
-    children?: React__default.ReactNode;
-}
-declare const variantConfig: Record<AlertDialogVariant, {
-    icon: React__default.ReactNode;
-    iconBg: string;
-    confirmVariant: "primary" | "destructive";
-}>;
-declare function AlertDialog({ open, onClose, variant, size, title, description, confirmLabel, cancelLabel, onConfirm, onCancel, closeOnOverlay, hideCloseButton, className, children, }: AlertDialogProps): react_jsx_runtime.JSX.Element | null;
-interface AlertDialogContextValue {
-    variant: AlertDialogVariant;
-    config: typeof variantConfig["destructive"];
-}
-declare const useAlertDialogContext: () => AlertDialogContextValue;
+declare function DialogFooter({ align, withDivider, className, children }: DialogFooterProps): react_jsx_runtime.JSX.Element;
 
 declare const Toaster: (props: ToasterProps) => react_jsx_runtime.JSX.Element;
 
@@ -313,78 +177,36 @@ interface TooltipProps {
 }
 declare const Tooltip: ({ content, children, side, ariaLabel, align, variant, size, disabled, }: TooltipProps) => react_jsx_runtime.JSX.Element;
 
-/** Un ítem individual dentro del menú */
 interface DropdownItem {
     label: string;
-    /** Ícono opcional a la izquierda del label */
-    icon?: ReactNode;
-    /** Ícono opcional a la derecha del label */
-    trailingIcon?: ReactNode;
+    icon?: React.ReactNode;
+    trailingIcon?: React.ReactNode;
     onClick?: () => void;
-    /** Deshabilita la interacción del ítem */
     disabled?: boolean;
-    /** Variante de color para acciones destructivas */
     variant?: "default" | "danger";
-    /** Separador visual debajo del ítem */
     separator?: boolean;
 }
-/** Grupo de ítems con label opcional */
 interface DropdownGroup {
     groupLabel?: string;
     items: DropdownItem[];
 }
-/**
- * Props del DropdownMenu
- * @param trigger      - Contenido del botón que abre el menú
- * @param groups       - Array de grupos de ítems
- * @param align        - Alineación del panel (left | right | center)
- * @param width        - Ancho del panel (ej. "w-48", "w-64")
- * @param disabled     - Deshabilita el trigger completo
- * @param className    - Clases extra para el contenedor raíz
- */
 interface DropdownMenuProps {
-    trigger: ReactNode;
+    trigger: React.ReactNode;
     groups: DropdownGroup[];
-    align?: "left" | "right" | "center";
+    align?: "start" | "end" | "center";
     width?: string;
     disabled?: boolean;
     className?: string;
 }
-declare function DropdownMenu({ trigger, groups, align, width, disabled, className, }: DropdownMenuProps): react_jsx_runtime.JSX.Element;
+declare function DropdownMenu({ trigger, groups, align, // Por defecto a la izquierda
+width, disabled, className, }: DropdownMenuProps): react_jsx_runtime.JSX.Element;
 
-/**
- * Componente: Calendar
- * Propósito: Selector de fecha reutilizable con múltiples variantes y modos de selección.
- *   - variant "full": Calendario grande tipo vista mensual
- *   - variant "input": Campo con popover compacto para seleccionar fecha
- *
- * Modos de vista interna (CalendarMode):
- *   - "days":   Grilla de días del mes (vista por defecto)
- *   - "months": Grilla de los 12 meses del año
- *   - "years":  Grilla de años navegable en rangos de 12
- *
- * Props:
- *   - variant:       "full" | "input"           — Modo de visualización
- *   - selectionMode: "date" | "month" | "year"  — Qué puede seleccionar el usuario
- *   - value:         Date | null                — Fecha actualmente seleccionada
- *   - onChange:      (date: Date) => void       — Callback al seleccionar
- *   - minDate?:      Date                       — Fecha mínima seleccionable
- *   - maxDate?:      Date                       — Fecha máxima seleccionable
- *   - placeholder?:  string                     — Texto del input sin fecha seleccionada
- *   - label?:        string                     — Etiqueta del input (solo variante "input")
- *   - disabled?:     boolean                    — Deshabilita todo el componente
- *   - className?:    string                     — Clases adicionales para el contenedor raíz
- */
-
-/** Controla qué vista interna muestra el calendario */
-type CalendarMode = "days" | "months" | "years";
-/** Controla qué puede seleccionar finalmente el usuario */
 type SelectionMode = "date" | "month" | "year";
 interface CalendarProps {
     variant?: "full" | "input";
     selectionMode?: SelectionMode;
     value?: Date | null;
-    onChange?: (date: Date) => void;
+    onChange?: (date: Date | null) => void;
     minDate?: Date;
     maxDate?: Date;
     placeholder?: string;
@@ -394,74 +216,11 @@ interface CalendarProps {
 }
 declare function getDiasDelMes(year: number, month: number): (number | null)[];
 declare function isSameDay(a: Date, b: Date): boolean;
-declare function isSameMonth(a: Date, b: Date): boolean;
-declare function isSameYear(a: Date, b: Date): boolean;
 declare function isWeekendDate(date: Date): boolean;
 declare function isDisabledDay(day: number, year: number, month: number, min?: Date, max?: Date): boolean;
 declare function isDisabledMonth(year: number, month: number, min?: Date, max?: Date): boolean;
 declare function isDisabledYear(year: number, min?: Date, max?: Date): boolean;
 declare function formatDate(date: Date, mode?: SelectionMode): string;
-/**
- * Propósito: Grilla de años navegable en bloques de 12.
- * Lógica clave: El rango se calcula a partir de yearBase (múltiplo de 12).
- */
-interface YearGridProps {
-    yearBase: number;
-    selected: Date | null;
-    onSelectYear: (year: number) => void;
-    minDate?: Date;
-    maxDate?: Date;
-    size?: "sm" | "lg";
-}
-declare const YearGrid: React__default.FC<YearGridProps>;
-/**
- * Propósito: Grilla de los 12 meses del año.
- * Lógica clave: Marca el mes seleccionado y deshabilita meses fuera del rango min/max.
- */
-interface MonthGridProps {
-    year: number;
-    selected: Date | null;
-    onSelectMonth: (month: number) => void;
-    minDate?: Date;
-    maxDate?: Date;
-    size?: "sm" | "lg";
-}
-declare const MonthGrid: React__default.FC<MonthGridProps>;
-/**
- * Propósito: Grilla de días del mes.
- * Lógica clave: Genera la cuadrícula con offset de lunes, marca festivos colombianos,
- * fines de semana, el día actual y el seleccionado. Deshabilita días fuera del rango.
- */
-interface CalendarGridProps {
-    year: number;
-    month: number;
-    selected: Date | null;
-    today: Date;
-    onSelectDay: (day: number) => void;
-    minDate?: Date;
-    maxDate?: Date;
-    size?: "sm" | "lg";
-}
-declare const CalendarGrid: React__default.FC<CalendarGridProps>;
-/**
- * Propósito: Encabezado del calendario con mes/año/rango clickeable y navegación.
- * Lógica clave: El botón central cambia el modo de vista al hacer clic.
- *   - En modo "days"  → muestra "MES AÑO", clic abre "months"
- *   - En modo "months"→ muestra "AÑO", clic abre "years"
- *   - En modo "years" → muestra el rango de años, clic no hace nada
- */
-interface CalendarHeaderProps {
-    year: number;
-    month: number;
-    mode: CalendarMode;
-    yearBase: number;
-    onPrev: () => void;
-    onNext: () => void;
-    onClickTitle: () => void;
-    selectionMode: SelectionMode;
-    size?: "sm" | "lg";
-}
-declare const CalendarHeader: React__default.FC<CalendarHeaderProps>;
 declare const Calendar: React__default.FC<CalendarProps>;
 
 interface BarSegment {
@@ -475,11 +234,10 @@ interface PureBarChartProps {
     description?: string;
     height?: number;
     barRadius?: number;
-    animated?: boolean;
     legendLabel?: string;
     yLabel?: string;
 }
-declare const GraficaBar: ({ className, data, title, description, height, barRadius, animated, legendLabel, yLabel, }: PureBarChartProps) => react_jsx_runtime.JSX.Element;
+declare const GraficaBar: ({ className, data, title, description, height, barRadius, legendLabel, yLabel, }: PureBarChartProps) => react_jsx_runtime.JSX.Element;
 
 interface ChartSegment {
     value: number;
@@ -504,17 +262,17 @@ interface DataPoint {
     value: number;
 }
 interface PureLineChartProps {
+    className?: string;
     data: DataPoint[];
     title?: string;
     description?: string;
     height?: number;
     lineColor?: string;
     showArea?: boolean;
-    animated?: boolean;
     legendLabel?: string;
     yLabel?: string;
 }
-declare const PureLineChart: ({ data, title, description, height, lineColor, showArea, animated, legendLabel, yLabel, }: PureLineChartProps) => react_jsx_runtime.JSX.Element;
+declare const PureLineChart: ({ className, data, title, description, height, lineColor, showArea, legendLabel, yLabel, }: PureLineChartProps) => react_jsx_runtime.JSX.Element;
 
 type TabItem = {
     id: string;
@@ -563,6 +321,9 @@ interface DataTableProps<T> {
 }
 declare function DataTable<T>({ data, columns, maxHeight, rowKey, emptyState, isLoading, className, headerVariant, size, }: DataTableProps<T>): react_jsx_runtime.JSX.Element;
 
-declare function Breadcrumbs(): react_jsx_runtime.JSX.Element;
+interface BreadcrumbsProps {
+    className?: string;
+}
+declare function Breadcrumbs({ className }: BreadcrumbsProps): react_jsx_runtime.JSX.Element;
 
-export { AlertDialog, type AlertDialogProps, type AlertDialogSize, type AlertDialogVariant, Breadcrumbs, Button, type ButtonProps, Calendar, CalendarGrid, CalendarHeader, type CalendarMode, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardPadding, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, LabelBadge, type LabelColor, type LabelVariant, MonthGrid, MultiSelect, type MultiSelectOption, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, type SelectionMode, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, ThemeProvider, ThemeToggle, Toaster, Tooltip, YearGrid, buttonVariants, formatDate, getDiasDelMes, isDisabledDay, isDisabledMonth, isDisabledYear, isSameDay, isSameMonth, isSameYear, isWeekendDate, useAlertDialogContext, useDialogContext };
+export { Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, type InputProps, LabelBadge, type LabelColor, type LabelVariant, MultiSelect, type MultiSelectOption, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, type TextareaProps, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, formatDate, getDiasDelMes, inputVariants, isDisabledDay, isDisabledMonth, isDisabledYear, isSameDay, isWeekendDate, useDialogContext };

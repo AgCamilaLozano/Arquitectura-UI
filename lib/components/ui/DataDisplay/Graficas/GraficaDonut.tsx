@@ -89,7 +89,7 @@ const GraficaDonut = ({
     }
 
     return (
-        <div className="rounded-2xl bg-background border border-border shadow-md p-6">
+        <div className="rounded-md bg-background border border-border shadow-xs p-6">
             {/* Header */}
             {(title || description) && (
                 <div className="mb-4">

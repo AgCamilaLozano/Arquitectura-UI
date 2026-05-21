@@ -1,225 +1,159 @@
-// /components/ui/DropdownMenu.tsx
-
-/**
- * Propósito: Menú desplegable reutilizable con soporte para grupos,
- * separadores, íconos, ítems deshabilitados y alineación configurable.
- * Compatible con el design system vía tokens de globals.css.
- */
-
 "use client";
 
-import { useEffect, useRef, useState, ReactNode } from "react";
+import * as React from "react";
+import { DropdownMenu as DropdownPrimitive } from "radix-ui"; 
+import { cn } from "@/lib/utils";
 
-// ─── Tipos ────────────────────────────────────────────────────────────────────
-
-/** Un ítem individual dentro del menú */
+// ─── Tipos (Se mantienen exactamente iguales para no romper tu código) ───────
 export interface DropdownItem {
   label: string;
-  /** Ícono opcional a la izquierda del label */
-  icon?: ReactNode;
-  /** Ícono opcional a la derecha del label */
-  trailingIcon?: ReactNode;
+  icon?: React.ReactNode;
+  trailingIcon?: React.ReactNode;
   onClick?: () => void;
-  /** Deshabilita la interacción del ítem */
   disabled?: boolean;
-  /** Variante de color para acciones destructivas */
   variant?: "default" | "danger";
-  /** Separador visual debajo del ítem */
   separator?: boolean;
 }
 
-/** Grupo de ítems con label opcional */
 export interface DropdownGroup {
   groupLabel?: string;
   items: DropdownItem[];
 }
 
-/**
- * Props del DropdownMenu
- * @param trigger      - Contenido del botón que abre el menú
- * @param groups       - Array de grupos de ítems
- * @param align        - Alineación del panel (left | right | center)
- * @param width        - Ancho del panel (ej. "w-48", "w-64")
- * @param disabled     - Deshabilita el trigger completo
- * @param className    - Clases extra para el contenedor raíz
- */
 export interface DropdownMenuProps {
-  trigger: ReactNode;
+  trigger: React.ReactNode;
   groups: DropdownGroup[];
-  align?: "left" | "right" | "center";
+  align?: "start" | "end" | "center"; // Radix usa 'start' (left) y 'end' (right)
   width?: string;
   disabled?: boolean;
   className?: string;
 }
 
-// ─── Mapas de utilidad ────────────────────────────────────────────────────────
-
-const alignMap: Record<NonNullable<DropdownMenuProps["align"]>, string> = {
-  left: "left-0",
-  right: "right-0",
-  center: "left-1/2 -translate-x-1/2",
-};
-
-// ─── Componente ───────────────────────────────────────────────────────────────
-
 export function DropdownMenu({
   trigger,
   groups,
-  align = "left",
+  align = "start", // Por defecto a la izquierda
   width = "w-52",
   disabled = false,
   className = "",
 }: DropdownMenuProps) {
-  const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  /**
-   * Lógica clave: cierra el menú al hacer click fuera del contenedor.
-   * Usa `mousedown` para capturar antes de que el foco cambie.
-   */
-  useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
-  }, []);
-
-  /** Cierra el menú al presionar Escape */
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
-  }, []);
-
+  
   const handleItemClick = (item: DropdownItem) => {
     if (item.disabled) return;
     item.onClick?.();
-    setOpen(false);
   };
 
   return (
-    <div ref={containerRef} className={`relative  inline-block ${className}`}>
-      {/* ── Trigger ── */}
-      <button
-        type="button"
-        onClick={() => !disabled && setOpen((prev) => !prev)}
-        disabled={disabled}
-        aria-haspopup="menu"
-        aria-expanded={open}
-        className={[
-          "inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium",
-          "border border-border bg-surface text-text-primary",
-          "transition-colors duration-150",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent",
-          disabled
-            ? "cursor-not-allowed opacity-50"
-            : "hover:bg-muted cursor-pointer",
-          open ? "ring-2 ring-accent" : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-      >
-        {trigger}
-
-        {/* Chevron animado */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className={`text-text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-          aria-hidden="true"
+    // 1. Contenedor Raíz de Radix
+    <DropdownPrimitive.Root>
+      
+      {/* 2. El disparador (Trigger) adaptado a Radix */}
+      <DropdownPrimitive.Trigger asChild disabled={disabled}>
+        <button
+          type="button"
+          className={cn(
+            "inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium",
+            "border border-border bg-surface text-text-primary shadow-xs",
+            "transition-colors duration-150 outline-none cursor-pointer",
+            "focus-visible:ring-[3px] focus-visible:ring-accent-soft focus-visible:border-accent",
+            "data-[state=open]:ring-[3px] data-[state=open]:ring-accent-soft data-[state=open]:border-accent",
+            disabled && "cursor-not-allowed opacity-50",
+            className
+          )}
         >
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
-      </button>
+          {trigger}
+          
+          {/* Chevron que rota automáticamente con el estado de Radix */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-text-muted transition-transform duration-200 group-data-[state=open]:rotate-180 data-[state=open]:rotate-180"
+            aria-hidden="true"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+      </DropdownPrimitive.Trigger>
 
-      {/* ── Panel ── */}
-      {open && (
-        <div
-          role="menu"
-          aria-orientation="vertical"
-          className={[
-            "absolute  z-[9999] mt-2",
-            alignMap[align],
-            width,
-            "rounded-xl border border-border bg-surface py-1",
-            "shadow-[var(--shadow-card)]",
-            "animate-in fade-in-0 zoom-in-95 duration-150",
-          ].join(" ")}
+      {/* 3. El Portal y el Contenido Flotante Inteligente de Radix */}
+      <DropdownPrimitive.Portal>
+        <DropdownPrimitive.Content
+          align={align}
+          sideOffset={8} // Equivale a mt-2 (8px) de separación
+          className={cn(
+            // Estilos del panel (Copiados de tu SelectContent para consistencia total)
+            "bg-surface text-text-primary border border-border rounded-xl p-1 z-[9999]",
+            "shadow-[var(--shadow-card)] outline-none",
+            "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
+            width
+          )}
         >
           {groups.map((group, gIdx) => (
-            <div key={gIdx}>
+            // Agrupador nativo de Radix
+            <DropdownPrimitive.Group key={gIdx} className="flex flex-col gap-0.5">
+              
               {/* Label de grupo */}
               {group.groupLabel && (
-                <p className="px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted select-none">
+                <DropdownPrimitive.Label className="px-3 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted select-none">
                   {group.groupLabel}
-                </p>
+                </DropdownPrimitive.Label>
               )}
 
-              {/* Ítems del grupo */}
+              {/* Ítems del grupo mapeados a DropdownPrimitive.Item */}
               {group.items.map((item, iIdx) => (
                 <div key={iIdx}>
-                  <button
-                    role="menuitem"
-                    type="button"
+                  <DropdownPrimitive.Item
                     disabled={item.disabled}
-                    onClick={() => handleItemClick(item)}
-                    className={[
-                      "flex w-full items-center gap-2.5 px-3 py-2 text-sm text-left",
-                      "transition-colors duration-100",
-                      item.disabled
-                        ? "cursor-not-allowed text-text-disabled"
-                        : item.variant === "danger"
-                          ? "cursor-pointer text-text-error hover:bg-error"
-                          : "cursor-pointer text-text-primary hover:bg-accent-soft hover:text-accent",
-                    ]
-                      .filter(Boolean)
-                      .join(" ")}
+                    onSelect={() => handleItemClick(item)} // Radix maneja los clics con onSelect
+                    className={cn(
+                      "flex w-full items-center gap-2.5 px-3 py-2 text-sm text-left rounded-lg outline-none select-none transition-colors duration-100",
+                      "data-[disabled]:cursor-not-allowed data-[disabled]:text-text-disabled data-[disabled]:pointer-events-none",
+                      item.variant === "danger"
+                        ? "text-text-error focus:bg-error/20 focus:text-text-error cursor-pointer"
+                        : "text-text-primary focus:bg-muted focus:text-text-primary cursor-pointer"
+                    )}
                   >
                     {/* Ícono izquierdo */}
                     {item.icon && (
-                      <span className="shrink-0 text-current" aria-hidden="true">
+                      <span className="shrink-0 text-current [&_svg]:size-4" aria-hidden="true">
                         {item.icon}
                       </span>
                     )}
 
                     {/* Label */}
-                    <span className="flex-1">{item.label}</span>
+                    <span className="flex-1 truncate">{item.label}</span>
 
                     {/* Ícono derecho / trailing */}
                     {item.trailingIcon && (
-                      <span className="shrink-0 text-text-muted" aria-hidden="true">
+                      <span className="shrink-0 text-text-muted [&_svg]:size-4" aria-hidden="true">
                         {item.trailingIcon}
                       </span>
                     )}
-                  </button>
+                  </DropdownPrimitive.Item>
 
-                  {/* Separador opcional */}
+                  {/* Separador opcional de ítem */}
                   {item.separator && (
-                    <hr className="my-1 border-border" />
+                    <DropdownPrimitive.Separator className="my-1 h-px bg-border -mx-1" />
                   )}
                 </div>
               ))}
 
-              {/* Separador entre grupos (excepto el último) */}
+              {/* Separador entre grupos nativo (excepto el último) */}
               {gIdx < groups.length - 1 && (
-                <hr className="my-1 border-border" />
+                <DropdownPrimitive.Separator className="my-1 h-px bg-border -mx-1" />
               )}
-            </div>
+            </DropdownPrimitive.Group>
           ))}
-        </div>
-      )}
-    </div>
+        </DropdownPrimitive.Content>
+      </DropdownPrimitive.Portal>
+
+    </DropdownPrimitive.Root>
   );
 }

@@ -1,15 +1,21 @@
+@import "tailwindcss";
+
 @theme inline {
   --color-background: var(--bg-background);
   --color-surface: var(--bg-surface);
   --color-muted: var(--bg-muted);
+
   --color-border: var(--border-default);
   --color-border-strong: var(--border-strong);
   --color-border-sidebar: var(--border-sidebar);
+
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
+
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
+
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
@@ -23,6 +29,8 @@
   --color-text-success: var(--text-success);
   --color-text-warning: var(--text-warning);
   --color-text-info: var(--text-info);
+
+  --shadow-card: var(--shadow-card);
 }
 
 :root {

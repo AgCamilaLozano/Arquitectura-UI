@@ -1,11 +1,7 @@
-'use client'
 import React from 'react';
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from '../../../../utils'
+import { cn } from '../../../../utils';
 
-
-// Textarea Reutilizable
-type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     ({ className, ...props }, ref) => {
@@ -13,16 +9,17 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             <textarea
                 ref={ref}
                 className={cn(
-                    "w-full px-3 py-1 border border-border rounded-md text-sm",
-                    "focus:outline-none focus:shadow-[0_0_0_3px_var(--accent-soft)] focus:border-accent resize-none transition-all duration-200",
+                    "w-full min-h-[80px] px-3 py-2 border border-border rounded-md text-sm bg-transparent placeholder:text-text-muted transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+                    "focus:border-accent focus:shadow-[0_0_0_3px_var(--accent-soft)]",
+                    "aria-invalid:ring-text-error/20 dark:aria-invalid:ring-text-error/40 aria-invalid:border-text-error",
                     className
                 )}
                 {...props}
             />
-        )
+        );
     }
-)
+);
 
-Textarea.displayName = "Textarea"
+Textarea.displayName = "Textarea";
 
-export { Textarea }
+export { Textarea };

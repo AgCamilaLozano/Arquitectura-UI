@@ -1,30 +1,8 @@
-import { cn } from '../../../../utils'
-import { X } from 'lucide-react'
+import React from 'react';
+import { cn } from "@/lib/utils"; // Ruta estandarizada
+import { X } from 'lucide-react';
 
-/**
- * Propósito: Badge de etiqueta/categoría configurable.
- * Sirve para clasificar, etiquetar o destacar contenido con estilos visuales distintos.
- *
- * Props:
- * - label: texto del badge
- * - variant: estilo visual (filled | soft | outline | accent)
- * - color: color base semántico o de marca (neutral | accent | success | error | warning | info)
- * - size: tamaño del badge (sm | md | lg)
- * - icon: icono React a mostrar a la izquierda (opcional)
- * - onRemove: callback para mostrar botón de eliminar (opcional)
- * - className: clases adicionales
- */
-
-
-
-export type LabelColor =
-    | "neutral"
-    | "accent"
-    | "success"
-    | "error"
-    | "warning"
-    | "info";
-
+export type LabelColor = "neutral" | "accent" | "success" | "error" | "warning" | "info";
 export type LabelVariant = "filled" | "soft" | "outline";
 
 interface LabelBadgeProps {
@@ -37,39 +15,34 @@ interface LabelBadgeProps {
     className?: string;
 }
 
-// Lógica clave: cada combinación color × variante produce una clase diferente
-// usando los tokens del design system globales
-const colorVariantStyles: Record<
-    LabelColor,
-    Record<LabelVariant, string>
-> = {
+const colorVariantStyles: Record<LabelColor, Record<LabelVariant, string>> = {
     neutral: {
-        filled: "bg-primary text-background",
+        filled: "bg-primary text-background border border-transparent",
         soft: "bg-muted text-text-primary border border-border",
         outline: "border border-border text-text-primary bg-transparent",
     },
     accent: {
-        filled: "bg-accent text-white",
+        filled: "bg-accent text-white border border-transparent",
         soft: "bg-accent-soft text-accent border border-accent/30",
         outline: "border border-accent text-accent bg-transparent",
     },
     success: {
-        filled: "bg-text-success text-white",
+        filled: "bg-text-success text-white border border-transparent",
         soft: "bg-success text-text-success border border-text-success/25",
         outline: "border border-text-success text-text-success bg-transparent",
     },
     error: {
-        filled: "bg-text-error text-white",
+        filled: "bg-text-error text-white border border-transparent",
         soft: "bg-error text-text-error border border-text-error/25",
         outline: "border border-text-error text-text-error bg-transparent",
     },
     warning: {
-        filled: "bg-text-warning text-white",
+        filled: "bg-text-warning text-white border border-transparent",
         soft: "bg-warning text-text-warning border border-text-warning/25",
         outline: "border border-text-warning text-text-warning bg-transparent",
     },
     info: {
-        filled: "bg-text-info text-white",
+        filled: "bg-text-info text-white border border-transparent",
         soft: "bg-info text-text-info border border-text-info/25",
         outline: "border border-text-info text-text-info bg-transparent",
     },
@@ -82,9 +55,9 @@ const sizeStyles = {
 };
 
 const iconSizeStyles = {
-    sm: "w-3 h-3",
-    md: "w-3.5 h-3.5",
-    lg: "w-4 h-4",
+    sm: "size-3",
+    md: "size-3.5",
+    lg: "size-4",
 };
 
 export function LabelBadge({
@@ -99,27 +72,28 @@ export function LabelBadge({
     return (
         <span
             className={cn(
-                "inline-flex items-center rounded-md font-medium",
+                "inline-flex items-center rounded-md font-medium select-none",
                 colorVariantStyles[color][variant],
                 sizeStyles[size],
                 className
             )}
         >
-            {/* Icono izquierdo opcional */}
             {icon && (
-                <span className={cn("flex-shrink-0", iconSizeStyles[size])}>
+                <span className={cn("flex-shrink-0 [&_svg]:size-full", iconSizeStyles[size])}>
                     {icon}
                 </span>
             )}
 
-            {label}
+            <span className="truncate">{label}</span>
 
-            {/* Botón de eliminar opcional */}
             {onRemove && (
                 <button
                     type="button"
                     onClick={onRemove}
-                    className="ml-0.5 flex-shrink-0 rounded-full opacity-60 hover:opacity-100 transition-opacity focus:outline-none"
+                    className={cn(
+                        "flex items-center justify-center rounded-full opacity-60 hover:opacity-100 transition-all outline-none cursor-pointer",
+                        "focus-visible:ring-1 focus-visible:ring-current"
+                    )}
                     aria-label={`Eliminar ${label}`}
                 >
                     <X className={iconSizeStyles[size]} />

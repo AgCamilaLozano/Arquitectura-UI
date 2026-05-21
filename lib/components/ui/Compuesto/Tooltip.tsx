@@ -1,7 +1,9 @@
-
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import * as React from "react";
+// Importamos los primitivos del Tooltip de Radix
+import { Tooltip as TooltipPrimitive } from "radix-ui";
+import { cn } from "@/lib/utils";
 
 type TooltipSide = "top" | "bottom" | "left" | "right";
 type TooltipVariant = "default" | "rich";
@@ -18,50 +20,20 @@ interface TooltipProps {
     disabled?: boolean;
 }
 
-// ─── Posición ────────────────────────────────────────────────────────────────
-
-const sideClasses: Record<TooltipSide, string> = {
-    top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
-    bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
-    left: "right-full top-1/2 -translate-y-1/2 mr-2",
-    right: "left-full top-1/2 -translate-y-1/2 ml-2",
-};
-
-const alignClasses: Record<"start" | "center" | "end", string> = {
-    start: "left-0 -translate-x-0",
-    center: "left-1/2 -translate-x-1/2",
-    end: "right-0 translate-x-0",
-};
-
-// ─── Variantes visuales ───────────────────────────────────────────────────────
+// ─── Variantes visuales (Tus mismos tokens limpios) ───────────────────────────
 
 const variantClasses: Record<TooltipVariant, string> = {
-    default: `
-        bg-primary text-background
-        rounded-md
-        px-3 py-1.5
-        text-xs
-        shadow-lg
-    `,
-    rich: `
-        bg-surface text-primary
-        border border-border
-        rounded-lg
-        px-4 py-3
-        text-sm
-        shadow-card
-    `,
+    default: "bg-primary text-background rounded-md shadow-lg",
+    rich: "bg-surface text-text-primary border border-border rounded-lg shadow-card",
 };
 
-// ─── Tamaños ──────────────────────────────────────────────────────────────────
+// ─── Tamaños (Tus mismos límites de empaquetado) ──────────────────────────────
 
 const sizeClasses: Record<TooltipSize, string> = {
     small: "max-w-[160px] px-2 py-1 text-xs",
     default: "max-w-[200px] px-3 py-1.5 text-xs",
     rich: "max-w-[280px] px-4 py-3 text-sm",
 };
-
-// ─── Componente ───────────────────────────────────────────────────────────────
 
 export const Tooltip = ({
     content,
@@ -73,62 +45,56 @@ export const Tooltip = ({
     size,
     disabled = false,
 }: TooltipProps) => {
-    const [visible, setVisible] = useState(false);
-    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-    const show = () => {
-        if (disabled) return;
-        timerRef.current = setTimeout(() => setVisible(true), 300);
-    };
-
-    const hide = () => {
-        if (timerRef.current) clearTimeout(timerRef.current);
-        setVisible(false);
-    };
-
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") hide();
-        };
-        document.addEventListener("keydown", handleKeyDown);
-        return () => document.removeEventListener("keydown", handleKeyDown);
-    }, []);
-
-    const resolvedSizeClass = size ? sizeClasses[size] : "";
-
-    const accessibleLabel =
-        ariaLabel ?? (typeof content === "string" ? content : undefined);
+    
+    // Si no definen el tamaño, adoptamos el default del tipo de variante
+    const resolvedSize = size ?? (variant === "rich" ? "rich" : "default");
 
     return (
-        <div
-            className="relative inline-flex items-center"
-            onMouseEnter={show}
-            onMouseLeave={hide}
-            onFocus={show}
-            onBlur={hide}
-            aria-label={accessibleLabel}
-        >
-            {children}
+        // Provider global de Radix para controlar el delay (300ms como tenías en tu timeout)
+        <TooltipPrimitive.Provider delayDuration={300}>
+            <TooltipPrimitive.Root>
+                
+                {/* El trigger que envuelve el botón o texto. asChild evita divs extra */}
+                <TooltipPrimitive.Trigger asChild>
+                    <span 
+                        className="inline-flex items-center"
+                        aria-label={ariaLabel ?? (typeof content === "string" ? content : undefined)}
+                    >
+                        {children}
+                    </span>
+                </TooltipPrimitive.Trigger>
 
-            {visible && !disabled && (
-                <div
-                    role="tooltip"
-                    className={`
-                        absolute ${sideClasses[side]} ${alignClasses[align]}
-                        w-max
-                        font-normal leading-relaxed
-                        z-50
-                        transition-opacity duration-150
-                        animate-in fade-in
-                        pointer-events-none
-                        break-words
-                        ${variantClasses[variant]}
-                        ${resolvedSizeClass}
-                    `}
-                >
-                    {content}
-                </div>
-            )}
-        </div>
+                {/* El Portal saca el Tooltip al body para evitar que tablas o modales lo corten */}
+                <TooltipPrimitive.Portal>
+                    {!disabled && (
+                        <TooltipPrimitive.Content
+                            side={side}
+                            align={align}
+                            sideOffset={8} // Margen de separación (mb-2 o mt-2 equivalente)
+                            className={cn(
+                                "z-[9999] w-max font-normal leading-relaxed break-words pointer-events-none select-none",
+                                // Animaciones nativas de Radix acopladas a Tailwind v4
+                                "data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in",
+                                "data-[state=closed]:animate-out data-[state=closed]:fade-out",
+                                variantClasses[variant],
+                                sizeClasses[resolvedSize]
+                            )}
+                        >
+                            {content}
+                            
+                            {/* Opcional: Radix te regala una flechita estética que apunta al botón si quieres */}
+                            <TooltipPrimitive.Arrow 
+                                className={cn(
+                                    "fill-current",
+                                    variant === "default" ? "text-primary" : "text-surface"
+                                )} 
+                                width={10} 
+                                height={5} 
+                            />
+                        </TooltipPrimitive.Content>
+                    )}
+                </TooltipPrimitive.Portal>
+            </TooltipPrimitive.Root>
+        </TooltipPrimitive.Provider>
     );
 };
