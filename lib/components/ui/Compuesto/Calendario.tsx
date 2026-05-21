@@ -91,7 +91,7 @@ interface YearGridProps {
   maxDate?: Date;
   size?: "sm" | "lg";
 }
-const YearGrid: React.FC<YearGridProps> = ({ yearBase, selected, onSelectYear, minDate, maxDate, size = "lg" }) => {
+export const YearGrid: React.FC<YearGridProps> = ({ yearBase, selected, onSelectYear, minDate, maxDate, size = "lg" }) => {
   const years = Array.from({ length: 12 }, (_, i) => yearBase + i);
   const today = new Date();
 
@@ -136,7 +136,7 @@ interface MonthGridProps {
   maxDate?: Date;
   size?: "sm" | "lg";
 }
-const MonthGrid: React.FC<MonthGridProps> = ({ year, selected, onSelectMonth, minDate, maxDate, size = "lg" }) => {
+export const MonthGrid: React.FC<MonthGridProps> = ({ year, selected, onSelectMonth, minDate, maxDate, size = "lg" }) => {
   const today = new Date();
 
   return (
@@ -183,7 +183,7 @@ interface CalendarGridProps {
   maxDate?: Date;
   size?: "sm" | "lg";
 }
-const CalendarGrid: React.FC<CalendarGridProps> = ({ year, month, selected, today, onSelectDay, minDate, maxDate, size = "lg" }) => {
+export const CalendarGrid: React.FC<CalendarGridProps> = ({ year, month, selected, today, onSelectDay, minDate, maxDate, size = "lg" }) => {
   const dias = getDiasDelMes(year, month);
 
   const holidays = useMemo(() => {
@@ -259,7 +259,7 @@ interface CalendarHeaderProps {
   selectionMode: SelectionMode;
   size?: "sm" | "lg";
 }
-const CalendarHeader: React.FC<CalendarHeaderProps> = ({ year, month, mode, yearBase, onPrev, onNext, onClickTitle, selectionMode, size = "lg" }) => {
+export const CalendarHeader: React.FC<CalendarHeaderProps> = ({ year, month, mode, yearBase, onPrev, onNext, onClickTitle, selectionMode, size = "lg" }) => {
   const canDrillUp = (mode === "days" && selectionMode === "date") || (mode === "months" && (selectionMode === "date" || selectionMode === "month")) || (mode === "days" && selectionMode === "month");
   const titleLabel = mode === "years" ? `${yearBase} – ${yearBase + 11}` : mode === "months" ? String(year) : `${MESES_LARGO[month]} ${year}`;
 

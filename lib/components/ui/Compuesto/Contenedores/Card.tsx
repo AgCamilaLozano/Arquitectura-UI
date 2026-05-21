@@ -46,7 +46,7 @@ export function Card({
             type={isInteractive ? "button" : undefined}
             tabIndex={isInteractive ? 0 : undefined}
             className={cn(
-                "rounded-xl overflow-hidden transition-all duration-200 text-left block flex flex-col w-fit",
+                "rounded-md overflow-hidden transition-all duration-200 text-left block flex flex-col w-fit",
                 variantClasses[variant],
                 fullWidth && "w-full",
                 isInteractive && [

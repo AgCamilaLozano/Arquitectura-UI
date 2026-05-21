@@ -108,7 +108,7 @@ export function DataTable<T>({
 
     return (
         <div
-            className={cn("border border-border rounded-xl overflow-hidden bg-surface shadow-xs w-full flex flex-col",
+            className={cn("border border-border rounded-md overflow-hidden bg-surface shadow-xs w-full flex flex-col",
                 className)}
         >
             <div

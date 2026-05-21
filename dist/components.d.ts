@@ -202,6 +202,7 @@ interface DropdownMenuProps {
 declare function DropdownMenu({ trigger, groups, align, // Por defecto a la izquierda
 width, disabled, className, }: DropdownMenuProps): react_jsx_runtime.JSX.Element;
 
+type CalendarMode = "days" | "months" | "years";
 type SelectionMode = "date" | "month" | "year";
 interface CalendarProps {
     variant?: "full" | "input";
@@ -222,6 +223,47 @@ declare function isDisabledDay(day: number, year: number, month: number, min?: D
 declare function isDisabledMonth(year: number, month: number, min?: Date, max?: Date): boolean;
 declare function isDisabledYear(year: number, min?: Date, max?: Date): boolean;
 declare function formatDate(date: Date, mode?: SelectionMode): string;
+interface YearGridProps {
+    yearBase: number;
+    selected: Date | null;
+    onSelectYear: (year: number) => void;
+    minDate?: Date;
+    maxDate?: Date;
+    size?: "sm" | "lg";
+}
+declare const YearGrid: React__default.FC<YearGridProps>;
+interface MonthGridProps {
+    year: number;
+    selected: Date | null;
+    onSelectMonth: (month: number) => void;
+    minDate?: Date;
+    maxDate?: Date;
+    size?: "sm" | "lg";
+}
+declare const MonthGrid: React__default.FC<MonthGridProps>;
+interface CalendarGridProps {
+    year: number;
+    month: number;
+    selected: Date | null;
+    today: Date;
+    onSelectDay: (day: number) => void;
+    minDate?: Date;
+    maxDate?: Date;
+    size?: "sm" | "lg";
+}
+declare const CalendarGrid: React__default.FC<CalendarGridProps>;
+interface CalendarHeaderProps {
+    year: number;
+    month: number;
+    mode: CalendarMode;
+    yearBase: number;
+    onPrev: () => void;
+    onNext: () => void;
+    onClickTitle: () => void;
+    selectionMode: SelectionMode;
+    size?: "sm" | "lg";
+}
+declare const CalendarHeader: React__default.FC<CalendarHeaderProps>;
 declare const Calendar: React__default.FC<CalendarProps>;
 
 interface BarSegment {
@@ -351,4 +393,4 @@ interface SidebarProps {
 }
 declare function Sidebar({ links, subLinks, subLinksTitle, userName, userRole, userInitials, className, }: SidebarProps): react_jsx_runtime.JSX.Element;
 
-export { Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, type InputProps, LabelBadge, type LabelColor, type LabelVariant, MultiSelect, type MultiSelectOption, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, Sidebar, type SidebarLink, type SidebarSubLink, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, type TextareaProps, ThemeProvider, ThemeToggle, Toaster, Tooltip, buttonVariants, formatDate, getDiasDelMes, inputVariants, isDisabledDay, isDisabledMonth, isDisabledYear, isSameDay, isWeekendDate, useDialogContext };
+export { Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, CalendarGrid, CalendarHeader, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, type InputProps, LabelBadge, type LabelColor, type LabelVariant, MonthGrid, MultiSelect, type MultiSelectOption, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, Sidebar, type SidebarLink, type SidebarSubLink, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, type TextareaProps, ThemeProvider, ThemeToggle, Toaster, Tooltip, YearGrid, buttonVariants, formatDate, getDiasDelMes, inputVariants, isDisabledDay, isDisabledMonth, isDisabledYear, isSameDay, isWeekendDate, useDialogContext };

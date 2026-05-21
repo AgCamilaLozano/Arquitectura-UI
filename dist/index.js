@@ -731,7 +731,7 @@ function Card({
       type: isInteractive ? "button" : void 0,
       tabIndex: isInteractive ? 0 : void 0,
       className: cn(
-        "rounded-xl overflow-hidden transition-all duration-200 text-left block flex flex-col w-fit",
+        "rounded-md overflow-hidden transition-all duration-200 text-left block flex flex-col w-fit",
         variantClasses[variant],
         fullWidth && "w-full",
         isInteractive && [
@@ -2103,7 +2103,7 @@ function DataTable({
     "div",
     {
       className: cn(
-        "border border-border rounded-xl overflow-hidden bg-surface shadow-xs w-full flex flex-col",
+        "border border-border rounded-md overflow-hidden bg-surface shadow-xs w-full flex flex-col",
         className
       ),
       children: [
@@ -2415,6 +2415,8 @@ export {
   Breadcrumbs,
   Button,
   Calendar,
+  CalendarGrid,
+  CalendarHeader,
   Card,
   CardBody,
   CardFooter,
@@ -2431,6 +2433,7 @@ export {
   GraficaLine_default as GraficaLine,
   Input,
   LabelBadge,
+  MonthGrid,
   MultiSelect,
   Select,
   SelectContent,
@@ -2450,6 +2453,7 @@ export {
   ThemeToggle,
   Toaster,
   Tooltip,
+  YearGrid,
   buttonVariants,
   cn,
   formatDate,
