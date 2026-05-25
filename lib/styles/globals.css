@@ -161,23 +161,23 @@ h6 {
 }
 
 h1 {
-  font-size: 40px;      /* text-4xl */
-  font-weight: 700;    /* Bold */
+  font-size: 2.25rem;    /* Equivalente a text-4xl (36px-40px aprox pero fluido) */
+  font-weight: 700;
 }
 
 h2 {
-  font-size: 32px;      /* text-2xl */
-  font-weight: 600;    /* SemiBold */
+  font-size: 1.875rem;   /* Equivalente a text-3xl */
+  font-weight: 600;
 }
 
 h3 {
-  font-size: 24px;      /* text-lg */
-  font-weight: 500;    /* Medium */
+  font-size: 1.5rem;     /* Equivalente a text-2xl */
+  font-weight: 500;
 }
 
 h4 {
-  font-size: 20px;      /* text-md */
-  font-weight: 500;    /* Medium */
+  font-size: 1.25rem;    /* Equivalente a text-xl */
+  font-weight: 500;
 }
  
 .scrollbar-soft::-webkit-scrollbar {
