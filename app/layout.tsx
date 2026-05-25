@@ -35,7 +35,7 @@ export default function RootLayout({
   
           <LayoutApp>
             {children}
-              <Toaster />
+              
           </LayoutApp>
           
         

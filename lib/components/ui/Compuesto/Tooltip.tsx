@@ -24,7 +24,7 @@ interface TooltipProps {
 
 const variantClasses: Record<TooltipVariant, string> = {
     default: "bg-primary text-background rounded-md shadow-lg",
-    rich: "bg-surface text-text-primary border border-border rounded-lg shadow-card",
+    rich: "bg-surface text-text-primary border border-border rounded-md shadow-lg",
 };
 
 // ─── Tamaños (Tus mismos límites de empaquetado) ──────────────────────────────

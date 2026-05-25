@@ -9,10 +9,8 @@ const inputVariants = cva(
         variants: {
             variant: {
                 default: "border-border focus:border-accent focus:shadow-[0_0_0_3px_var(--accent-soft)]",
-                // Variante para cuando el campo tiene un error crítico o es destructivo
                 destructive: "border-text-error focus:border-text-error focus:shadow-[0_0_0_3px_rgba(231,0,11,0.15)] text-text-error placeholder:text-text-error/50",
             },
-            // Ajustamos el padding izquierdo o derecho si lleva icono
             withIcon: {
                 none: "px-3",
                 left: "pl-10 pr-3",
@@ -27,22 +25,25 @@ const inputVariants = cva(
     }
 );
 
-// 2. Extendemos las propiedades nativas para aceptar iconos creados con Lucide o SVG
+// 2. Añadimos containerClassName para controlar el div exterior desde fuera
 export interface InputProps
     extends Omit<React.ComponentProps<"input">, "size">,
     VariantProps<typeof inputVariants> {
     iconLeft?: React.ReactNode;
     iconRight?: React.ReactNode;
+    containerClassName?: string; // <-- Prop clave añadido
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-    ({ className, type = "text", variant, iconLeft, iconRight, ...props }, ref) => {
+    ({ className, type = "text", variant, iconLeft, iconRight, containerClassName, ...props }, ref) => {
         
-        // Determinamos automáticamente el padding basándonos en si vienen iconos
         const iconPosition = iconLeft && iconRight ? "both" : iconLeft ? "left" : iconRight ? "right" : "none";
 
         return (
-            <div className="relative RussoOne-Normal w-full flex items-center">
+            /* CAMBIO CLAVE: Usamos cn() para fusionar estilos. 
+              Por defecto es w-full, pero si le pasas otra medida por containerClassName, se adaptará.
+            */
+            <div className={cn("relative RussoOne-Normal w-full flex items-center", containerClassName)}>
                 
                 {/* Icono Izquierdo */}
                 {iconLeft && (
@@ -61,9 +62,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                     className={inputVariants({ 
                         variant, 
                         withIcon: iconPosition, 
-                        className 
+                        className // Aplica las clases solo al tag <input> nativo
                     })}
-                    // Si el estado es destructive, añadimos el atributo de accesibilidad automáticamente
                     aria-invalid={variant === "destructive" || undefined}
                     {...props}
                 />

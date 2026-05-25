@@ -52,7 +52,7 @@ export function DropdownMenu({
         <button
           type="button"
           className={cn(
-            "inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium",
+            "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium",
             "border border-border bg-surface text-text-primary shadow-xs",
             "transition-colors duration-150 outline-none cursor-pointer",
             "focus-visible:ring-[3px] focus-visible:ring-accent-soft focus-visible:border-accent",
@@ -89,7 +89,7 @@ export function DropdownMenu({
           sideOffset={8} // Equivale a mt-2 (8px) de separación
           className={cn(
             // Estilos del panel (Copiados de tu SelectContent para consistencia total)
-            "bg-surface text-text-primary border border-border rounded-xl p-1 z-[9999]",
+            "bg-surface text-text-primary border border-border rounded-md p-1 z-[9999]",
             "shadow-[var(--shadow-card)] outline-none",
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
             width
@@ -113,7 +113,7 @@ export function DropdownMenu({
                     disabled={item.disabled}
                     onSelect={() => handleItemClick(item)} // Radix maneja los clics con onSelect
                     className={cn(
-                      "flex w-full items-center gap-2.5 px-3 py-2 text-sm text-left rounded-lg outline-none select-none transition-colors duration-100",
+                      "flex w-full items-center gap-2.5 px-3 py-2 text-sm text-left rounded-md outline-none select-none transition-colors duration-100",
                       "data-[disabled]:cursor-not-allowed data-[disabled]:text-text-disabled data-[disabled]:pointer-events-none",
                       item.variant === "danger"
                         ? "text-text-error focus:bg-error/20 focus:text-text-error cursor-pointer"
@@ -140,14 +140,14 @@ export function DropdownMenu({
 
                   {/* Separador opcional de ítem */}
                   {item.separator && (
-                    <DropdownPrimitive.Separator className="my-1 h-px bg-border -mx-1" />
+                    <DropdownPrimitive.Separator className="my-1 h-px bg-border-border -mx-1" />
                   )}
                 </div>
               ))}
 
               {/* Separador entre grupos nativo (excepto el último) */}
               {gIdx < groups.length - 1 && (
-                <DropdownPrimitive.Separator className="my-1 h-px bg-border -mx-1" />
+                <DropdownPrimitive.Separator className="my-1 h-px bg-border-border -mx-1" />
               )}
             </DropdownPrimitive.Group>
           ))}

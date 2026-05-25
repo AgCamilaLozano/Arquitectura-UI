@@ -420,7 +420,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             sideOffset={6}
             align="start"
             className={cn(
-              "z-[9999] bg-background border border-border rounded-xl p-4 w-auto min-w-64 shadow-[var(--shadow-card)] outline-none",
+              "z-[9999] bg-background border border-border rounded-md p-4 w-auto min-w-64 shadow-[var(--shadow-card)] outline-none",
               "data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-150"
             )}
           >
