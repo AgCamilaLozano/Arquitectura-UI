@@ -67,7 +67,7 @@ export function Dialog({
                     <DialogPrimitive.Content
                         className={cn(
                             "relative w-full pointer-events-auto",
-                            "bg-surface dark:bg-background rounded-md overflow-hidden border border-border shadow-[var(--shadow-card)]",
+                            "bg-surface rounded-md overflow-hidden border border-border shadow-[var(--shadow-card)]",
                             "data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-200",
                             sizeClasses[size],
                             className
