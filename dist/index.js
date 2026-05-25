@@ -257,7 +257,7 @@ function MultiSelect({
     );
   }, [options]);
   const hasSelected = selected.length > 0;
-  return /* @__PURE__ */ jsxs2("div", { ref, className: cn("relative w-full min-w-[180px]", className), children: [
+  return /* @__PURE__ */ jsxs2("div", { ref, className: cn("relative min-w-[180px]", className), children: [
     /* @__PURE__ */ jsxs2(
       "button",
       {

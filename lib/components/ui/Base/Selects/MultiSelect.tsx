@@ -57,7 +57,7 @@ export function MultiSelect({
     const hasSelected = selected.length > 0
 
     return (
-        <div ref={ref} className={cn("relative w-full min-w-[180px]", className)}>
+        <div ref={ref} className={cn("relative min-w-[180px]", className)}>
             <button
                 type="button"
                 onClick={() => setOpen((prev) => !prev)}
