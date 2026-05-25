@@ -1101,9 +1101,6 @@
       background-color: color-mix(in oklab, var(--color-black) 50%, transparent);
     }
   }
-  .bg-border {
-    background-color: var(--border-default);
-  }
   .bg-error {
     background-color: var(--alert-error);
   }
@@ -1551,15 +1548,6 @@
       var(--tw-shadow);
   }
   .shadow-\[var\(--shadow-card\)\] {
-    --tw-shadow: var(--shadow-card);
-    box-shadow:
-      var(--tw-inset-shadow),
-      var(--tw-inset-ring-shadow),
-      var(--tw-ring-offset-shadow),
-      var(--tw-ring-shadow),
-      var(--tw-shadow);
-  }
-  .shadow-card {
     --tw-shadow: var(--shadow-card);
     box-shadow:
       var(--tw-inset-shadow),

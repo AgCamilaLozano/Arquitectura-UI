@@ -363,10 +363,8 @@ var inputVariants = cva2(
     variants: {
       variant: {
         default: "border-border focus:border-accent focus:shadow-[0_0_0_3px_var(--accent-soft)]",
-        // Variante para cuando el campo tiene un error crítico o es destructivo
         destructive: "border-text-error focus:border-text-error focus:shadow-[0_0_0_3px_rgba(231,0,11,0.15)] text-text-error placeholder:text-text-error/50"
       },
-      // Ajustamos el padding izquierdo o derecho si lleva icono
       withIcon: {
         none: "px-3",
         left: "pl-10 pr-3",
@@ -382,32 +380,38 @@ var inputVariants = cva2(
 );
 var Input = React2.forwardRef(
   (_a, ref) => {
-    var _b = _a, { className, type = "text", variant, iconLeft, iconRight } = _b, props = __objRest(_b, ["className", "type", "variant", "iconLeft", "iconRight"]);
+    var _b = _a, { className, type = "text", variant, iconLeft, iconRight, containerClassName } = _b, props = __objRest(_b, ["className", "type", "variant", "iconLeft", "iconRight", "containerClassName"]);
     const iconPosition = iconLeft && iconRight ? "both" : iconLeft ? "left" : iconRight ? "right" : "none";
-    return /* @__PURE__ */ jsxs3("div", { className: "relative RussoOne-Normal w-full flex items-center", children: [
-      iconLeft && /* @__PURE__ */ jsx4("div", { className: cn(
-        "absolute left-3 flex items-center justify-center pointer-events-none text-text-muted [&_svg]:size-4",
-        variant === "destructive" && "text-text-error"
-      ), children: iconLeft }),
-      /* @__PURE__ */ jsx4(
-        "input",
-        __spreadValues({
-          ref,
-          type,
-          "data-slot": "input",
-          className: inputVariants({
-            variant,
-            withIcon: iconPosition,
-            className
-          }),
-          "aria-invalid": variant === "destructive" || void 0
-        }, props)
-      ),
-      iconRight && /* @__PURE__ */ jsx4("div", { className: cn(
-        "absolute right-3 flex items-center justify-center pointer-events-none text-text-muted [&_svg]:size-4",
-        variant === "destructive" && "text-text-error"
-      ), children: iconRight })
-    ] });
+    return (
+      /* CAMBIO CLAVE: Usamos cn() para fusionar estilos. 
+        Por defecto es w-full, pero si le pasas otra medida por containerClassName, se adaptará.
+      */
+      /* @__PURE__ */ jsxs3("div", { className: cn("relative RussoOne-Normal w-full flex items-center", containerClassName), children: [
+        iconLeft && /* @__PURE__ */ jsx4("div", { className: cn(
+          "absolute left-3 flex items-center justify-center pointer-events-none text-text-muted [&_svg]:size-4",
+          variant === "destructive" && "text-text-error"
+        ), children: iconLeft }),
+        /* @__PURE__ */ jsx4(
+          "input",
+          __spreadValues({
+            ref,
+            type,
+            "data-slot": "input",
+            className: inputVariants({
+              variant,
+              withIcon: iconPosition,
+              className
+              // Aplica las clases solo al tag <input> nativo
+            }),
+            "aria-invalid": variant === "destructive" || void 0
+          }, props)
+        ),
+        iconRight && /* @__PURE__ */ jsx4("div", { className: cn(
+          "absolute right-3 flex items-center justify-center pointer-events-none text-text-muted [&_svg]:size-4",
+          variant === "destructive" && "text-text-error"
+        ), children: iconRight })
+      ] })
+    );
   }
 );
 Input.displayName = "Input";
@@ -963,7 +967,7 @@ import { Tooltip as TooltipPrimitive } from "radix-ui";
 import { jsx as jsx14, jsxs as jsxs10 } from "react/jsx-runtime";
 var variantClasses2 = {
   default: "bg-primary text-background rounded-md shadow-lg",
-  rich: "bg-surface text-text-primary border border-border rounded-lg shadow-card"
+  rich: "bg-surface text-text-primary border border-border rounded-md shadow-lg"
 };
 var sizeClasses2 = {
   small: "max-w-[160px] px-2 py-1 text-xs",
@@ -1051,7 +1055,7 @@ function DropdownMenu({
         {
           type: "button",
           className: cn(
-            "inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium",
+            "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium",
             "border border-border bg-surface text-text-primary shadow-xs",
             "transition-colors duration-150 outline-none cursor-pointer",
             "focus-visible:ring-[3px] focus-visible:ring-accent-soft focus-visible:border-accent",
@@ -1088,7 +1092,7 @@ function DropdownMenu({
           sideOffset: 8,
           className: cn(
             // Estilos del panel (Copiados de tu SelectContent para consistencia total)
-            "bg-surface text-text-primary border border-border rounded-xl p-1 z-[9999]",
+            "bg-surface text-text-primary border border-border rounded-md p-1 z-[9999]",
             "shadow-[var(--shadow-card)] outline-none",
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
             width
@@ -1104,7 +1108,7 @@ function DropdownMenu({
                     disabled: item.disabled,
                     onSelect: () => handleItemClick(item),
                     className: cn(
-                      "flex w-full items-center gap-2.5 px-3 py-2 text-sm text-left rounded-lg outline-none select-none transition-colors duration-100",
+                      "flex w-full items-center gap-2.5 px-3 py-2 text-sm text-left rounded-md outline-none select-none transition-colors duration-100",
                       "data-[disabled]:cursor-not-allowed data-[disabled]:text-text-disabled data-[disabled]:pointer-events-none",
                       item.variant === "danger" ? "text-text-error focus:bg-error/20 focus:text-text-error cursor-pointer" : "text-text-primary focus:bg-muted focus:text-text-primary cursor-pointer"
                     ),
@@ -1115,9 +1119,9 @@ function DropdownMenu({
                     ]
                   }
                 ),
-                item.separator && /* @__PURE__ */ jsx15(DropdownPrimitive2.Separator, { className: "my-1 h-px bg-border -mx-1" })
+                item.separator && /* @__PURE__ */ jsx15(DropdownPrimitive2.Separator, { className: "my-1 h-px bg-border-border -mx-1" })
               ] }, iIdx)),
-              gIdx < groups.length - 1 && /* @__PURE__ */ jsx15(DropdownPrimitive2.Separator, { className: "my-1 h-px bg-border -mx-1" })
+              gIdx < groups.length - 1 && /* @__PURE__ */ jsx15(DropdownPrimitive2.Separator, { className: "my-1 h-px bg-border-border -mx-1" })
             ] }, gIdx)
           ))
         }
@@ -1410,7 +1414,7 @@ var Calendar = ({
           sideOffset: 6,
           align: "start",
           className: cn(
-            "z-[9999] bg-background border border-border rounded-xl p-4 w-auto min-w-64 shadow-[var(--shadow-card)] outline-none",
+            "z-[9999] bg-background border border-border rounded-md p-4 w-auto min-w-64 shadow-[var(--shadow-card)] outline-none",
             "data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-150"
           ),
           children: renderBody("sm")

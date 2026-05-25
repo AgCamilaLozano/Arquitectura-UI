@@ -49,6 +49,7 @@ declare const inputVariants: (props?: ({
 interface InputProps extends Omit<React__default.ComponentProps<"input">, "size">, VariantProps<typeof inputVariants> {
     iconLeft?: React__default.ReactNode;
     iconRight?: React__default.ReactNode;
+    containerClassName?: string;
 }
 declare const Input: React__default.ForwardRefExoticComponent<Omit<InputProps, "ref"> & React__default.RefAttributes<HTMLInputElement>>;
 
