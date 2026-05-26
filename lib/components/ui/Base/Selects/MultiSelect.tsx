@@ -70,10 +70,13 @@ export function MultiSelect({
                     hasSelected ? "text-text-primary font-medium" : "text-text-muted"
                 )}
             >
-                <span className="truncate">
-                    {!hasSelected
-                        ? placeholder
-                        : `${placeholder} (${selected.length})`}
+                <span className="flex-1 text-left truncate">
+                    {!hasSelected 
+                        ? placeholder 
+                        : selected.length === 1 
+                            ? normalized.find(opt => opt.value === selected[0])?.label 
+                            : `${selected.length} seleccionados`
+                    }
                 </span>
                 <ChevronDown className={cn("h-4 w-4 shrink-0 text-text-muted transition-transform duration-200", open && "rotate-180")} />
             </button>

@@ -122,6 +122,9 @@ export default function HomePage() {
   const [selectValue, setSelectValue] = useState("opcion-2");
   const [multiSelected, setMultiSelected] = useState<string[]>(["frontend"]);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogTestOpen, setDialogTestOpen] = useState(false);
+  const [selectDialogValue, setSelectDialogValue] = useState("rol-1");
+  const [multiSelectDialogValue, setMultiSelectDialogValue] = useState<string[]>([]);
   const [alertOpen, setAlertOpen] = useState(false);
   const [calendarValue, setCalendarValue] = useState<Date | null>(new Date());
 
@@ -361,6 +364,9 @@ export default function HomePage() {
                     <Button variant="default" onClick={() => setDialogOpen(true)}>
                       Abrir Dialog
                     </Button>
+                    <Button variant="secondary" onClick={() => setDialogTestOpen(true)}>
+                      Test: Select + Menu
+                    </Button>
                     <Button variant="ghost" onClick={() => toast("¡Ejemplo ghost!")}>Ghost toast</Button>
                   </div>
 
@@ -407,6 +413,101 @@ export default function HomePage() {
             toast.success("Dialog confirmado");
           }}>
             Confirmar
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      {/* Dialog de Testing: Select, MultiSelect, DropdownMenu */}
+      <Dialog open={dialogTestOpen} onClose={() => setDialogTestOpen(false)} size="md">
+        <DialogHeader
+          title="Test: Componentes en Dialog"
+          description="Verifica que Select, MultiSelect y DropdownMenu se desplieguen correctamente"
+          withDivider
+        />
+        <DialogBody>
+          <div className="space-y-5">
+            {/* Select Test */}
+            <div className="space-y-2">
+              <p className="font-semibold text-text-primary text-sm">Select</p>
+              <Select value={selectDialogValue} onValueChange={setSelectDialogValue}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Selecciona un rol" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="rol-1">Administrador</SelectItem>
+                  <SelectItem value="rol-2">Moderador</SelectItem>
+                  <SelectItem value="rol-3">Usuario</SelectItem>
+                  <SelectItem value="rol-4">Invitado</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-text-muted">Seleccionado: {selectDialogValue}</p>
+            </div>
+
+            {/* MultiSelect Test */}
+            <div className="space-y-2">
+              <p className="font-semibold text-text-primary text-sm">MultiSelect</p>
+              <MultiSelect
+                options={["Leer", "Escribir", "Eliminar", "Compartir", "Editar"]}
+                selected={multiSelectDialogValue}
+                onChange={setMultiSelectDialogValue}
+                placeholder="Permisos"
+              />
+              <p className="text-xs text-text-muted">
+                {multiSelectDialogValue.length > 0
+                  ? `Permisos: ${multiSelectDialogValue.join(", ")}`
+                  : "Sin permisos seleccionados"}
+              </p>
+            </div>
+
+            {/* DropdownMenu Test */}
+            <div className="space-y-2">
+              <p className="font-semibold text-text-primary text-sm">DropdownMenu</p>
+              <DropdownMenu
+                trigger={<span className="font-medium cursor-pointer">⚙️ Más opciones</span>}
+                width="w-56"
+                groups={[
+                  {
+                    groupLabel: "Acciones",
+                    items: [
+                      {
+                        label: "Exportar",
+                        onClick: () => toast.success("Exportando..."),
+                      },
+                      {
+                        label: "Compartir",
+                        onClick: () => toast.success("Compartido!"),
+                        separator: true,
+                      },
+                    ],
+                  },
+                  {
+                    items: [
+                      {
+                        label: "Eliminar",
+                        variant: "danger",
+                        onClick: () => toast.error("Acción cancelada"),
+                      },
+                    ],
+                  },
+                ]}
+              />
+            </div>
+
+            {/* Info box */}
+            <div className="bg-info/20 border border-text-info/20 rounded-md p-3 text-xs text-text-info">
+              ✓ Verifica que los dropdowns se vean completamente visibles y con hover notorio.
+            </div>
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => setDialogTestOpen(false)}>
+            Cerrar
+          </Button>
+          <Button variant="default" onClick={() => {
+            setDialogTestOpen(false);
+            toast.success("Test completado!");
+          }}>
+            Listo
           </Button>
         </DialogFooter>
       </Dialog>

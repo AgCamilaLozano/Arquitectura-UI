@@ -74,7 +74,7 @@ export function DropdownMenu({
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="text-text-muted transition-transform duration-200 group-data-[state=open]:rotate-180 data-[state=open]:rotate-180"
+            className="text-text-muted transition-transform duration-200 data-[state=open]:rotate-180"
             aria-hidden="true"
           >
             <polyline points="6 9 12 15 18 9" />
