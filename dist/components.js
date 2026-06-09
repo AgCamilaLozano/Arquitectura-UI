@@ -964,8 +964,8 @@ var Toaster = (props) => {
 import { Tooltip as TooltipPrimitive } from "radix-ui";
 import { jsx as jsx14, jsxs as jsxs9 } from "react/jsx-runtime";
 var variantClasses2 = {
-  default: "bg-primary text-background rounded-md shadow-lg",
-  rich: "bg-surface text-text-primary border border-border rounded-md shadow-lg"
+  default: "bg-background text-text-primary rounded-md shadow-lg",
+  rich: "bg-surface text-text-primary border border-border rounded-md shadow-md"
 };
 var sizeClasses2 = {
   small: "max-w-[160px] px-2 py-1 text-xs",

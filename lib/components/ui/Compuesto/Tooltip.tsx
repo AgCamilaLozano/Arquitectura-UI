@@ -23,8 +23,8 @@ interface TooltipProps {
 // ─── Variantes visuales (Tus mismos tokens limpios) ───────────────────────────
 
 const variantClasses: Record<TooltipVariant, string> = {
-    default: "bg-primary text-background rounded-md shadow-lg",
-    rich: "bg-surface text-text-primary border border-border rounded-md shadow-lg",
+    default: "bg-background text-text-primary rounded-md shadow-lg",
+    rich: "bg-surface text-text-primary border border-border rounded-md shadow-md",
 };
 
 // ─── Tamaños (Tus mismos límites de empaquetado) ──────────────────────────────
