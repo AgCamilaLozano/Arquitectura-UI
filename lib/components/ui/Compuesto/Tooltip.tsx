@@ -23,8 +23,8 @@ interface TooltipProps {
 // ─── Variantes visuales (Tus mismos tokens limpios) ───────────────────────────
 
 const variantClasses: Record<TooltipVariant, string> = {
-    default: "bg-background text-text-primary rounded-md shadow-lg",
-    rich: "bg-surface text-text-primary border border-border rounded-md shadow-md",
+    default: "bg-surface text-text-primary border border-border rounded-md shadow-md z-[99]",
+    rich: "bg-primary text-white border border-border rounded-md shadow-md",
 };
 
 // ─── Tamaños (Tus mismos límites de empaquetado) ──────────────────────────────
@@ -86,7 +86,7 @@ export const Tooltip = ({
                             <TooltipPrimitive.Arrow 
                                 className={cn(
                                     "fill-current",
-                                    variant === "default" ? "text-primary" : "text-surface"
+                                    variant === "default" ? "text-surface" : "text-surface"
                                 )} 
                                 width={10} 
                                 height={5} 
