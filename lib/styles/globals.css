@@ -34,6 +34,29 @@
   --color-ring-error: var(--ring-color-destructive);
 
   --shadow-card: var(--shadow-card);
+  --color-sidebar-bg: hsl(var(--sidebar-bg));
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+  --color-chart-6: hsl(var(--chart-6));
+  --color-chart-7: hsl(var(--chart-7));
+
+  --color-overlay-dark: var(--overlay-dark);
+  --color-overlay-light: var(--overlay-light);
+
+   /* Border Radius */
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+  --radius-2xl: var(--r-2xl);
+
+  /* Shadows */
+  --shadow-raised: var(--shadow-raised);
+  --shadow-floating: var(--shadow-floating);
+  --shadow-overlay: var(--shadow-overlay);
 }
 
 :root {
