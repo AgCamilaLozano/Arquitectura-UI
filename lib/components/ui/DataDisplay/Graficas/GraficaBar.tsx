@@ -58,7 +58,7 @@ export const GraficaBar = ({
     return (
         <div 
             ref={containerRef} 
-            className={cn("relative rounded-md border border-border  shadow-xs p-5 select-none", className)}
+            className={cn("relative rounded-md border border-border  shadow-xs p-2 select-none", className)}
             onMouseLeave={() => {
                 setHoveredIndex(null)
                 setTooltip(null)
@@ -97,7 +97,7 @@ export const GraficaBar = ({
                             const isHov = hoveredIndex === i
 
                             return (
-                                <g key={i}>
+                                <g key={`bar-${item.label}-${i}`}>
                                     {/* Zona interactiva invisible agrandada */}
                                     <rect
                                         x={x - 10} y={0} width={48} height={chartH}
