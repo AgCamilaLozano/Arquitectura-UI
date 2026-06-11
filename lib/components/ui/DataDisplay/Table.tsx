@@ -187,7 +187,7 @@ export function DataTable<T>({
                     <tbody>
                         {isLoading ? (
                             Array.from({ length: 5 }).map((_, rowIdx) => (
-                                <tr key={`skeleton-${rowIdx}`} className="hover:bg-muted/30 transition-colors">
+                                <tr key={`skeleton-${rowIdx}`} className="bg-[#f5f5f5] hover:bg-muted/30 transition-colors">
                                     {columns.map((col) => (
                                         <td key={col.key} className={cn("border-b border-border", cellPaddingClass)}>
                                             <div
@@ -199,7 +199,7 @@ export function DataTable<T>({
                                 </tr>
                             ))
                         ) : data.length === 0 ? (
-                            <tr>
+                            <tr className="bg-[#f5f5f5]">
                                 <td
                                     colSpan={columns.length}
                                     className="py-12 px-4 text-center text-text-muted font-normal"
@@ -214,7 +214,7 @@ export function DataTable<T>({
                                 return (
                                     <tr
                                         key={key}
-                                        className="hover:bg-muted/20 active:bg-muted/40 transition-colors border-b border-border"
+                                        className="bg-[#f5f5f5] hover:bg-muted/20 active:bg-muted/40 transition-colors border-b border-border"
                                     >
                                         {columns.map((col, i) => {
                                             const isFirstInGroup =

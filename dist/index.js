@@ -2167,13 +2167,13 @@ function DataTable({
                   );
                 }) })
               ] }),
-              /* @__PURE__ */ jsx21("tbody", { children: isLoading ? Array.from({ length: 5 }).map((_, rowIdx) => /* @__PURE__ */ jsx21("tr", { className: "hover:bg-muted/30 transition-colors", children: columns.map((col) => /* @__PURE__ */ jsx21("td", { className: cn("border-b border-border", cellPaddingClass), children: /* @__PURE__ */ jsx21(
+              /* @__PURE__ */ jsx21("tbody", { children: isLoading ? Array.from({ length: 5 }).map((_, rowIdx) => /* @__PURE__ */ jsx21("tr", { className: "bg-[#f5f5f5] hover:bg-muted/30 transition-colors", children: columns.map((col) => /* @__PURE__ */ jsx21("td", { className: cn("border-b border-border", cellPaddingClass), children: /* @__PURE__ */ jsx21(
                 "div",
                 {
                   className: "h-3 bg-muted rounded-xs animate-pulse",
                   style: { width: `${60 + Math.random() * 30}%` }
                 }
-              ) }, col.key)) }, `skeleton-${rowIdx}`)) : data.length === 0 ? /* @__PURE__ */ jsx21("tr", { children: /* @__PURE__ */ jsx21(
+              ) }, col.key)) }, `skeleton-${rowIdx}`)) : data.length === 0 ? /* @__PURE__ */ jsx21("tr", { className: "bg-[#f5f5f5]", children: /* @__PURE__ */ jsx21(
                 "td",
                 {
                   colSpan: columns.length,
@@ -2185,7 +2185,7 @@ function DataTable({
                 return /* @__PURE__ */ jsx21(
                   "tr",
                   {
-                    className: "hover:bg-muted/20 active:bg-muted/40 transition-colors border-b border-border",
+                    className: "bg-[#f5f5f5] hover:bg-muted/20 active:bg-muted/40 transition-colors border-b border-border",
                     children: columns.map((col, i) => {
                       var _a2;
                       const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
