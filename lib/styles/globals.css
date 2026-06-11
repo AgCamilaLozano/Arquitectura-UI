@@ -146,25 +146,25 @@
 
 .dark {
   /* Fondos */
-  --bg-background: #16141a;
-  --bg-surface: #1d1a23;
-  --bg-muted: #2A2533;
+  --bg-background: hsl(220 13% 9%);
+  --bg-surface: #141721;  /* De un morado oscuro a un gris azulado profundo muy elegante */
+  --bg-muted: #1e2330;
 
   /* Color Marca */
-  --primary: #FAFAFA;
+  --primary: hsl(265 60% 65%);
   --primary-hover: #F4F4F5;
   --accent: #9d70db;
   --accent-hover: rgba(138, 95, 209, 0.18);
   --accent-soft: rgba(124, 58, 237, 0.12);
 
   /* Color Texto */
-  --text-primary: #EDEDED;
-  --text-secondary: #B7B7C9;
-  --text-muted: #8C8C98;
+  --text-primary: hsl(220 10% 93%);       /* El antiguo --foreground (Blanco roto) */
+  --text-secondary: hsl(220 10% 82%);     /* El antiguo --secondary-foreground */
+  --text-muted: hsl(220 8% 55%);          /* El antiguo --muted-foreground */
   --text-disabled: #52525B;
 
   /* Color Bordes */
-  --border-default: #312B3D;
+ --border-default: hsl(220 11% 18%);
   --border-strong: #C084FC;
   --border-sidebar: #301942;
 
