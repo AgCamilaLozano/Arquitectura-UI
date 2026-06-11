@@ -64,6 +64,7 @@ export function DropdownMenu({
           {trigger}
           
           {/* Chevron que rota automáticamente con el estado de Radix */}
+          {/* Icono de tres puntos horizontales */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
@@ -74,10 +75,12 @@ export function DropdownMenu({
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="text-text-muted transition-transform duration-200 data-[state=open]:rotate-180"
+            className="text-text-muted transition-transform duration-200"
             aria-hidden="true"
           >
-            <polyline points="6 9 12 15 18 9" />
+            <circle cx="12" cy="12" r="1" />
+            <circle cx="19" cy="12" r="1" />
+            <circle cx="5" cy="12" r="1" />
           </svg>
         </button>
       </DropdownPrimitive.Trigger>
