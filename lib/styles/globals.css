@@ -146,12 +146,12 @@
 
 .dark {
   /* Fondos */
-  --bg-background: hsl(220 13% 9%);
-  --bg-surface: #141721;  /* De un morado oscuro a un gris azulado profundo muy elegante */
-  --bg-muted: #1e2330;
+  --bg-background: #14161a;
+  --bg-surface: #1b1d22;  
+  --bg-muted: #191b1f;
 
   /* Color Marca */
-  --primary: hsl(265 60% 65%);
+  --primary: #FAFAFA;
   --primary-hover: #F4F4F5;
   --accent: #9d70db;
   --accent-hover: rgba(138, 95, 209, 0.18);
