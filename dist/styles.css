@@ -39,6 +39,8 @@
     --text-sm--line-height: calc(1.25 / 0.875);
     --text-base: 1rem;
     --text-base--line-height: calc(1.5 / 1);
+    --text-lg: 1.125rem;
+    --text-lg--line-height: calc(1.75 / 1.125);
     --text-xl: 1.25rem;
     --text-xl--line-height: calc(1.75 / 1.25);
     --font-weight-normal: 400;
@@ -980,6 +982,12 @@
       border-color: color-mix(in oklab, var(--accent) 30%, transparent);
     }
   }
+  .border-accent\/40 {
+    border-color: var(--accent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--accent) 40%, transparent);
+    }
+  }
   .border-border {
     border-color: var(--border-default);
   }
@@ -1087,9 +1095,6 @@
   }
   .bg-\[\#0A0A0B\] {
     background-color: #0A0A0B;
-  }
-  .bg-\[\#f5f5f5\] {
-    background-color: #f5f5f5;
   }
   .bg-accent {
     background-color: var(--accent);
@@ -1353,6 +1358,10 @@
     font-size: var(--text-base);
     line-height: var(--tw-leading, var(--text-base--line-height));
   }
+  .text-lg {
+    font-size: var(--text-lg);
+    line-height: var(--tw-leading, var(--text-lg--line-height));
+  }
   .text-sm {
     font-size: var(--text-sm);
     line-height: var(--tw-leading, var(--text-sm--line-height));
@@ -1373,6 +1382,9 @@
   }
   .text-\[11px\] {
     font-size: 11px;
+  }
+  .text-\[12\.5px\] {
+    font-size: 12.5px;
   }
   .text-\[12px\] {
     font-size: 12px;
@@ -1821,6 +1833,11 @@
       }
     }
   }
+  .group-data-\[state\=open\]\:rotate-180 {
+    &:is(:where(.group)[data-state=open] *) {
+      rotate: 180deg;
+    }
+  }
   .selection\:bg-accent-soft {
     & *::selection {
       background-color: var(--accent-soft);
@@ -1913,12 +1930,12 @@
       }
     }
   }
-  .hover\:border-accent\/50 {
+  .hover\:border-accent\/30 {
     &:hover {
       @media (hover: hover) {
         border-color: var(--accent);
         @supports (color: color-mix(in lab, red, red)) {
-          border-color: color-mix(in oklab, var(--accent) 50%, transparent);
+          border-color: color-mix(in oklab, var(--accent) 30%, transparent);
         }
       }
     }
@@ -1927,16 +1944,6 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--accent-soft);
-      }
-    }
-  }
-  .hover\:bg-accent\/10 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--accent);
-        @supports (color: color-mix(in lab, red, red)) {
-          background-color: color-mix(in oklab, var(--accent) 10%, transparent);
-        }
       }
     }
   }
@@ -2003,6 +2010,16 @@
         background-color: var(--text-error);
         @supports (color: color-mix(in lab, red, red)) {
           background-color: color-mix(in oklab, var(--text-error) 90%, transparent);
+        }
+      }
+    }
+  }
+  .hover\:bg-text-muted\/10 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--text-muted);
+        @supports (color: color-mix(in lab, red, red)) {
+          background-color: color-mix(in oklab, var(--text-muted) 10%, transparent);
         }
       }
     }
@@ -2361,11 +2378,6 @@
       }
     }
   }
-  .data-\[state\=open\]\:rotate-180 {
-    &[data-state=open] {
-      rotate: 180deg;
-    }
-  }
   .data-\[state\=open\]\:border-accent {
     &[data-state=open] {
       border-color: var(--accent);
@@ -2431,6 +2443,11 @@
   .dark\:bg-background {
     @media (prefers-color-scheme: dark) {
       background-color: var(--bg-background);
+    }
+  }
+  .dark\:bg-surface {
+    @media (prefers-color-scheme: dark) {
+      background-color: var(--bg-surface);
     }
   }
   .dark\:text-black {
@@ -2600,19 +2617,19 @@
   --shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 .dark {
-  --bg-background: #16141a;
-  --bg-surface: #1d1a23;
-  --bg-muted: #2A2533;
+  --bg-background: #14161a;
+  --bg-surface: #1b1d22;
+  --bg-muted: #191b1f;
   --primary: #FAFAFA;
   --primary-hover: #F4F4F5;
   --accent: #9d70db;
   --accent-hover: rgba(138, 95, 209, 0.18);
   --accent-soft: rgba(124, 58, 237, 0.12);
-  --text-primary: #EDEDED;
-  --text-secondary: #B7B7C9;
-  --text-muted: #8C8C98;
+  --text-primary: hsl(220 10% 93%);
+  --text-secondary: hsl(220 10% 82%);
+  --text-muted: hsl(220 8% 55%);
   --text-disabled: #52525B;
-  --border-default: #312B3D;
+  --border-default: hsl(220 11% 18%);
   --border-strong: #C084FC;
   --border-sidebar: #301942;
   --chart-1: #7B3BC2;

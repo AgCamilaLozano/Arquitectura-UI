@@ -78,7 +78,16 @@ export function MultiSelect({
                             : `${selected.length} seleccionados`
                     }
                 </span>
-                <ChevronDown className={cn("h-4 w-4 shrink-0 text-text-muted transition-transform duration-200", open && "rotate-180")} />
+                <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={cn("h-4 w-4 shrink-0 text-text-muted transition-transform duration-200", open && "rotate-180")}
+                >
+                    <path d="M3 5.5L8 11L13 5.5H3Z" fill="#767676" />
+                </svg>
             </button>
 
             {open && (

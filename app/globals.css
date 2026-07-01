@@ -5,3 +5,5 @@
 
 /* 2. Importamos tu archivo de tokens y estilos base que definiste antes */
 @import "../lib/styles/globals.css";
+
+@variant dark (&:where(.dark, .dark *));

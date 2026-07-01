@@ -73,13 +73,24 @@ function SelectTrigger(_a) {
       type: "button",
       "data-size": size,
       className: cn(
-        "border-border data-[placeholder]:text-text-muted [&_svg:not([class*='text-'])]:text-text-muted focus-visible:border-accent focus-visible:ring-accent-soft/50 aria-invalid:ring-text-error/20 dark:aria-invalid:ring-text-error/40 aria-invalid:border-text-error bg-surface flex w-full items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "group border-border data-[placeholder]:text-text-muted [&_svg:not([class*='text-'])]:text-text-muted focus-visible:border-accent focus-visible:ring-accent-soft/50 aria-invalid:ring-text-error/20 dark:aria-invalid:ring-text-error/40 aria-invalid:border-text-error bg-background flex w-full items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )
     }, props), {
       children: [
         children,
-        /* @__PURE__ */ jsx(SelectPrimitive.Icon, { asChild: true, children: /* @__PURE__ */ jsx(ChevronDownIcon, { className: "size-4 opacity-50" }) })
+        /* @__PURE__ */ jsx(SelectPrimitive.Icon, { asChild: true, children: /* @__PURE__ */ jsx(
+          "svg",
+          {
+            width: "12",
+            height: "12",
+            viewBox: "0 0 18 18",
+            fill: "none",
+            xmlns: "http://www.w3.org/2000/svg",
+            className: "transition-transform duration-300 ease-out group-data-[state=open]:rotate-180",
+            children: /* @__PURE__ */ jsx("path", { d: "M3 5.5L8 11L13 5.5H3Z", fill: "#767676" })
+          }
+        ) })
       ]
     })
   );
@@ -152,7 +163,7 @@ function SelectItem(_a) {
     __spreadProps(__spreadValues({
       "data-slot": "select-item",
       className: cn(
-        "hover:bg-muted focus:bg-muted focus:text-text-primary transition-colors [&_svg:not([class*='text-'])]:text-text-muted relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+        "hover:bg-text-muted/10 focus:bg-muted focus:text-text-primary transition-colors [&_svg:not([class*='text-'])]:text-text-muted relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className
       )
     }, props), {
@@ -161,7 +172,7 @@ function SelectItem(_a) {
           "span",
           {
             "data-slot": "select-item-indicator",
-            className: "absolute right-2 flex size-3.5 items-center justify-center",
+            className: "absolute right-2 !text-accent flex size-3.5 items-center justify-center",
             children: /* @__PURE__ */ jsx(SelectPrimitive.ItemIndicator, { children: /* @__PURE__ */ jsx(CheckIcon, { className: "size-4" }) })
           }
         ),
@@ -225,7 +236,7 @@ function SelectScrollDownButton(_a) {
 
 // lib/components/ui/Base/Selects/MultiSelect.tsx
 import { useState, useRef, useEffect, useMemo } from "react";
-import { ChevronDown, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
 function MultiSelect({
   options,
@@ -273,7 +284,18 @@ function MultiSelect({
         ),
         children: [
           /* @__PURE__ */ jsx2("span", { className: "flex-1 text-left truncate", children: !hasSelected ? placeholder : selected.length === 1 ? (_a = normalized.find((opt) => opt.value === selected[0])) == null ? void 0 : _a.label : `${selected.length} seleccionados` }),
-          /* @__PURE__ */ jsx2(ChevronDown, { className: cn("h-4 w-4 shrink-0 text-text-muted transition-transform duration-200", open && "rotate-180") })
+          /* @__PURE__ */ jsx2(
+            "svg",
+            {
+              width: "12",
+              height: "12",
+              viewBox: "0 0 18 18",
+              fill: "none",
+              xmlns: "http://www.w3.org/2000/svg",
+              className: cn("h-4 w-4 shrink-0 text-text-muted transition-transform duration-200", open && "rotate-180"),
+              children: /* @__PURE__ */ jsx2("path", { d: "M3 5.5L8 11L13 5.5H3Z", fill: "#767676" })
+            }
+          )
         ]
       }
     ),
@@ -319,16 +341,16 @@ var buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-accent text-white",
-        outline: "border bg-background border-border shadow-xs hover:bg-accent/10",
+        outline: "border bg-background border-border shadow-xs hover:bg-text-muted/10",
         secondary: "bg-muted/90 text-secondary dark:text-primary shadow-md focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)]",
-        ghost: "hover:bg-accent/10 hover:text-accent dark:hover:text-accent",
+        ghost: "hover:bg-text-muted/10 hover:text-text-primary text-text-secondary",
         link: "text-text-secondary hover:text-accent dark:hover:text-accent underline-offset-6 decoration-accent hover:underline",
         destructive: "bg-text-error text-white hover:bg-text-error/90"
       },
       size: {
-        default: "h-9 px-4 py-2 ",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5 ",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        default: "h-9 px-4 py-1 text-[12.5px]",
+        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5 text-sm",
+        lg: "h-10 rounded-md px-6 has-[>svg]:px-4 text-sm",
         icon: "size-9",
         "icon-sm": "size-8",
         "icon-lg": "size-10"
@@ -708,8 +730,8 @@ function StatusBadge({
 // lib/components/ui/Compuesto/Contenedores/Card.tsx
 import { jsx as jsx11, jsxs as jsxs7 } from "react/jsx-runtime";
 var variantClasses = {
-  default: "bg-background border border-border hover:border-accent/50",
-  outlined: "bg-background border border-accent",
+  default: "bg-background dark:bg-surface border border-border hover:border-accent/30",
+  outlined: "bg-background border border-accent/40",
   elevated: "bg-background border border-border shadow-md",
   // Ajustado para dar sensación de elevación
   accent: "bg-background border border-border border-l-4 border-l-accent shadow-xs",
@@ -754,7 +776,7 @@ function CardHeader({
 }) {
   return /* @__PURE__ */ jsx11("div", { className: cn("p-5 pb-3", withDivider && "border-b border-border mb-3", className), children: /* @__PURE__ */ jsxs7("div", { className: "flex items-start justify-between gap-3", children: [
     /* @__PURE__ */ jsxs7("div", { className: "min-w-0", children: [
-      /* @__PURE__ */ jsx11("h3", { className: "font-semibold leading-snug text-text-primary truncate", children: title }),
+      /* @__PURE__ */ jsx11("h3", { className: "font-semibold text-lg leading-snug text-text-primary truncate", children: title }),
       subtitle && /* @__PURE__ */ jsx11("p", { className: "mt-0.5 text-sm text-text-secondary truncate", children: subtitle })
     ] }),
     action && /* @__PURE__ */ jsx11("div", { className: "shrink-0", children: action })
@@ -853,7 +875,7 @@ function Dialog({
         {
           className: cn(
             "relative w-full pointer-events-auto",
-            "bg-surface rounded-md overflow-hidden border border-border shadow-[var(--shadow-card)]",
+            "bg-background rounded-md overflow-hidden border border-border shadow-[var(--shadow-card)]",
             "data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-200",
             sizeClasses[size],
             className
@@ -893,7 +915,7 @@ function DialogHeader({
   return /* @__PURE__ */ jsx12("div", { className: cn("px-6 pt-6", withDivider ? "pb-4 border-b border-border" : "pb-2", className), children: /* @__PURE__ */ jsxs8("div", { className: "flex items-start gap-3", children: [
     icon && /* @__PURE__ */ jsx12("span", { className: cn("mt-0.5 flex items-center justify-center w-9 h-9 rounded-md shrink-0", variantIconBg[variant]), children: icon }),
     /* @__PURE__ */ jsxs8("div", { className: "flex-1 min-w-0 pr-6", children: [
-      /* @__PURE__ */ jsx12(DialogPrimitive.Title, { asChild: true, children: /* @__PURE__ */ jsx12("h3", { className: "semibold leading-snug text-text-primary", children: title }) }),
+      /* @__PURE__ */ jsx12(DialogPrimitive.Title, { asChild: true, children: /* @__PURE__ */ jsx12("h3", { className: "font-semibold text-lg leading-snug text-text-primary", children: title }) }),
       description && /* @__PURE__ */ jsx12(DialogPrimitive.Description, { asChild: true, children: /* @__PURE__ */ jsx12("p", { className: "mt-1 text-sm text-text-secondary leading-relaxed", children: description }) })
     ] })
   ] }) });
@@ -1031,6 +1053,26 @@ var Tooltip = ({
 // lib/components/ui/Compuesto/dropdown-menu.tsx
 import { DropdownMenu as DropdownPrimitive2 } from "radix-ui";
 import { jsx as jsx15, jsxs as jsxs10 } from "react/jsx-runtime";
+var DefaultTriggerIcon = /* @__PURE__ */ jsxs10(
+  "svg",
+  {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "14",
+    height: "14",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true",
+    children: [
+      /* @__PURE__ */ jsx15("circle", { cx: "12", cy: "12", r: "1" }),
+      /* @__PURE__ */ jsx15("circle", { cx: "19", cy: "12", r: "1" }),
+      /* @__PURE__ */ jsx15("circle", { cx: "5", cy: "12", r: "1" })
+    ]
+  }
+);
 function DropdownMenu({
   trigger,
   groups,
@@ -1038,7 +1080,8 @@ function DropdownMenu({
   // Por defecto a la izquierda
   width = "w-52",
   disabled = false,
-  className = ""
+  className = "",
+  triggerIcon = DefaultTriggerIcon
 }) {
   const handleItemClick = (item) => {
     var _a;
@@ -1053,8 +1096,8 @@ function DropdownMenu({
         {
           type: "button",
           className: cn(
-            "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium",
-            "border border-border bg-surface text-text-primary shadow-xs",
+            "group inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium",
+            "border border-border bg-background text-text-primary shadow-xs",
             "transition-colors duration-150 outline-none cursor-pointer",
             "focus-visible:ring-[3px] focus-visible:ring-accent-soft focus-visible:border-accent",
             "data-[state=open]:ring-[3px] data-[state=open]:ring-accent-soft data-[state=open]:border-accent",
@@ -1063,21 +1106,12 @@ function DropdownMenu({
           ),
           children: [
             trigger,
-            /* @__PURE__ */ jsx15(
-              "svg",
+            triggerIcon && /* @__PURE__ */ jsx15(
+              "span",
               {
-                xmlns: "http://www.w3.org/2000/svg",
-                width: "14",
-                height: "14",
-                viewBox: "0 0 24 24",
-                fill: "none",
-                stroke: "currentColor",
-                strokeWidth: "2",
-                strokeLinecap: "round",
-                strokeLinejoin: "round",
-                className: "text-text-muted transition-transform duration-200 data-[state=open]:rotate-180",
+                className: "text-text-muted transition-transform duration-200 group-data-[state=open]:rotate-180 [&_svg]:size-full",
                 "aria-hidden": "true",
-                children: /* @__PURE__ */ jsx15("polyline", { points: "6 9 12 15 18 9" })
+                children: triggerIcon
               }
             )
           ]
@@ -1090,7 +1124,7 @@ function DropdownMenu({
           sideOffset: 8,
           className: cn(
             // Estilos del panel (Copiados de tu SelectContent para consistencia total)
-            "bg-surface text-text-primary border border-border rounded-md p-1 z-[9999]",
+            "bg-background text-text-primary border border-border rounded-md p-1 z-[9999]",
             "shadow-[var(--shadow-card)] outline-none",
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
             width
@@ -1460,7 +1494,7 @@ var GraficaBar = ({
     "div",
     {
       ref: containerRef,
-      className: cn("relative rounded-md border border-border  shadow-xs p-5 select-none", className),
+      className: cn("relative rounded-md border border-border  shadow-xs p-2 select-none", className),
       onMouseLeave: () => {
         setHoveredIndex(null);
         setTooltip(null);
@@ -1563,7 +1597,7 @@ var GraficaBar = ({
                       children: item.label
                     }
                   )
-                ] }, i);
+                ] }, `bar-${item.label}-${i}`);
               }),
               /* @__PURE__ */ jsx17("line", { x1: 0, y1: chartH, x2: svgW - padding.left - padding.right, y2: chartH, stroke: "var(--border-strong)" })
             ] })
@@ -2166,13 +2200,13 @@ function DataTable({
                   );
                 }) })
               ] }),
-              /* @__PURE__ */ jsx21("tbody", { children: isLoading ? Array.from({ length: 5 }).map((_, rowIdx) => /* @__PURE__ */ jsx21("tr", { className: "bg-[#f5f5f5] hover:bg-muted/30 transition-colors", children: columns.map((col) => /* @__PURE__ */ jsx21("td", { className: cn("border-b border-border", cellPaddingClass), children: /* @__PURE__ */ jsx21(
+              /* @__PURE__ */ jsx21("tbody", { children: isLoading ? Array.from({ length: 5 }).map((_, rowIdx) => /* @__PURE__ */ jsx21("tr", { className: "bg-background hover:bg-muted/30 transition-colors", children: columns.map((col) => /* @__PURE__ */ jsx21("td", { className: cn("border-b border-border", cellPaddingClass), children: /* @__PURE__ */ jsx21(
                 "div",
                 {
                   className: "h-3 bg-muted rounded-xs animate-pulse",
                   style: { width: `${60 + Math.random() * 30}%` }
                 }
-              ) }, col.key)) }, `skeleton-${rowIdx}`)) : data.length === 0 ? /* @__PURE__ */ jsx21("tr", { className: "bg-[#f5f5f5]", children: /* @__PURE__ */ jsx21(
+              ) }, col.key)) }, `skeleton-${rowIdx}`)) : data.length === 0 ? /* @__PURE__ */ jsx21("tr", { className: "bg-background", children: /* @__PURE__ */ jsx21(
                 "td",
                 {
                   colSpan: columns.length,
@@ -2184,7 +2218,7 @@ function DataTable({
                 return /* @__PURE__ */ jsx21(
                   "tr",
                   {
-                    className: "bg-[#f5f5f5] hover:bg-muted/20 active:bg-muted/40 transition-colors border-b border-border",
+                    className: "bg-background hover:bg-muted/20 active:bg-muted/40 transition-colors border-b border-border",
                     children: columns.map((col, i) => {
                       var _a2;
                       const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);

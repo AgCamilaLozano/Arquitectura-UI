@@ -17,8 +17,8 @@ export interface CardProps {
 // ─── Mapas de clases (Corregido border-1 a border) ────────────────────────────
 
 const variantClasses: Record<CardVariant, string> = {
-    default: "bg-background border border-border hover:border-accent/50",
-    outlined: "bg-background border border-accent",
+    default: "bg-background dark:bg-surface border border-border hover:border-accent/30",
+    outlined: "bg-background border border-accent/40",
     elevated: "bg-background border border-border shadow-md", // Ajustado para dar sensación de elevación
     accent: "bg-background border border-border border-l-4 border-l-accent shadow-xs",
     ghost: "bg-surface border border-border shadow-none",
@@ -83,7 +83,7 @@ export function CardHeader({
             <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                     {/* CORREGIDO: Eliminado text-base duplicado */}
-                    <h3 className="font-semibold leading-snug text-text-primary truncate">
+                    <h3 className="font-semibold text-lg leading-snug text-text-primary truncate">
                         {title}
                     </h3>
                     {subtitle && (

@@ -199,9 +199,14 @@ interface DropdownMenuProps {
     width?: string;
     disabled?: boolean;
     className?: string;
+    /**
+     * Ícono del disparador. Si no se pasa, usa el de tres puntos por defecto.
+     * Pasa `null` explícitamente si no quieres ningún ícono.
+     */
+    triggerIcon?: React.ReactNode;
 }
 declare function DropdownMenu({ trigger, groups, align, // Por defecto a la izquierda
-width, disabled, className, }: DropdownMenuProps): react_jsx_runtime.JSX.Element;
+width, disabled, className, triggerIcon, }: DropdownMenuProps): react_jsx_runtime.JSX.Element;
 
 type CalendarMode = "days" | "months" | "years";
 type SelectionMode = "date" | "month" | "year";

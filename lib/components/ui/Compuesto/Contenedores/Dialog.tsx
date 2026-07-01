@@ -67,7 +67,7 @@ export function Dialog({
                     <DialogPrimitive.Content
                         className={cn(
                             "relative w-full pointer-events-auto",
-                            "bg-surface rounded-md overflow-hidden border border-border shadow-[var(--shadow-card)]",
+                            "bg-background rounded-md overflow-hidden border border-border shadow-[var(--shadow-card)]",
                             "data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-200",
                             sizeClasses[size],
                             className
@@ -136,7 +136,7 @@ export function DialogHeader({
                 <div className="flex-1 min-w-0 pr-6">
                     {/* Radix vincula semánticamente este h2 como el lector oficial del modal */}
                     <DialogPrimitive.Title asChild>
-                        <h3 className="semibold leading-snug text-text-primary">
+                        <h3 className="font-semibold text-lg leading-snug text-text-primary">
                             {title}
                         </h3>
                     </DialogPrimitive.Title>

@@ -27,7 +27,32 @@ export interface DropdownMenuProps {
   width?: string;
   disabled?: boolean;
   className?: string;
+  /**
+   * Ícono del disparador. Si no se pasa, usa el de tres puntos por defecto.
+   * Pasa `null` explícitamente si no quieres ningún ícono.
+   */
+  triggerIcon?: React.ReactNode;
 }
+
+// Ícono por defecto: tres puntos horizontales
+const DefaultTriggerIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="1" />
+    <circle cx="19" cy="12" r="1" />
+    <circle cx="5" cy="12" r="1" />
+  </svg>
+);
 
 export function DropdownMenu({
   trigger,
@@ -36,8 +61,9 @@ export function DropdownMenu({
   width = "w-52",
   disabled = false,
   className = "",
+  triggerIcon = DefaultTriggerIcon,
 }: DropdownMenuProps) {
-  
+
   const handleItemClick = (item: DropdownItem) => {
     if (item.disabled) return;
     item.onClick?.();
@@ -52,8 +78,8 @@ export function DropdownMenu({
         <button
           type="button"
           className={cn(
-            "inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium",
-            "border border-border bg-surface text-text-primary shadow-xs",
+            "group inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium",
+            "border border-border bg-background text-text-primary shadow-xs",
             "transition-colors duration-150 outline-none cursor-pointer",
             "focus-visible:ring-[3px] focus-visible:ring-accent-soft focus-visible:border-accent",
             "data-[state=open]:ring-[3px] data-[state=open]:ring-accent-soft data-[state=open]:border-accent",
@@ -62,26 +88,16 @@ export function DropdownMenu({
           )}
         >
           {trigger}
-          
-          {/* Chevron que rota automáticamente con el estado de Radix */}
-          {/* Icono de tres puntos horizontales */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-text-muted transition-transform duration-200"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="12" r="1" />
-            <circle cx="19" cy="12" r="1" />
-            <circle cx="5" cy="12" r="1" />
-          </svg>
+
+          {/* Ícono configurable del trigger */}
+          {triggerIcon && (
+            <span
+              className="text-text-muted transition-transform duration-200 group-data-[state=open]:rotate-180 [&_svg]:size-full"
+              aria-hidden="true"
+            >
+              {triggerIcon}
+            </span>
+          )}
         </button>
       </DropdownPrimitive.Trigger>
 
@@ -92,7 +108,7 @@ export function DropdownMenu({
           sideOffset={8} // Equivale a mt-2 (8px) de separación
           className={cn(
             // Estilos del panel (Copiados de tu SelectContent para consistencia total)
-            "bg-surface text-text-primary border border-border rounded-md p-1 z-[9999]",
+            "bg-background text-text-primary border border-border rounded-md p-1 z-[9999]",
             "shadow-[var(--shadow-card)] outline-none",
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2",
             width
