@@ -4,7 +4,6 @@ import * as React from "react";
 import { Moon, Sun, Laptop } from "lucide-react";
 import { useTheme } from "next-themes";
 import { DropdownMenu as DropdownPrimitive } from "radix-ui"; 
-import AnimatedIconButton from "@/lib/components/ui/buttonIcons/fondoIcons";
 import { cn } from "@/lib/utils";
 
 export function ThemeToggle() {
@@ -41,10 +40,15 @@ export function ThemeToggle() {
       <DropdownPrimitive.Trigger asChild>
         {/* El gatillo usa tu botón animado nativo */}
         <div className="inline-block outline-none">
-          <AnimatedIconButton
+          <button
+            className={cn(
+              "inline-flex items-center justify-center rounded-lg border border-border bg-transparent p-2 text-sm font-medium text-text-muted transition-colors hover:bg-accent-soft hover:text-accent focus:outline-none focus:ring-4 focus:ring-border-strong/20 focus:ring-offset-0",
+              "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-muted"
+            )}
             aria-label="Cambiar tema"
-            Icon={CurrentIcon}
-          />
+          >
+            <CurrentIcon className="size-5" />
+          </button>
         </div>
       </DropdownPrimitive.Trigger>
 

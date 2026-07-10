@@ -1,25 +1,42 @@
-import React from 'react';
-import { cn } from '../../../../utils';
+"use client";
 
-export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+
+const textareaVariants = cva(
+  "flex min-h-[80px] w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-muted font-sans transition-all duration-200 shadow-xs resize-y",
+  {
+    variants: {
+      variant: {
+        /* Sincronización exacta con el comportamiento óptico de producción en AGUSTIN */
+        default: "border-border focus-visible:border-accent focus-visible:ring-border-strong/20",
+        destructive: "border-error focus-visible:border-text-error focus-visible:ring-ring-error/20 text-text-error placeholder:text-text-error/50",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+export interface TextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+    VariantProps<typeof textareaVariants> {}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-    ({ className, ...props }, ref) => {
-        return (
-            <textarea
-                ref={ref}
-                className={cn(
-                    "w-full min-h-[80px] px-3 py-2 border border-border rounded-md text-sm bg-transparent placeholder:text-text-muted transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-                    "focus:border-accent focus:shadow-[0_0_0_3px_var(--accent-soft)]",
-                    "aria-invalid:ring-text-error/20 dark:aria-invalid:ring-text-error/40 aria-invalid:border-text-error",
-                    className
-                )}
-                {...props}
-            />
-        );
-    }
+  ({ className, variant, ...props }, ref) => {
+    return (
+      <textarea
+        ref={ref}
+        className={cn(textareaVariants({ variant, className }))}
+        aria-invalid={variant === "destructive" || undefined}
+        {...props}
+      />
+    );
+  }
 );
 
 Textarea.displayName = "Textarea";
 
-export { Textarea };
+export { Textarea, textareaVariants };

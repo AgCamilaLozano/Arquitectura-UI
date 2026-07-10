@@ -1,6 +1,5 @@
 export * from './Badges'
 export * from './Contenedores'
-export * from './Toaster'
 export * from './Tooltip'
 export * from './dropdown-menu'
 export * from './Calendario'

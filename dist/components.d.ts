@@ -1,61 +1,92 @@
 import * as react_jsx_runtime from 'react/jsx-runtime';
-import * as React from 'react';
-import React__default, { ReactNode } from 'react';
-import { Select as Select$1 } from 'radix-ui';
+import * as React$1 from 'react';
+import React__default from 'react';
+import * as SelectPrimitive from '@radix-ui/react-select';
 import * as class_variance_authority_types from 'class-variance-authority/types';
 import { VariantProps } from 'class-variance-authority';
 import { ThemeProviderProps } from 'next-themes';
+import * as LabelPrimitive from '@radix-ui/react-label';
+import { AlertDialog as AlertDialog$1, Avatar as Avatar$1, Collapsible as Collapsible$1, Popover as Popover$1, Separator as Separator$1, Switch as Switch$1 } from 'radix-ui';
+import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { ToasterProps } from 'sonner';
-import { LucideIcon } from 'lucide-react';
 
-declare function Select({ ...props }: React.ComponentProps<typeof Select$1.Root>): react_jsx_runtime.JSX.Element;
-declare function SelectGroup({ ...props }: React.ComponentProps<typeof Select$1.Group>): react_jsx_runtime.JSX.Element;
-declare function SelectValue({ ...props }: React.ComponentProps<typeof Select$1.Value>): react_jsx_runtime.JSX.Element;
-declare function SelectTrigger({ className, size, children, ...props }: React.ComponentProps<typeof Select$1.Trigger> & {
+interface SearchableSelectOption {
+    value: string;
+    label: string;
+}
+interface SearchableSelectProps {
+    value: string;
+    onValueChange: (value: string) => void;
+    options: readonly SearchableSelectOption[];
+    placeholder?: string;
+    searchPlaceholder?: string;
+    className?: string;
+    disabled?: boolean;
+    allowCustom?: boolean;
+    customPlaceholder?: string;
+}
+declare function SearchableSelect({ value, onValueChange, options, placeholder, searchPlaceholder, className, disabled, allowCustom, customPlaceholder, }: SearchableSelectProps): react_jsx_runtime.JSX.Element;
+
+declare function Select({ ...props }: React$1.ComponentProps<typeof SelectPrimitive.Root>): react_jsx_runtime.JSX.Element;
+declare function SelectGroup({ ...props }: React$1.ComponentProps<typeof SelectPrimitive.Group>): react_jsx_runtime.JSX.Element;
+declare function SelectValue({ ...props }: React$1.ComponentProps<typeof SelectPrimitive.Value>): react_jsx_runtime.JSX.Element;
+declare function SelectTrigger({ className, size, children, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Trigger> & {
     size?: "sm" | "default";
 }): react_jsx_runtime.JSX.Element;
-declare function SelectContent({ className, children, position, align, ...props }: React.ComponentProps<typeof Select$1.Content>): react_jsx_runtime.JSX.Element;
-declare function SelectLabel({ className, ...props }: React.ComponentProps<typeof Select$1.Label>): react_jsx_runtime.JSX.Element;
-declare function SelectItem({ className, children, ...props }: React.ComponentProps<typeof Select$1.Item>): react_jsx_runtime.JSX.Element;
-declare function SelectSeparator({ className, ...props }: React.ComponentProps<typeof Select$1.Separator>): react_jsx_runtime.JSX.Element;
-declare function SelectScrollUpButton({ className, ...props }: React.ComponentProps<typeof Select$1.ScrollUpButton>): react_jsx_runtime.JSX.Element;
-declare function SelectScrollDownButton({ className, ...props }: React.ComponentProps<typeof Select$1.ScrollDownButton>): react_jsx_runtime.JSX.Element;
-
-type MultiSelectOption = string | {
-    label: string;
-    value: string;
-};
-interface MultiSelectProps {
-    options: MultiSelectOption[];
-    selected: string[];
-    onChange: (values: string[]) => void;
-    placeholder?: string;
-    className?: string;
+declare namespace SelectTrigger {
+    var displayName: string;
 }
-declare function MultiSelect({ options, selected, onChange, placeholder, className, }: MultiSelectProps): react_jsx_runtime.JSX.Element;
+declare function SelectContent({ className, children, position, align, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Content>): react_jsx_runtime.JSX.Element;
+declare namespace SelectContent {
+    var displayName: string;
+}
+declare function SelectLabel({ className, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Label>): react_jsx_runtime.JSX.Element;
+declare namespace SelectLabel {
+    var displayName: string;
+}
+declare function SelectItem({ className, children, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Item>): react_jsx_runtime.JSX.Element;
+declare namespace SelectItem {
+    var displayName: string;
+}
+declare function SelectSeparator({ className, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Separator>): react_jsx_runtime.JSX.Element;
+declare namespace SelectSeparator {
+    var displayName: string;
+}
+declare function SelectScrollUpButton({ className, ...props }: React$1.ComponentProps<typeof SelectPrimitive.ScrollUpButton>): react_jsx_runtime.JSX.Element;
+declare namespace SelectScrollUpButton {
+    var displayName: string;
+}
+declare function SelectScrollDownButton({ className, ...props }: React$1.ComponentProps<typeof SelectPrimitive.ScrollDownButton>): react_jsx_runtime.JSX.Element;
+declare namespace SelectScrollDownButton {
+    var displayName: string;
+}
 
 declare const buttonVariants: (props?: ({
     variant?: "link" | "default" | "outline" | "secondary" | "ghost" | "destructive" | null | undefined;
     size?: "sm" | "default" | "lg" | "icon" | "icon-sm" | "icon-lg" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
-interface ButtonProps extends React__default.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
+interface ButtonProps extends React$1.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
+    asChild?: boolean;
 }
-declare const Button: React__default.ForwardRefExoticComponent<ButtonProps & React__default.RefAttributes<HTMLButtonElement>>;
+declare const Button: React$1.ForwardRefExoticComponent<ButtonProps & React$1.RefAttributes<HTMLButtonElement>>;
 
 declare const inputVariants: (props?: ({
     variant?: "default" | "destructive" | null | undefined;
     withIcon?: "none" | "left" | "right" | "both" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
-interface InputProps extends Omit<React__default.ComponentProps<"input">, "size">, VariantProps<typeof inputVariants> {
-    iconLeft?: React__default.ReactNode;
-    iconRight?: React__default.ReactNode;
+interface InputProps extends Omit<React$1.InputHTMLAttributes<HTMLInputElement>, "size">, VariantProps<typeof inputVariants> {
+    iconLeft?: React$1.ReactNode;
+    iconRight?: React$1.ReactNode;
     containerClassName?: string;
 }
-declare const Input: React__default.ForwardRefExoticComponent<Omit<InputProps, "ref"> & React__default.RefAttributes<HTMLInputElement>>;
+declare const Input: React$1.ForwardRefExoticComponent<InputProps & React$1.RefAttributes<HTMLInputElement>>;
 
-interface TextareaProps extends React__default.TextareaHTMLAttributes<HTMLTextAreaElement> {
+declare const textareaVariants: (props?: ({
+    variant?: "default" | "destructive" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+interface TextareaProps extends React$1.TextareaHTMLAttributes<HTMLTextAreaElement>, VariantProps<typeof textareaVariants> {
 }
-declare const Textarea: React__default.ForwardRefExoticComponent<TextareaProps & React__default.RefAttributes<HTMLTextAreaElement>>;
+declare const Textarea: React$1.ForwardRefExoticComponent<TextareaProps & React$1.RefAttributes<HTMLTextAreaElement>>;
 
 declare function ThemeProvider({ children, ...props }: ThemeProviderProps): react_jsx_runtime.JSX.Element;
 
@@ -68,60 +99,58 @@ interface LabelBadgeProps {
     variant?: LabelVariant;
     color?: LabelColor;
     size?: "sm" | "md" | "lg";
-    icon?: React__default.ReactNode;
+    icon?: React$1.ReactNode;
     onRemove?: () => void;
     className?: string;
 }
 declare function LabelBadge({ label, variant, color, size, icon, onRemove, className, }: LabelBadgeProps): react_jsx_runtime.JSX.Element;
 
-type StatusVariant = "success" | "error" | "warning" | "info" | "idle";
-interface StatusBadgeProps {
-    status: StatusVariant;
-    label: string;
-    withDot?: boolean;
-    animated?: boolean;
-    size?: "sm" | "md";
-    className?: string;
-}
-declare function StatusBadge({ status, label, withDot, animated, size, className, }: StatusBadgeProps): react_jsx_runtime.JSX.Element;
+declare const Label: React$1.ForwardRefExoticComponent<Omit<LabelPrimitive.LabelProps & React$1.RefAttributes<HTMLLabelElement>, "ref"> & VariantProps<(props?: class_variance_authority_types.ClassProp | undefined) => string> & React$1.RefAttributes<HTMLLabelElement>>;
 
 type CardVariant = "default" | "outlined" | "elevated" | "accent" | "ghost";
-interface CardProps {
+interface CardProps extends React$1.HTMLAttributes<HTMLDivElement> {
     variant?: CardVariant;
     clickable?: boolean;
-    onClick?: () => void;
     fullWidth?: boolean;
-    className?: string;
-    children: React__default.ReactNode;
+    asChild?: boolean;
 }
-declare function Card({ variant, clickable, onClick, fullWidth, className, children, }: CardProps): react_jsx_runtime.JSX.Element;
-interface CardHeaderProps {
-    title: React__default.ReactNode;
-    subtitle?: React__default.ReactNode;
-    action?: React__default.ReactNode;
+declare const Card: React$1.ForwardRefExoticComponent<CardProps & React$1.RefAttributes<HTMLDivElement>>;
+interface CardHeaderProps extends Omit<React$1.HTMLAttributes<HTMLDivElement>, "title"> {
+    title: React$1.ReactNode;
+    subtitle?: React$1.ReactNode;
+    action?: React$1.ReactNode;
     withDivider?: boolean;
-    className?: string;
+    as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }
-declare function CardHeader({ title, subtitle, action, withDivider, className, }: CardHeaderProps): react_jsx_runtime.JSX.Element;
-interface CardBodyProps {
-    className?: string;
-    children: React__default.ReactNode;
+declare function CardHeader({ title, subtitle, action, withDivider, as: HeadingTag, // Por defecto h4 acorde a la escala visual de cards corporativas
+className, ...props }: CardHeaderProps): react_jsx_runtime.JSX.Element;
+declare namespace CardHeader {
+    var displayName: string;
 }
-declare function CardBody({ className, children }: CardBodyProps): react_jsx_runtime.JSX.Element;
-interface CardFooterProps {
+interface CardBodyProps extends React$1.HTMLAttributes<HTMLDivElement> {
+}
+declare function CardBody({ className, children, ...props }: CardBodyProps): react_jsx_runtime.JSX.Element;
+declare namespace CardBody {
+    var displayName: string;
+}
+interface CardFooterProps extends React$1.HTMLAttributes<HTMLDivElement> {
     align?: "left" | "center" | "right" | "between";
     withDivider?: boolean;
-    className?: string;
-    children: React__default.ReactNode;
 }
-declare function CardFooter({ align, withDivider, className, children, }: CardFooterProps): react_jsx_runtime.JSX.Element;
-interface CardImageProps {
+declare function CardFooter({ align, withDivider, className, children, ...props }: CardFooterProps): react_jsx_runtime.JSX.Element;
+declare namespace CardFooter {
+    var displayName: string;
+}
+interface CardImageProps extends React$1.HTMLAttributes<HTMLDivElement> {
     src: string;
     alt: string;
     height?: string;
-    className?: string;
+    imgClassName?: string;
 }
-declare function CardImage({ src, alt, height, className, }: CardImageProps): react_jsx_runtime.JSX.Element;
+declare function CardImage({ src, alt, height, className, imgClassName, ...props }: CardImageProps): react_jsx_runtime.JSX.Element;
+declare namespace CardImage {
+    var displayName: string;
+}
 
 type DialogVariant = "default" | "destructive" | "warning" | "info";
 type DialogSize = "sm" | "md" | "lg" | "xl";
@@ -133,7 +162,7 @@ interface DialogProps {
     closeOnOverlay?: boolean;
     hideCloseButton?: boolean;
     className?: string;
-    children: React__default.ReactNode;
+    children: React$1.ReactNode;
 }
 interface DialogContextValue {
     variant: DialogVariant;
@@ -141,35 +170,63 @@ interface DialogContextValue {
 declare const useDialogContext: () => DialogContextValue;
 declare function Dialog({ open, onClose, variant, size, closeOnOverlay, hideCloseButton, className, children, }: DialogProps): react_jsx_runtime.JSX.Element;
 interface DialogHeaderProps {
-    title: React__default.ReactNode;
-    description?: React__default.ReactNode;
-    icon?: React__default.ReactNode;
+    title: React$1.ReactNode;
+    description?: React$1.ReactNode;
+    icon?: React$1.ReactNode;
     withDivider?: boolean;
     className?: string;
 }
 declare function DialogHeader({ title, description, icon, withDivider, className, }: DialogHeaderProps): react_jsx_runtime.JSX.Element;
+declare namespace DialogHeader {
+    var displayName: string;
+}
 interface DialogBodyProps {
     scrollable?: boolean;
     className?: string;
-    children: React__default.ReactNode;
+    children: React$1.ReactNode;
 }
 declare function DialogBody({ scrollable, className, children }: DialogBodyProps): react_jsx_runtime.JSX.Element;
+declare namespace DialogBody {
+    var displayName: string;
+}
 interface DialogFooterProps {
     align?: "left" | "center" | "right" | "between";
     withDivider?: boolean;
     className?: string;
-    children: React__default.ReactNode;
+    children: React$1.ReactNode;
 }
 declare function DialogFooter({ align, withDivider, className, children }: DialogFooterProps): react_jsx_runtime.JSX.Element;
+declare namespace DialogFooter {
+    var displayName: string;
+}
 
-declare const Toaster: (props: ToasterProps) => react_jsx_runtime.JSX.Element;
+declare function AlertDialog({ ...props }: React$1.ComponentProps<typeof AlertDialog$1.Root>): react_jsx_runtime.JSX.Element;
+declare function AlertDialogTrigger({ ...props }: React$1.ComponentProps<typeof AlertDialog$1.Trigger>): react_jsx_runtime.JSX.Element;
+declare function AlertDialogContent({ className, ...props }: React$1.ComponentProps<typeof AlertDialog$1.Content>): react_jsx_runtime.JSX.Element;
+declare function AlertDialogHeader({ className, ...props }: React$1.ComponentProps<"div">): react_jsx_runtime.JSX.Element;
+declare function AlertDialogFooter({ className, ...props }: React$1.ComponentProps<"div">): react_jsx_runtime.JSX.Element;
+declare function AlertDialogTitle({ className, ...props }: React$1.ComponentProps<typeof AlertDialog$1.Title>): react_jsx_runtime.JSX.Element;
+declare function AlertDialogDescription({ className, ...props }: React$1.ComponentProps<typeof AlertDialog$1.Description>): react_jsx_runtime.JSX.Element;
+declare function AlertDialogAction({ className, ...props }: React$1.ComponentProps<typeof AlertDialog$1.Action>): react_jsx_runtime.JSX.Element;
+declare function AlertDialogCancel({ className, ...props }: React$1.ComponentProps<typeof AlertDialog$1.Cancel>): react_jsx_runtime.JSX.Element;
+
+interface ConfirmDeleteDialogProps {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    title?: string;
+    description?: string;
+    itemName?: string;
+    onConfirm: () => void;
+    loading?: boolean;
+}
+declare function ConfirmDeleteDialog({ open, onOpenChange, title, description, itemName, onConfirm, loading, }: ConfirmDeleteDialogProps): react_jsx_runtime.JSX.Element;
 
 type TooltipSide = "top" | "bottom" | "left" | "right";
 type TooltipVariant = "default" | "rich";
 type TooltipSize = "small" | "default" | "rich";
 interface TooltipProps {
-    content: React.ReactNode;
-    children: React.ReactNode;
+    content: React$1.ReactNode;
+    children: React$1.ReactNode;
     side?: TooltipSide;
     ariaLabel?: string;
     align?: "start" | "center" | "end";
@@ -177,12 +234,12 @@ interface TooltipProps {
     size?: TooltipSize;
     disabled?: boolean;
 }
-declare const Tooltip: ({ content, children, side, ariaLabel, align, variant, size, disabled, }: TooltipProps) => react_jsx_runtime.JSX.Element;
+declare function Tooltip({ content, children, side, ariaLabel, align, variant, size, disabled, }: TooltipProps): react_jsx_runtime.JSX.Element;
 
 interface DropdownItem {
     label: string;
-    icon?: React.ReactNode;
-    trailingIcon?: React.ReactNode;
+    icon?: React$1.ReactNode;
+    trailingIcon?: React$1.ReactNode;
     onClick?: () => void;
     disabled?: boolean;
     variant?: "default" | "danger";
@@ -193,20 +250,15 @@ interface DropdownGroup {
     items: DropdownItem[];
 }
 interface DropdownMenuProps {
-    trigger: React.ReactNode;
+    trigger: React$1.ReactNode;
     groups: DropdownGroup[];
     align?: "start" | "end" | "center";
     width?: string;
     disabled?: boolean;
     className?: string;
-    /**
-     * Ícono del disparador. Si no se pasa, usa el de tres puntos por defecto.
-     * Pasa `null` explícitamente si no quieres ningún ícono.
-     */
-    triggerIcon?: React.ReactNode;
+    triggerIcon?: React$1.ReactNode;
 }
-declare function DropdownMenu({ trigger, groups, align, // Por defecto a la izquierda
-width, disabled, className, triggerIcon, }: DropdownMenuProps): react_jsx_runtime.JSX.Element;
+declare function DropdownMenu({ trigger, groups, align, width, disabled, className, triggerIcon, }: DropdownMenuProps): react_jsx_runtime.JSX.Element;
 
 type CalendarMode = "days" | "months" | "years";
 type SelectionMode = "date" | "month" | "year";
@@ -326,77 +378,77 @@ declare const PureLineChart: ({ className, data, title, description, height, lin
 type TabItem = {
     id: string;
     label: string;
-    icon?: ReactNode;
-    content: ReactNode;
+    icon?: React$1.ReactNode;
+    content: React$1.ReactNode;
     disabled?: boolean;
 };
 type TabsVariant = "underline" | "pill" | "card";
-type TabsProps = {
+interface TabsProps extends Omit<React$1.HTMLAttributes<HTMLDivElement>, "onChange"> {
     tabs: TabItem[];
     defaultTab?: string;
     activeTab?: string;
     onChange?: (id: string) => void;
     variant?: TabsVariant;
-    className?: string;
     align?: "start" | "center" | "end" | "stretch";
-};
-declare function Tabs({ tabs, defaultTab, activeTab: controlledTab, onChange, variant, className, align, }: TabsProps): react_jsx_runtime.JSX.Element;
+}
+declare const Tabs: React$1.ForwardRefExoticComponent<TabsProps & React$1.RefAttributes<HTMLDivElement>>;
 
-/** Una columna individual de la tabla */
 interface Column<T> {
     key: string;
     header: string;
-    accessor?: keyof T | ((row: T) => React__default.ReactNode);
-    render?: (row: T) => React__default.ReactNode;
+    accessor?: keyof T | ((row: T) => React$1.ReactNode);
+    render?: (row: T) => React$1.ReactNode;
     width?: string | number;
     align?: "left" | "center" | "right";
     group?: string;
-    groupStyle?: {
-        bg?: string;
-        border?: string;
-    };
 }
-/** Props del componente DataTable */
-interface DataTableProps<T> {
+interface DataTableProps<T> extends React$1.HTMLAttributes<HTMLDivElement> {
     data: T[];
     columns: Column<T>[];
     maxHeight?: string;
     rowKey: keyof T;
-    emptyState?: React__default.ReactNode;
+    emptyState?: React$1.ReactNode;
     isLoading?: boolean;
-    className?: string;
     headerVariant?: "default" | "accent";
     size?: "sm" | "md" | "lg";
 }
-declare function DataTable<T>({ data, columns, maxHeight, rowKey, emptyState, isLoading, className, headerVariant, size, }: DataTableProps<T>): react_jsx_runtime.JSX.Element;
+declare const DataTable: <T>(props: DataTableProps<T> & {
+    ref?: React$1.ForwardedRef<HTMLDivElement>;
+}) => React$1.ReactElement;
 
-interface BreadcrumbsProps {
-    className?: string;
-}
-declare function Breadcrumbs({ className }: BreadcrumbsProps): react_jsx_runtime.JSX.Element;
+declare function Skeleton({ className, ...props }: React.ComponentProps<"div">): react_jsx_runtime.JSX.Element;
 
-interface SidebarLink {
-    id: string;
-    label: string;
-    icon: LucideIcon;
-    short: string;
-    active?: boolean;
-    onClick?: () => void;
-}
-interface SidebarSubLink {
-    label: string;
-    href: string;
-    isDot?: boolean;
-}
-interface SidebarProps {
-    links: SidebarLink[];
-    subLinks?: SidebarSubLink[];
-    subLinksTitle?: string;
-    userName?: string;
-    userRole?: string;
-    userInitials?: string;
-    className?: string;
-}
-declare function Sidebar({ links, subLinks, subLinksTitle, userName, userRole, userInitials, className, }: SidebarProps): react_jsx_runtime.JSX.Element;
+declare function Avatar({ className, size, ...props }: React$1.ComponentProps<typeof Avatar$1.Root> & {
+    size?: "default" | "sm" | "lg";
+}): react_jsx_runtime.JSX.Element;
+declare function AvatarImage({ className, ...props }: React$1.ComponentProps<typeof Avatar$1.Image>): react_jsx_runtime.JSX.Element;
+declare function AvatarFallback({ className, ...props }: React$1.ComponentProps<typeof Avatar$1.Fallback>): react_jsx_runtime.JSX.Element;
 
-export { Breadcrumbs, type BreadcrumbsProps, Button, type ButtonProps, Calendar, CalendarGrid, CalendarHeader, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardProps, type CardVariant, type Column, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, type InputProps, LabelBadge, type LabelColor, type LabelVariant, MonthGrid, MultiSelect, type MultiSelectOption, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, Sidebar, type SidebarLink, type SidebarSubLink, StatusBadge, type StatusVariant, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, type TextareaProps, ThemeProvider, ThemeToggle, Toaster, Tooltip, YearGrid, buttonVariants, formatDate, getDiasDelMes, inputVariants, isDisabledDay, isDisabledMonth, isDisabledYear, isSameDay, isWeekendDate, useDialogContext };
+declare function Breadcrumb({ ...props }: React$1.ComponentProps<"nav">): react_jsx_runtime.JSX.Element;
+declare function BreadcrumbList({ className, ...props }: React$1.ComponentProps<"ol">): react_jsx_runtime.JSX.Element;
+declare function BreadcrumbItem({ className, ...props }: React$1.ComponentProps<"li">): react_jsx_runtime.JSX.Element;
+declare function BreadcrumbLink({ asChild, className, ...props }: React$1.ComponentProps<"a"> & {
+    asChild?: boolean;
+}): react_jsx_runtime.JSX.Element;
+declare function BreadcrumbPage({ className, ...props }: React$1.ComponentProps<"span">): react_jsx_runtime.JSX.Element;
+declare function BreadcrumbSeparator({ children, className, ...props }: React$1.ComponentProps<"li">): react_jsx_runtime.JSX.Element;
+
+declare const Checkbox: React$1.ForwardRefExoticComponent<Omit<CheckboxPrimitive.CheckboxProps & React$1.RefAttributes<HTMLButtonElement>, "ref"> & React$1.RefAttributes<HTMLButtonElement>>;
+
+declare function Collapsible({ ...props }: React$1.ComponentProps<typeof Collapsible$1.Root>): react_jsx_runtime.JSX.Element;
+declare function CollapsibleTrigger({ ...props }: React$1.ComponentProps<typeof Collapsible$1.CollapsibleTrigger>): react_jsx_runtime.JSX.Element;
+declare function CollapsibleContent({ ...props }: React$1.ComponentProps<typeof Collapsible$1.CollapsibleContent>): react_jsx_runtime.JSX.Element;
+
+declare function Popover({ ...props }: React$1.ComponentProps<typeof Popover$1.Root>): react_jsx_runtime.JSX.Element;
+declare function PopoverTrigger({ ...props }: React$1.ComponentProps<typeof Popover$1.Trigger>): react_jsx_runtime.JSX.Element;
+declare function PopoverContent({ className, align, sideOffset, ...props }: React$1.ComponentProps<typeof Popover$1.Content>): react_jsx_runtime.JSX.Element;
+
+declare function Separator({ className, orientation, decorative, ...props }: React$1.ComponentProps<typeof Separator$1.Root>): react_jsx_runtime.JSX.Element;
+
+declare const Toaster: ({ ...props }: ToasterProps) => react_jsx_runtime.JSX.Element;
+
+declare function Switch({ className, size, ...props }: React$1.ComponentProps<typeof Switch$1.Root> & {
+    size?: "sm" | "default";
+}): react_jsx_runtime.JSX.Element;
+
+export { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, Avatar, AvatarFallback, AvatarImage, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Calendar, CalendarGrid, CalendarHeader, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardProps, type CardVariant, Checkbox, Collapsible, CollapsibleContent, CollapsibleTrigger, type Column, ConfirmDeleteDialog, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, type InputProps, Label, LabelBadge, type LabelColor, type LabelVariant, MonthGrid, Popover, PopoverContent, PopoverTrigger, SearchableSelect, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, Separator, Skeleton, Switch, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, type TextareaProps, ThemeProvider, ThemeToggle, Toaster, Tooltip, type TooltipProps, YearGrid, buttonVariants, formatDate, getDiasDelMes, inputVariants, isDisabledDay, isDisabledMonth, isDisabledYear, isSameDay, isWeekendDate, textareaVariants, useDialogContext };

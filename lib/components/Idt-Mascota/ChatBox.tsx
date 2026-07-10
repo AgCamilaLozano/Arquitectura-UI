@@ -83,7 +83,7 @@ function ChatFooter({
                         {models.map((modelo) => {
                             const Icon = modelo.icon
                             return (
-                                <SelectItem key={modelo.id} value={modelo.id} label={modelo.name}>
+                                <SelectItem key={modelo.id} value={modelo.id}>
                                     <div className="flex items-center gap-2">
                                         <Icon className="w-4 h-4" />
                                         {modelo.name}

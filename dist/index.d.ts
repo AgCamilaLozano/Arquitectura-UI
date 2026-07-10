@@ -1,12 +1,14 @@
-export { Breadcrumbs, BreadcrumbsProps, Button, ButtonProps, Calendar, CalendarGrid, CalendarHeader, CalendarProps, Card, CardBody, CardBodyProps, CardFooter, CardFooterProps, CardHeader, CardHeaderProps, CardImage, CardImageProps, CardProps, CardVariant, Column, DataTable, DataTableProps, Dialog, DialogBody, DialogBodyProps, DialogFooter, DialogFooterProps, DialogHeader, DialogHeaderProps, DialogProps, DialogSize, DialogVariant, DropdownGroup, DropdownItem, DropdownMenu, DropdownMenuProps, GraficaBar, GraficaDonut, GraficaLine, Input, InputProps, LabelBadge, LabelColor, LabelVariant, MonthGrid, MultiSelect, MultiSelectOption, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, Sidebar, SidebarLink, SidebarSubLink, StatusBadge, StatusVariant, TabItem, Tabs, TabsProps, TabsVariant, Textarea, TextareaProps, ThemeProvider, ThemeToggle, Toaster, Tooltip, YearGrid, buttonVariants, formatDate, getDiasDelMes, inputVariants, isDisabledDay, isDisabledMonth, isDisabledYear, isSameDay, isWeekendDate, useDialogContext } from './components.js';
+export { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, Avatar, AvatarFallback, AvatarImage, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonProps, Calendar, CalendarGrid, CalendarHeader, CalendarProps, Card, CardBody, CardBodyProps, CardFooter, CardFooterProps, CardHeader, CardHeaderProps, CardImage, CardImageProps, CardProps, CardVariant, Checkbox, Collapsible, CollapsibleContent, CollapsibleTrigger, Column, ConfirmDeleteDialog, DataTable, DataTableProps, Dialog, DialogBody, DialogBodyProps, DialogFooter, DialogFooterProps, DialogHeader, DialogHeaderProps, DialogProps, DialogSize, DialogVariant, DropdownGroup, DropdownItem, DropdownMenu, DropdownMenuProps, GraficaBar, GraficaDonut, GraficaLine, Input, InputProps, Label, LabelBadge, LabelColor, LabelVariant, MonthGrid, Popover, PopoverContent, PopoverTrigger, SearchableSelect, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, Separator, Skeleton, Switch, TabItem, Tabs, TabsProps, TabsVariant, Textarea, TextareaProps, ThemeProvider, ThemeToggle, Toaster, Tooltip, TooltipProps, YearGrid, buttonVariants, formatDate, getDiasDelMes, inputVariants, isDisabledDay, isDisabledMonth, isDisabledYear, isSameDay, isWeekendDate, textareaVariants, useDialogContext } from './components.js';
 export { toast } from './toast.js';
 export { cn } from './utils.js';
 import 'react/jsx-runtime';
 import 'react';
-import 'radix-ui';
+import '@radix-ui/react-select';
 import 'class-variance-authority/types';
 import 'class-variance-authority';
 import 'next-themes';
+import '@radix-ui/react-label';
+import 'radix-ui';
+import '@radix-ui/react-checkbox';
 import 'sonner';
-import 'lucide-react';
 import 'clsx';

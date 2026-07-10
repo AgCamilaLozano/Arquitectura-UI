@@ -1,516 +1,168 @@
-'use client'
+"use client";
 
-import { useMemo, useState } from "react";
-import { toast } from "sonner";
-import { Button, Input, Textarea } from "@/lib/components/ui/Base/Entradas";
+import React, { useState, useEffect, useCallback } from "react";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/lib/components/ui/Base/Selects/select";
-import { MultiSelect } from "@/lib/components/ui/Base/Selects/MultiSelect";
-import { DropdownMenu, type DropdownGroup } from "@/lib/components/ui/Compuesto/dropdown-menu";
-import { Tooltip } from "@/lib/components/ui/Compuesto/Tooltip";
-import { Breadcrumbs } from "@/lib/components/ui/Navegacion/Breadcrumbs";
-import { DataTable } from "@/lib/components/ui/DataDisplay/Table";
-import { Tabs } from "@/lib/components/ui/DataDisplay/Tabs";
-import GraficaBar from "@/lib/components/ui/DataDisplay/Graficas/GraficaBar";
-import GraficaDonut from "@/lib/components/ui/DataDisplay/Graficas/GraficaDonut";
-import GraficaLine from "@/lib/components/ui/DataDisplay/Graficas/GraficaLine";
-import { LabelBadge, StatusBadge } from "@/lib/components/ui/Compuesto/Badges";
-import Dialog, {
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-} from "@/lib/components/ui/Compuesto/Contenedores/Dialog";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-} from "@/lib/components/ui/Compuesto/Contenedores/Card";
-import { ChatWidget } from "@/lib/components/Idt-Mascota/ChatBox";
-import { Calendar } from "@/lib/components/ui/Compuesto/Calendario";
-import { Info } from "lucide-react";
-import { Mail, AlertCircle, Search } from "lucide-react"; 
-import { 
-  User, 
-  Settings, 
-  CreditCard, 
-  LogOut, 
-  Trash2, 
-  ChevronRight, 
-  HelpCircle 
+  Layers,
+  MousePointerClick,
+  Type,
+  List,
+  Tag,
+  CreditCard,
+  MessageSquare,
+  ChevronDown,
+  Columns,
+  Table,
+  BarChart3,
+  CalendarDays,
+  Navigation,
+  Bell,
+  UserCircle,
+  ChevronsDownUp,
+  PanelRightOpen,
+  PawPrint,
 } from "lucide-react";
 
-const sampleTableData: Array<{ id: string; name: string; role: string; status: string }> = [
-  { id: "1", name: "Alicia", role: "Diseñadora", status: "Activo" },
-  { id: "2", name: "Bruno", role: "Desarrollador", status: "Revisión" },
-  { id: "3", name: "Carolina", role: "PM", status: "Completado" },
-];
+import { ButtonsSection } from "./components-showcase/sections/buttons";
+import { InputsSection } from "./components-showcase/sections/inputs";
+import { SelectorsSection } from "./components-showcase/sections/selectors";
+import { BadgesSection } from "./components-showcase/sections/badges";
+import { CardsSection } from "./components-showcase/sections/cards";
+import { DialogsSection } from "./components-showcase/sections/dialogs";
+import { DropdownMenuSection } from "./components-showcase/sections/dropdown-menu";
+import { TooltipSection } from "./components-showcase/sections/tooltip";
+import { TabsSection } from "./components-showcase/sections/tabs";
+import { DataTableSection } from "./components-showcase/sections/data-table";
+import { ChartsSection } from "./components-showcase/sections/charts";
+import { CalendarSection } from "./components-showcase/sections/calendar";
+import { NavigationSection } from "./components-showcase/sections/navigation";
+import { FeedbackSection } from "./components-showcase/sections/feedback";
+import { AvatarSection } from "./components-showcase/sections/avatar";
+import { CollapsiblePopoverSection } from "./components-showcase/sections/collapsible-popover";
+import { SheetSection } from "./components-showcase/sections/sheet";
+import { MascotSection } from "./components-showcase/sections/mascot";
 
-const tableColumns: Array<{
-  key: string;
-  header: string;
-  accessor: keyof (typeof sampleTableData)[number];
-}> = [
-  { key: "name", header: "Nombre", accessor: "name" },
-  { key: "role", header: "Rol", accessor: "role" },
-  { key: "status", header: "Estado", accessor: "status" },
-];
+interface SidebarItem {
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+}
 
-const barData = [
-  { label: "Ene", value: 420 },
-  { label: "Feb", value: 310 },
-  { label: "Mar", value: 520 },
-  { label: "Abr", value: 410 },
-  { label: "May", value: 590 },
-];
-
-const donutData = [
-  { label: "Ventas", value: 35 },
-  { label: "Marketing", value: 25 },
-  { label: "Soporte", value: 20 },
-  { label: "Infra", value: 20 },
-];
-
-const lineData = [
-  { label: "Lun", value: 30 },
-  { label: "Mar", value: 70 },
-  { label: "Mié", value: 45 },
-  { label: "Jue", value: 90 },
-  { label: "Vie", value: 60 },
-];
-
-const tabItems = [
-  {
-    id: "principales",
-    label: "Principales",
-    content: (
-      <div className="space-y-3 text-sm text-text-secondary">
-        <p>Esta pestaña muestra el contenido principal de la página de demo.</p>
-        <p>Usa los botones, inputs y toggles para validar la interfaz.</p>
-      </div>
-    ),
-  },
-  {
-    id: "informacion",
-    label: "Información",
-    content: (
-      <div className="space-y-3 text-sm text-text-secondary">
-        <p>Prueba aquí la interacción con selectores y modales.</p>
-        <p>Los estados activos se ven con badges y cards.</p>
-      </div>
-    ),
-  },
-  {
-    id: "extras",
-    label: "Extras",
-    content: (
-      <div className="space-y-3 text-sm text-text-secondary">
-        <p>El calendario y el chat permiten validar componentes más complejos.</p>
-      </div>
-    ),
-  },
+const sidebarSections: SidebarItem[] = [
+  { id: "buttons", label: "Botones", icon: <MousePointerClick className="size-4" /> },
+  { id: "inputs", label: "Entradas", icon: <Type className="size-4" /> },
+  { id: "selectors", label: "Selectores", icon: <List className="size-4" /> },
+  { id: "badges", label: "Badges", icon: <Tag className="size-4" /> },
+  { id: "cards", label: "Cards", icon: <CreditCard className="size-4" /> },
+  { id: "dialogs", label: "Dialogs", icon: <MessageSquare className="size-4" /> },
+  { id: "dropdown-menu", label: "Dropdown Menu", icon: <ChevronDown className="size-4" /> },
+  { id: "tooltip", label: "Tooltip", icon: <Columns className="size-4" /> },
+  { id: "tabs", label: "Tabs", icon: <Columns className="size-4" /> },
+  { id: "data-table", label: "Tabla de Datos", icon: <Table className="size-4" /> },
+  { id: "charts", label: "Gráficas", icon: <BarChart3 className="size-4" /> },
+  { id: "calendar", label: "Calendario", icon: <CalendarDays className="size-4" /> },
+  { id: "navigation", label: "Navegación", icon: <Navigation className="size-4" /> },
+  { id: "feedback", label: "Feedback & Misc", icon: <Bell className="size-4" /> },
+  { id: "avatar", label: "Avatar", icon: <UserCircle className="size-4" /> },
+  { id: "collapsible-popover", label: "Collapsible & Popover", icon: <ChevronsDownUp className="size-4" /> },
+  { id: "sheet", label: "Sheet", icon: <PanelRightOpen className="size-4" /> },
+  { id: "mascot", label: "Mascota / Chat", icon: <PawPrint className="size-4" /> },
 ];
 
 export default function HomePage() {
-  const [inputValue, setInputValue] = useState("Texto de ejemplo");
-  const [textareaValue, setTextareaValue] = useState("Una nota rápida...");
-  const [selectValue, setSelectValue] = useState("opcion-2");
-  const [multiSelected, setMultiSelected] = useState<string[]>(["frontend"]);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogTestOpen, setDialogTestOpen] = useState(false);
-  const [selectDialogValue, setSelectDialogValue] = useState("rol-1");
-  const [multiSelectDialogValue, setMultiSelectDialogValue] = useState<string[]>([]);
-  const [alertOpen, setAlertOpen] = useState(false);
-  const [calendarValue, setCalendarValue] = useState<Date | null>(new Date());
+  const [activeSection, setActiveSection] = useState(sidebarSections[0].id);
 
-  const selectedMultiLabel = useMemo(
-    () => (multiSelected.length ? multiSelected.join(", ") : "Sin selección"),
-    [multiSelected]
-  );
-  
-  const menuConfig: DropdownGroup[] = [
-    {
-      groupLabel: "Mi Cuenta",
-      items: [
-        {
-          label: "Perfil",
-          icon: <User className="size-4" />,
-          trailingIcon: <span className="text-xs opacity-50">⌘P</span>,
-          onClick: () => console.log("Ir al perfil"),
-        },
-        {
-          label: "Facturación",
-          icon: <CreditCard className="size-4" />,
-          onClick: () => console.log("Ver facturas"),
-          separator: true, // Deja una línea sutil debajo de este ítem
-        },
-      ],
-    },
-    {
-      groupLabel: "Configuración",
-      items: [
-        {
-          label: "Ajustes del Sistema",
-          icon: <Settings className="size-4" />,
-          onClick: () => console.log("Abrir ajustes"),
-        },
-        {
-          label: "Soporte Técnico",
-          icon: <HelpCircle className="size-4" />,
-          disabled: true, // Ítem deshabilitado automáticamente estilizado
-        },
-      ],
-    },
-    {
-      // Grupo sin etiqueta para acciones peligrosas al final
-      items: [
-        {
-          label: "Eliminar Espacio",
-          icon: <Trash2 className="size-4" />,
-          variant: "danger", // Aplica automáticamente tus tokens de error corporativos
-          onClick: () => alert("¿Seguro que deseas eliminar?"),
-        },
-        {
-          label: "Cerrar Sesión",
-          icon: <LogOut className="size-4" />,
-          onClick: () => console.log("Logout"),
-        },
-      ],
-    },
-  ];
+  const handleScroll = useCallback(() => {
+    const mainEl = document.querySelector("main");
+    if (!mainEl) return;
+
+    let current = sidebarSections[0].id;
+    for (const section of sidebarSections) {
+      const el = document.getElementById(section.id);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        const mainRect = mainEl.getBoundingClientRect();
+        if (rect.top - mainRect.top <= 120) {
+          current = section.id;
+        }
+      }
+    }
+    setActiveSection(current);
+  }, []);
+
+  useEffect(() => {
+    const mainEl = document.querySelector("main");
+    if (!mainEl) return;
+    mainEl.addEventListener("scroll", handleScroll, { passive: true });
+    return () => mainEl.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
-    <main className="">
-      <div className="mx-auto space-y-6">
-        <section className="space-y-4">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <h1 className="font-semibold text-text-primary">
-                Página de prueba de la librería UI
-              </h1>
-              <p className="mt-2 max-w-2xl text-sm text-text-secondary">
-                Verifica botones, formularios, cards, gráficos, tablas, modales, calendario y chat.
-              </p>
+    <div className="flex gap-6">
+      <aside className="hidden lg:block w-56 shrink-0">
+        <div className="sticky top-0 space-y-1">
+          <div className="pb-3 mb-3 border-b border-border">
+            <div className="flex items-center gap-2 px-3">
+              <Layers className="size-4 text-accent" />
+              <h1 className="text-sm font-semibold text-text-primary">Componentes</h1>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Button variant="default" onClick={() => toast.success("Toast de éxito mostrado")}>Toast exitosa</Button>
-              <Button variant="outline" onClick={() => toast.error("Error simulado")}>Toast error</Button>
-              <Tooltip content="Abrir diálogo de ejemplo" side="bottom">
-                <Button variant="secondary" onClick={() => setDialogOpen(true)}>
-                  Abrir diálogo
-                </Button>
-              </Tooltip>
-            </div>
+            <p className="px-3 mt-1 text-xs text-text-muted">
+              {sidebarSections.length} componentes
+            </p>
           </div>
-        </section>
+          <nav className="space-y-0.5 max-h-[calc(100vh-10rem)] overflow-y-auto scrollbar-soft">
+            {sidebarSections.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollTo(item.id)}
+                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors text-left ${
+                  activeSection === item.id
+                    ? "bg-accent/10 text-accent font-medium"
+                    : "text-text-secondary hover:bg-surface hover:text-text-primary"
+                }`}
+              >
+                {item.icon}
+                <span className="truncate">{item.label}</span>
+              </button>
+            ))}
+          </nav>
+        </div>
+      </aside>
 
-        <section className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
-          <div className="space-y-6">
-            <Card className="space-y-6">
-              <CardHeader title="Controles básicos" subtitle="Botones, inputs y selectores" />
-              <CardBody className="space-y-5">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-3">
-                    <p className="font-semibold text-text-primary">Botones</p>
-                    <div className="flex flex-wrap gap-3">
-                      <Button variant="default">Default</Button>
-                      <Button variant="outline">Outline</Button>
-                      <Button variant="secondary">Secondary</Button>
-                      <Button variant="ghost">Ghost</Button>
-                      <Button variant="link">Link</Button>
-                      <Button variant="destructive">Destructive</Button>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <p className="font-semibold text-text-primary">Inputs</p>
-                    <div className="grid gap-3">
-                      <Input
-                        value={inputValue}
-                        onChange={(event) => setInputValue(event.target.value)}
-                        placeholder="Ingresa texto"
-                      />
-
-                      <Input 
-        type="email" 
-        placeholder="Tu correo" 
-        iconLeft={<Mail />} 
-      />
-
-      <Input 
-        type="text" 
-        placeholder="Nombre de usuario" 
-        variant="destructive"
-        iconRight={<AlertCircle />} 
-        defaultValue="Agustin!!"
-      />
-
-      <Input 
-        type="search" 
-        placeholder="Buscar en el dashboard..." 
-        iconLeft={<Search />} 
-      />
-
-                      <Textarea
-                        value={textareaValue}
-                        onChange={(event) => setTextareaValue(event.target.value)}
-                        rows={4}
-                        placeholder="Descripción breve"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-3">
-                    <p className="font-semibold text-text-primary">Select</p>
-                    <Select value={selectValue} onValueChange={setSelectValue}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Selecciona una opción" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="opcion-1">Opción 1</SelectItem>
-                        <SelectItem value="opcion-2">Opción 2</SelectItem>
-                        <SelectItem value="opcion-3">Opción 3</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <p className="text-xs text-text-muted">Valor seleccionado: {selectValue}</p>
-                  </div>
-
-                  <div className="space-y-3">
-                    <p className="font-semibold text-text-primary">MultiSelect</p>
-                    <MultiSelect
-                      options={["frontend", "backend", "diseño", "qa"]}
-                      selected={multiSelected}
-                      onChange={setMultiSelected}
-                      placeholder="Áreas"
-                    />
-                    <p className="text-xs text-text-muted">Seleccionado: {selectedMultiLabel}</p>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <p className="font-semibold text-text-primary">Dropdown Menu</p>
-                  <DropdownMenu
-                    trigger={<span className="font-medium">Abrir menú</span>}
-                    width="w-64"
-                    groups={menuConfig}
-                  />
-                </div>
-              </CardBody>
-            </Card>
-
-            <Card className="space-y-6">
-              <CardHeader title="Datos y visualizaciones" subtitle="Tablas, badges y gráficas" />
-              <CardBody className="space-y-6">
-                <div className="space-y-4">
-                  <p className="text-sm font-semibold text-text-primary">Badges</p>
-                  <div className="flex flex-wrap gap-3">
-                    <LabelBadge label="Nuevo" color="accent" variant="filled" />
-                    <LabelBadge label="Revisión" color="warning" variant="soft" />
-                    <LabelBadge label="Activo" color="success" variant="outline" />
-                    <StatusBadge status="success" label="Operativo" animated />
-                    <StatusBadge status="warning" label="Atención" />
-                    <StatusBadge status="error" label="Error" />
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <p className="text-sm font-semibold text-text-primary">Tabs</p>
-                  <Tabs tabs={tabItems} defaultTab="principales" />
-                </div>
-
-                <div className="space-y-4">
-                  <p className="text-sm font-semibold text-text-primary">Tabla de ejemplo</p>
-                  <DataTable
-                    data={sampleTableData}
-                    columns={tableColumns}
-                    rowKey="id"
-                    maxHeight="280px"
-                    headerVariant="accent"
-                    size="md"
-                  />
-                </div>
-              </CardBody>
-            </Card>
-          </div>
-
-          <div className="space-y-6">
-            <Card className="space-y-5">
-              <CardHeader title="Gráficas" subtitle="Barr, donut y línea" />
-              <CardBody className="grid gap-5">
-                <GraficaBar title="Ventas mensuales" description="Valores en miles" data={barData} />
-                <GraficaDonut title="Distribución" description="Porcentaje por categoría" data={donutData} />
-                <GraficaLine
-                  title="Tendencia semanal"
-                  description="Interacción por día"
-                  data={lineData}
-                  showArea
-                  legendLabel="Usuarios"
-                />
-              </CardBody>
-            </Card>
-
-            <Card className="space-y-5">
-              <CardHeader title="Componentes avanzados" subtitle="Modales, calendario y chat" />
-              <CardBody className="space-y-5">
-                <div className="grid gap-4">
-                  <div className="flex flex-wrap gap-3">
-                    <Button variant="default" onClick={() => setDialogOpen(true)}>
-                      Abrir Dialog
-                    </Button>
-                    <Button variant="secondary" onClick={() => setDialogTestOpen(true)}>
-                      Test: Select + Menu
-                    </Button>
-                    <Button variant="ghost" onClick={() => toast("¡Ejemplo ghost!")}>Ghost toast</Button>
-                  </div>
-
-                  <div className="space-y-3">
-                    <p className="font-semibold text-text-primary">Calendario</p>
-                    <Calendar
-                      variant="full"
-                      value={calendarValue}
-                      onChange={setCalendarValue}
-                      selectionMode="date"
-                      minDate={new Date(2023, 0, 1)}
-                      maxDate={new Date(2026, 11, 31)}
-                    />
-                    <p className="text-xs text-text-muted">
-                      Fecha seleccionada:{' '}
-                      {calendarValue ? calendarValue.toLocaleDateString('es-CO') : 'Ninguna'}
-                    </p>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-          </div>
-        </section>
-      </div>
-
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} size="lg">
-        <DialogHeader
-          title="Diálogo de prueba"
-          description="Este diálogo utiliza Header, Body y Footer del componente Dialog."
-          icon={<Info className="w-5 h-5" />}
-          withDivider
-        />
-        <DialogBody>
-          <p className="text-sm text-text-secondary">
-            Aquí puedes validar el render del modal y cerrar con Escape o clic fuera.
+      <div className="flex-1 min-w-0 space-y-10">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-bold text-text-primary">Librería UI</h1>
+          <p className="text-sm text-text-secondary max-w-2xl">
+            Catálogo completo de componentes de <code className="text-accent font-mono text-xs bg-accent/10 px-1.5 py-0.5 rounded">@agustin/ui</code>.
+            Cada componente incluye demo interactiva, props disponibles y código de uso.
           </p>
-        </DialogBody>
-        <DialogFooter>
-          <Button variant="secondary" onClick={() => setDialogOpen(false)}>
-            Cancelar
-          </Button>
-          <Button variant="default" onClick={() => {
-            setDialogOpen(false);
-            toast.success("Dialog confirmado");
-          }}>
-            Confirmar
-          </Button>
-        </DialogFooter>
-      </Dialog>
+        </div>
 
-      {/* Dialog de Testing: Select, MultiSelect, DropdownMenu */}
-      <Dialog open={dialogTestOpen} onClose={() => setDialogTestOpen(false)} size="md">
-        <DialogHeader
-          title="Test: Componentes en Dialog"
-          description="Verifica que Select, MultiSelect y DropdownMenu se desplieguen correctamente"
-          withDivider
-        />
-        <DialogBody>
-          <div className="space-y-5">
-            {/* Select Test */}
-            <div className="space-y-2">
-              <p className="font-semibold text-text-primary text-sm">Select</p>
-              <Select value={selectDialogValue} onValueChange={setSelectDialogValue}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Selecciona un rol" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="rol-1">Administrador</SelectItem>
-                  <SelectItem value="rol-2">Moderador</SelectItem>
-                  <SelectItem value="rol-3">Usuario</SelectItem>
-                  <SelectItem value="rol-4">Invitado</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-text-muted">Seleccionado: {selectDialogValue}</p>
-            </div>
-
-            {/* MultiSelect Test */}
-            <div className="space-y-2">
-              <p className="font-semibold text-text-primary text-sm">MultiSelect</p>
-              <MultiSelect
-                options={["Leer", "Escribir", "Eliminar", "Compartir", "Editar"]}
-                selected={multiSelectDialogValue}
-                onChange={setMultiSelectDialogValue}
-                placeholder="Permisos"
-              />
-              <p className="text-xs text-text-muted">
-                {multiSelectDialogValue.length > 0
-                  ? `Permisos: ${multiSelectDialogValue.join(", ")}`
-                  : "Sin permisos seleccionados"}
-              </p>
-            </div>
-
-            {/* DropdownMenu Test */}
-            <div className="space-y-2">
-              <p className="font-semibold text-text-primary text-sm">DropdownMenu</p>
-              <DropdownMenu
-                trigger={<span className="font-medium cursor-pointer">⚙️ Más opciones</span>}
-                width="w-56"
-                groups={[
-                  {
-                    groupLabel: "Acciones",
-                    items: [
-                      {
-                        label: "Exportar",
-                        onClick: () => toast.success("Exportando..."),
-                      },
-                      {
-                        label: "Compartir",
-                        onClick: () => toast.success("Compartido!"),
-                        separator: true,
-                      },
-                    ],
-                  },
-                  {
-                    items: [
-                      {
-                        label: "Eliminar",
-                        variant: "danger",
-                        onClick: () => toast.error("Acción cancelada"),
-                      },
-                    ],
-                  },
-                ]}
-              />
-            </div>
-
-            {/* Info box */}
-            <div className="bg-info/20 border border-text-info/20 rounded-md p-3 text-xs text-text-info">
-              ✓ Verifica que los dropdowns se vean completamente visibles y con hover notorio.
-            </div>
-          </div>
-        </DialogBody>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setDialogTestOpen(false)}>
-            Cerrar
-          </Button>
-          <Button variant="default" onClick={() => {
-            setDialogTestOpen(false);
-            toast.success("Test completado!");
-          }}>
-            Listo
-          </Button>
-        </DialogFooter>
-      </Dialog>
-    </main>
+        <ButtonsSection />
+        <InputsSection />
+        <SelectorsSection />
+        <BadgesSection />
+        <CardsSection />
+        <DialogsSection />
+        <DropdownMenuSection />
+        <TooltipSection />
+        <TabsSection />
+        <DataTableSection />
+        <ChartsSection />
+        <CalendarSection />
+        <NavigationSection />
+        <FeedbackSection />
+        <AvatarSection />
+        <CollapsiblePopoverSection />
+        <SheetSection />
+        <MascotSection />
+      </div>
+    </div>
   );
 }
