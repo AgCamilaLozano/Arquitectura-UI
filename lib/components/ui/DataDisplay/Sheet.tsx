@@ -5,26 +5,20 @@ import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
-  return <SheetPrimitive.Root data-slot="sheet" {...props} />
+function Sheet(props: React.ComponentProps<typeof SheetPrimitive.Root>) {
+  return <SheetPrimitive.Root data-slot="sheet" {...props} />;
 }
 
-function SheetTrigger({
-  ...props
-}: React.ComponentProps<typeof SheetPrimitive.Trigger>) {
-  return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />
+function SheetTrigger(props: React.ComponentProps<typeof SheetPrimitive.Trigger>) {
+  return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
 }
 
-function SheetClose({
-  ...props
-}: React.ComponentProps<typeof SheetPrimitive.Close>) {
-  return <SheetPrimitive.Close data-slot="sheet-close" {...props} />
+function SheetClose(props: React.ComponentProps<typeof SheetPrimitive.Close>) {
+  return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
 }
 
-function SheetPortal({
-  ...props
-}: React.ComponentProps<typeof SheetPrimitive.Portal>) {
-  return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />
+function SheetPortal(props: React.ComponentProps<typeof SheetPrimitive.Portal>) {
+  return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
 }
 
 function SheetOverlay({
@@ -61,7 +55,6 @@ function SheetContent({
         className={cn(
           "bg-background text-text-primary fixed z-50 flex flex-col gap-0 shadow-floating transition ease-in-out duration-300 font-sans outline-none",
           "data-[state=open]:animate-fade-in-soft",
-          
           side === "right" &&
             "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-full sm:w-3/4 border-l border-border sm:max-w-md",
           side === "left" &&
@@ -74,13 +67,11 @@ function SheetContent({
         )}
         {...props}
       >
-        {/* Contenedor con Scrollbar Suave unificada de Producción */}
         <div className="flex-1 flex flex-col min-h-0 overflow-y-auto scrollbar-soft relative">
           {children}
         </div>
-        
         {showCloseButton && (
-          <SheetPrimitive.Close 
+          <SheetPrimitive.Close
             className={cn(
               "absolute top-4 right-4 rounded-md opacity-60 transition-all cursor-pointer p-1.5 text-text-muted hover:text-text-primary hover:bg-muted outline-none",
               "focus-visible:outline-none focus-visible:border-accent focus-visible:ring-4 focus-visible:ring-border-strong/20 focus-visible:ring-offset-0"
@@ -96,21 +87,33 @@ function SheetContent({
 }
 SheetContent.displayName = "SheetContent";
 
-function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
+function SheetHeader({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="sheet-header"
-      className={cn("flex flex-col gap-1.5 p-5 border-b border-border relative", className)}
+      className={cn(
+        "flex flex-col gap-1.5 p-5 border-b border-border relative",
+        className
+      )}
       {...props}
     />
   );
 }
 
-function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
+function SheetFooter({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="sheet-footer"
-      className={cn("mt-auto flex flex-row justify-end gap-2 p-5 border-t border-border", className)}
+      className={cn(
+        "mt-auto flex flex-row justify-end gap-2 p-5 border-t border-border",
+        className
+      )}
       {...props}
     />
   );
@@ -123,7 +126,10 @@ function SheetTitle({
   return (
     <SheetPrimitive.Title
       data-slot="sheet-title"
-      className={cn("text-text-primary font-heading font-semibold text-lg tracking-tight", className)}
+      className={cn(
+        "text-text-primary font-heading font-semibold text-lg tracking-tight",
+        className
+      )}
       {...props}
     />
   );
@@ -136,7 +142,10 @@ function SheetDescription({
   return (
     <SheetPrimitive.Description
       data-slot="sheet-description"
-      className={cn("text-text-secondary text-sm font-normal font-sans leading-relaxed", className)}
+      className={cn(
+        "text-text-secondary text-sm font-normal font-sans leading-relaxed",
+        className
+      )}
       {...props}
     />
   );
