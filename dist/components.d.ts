@@ -6,7 +6,7 @@ import * as class_variance_authority_types from 'class-variance-authority/types'
 import { VariantProps } from 'class-variance-authority';
 import { ThemeProviderProps } from 'next-themes';
 import * as LabelPrimitive from '@radix-ui/react-label';
-import { AlertDialog as AlertDialog$1, Avatar as Avatar$1, Collapsible as Collapsible$1, Popover as Popover$1, Separator as Separator$1, Switch as Switch$1 } from 'radix-ui';
+import { AlertDialog as AlertDialog$1, RadioGroup as RadioGroup$1, Avatar as Avatar$1, Collapsible as Collapsible$1, Popover as Popover$1, Separator as Separator$1, Switch as Switch$1 } from 'radix-ui';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { ToasterProps } from 'sonner';
 
@@ -63,7 +63,7 @@ declare namespace SelectScrollDownButton {
 
 declare const buttonVariants: (props?: ({
     variant?: "link" | "default" | "outline" | "secondary" | "ghost" | "destructive" | null | undefined;
-    size?: "sm" | "default" | "lg" | "icon" | "icon-sm" | "icon-lg" | null | undefined;
+    size?: "icon" | "sm" | "default" | "lg" | "icon-sm" | "icon-lg" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface ButtonProps extends React$1.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
     asChild?: boolean;
@@ -416,6 +416,36 @@ declare const DataTable: <T>(props: DataTableProps<T> & {
     ref?: React$1.ForwardedRef<HTMLDivElement>;
 }) => React$1.ReactElement;
 
+interface EmptyStateProps {
+    icon?: React$1.ComponentType<{
+        className?: string;
+    }>;
+    title: string;
+    description?: string;
+    action?: React$1.ReactNode;
+    className?: string;
+}
+declare function EmptyState({ icon: Icon, title, description, action, className }: EmptyStateProps): react_jsx_runtime.JSX.Element;
+
+interface PaginationProps {
+    page: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
+    className?: string;
+}
+declare function Pagination({ page, totalPages, onPageChange, className }: PaginationProps): react_jsx_runtime.JSX.Element | null;
+
+declare function RadioGroup({ className, ...props }: React$1.ComponentProps<typeof RadioGroup$1.Root>): react_jsx_runtime.JSX.Element;
+declare function RadioGroupItem({ className, ...props }: React$1.ComponentProps<typeof RadioGroup$1.Item>): react_jsx_runtime.JSX.Element;
+
+declare const PasswordInput: React$1.ForwardRefExoticComponent<Omit<React$1.DetailedHTMLProps<React$1.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & React$1.RefAttributes<HTMLInputElement>>;
+
+interface PasswordStrengthProps {
+    password: string;
+}
+declare function isPasswordValid(password: string): boolean;
+declare function PasswordStrength({ password }: PasswordStrengthProps): react_jsx_runtime.JSX.Element;
+
 declare function Skeleton({ className, ...props }: React.ComponentProps<"div">): react_jsx_runtime.JSX.Element;
 
 declare function Avatar({ className, size, ...props }: React$1.ComponentProps<typeof Avatar$1.Root> & {
@@ -451,4 +481,4 @@ declare function Switch({ className, size, ...props }: React$1.ComponentProps<ty
     size?: "sm" | "default";
 }): react_jsx_runtime.JSX.Element;
 
-export { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, Avatar, AvatarFallback, AvatarImage, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Calendar, CalendarGrid, CalendarHeader, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardProps, type CardVariant, Checkbox, Collapsible, CollapsibleContent, CollapsibleTrigger, type Column, ConfirmDeleteDialog, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, type InputProps, Label, LabelBadge, type LabelColor, type LabelVariant, MonthGrid, Popover, PopoverContent, PopoverTrigger, SearchableSelect, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, Separator, Skeleton, Switch, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, type TextareaProps, ThemeProvider, ThemeToggle, Toaster, Tooltip, type TooltipProps, YearGrid, buttonVariants, formatDate, getDiasDelMes, inputVariants, isDisabledDay, isDisabledMonth, isDisabledYear, isSameDay, isWeekendDate, textareaVariants, useDialogContext };
+export { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, Avatar, AvatarFallback, AvatarImage, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Calendar, CalendarGrid, CalendarHeader, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardProps, type CardVariant, Checkbox, Collapsible, CollapsibleContent, CollapsibleTrigger, type Column, ConfirmDeleteDialog, DataTable, type DataTableProps, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, EmptyState, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Input, type InputProps, Label, LabelBadge, type LabelColor, type LabelVariant, MonthGrid, Pagination, PasswordInput, PasswordStrength, Popover, PopoverContent, PopoverTrigger, RadioGroup, RadioGroupItem, SearchableSelect, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, Separator, Skeleton, Switch, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, type TextareaProps, ThemeProvider, ThemeToggle, Toaster, Tooltip, type TooltipProps, YearGrid, buttonVariants, formatDate, getDiasDelMes, inputVariants, isDisabledDay, isDisabledMonth, isDisabledYear, isPasswordValid, isSameDay, isWeekendDate, textareaVariants, useDialogContext };

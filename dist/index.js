@@ -2484,9 +2484,202 @@ var DataTable = React14.forwardRef(
 );
 DataTable.displayName = "DataTable";
 
+// lib/components/ui/Groups/empty-state.tsx
+import { jsx as jsx23, jsxs as jsxs18 } from "react/jsx-runtime";
+function EmptyState({ icon: Icon2, title, description, action, className }) {
+  return /* @__PURE__ */ jsxs18("div", { className: cn("flex flex-col items-center justify-center py-16 text-center", className), children: [
+    Icon2 && /* @__PURE__ */ jsx23(Icon2, { className: "size-12 text-text-secondary mb-3" }),
+    /* @__PURE__ */ jsx23("h3", { className: "font-display text-lg font-medium text-text-primary", children: title }),
+    description && /* @__PURE__ */ jsx23("p", { className: "mt-1.5 text-sm text-text-secondary max-w-sm", children: description }),
+    action && /* @__PURE__ */ jsx23("div", { className: "mt-4", children: action })
+  ] });
+}
+
+// lib/components/ui/Groups/pagination.tsx
+import { jsx as jsx24, jsxs as jsxs19 } from "react/jsx-runtime";
+function getPages(current, total) {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const result = [1];
+  if (current > 3) result.push("\u2026");
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+  for (let i = start; i <= end; i++) result.push(i);
+  if (current < total - 2) result.push("\u2026");
+  result.push(total);
+  return result;
+}
+function Pagination({ page, totalPages, onPageChange, className }) {
+  if (totalPages <= 1) return null;
+  const pages = getPages(page, totalPages);
+  return /* @__PURE__ */ jsxs19("div", { className: cn("flex items-center justify-center gap-0.5 py-4", className), children: [
+    /* @__PURE__ */ jsx24(
+      "button",
+      {
+        disabled: page <= 1,
+        onClick: () => onPageChange(page - 1),
+        "aria-label": "P\xE1gina anterior",
+        className: cn(
+          "h-8 px-2.5 text-sm rounded-md transition-colors duration-150",
+          "text-text-secondary hover:text-text-primary hover:bg-muted",
+          "disabled:opacity-30 disabled:pointer-events-none"
+        ),
+        children: "\u2190"
+      }
+    ),
+    pages.map(
+      (p, i) => p === "\u2026" ? /* @__PURE__ */ jsx24(
+        "span",
+        {
+          className: "w-8 text-center text-sm text-text-muted select-none",
+          children: "\xB7\xB7\xB7"
+        },
+        `ellipsis-${i}`
+      ) : /* @__PURE__ */ jsx24(
+        "button",
+        {
+          onClick: () => onPageChange(p),
+          "aria-label": `P\xE1gina ${p}`,
+          "aria-current": p === page ? "page" : void 0,
+          className: cn(
+            "h-8 w-8 text-sm rounded-md transition-colors duration-150",
+            p === page ? "bg-accent text-white font-medium" : "text-text-secondary hover:text-text-primary hover:bg-muted"
+          ),
+          children: p
+        },
+        p
+      )
+    ),
+    /* @__PURE__ */ jsx24(
+      "button",
+      {
+        disabled: page >= totalPages,
+        onClick: () => onPageChange(page + 1),
+        "aria-label": "P\xE1gina siguiente",
+        className: cn(
+          "h-8 px-2.5 text-sm rounded-md transition-colors duration-150",
+          "text-text-secondary hover:text-text-primary hover:bg-muted",
+          "disabled:opacity-30 disabled:pointer-events-none"
+        ),
+        children: "\u2192"
+      }
+    )
+  ] });
+}
+
+// lib/components/ui/Groups/radio-group.tsx
+import { RadioGroup as RadioGroupPrimitive } from "radix-ui";
+import { jsx as jsx25 } from "react/jsx-runtime";
+function RadioGroup(_a) {
+  var _b = _a, {
+    className
+  } = _b, props = __objRest(_b, [
+    "className"
+  ]);
+  return /* @__PURE__ */ jsx25(
+    RadioGroupPrimitive.Root,
+    __spreadValues({
+      "data-slot": "radio-group",
+      className: cn("grid gap-2", className)
+    }, props)
+  );
+}
+function RadioGroupItem(_a) {
+  var _b = _a, {
+    className
+  } = _b, props = __objRest(_b, [
+    "className"
+  ]);
+  return /* @__PURE__ */ jsx25(
+    RadioGroupPrimitive.Item,
+    __spreadProps(__spreadValues({
+      "data-slot": "radio-group-item",
+      className: cn(
+        "border-accent text-accent focus-visible:ring-ring aspect-square size-4 rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )
+    }, props), {
+      children: /* @__PURE__ */ jsx25(
+        RadioGroupPrimitive.Indicator,
+        {
+          "data-slot": "radio-group-indicator",
+          className: "relative flex items-center justify-center",
+          children: /* @__PURE__ */ jsx25("span", { className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[8px] leading-none text-accent", children: "\u25CF" })
+        }
+      )
+    })
+  );
+}
+
+// lib/components/ui/Password/password-input.tsx
+import * as React15 from "react";
+import { jsx as jsx26, jsxs as jsxs20 } from "react/jsx-runtime";
+var PasswordInput = React15.forwardRef((_a, ref) => {
+  var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  const [showPassword, setShowPassword] = React15.useState(false);
+  return /* @__PURE__ */ jsxs20("div", { className: "relative", children: [
+    /* @__PURE__ */ jsx26(
+      "input",
+      __spreadValues({
+        type: showPassword ? "text" : "password",
+        className: cn(
+          "flex h-9 w-full rounded-md border border-border bg-transparent px-3 py-1 pr-10 text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          className
+        ),
+        ref
+      }, props)
+    ),
+    /* @__PURE__ */ jsxs20(
+      Button,
+      {
+        type: "button",
+        variant: "ghost",
+        size: "icon",
+        className: "absolute right-0 top-0 size-9 text-text-secondary hover:text-text-primary",
+        onClick: () => setShowPassword((prev) => !prev),
+        tabIndex: -1,
+        children: [
+          showPassword ? /* @__PURE__ */ jsx26("span", { className: "text-xs leading-none", children: "\u25CB" }) : /* @__PURE__ */ jsx26("span", { className: "text-xs leading-none", children: "\u25C9" }),
+          /* @__PURE__ */ jsx26("span", { className: "sr-only", children: showPassword ? "Ocultar contrase\xF1a" : "Mostrar contrase\xF1a" })
+        ]
+      }
+    )
+  ] });
+});
+PasswordInput.displayName = "PasswordInput";
+
+// lib/components/ui/Password/password-strength.tsx
+import { jsx as jsx27, jsxs as jsxs21 } from "react/jsx-runtime";
+var rules = [
+  { label: "M\xEDnimo 8 caracteres", test: (p) => p.length >= 8 },
+  { label: "Al menos una may\xFAscula", test: (p) => /[A-Z]/.test(p) },
+  { label: "Al menos un n\xFAmero", test: (p) => /\d/.test(p) }
+];
+function isPasswordValid(password) {
+  return rules.every((rule) => rule.test(password));
+}
+function PasswordStrength({ password }) {
+  return /* @__PURE__ */ jsx27("ul", { className: "space-y-1 text-sm", children: rules.map((rule) => {
+    const passes = rule.test(password);
+    return /* @__PURE__ */ jsxs21(
+      "li",
+      {
+        className: cn(
+          "flex items-center gap-2 transition-colors",
+          passes ? "text-text-success" : "text-text-secondary"
+        ),
+        children: [
+          passes ? /* @__PURE__ */ jsx27("span", { className: "text-xs leading-none font-bold w-3.5 text-center", children: "\u2713" }) : /* @__PURE__ */ jsx27("span", { className: "text-xs leading-none font-bold w-3.5 text-center", children: "\xD7" }),
+          rule.label
+        ]
+      },
+      rule.label
+    );
+  }) });
+}
+
 // lib/components/ui/avatar.tsx
 import { Avatar as AvatarPrimitive } from "radix-ui";
-import { jsx as jsx23 } from "react/jsx-runtime";
+import { jsx as jsx28 } from "react/jsx-runtime";
 function Avatar(_a) {
   var _b = _a, {
     className,
@@ -2495,7 +2688,7 @@ function Avatar(_a) {
     "className",
     "size"
   ]);
-  return /* @__PURE__ */ jsx23(
+  return /* @__PURE__ */ jsx28(
     AvatarPrimitive.Root,
     __spreadValues({
       "data-slot": "avatar",
@@ -2513,7 +2706,7 @@ function AvatarImage(_a) {
   } = _b, props = __objRest(_b, [
     "className"
   ]);
-  return /* @__PURE__ */ jsx23(
+  return /* @__PURE__ */ jsx28(
     AvatarPrimitive.Image,
     __spreadValues({
       "data-slot": "avatar-image",
@@ -2527,7 +2720,7 @@ function AvatarFallback(_a) {
   } = _b, props = __objRest(_b, [
     "className"
   ]);
-  return /* @__PURE__ */ jsx23(
+  return /* @__PURE__ */ jsx28(
     AvatarPrimitive.Fallback,
     __spreadValues({
       "data-slot": "avatar-fallback",
@@ -2541,14 +2734,14 @@ function AvatarFallback(_a) {
 
 // lib/components/ui/breadcrumb.tsx
 import { Slot as Slot3 } from "radix-ui";
-import { jsx as jsx24, jsxs as jsxs18 } from "react/jsx-runtime";
+import { jsx as jsx29, jsxs as jsxs22 } from "react/jsx-runtime";
 function Breadcrumb(_a) {
   var props = __objRest(_a, []);
-  return /* @__PURE__ */ jsx24("nav", __spreadValues({ "aria-label": "breadcrumb", "data-slot": "breadcrumb" }, props));
+  return /* @__PURE__ */ jsx29("nav", __spreadValues({ "aria-label": "breadcrumb", "data-slot": "breadcrumb" }, props));
 }
 function BreadcrumbList(_a) {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx24(
+  return /* @__PURE__ */ jsx29(
     "ol",
     __spreadValues({
       "data-slot": "breadcrumb-list",
@@ -2561,7 +2754,7 @@ function BreadcrumbList(_a) {
 }
 function BreadcrumbItem(_a) {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx24(
+  return /* @__PURE__ */ jsx29(
     "li",
     __spreadValues({
       "data-slot": "breadcrumb-item",
@@ -2578,7 +2771,7 @@ function BreadcrumbLink(_a) {
     "className"
   ]);
   const Comp = asChild ? Slot3.Root : "a";
-  return /* @__PURE__ */ jsx24(
+  return /* @__PURE__ */ jsx29(
     Comp,
     __spreadValues({
       "data-slot": "breadcrumb-link",
@@ -2588,7 +2781,7 @@ function BreadcrumbLink(_a) {
 }
 function BreadcrumbPage(_a) {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx24(
+  return /* @__PURE__ */ jsx29(
     "span",
     __spreadValues({
       "data-slot": "breadcrumb-page",
@@ -2607,7 +2800,7 @@ function BreadcrumbSeparator(_a) {
     "children",
     "className"
   ]);
-  return /* @__PURE__ */ jsx24(
+  return /* @__PURE__ */ jsx29(
     "li",
     __spreadProps(__spreadValues({
       "data-slot": "breadcrumb-separator",
@@ -2615,18 +2808,18 @@ function BreadcrumbSeparator(_a) {
       "aria-hidden": "true",
       className: cn("text-text-secondary/50 text-xs select-none", className)
     }, props), {
-      children: children != null ? children : /* @__PURE__ */ jsx24("span", { "aria-hidden": "true", children: "\u203A" })
+      children: children != null ? children : /* @__PURE__ */ jsx29("span", { "aria-hidden": "true", children: "\u203A" })
     })
   );
 }
 
 // lib/components/ui/checkbox.tsx
-import * as React15 from "react";
+import * as React16 from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { jsx as jsx25 } from "react/jsx-runtime";
-var Checkbox = React15.forwardRef((_a, ref) => {
+import { jsx as jsx30 } from "react/jsx-runtime";
+var Checkbox = React16.forwardRef((_a, ref) => {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
-  return /* @__PURE__ */ jsx25(
+  return /* @__PURE__ */ jsx30(
     CheckboxPrimitive.Root,
     __spreadProps(__spreadValues({
       ref,
@@ -2635,11 +2828,11 @@ var Checkbox = React15.forwardRef((_a, ref) => {
         className
       )
     }, props), {
-      children: /* @__PURE__ */ jsx25(
+      children: /* @__PURE__ */ jsx30(
         CheckboxPrimitive.Indicator,
         {
           className: cn("flex items-center justify-center text-current"),
-          children: /* @__PURE__ */ jsx25("span", { className: "text-[10px] leading-none font-bold", children: "\u2713" })
+          children: /* @__PURE__ */ jsx30("span", { className: "text-[10px] leading-none font-bold", children: "\u2713" })
         }
       )
     })
@@ -2649,14 +2842,14 @@ Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 
 // lib/components/ui/collapsible.tsx
 import { Collapsible as CollapsiblePrimitive } from "radix-ui";
-import { jsx as jsx26 } from "react/jsx-runtime";
+import { jsx as jsx31 } from "react/jsx-runtime";
 function Collapsible(_a) {
   var props = __objRest(_a, []);
-  return /* @__PURE__ */ jsx26(CollapsiblePrimitive.Root, __spreadValues({ "data-slot": "collapsible" }, props));
+  return /* @__PURE__ */ jsx31(CollapsiblePrimitive.Root, __spreadValues({ "data-slot": "collapsible" }, props));
 }
 function CollapsibleTrigger(_a) {
   var props = __objRest(_a, []);
-  return /* @__PURE__ */ jsx26(
+  return /* @__PURE__ */ jsx31(
     CollapsiblePrimitive.CollapsibleTrigger,
     __spreadValues({
       "data-slot": "collapsible-trigger"
@@ -2665,7 +2858,7 @@ function CollapsibleTrigger(_a) {
 }
 function CollapsibleContent(_a) {
   var props = __objRest(_a, []);
-  return /* @__PURE__ */ jsx26(
+  return /* @__PURE__ */ jsx31(
     CollapsiblePrimitive.CollapsibleContent,
     __spreadValues({
       "data-slot": "collapsible-content"
@@ -2675,14 +2868,14 @@ function CollapsibleContent(_a) {
 
 // lib/components/ui/popover.tsx
 import { Popover as PopoverPrimitive2 } from "radix-ui";
-import { jsx as jsx27 } from "react/jsx-runtime";
+import { jsx as jsx32 } from "react/jsx-runtime";
 function Popover(_a) {
   var props = __objRest(_a, []);
-  return /* @__PURE__ */ jsx27(PopoverPrimitive2.Root, __spreadValues({ "data-slot": "popover" }, props));
+  return /* @__PURE__ */ jsx32(PopoverPrimitive2.Root, __spreadValues({ "data-slot": "popover" }, props));
 }
 function PopoverTrigger(_a) {
   var props = __objRest(_a, []);
-  return /* @__PURE__ */ jsx27(PopoverPrimitive2.Trigger, __spreadValues({ "data-slot": "popover-trigger" }, props));
+  return /* @__PURE__ */ jsx32(PopoverPrimitive2.Trigger, __spreadValues({ "data-slot": "popover-trigger" }, props));
 }
 function PopoverContent(_a) {
   var _b = _a, {
@@ -2694,7 +2887,7 @@ function PopoverContent(_a) {
     "align",
     "sideOffset"
   ]);
-  return /* @__PURE__ */ jsx27(PopoverPrimitive2.Portal, { children: /* @__PURE__ */ jsx27(
+  return /* @__PURE__ */ jsx32(PopoverPrimitive2.Portal, { children: /* @__PURE__ */ jsx32(
     PopoverPrimitive2.Content,
     __spreadValues({
       "data-slot": "popover-content",
@@ -2716,7 +2909,7 @@ function PopoverContent(_a) {
 
 // lib/components/ui/separator.tsx
 import { Separator as SeparatorPrimitive } from "radix-ui";
-import { jsx as jsx28 } from "react/jsx-runtime";
+import { jsx as jsx33 } from "react/jsx-runtime";
 function Separator3(_a) {
   var _b = _a, {
     className,
@@ -2727,7 +2920,7 @@ function Separator3(_a) {
     "orientation",
     "decorative"
   ]);
-  return /* @__PURE__ */ jsx28(
+  return /* @__PURE__ */ jsx33(
     SeparatorPrimitive.Root,
     __spreadValues({
       "data-slot": "separator",
@@ -2748,21 +2941,21 @@ function Separator3(_a) {
 // lib/components/ui/sonner.tsx
 import { useTheme as useTheme2 } from "next-themes";
 import { Toaster as Sonner } from "sonner";
-import { jsx as jsx29 } from "react/jsx-runtime";
+import { jsx as jsx34 } from "react/jsx-runtime";
 var Toaster = (_a) => {
   var props = __objRest(_a, []);
   const { theme = "system" } = useTheme2();
-  return /* @__PURE__ */ jsx29(
+  return /* @__PURE__ */ jsx34(
     Sonner,
     __spreadValues({
       theme,
       className: "toaster group",
       icons: {
-        success: /* @__PURE__ */ jsx29("span", { className: "text-sm leading-none font-bold", children: "\u2713" }),
-        info: /* @__PURE__ */ jsx29("span", { className: "text-sm leading-none font-bold", children: "i" }),
-        warning: /* @__PURE__ */ jsx29("span", { className: "text-sm leading-none font-bold", children: "!" }),
-        error: /* @__PURE__ */ jsx29("span", { className: "text-sm leading-none font-bold", children: "\xD7" }),
-        loading: /* @__PURE__ */ jsx29("span", { className: "text-sm leading-none animate-spin", children: "\u27F3" })
+        success: /* @__PURE__ */ jsx34("span", { className: "text-sm leading-none font-bold", children: "\u2713" }),
+        info: /* @__PURE__ */ jsx34("span", { className: "text-sm leading-none font-bold", children: "i" }),
+        warning: /* @__PURE__ */ jsx34("span", { className: "text-sm leading-none font-bold", children: "!" }),
+        error: /* @__PURE__ */ jsx34("span", { className: "text-sm leading-none font-bold", children: "\xD7" }),
+        loading: /* @__PURE__ */ jsx34("span", { className: "text-sm leading-none animate-spin", children: "\u27F3" })
       },
       style: {
         "--normal-bg": "var(--popover)",
@@ -2776,7 +2969,7 @@ var Toaster = (_a) => {
 
 // lib/components/ui/switch.tsx
 import { Switch as SwitchPrimitive } from "radix-ui";
-import { jsx as jsx30 } from "react/jsx-runtime";
+import { jsx as jsx35 } from "react/jsx-runtime";
 function Switch(_a) {
   var _b = _a, {
     className,
@@ -2785,7 +2978,7 @@ function Switch(_a) {
     "className",
     "size"
   ]);
-  return /* @__PURE__ */ jsx30(
+  return /* @__PURE__ */ jsx35(
     SwitchPrimitive.Root,
     __spreadProps(__spreadValues({
       "data-slot": "switch",
@@ -2799,7 +2992,7 @@ function Switch(_a) {
         className
       )
     }, props), {
-      children: /* @__PURE__ */ jsx30(
+      children: /* @__PURE__ */ jsx35(
         SwitchPrimitive.Thumb,
         {
           "data-slot": "switch-thumb",
@@ -2859,7 +3052,7 @@ var toast = {
     success: messages.success,
     error: messages.error
   }),
-  custom: (jsx31) => sonnerToast(jsx31)
+  custom: (jsx36) => sonnerToast(jsx36)
 };
 export {
   AlertDialog,
@@ -2900,6 +3093,7 @@ export {
   DialogFooter,
   DialogHeader,
   DropdownMenu,
+  EmptyState,
   GraficaBar_default as GraficaBar,
   GraficaDonut_default as GraficaDonut,
   GraficaLine_default as GraficaLine,
@@ -2907,9 +3101,14 @@ export {
   Label2 as Label,
   LabelBadge,
   MonthGrid,
+  Pagination,
+  PasswordInput,
+  PasswordStrength,
   Popover,
   PopoverContent,
   PopoverTrigger,
+  RadioGroup,
+  RadioGroupItem,
   SearchableSelect,
   Select,
   SelectContent,
@@ -2939,6 +3138,7 @@ export {
   isDisabledDay,
   isDisabledMonth,
   isDisabledYear,
+  isPasswordValid,
   isSameDay,
   isWeekendDate,
   textareaVariants,
