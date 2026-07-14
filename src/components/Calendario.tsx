@@ -11,6 +11,14 @@ import { cn } from "@/src/utils/utils";
 type CalendarMode = "days" | "months" | "years";
 type SelectionMode = "date" | "month" | "year";
 
+interface HolidayType {
+  date: string;
+  start: Date;
+  end: Date;
+  name: string;
+  type: string;
+}
+
 export interface CalendarProps {
   variant?: "full" | "input";
   selectionMode?: SelectionMode;
@@ -188,7 +196,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({ year, month, selecte
 
   const holidays = useMemo(() => {
     const hd = new Holidays("CO");
-    return hd.getHolidays(year).map((h) => new Date(h.date));
+    return hd.getHolidays(year).map((h: HolidayType) => new Date(h.date));
   }, [year]);
 
   return (

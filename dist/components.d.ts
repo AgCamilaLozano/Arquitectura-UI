@@ -1,4 +1,3 @@
-import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as React from 'react';
 import React__default from 'react';
 import * as class_variance_authority_types from 'class-variance-authority/types';
@@ -17,7 +16,7 @@ interface LabelBadgeProps {
     onRemove?: () => void;
     className?: string;
 }
-declare function LabelBadge({ label, variant, color, size, icon, onRemove, className, }: LabelBadgeProps): react_jsx_runtime.JSX.Element;
+declare function LabelBadge({ label, variant, color, size, icon, onRemove, className, }: LabelBadgeProps): React.JSX.Element;
 
 declare const Label: React.ForwardRefExoticComponent<Omit<LabelPrimitive.LabelProps & React.RefAttributes<HTMLLabelElement>, "ref"> & VariantProps<(props?: class_variance_authority_types.ClassProp | undefined) => string> & React.RefAttributes<HTMLLabelElement>>;
 
@@ -91,7 +90,7 @@ interface PasswordStrengthProps {
     password: string;
 }
 declare function isPasswordValid(password: string): boolean;
-declare function PasswordStrength({ password }: PasswordStrengthProps): react_jsx_runtime.JSX.Element;
+declare function PasswordStrength({ password }: PasswordStrengthProps): React.JSX.Element;
 
 interface BarSegment {
     label: string;
@@ -107,7 +106,7 @@ interface PureBarChartProps {
     legendLabel?: string;
     yLabel?: string;
 }
-declare const GraficaBar: ({ className, data, title, description, height, barRadius, legendLabel, yLabel, }: PureBarChartProps) => react_jsx_runtime.JSX.Element;
+declare const GraficaBar: ({ className, data, title, description, height, barRadius, legendLabel, yLabel, }: PureBarChartProps) => React__default.JSX.Element;
 
 interface ChartSegment {
     value: number;
@@ -125,7 +124,7 @@ interface MultiDonutChartProps {
     totalValue?: number;
     formatValue?: (value: number) => string;
 }
-declare const GraficaDonut: ({ data, title, description, size, strokeWidth, loading, showTotal, totalValue, formatValue, }: MultiDonutChartProps) => react_jsx_runtime.JSX.Element;
+declare const GraficaDonut: ({ data, title, description, size, strokeWidth, loading, showTotal, totalValue, formatValue, }: MultiDonutChartProps) => React__default.JSX.Element;
 
 interface DataPoint {
     label: string;
@@ -142,7 +141,7 @@ interface PureLineChartProps {
     legendLabel?: string;
     yLabel?: string;
 }
-declare const PureLineChart: ({ className, data, title, description, height, lineColor, showArea, legendLabel, yLabel, }: PureLineChartProps) => react_jsx_runtime.JSX.Element;
+declare const PureLineChart: ({ className, data, title, description, height, lineColor, showArea, legendLabel, yLabel, }: PureLineChartProps) => React__default.JSX.Element;
 
 interface EmptyStateProps {
     icon?: React.ComponentType<{
@@ -153,7 +152,7 @@ interface EmptyStateProps {
     action?: React.ReactNode;
     className?: string;
 }
-declare function EmptyState({ icon: Icon, title, description, action, className }: EmptyStateProps): react_jsx_runtime.JSX.Element;
+declare function EmptyState({ icon: Icon, title, description, action, className }: EmptyStateProps): React.JSX.Element;
 
 type CardVariant = "default" | "outlined" | "elevated" | "accent" | "ghost";
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -171,13 +170,13 @@ interface CardHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "ti
     as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }
 declare function CardHeader({ title, subtitle, action, withDivider, as: HeadingTag, // Por defecto h4 acorde a la escala visual de cards corporativas
-className, ...props }: CardHeaderProps): react_jsx_runtime.JSX.Element;
+className, ...props }: CardHeaderProps): React.JSX.Element;
 declare namespace CardHeader {
     var displayName: string;
 }
 interface CardBodyProps extends React.HTMLAttributes<HTMLDivElement> {
 }
-declare function CardBody({ className, children, ...props }: CardBodyProps): react_jsx_runtime.JSX.Element;
+declare function CardBody({ className, children, ...props }: CardBodyProps): React.JSX.Element;
 declare namespace CardBody {
     var displayName: string;
 }
@@ -185,7 +184,7 @@ interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
     align?: "left" | "center" | "right" | "between";
     withDivider?: boolean;
 }
-declare function CardFooter({ align, withDivider, className, children, ...props }: CardFooterProps): react_jsx_runtime.JSX.Element;
+declare function CardFooter({ align, withDivider, className, children, ...props }: CardFooterProps): React.JSX.Element;
 declare namespace CardFooter {
     var displayName: string;
 }
@@ -195,7 +194,7 @@ interface CardImageProps extends React.HTMLAttributes<HTMLDivElement> {
     height?: string;
     imgClassName?: string;
 }
-declare function CardImage({ src, alt, height, className, imgClassName, ...props }: CardImageProps): react_jsx_runtime.JSX.Element;
+declare function CardImage({ src, alt, height, className, imgClassName, ...props }: CardImageProps): React.JSX.Element;
 declare namespace CardImage {
     var displayName: string;
 }
@@ -216,7 +215,7 @@ interface DialogContextValue {
     variant: DialogVariant;
 }
 declare const useDialogContext: () => DialogContextValue;
-declare function Dialog({ open, onClose, variant, size, closeOnOverlay, hideCloseButton, className, children, }: DialogProps): react_jsx_runtime.JSX.Element;
+declare function Dialog({ open, onClose, variant, size, closeOnOverlay, hideCloseButton, className, children, }: DialogProps): React.JSX.Element;
 interface DialogHeaderProps {
     title: React.ReactNode;
     description?: React.ReactNode;
@@ -224,7 +223,7 @@ interface DialogHeaderProps {
     withDivider?: boolean;
     className?: string;
 }
-declare function DialogHeader({ title, description, icon, withDivider, className, }: DialogHeaderProps): react_jsx_runtime.JSX.Element;
+declare function DialogHeader({ title, description, icon, withDivider, className, }: DialogHeaderProps): React.JSX.Element;
 declare namespace DialogHeader {
     var displayName: string;
 }
@@ -233,7 +232,7 @@ interface DialogBodyProps {
     className?: string;
     children: React.ReactNode;
 }
-declare function DialogBody({ scrollable, className, children }: DialogBodyProps): react_jsx_runtime.JSX.Element;
+declare function DialogBody({ scrollable, className, children }: DialogBodyProps): React.JSX.Element;
 declare namespace DialogBody {
     var displayName: string;
 }
@@ -243,20 +242,20 @@ interface DialogFooterProps {
     className?: string;
     children: React.ReactNode;
 }
-declare function DialogFooter({ align, withDivider, className, children }: DialogFooterProps): react_jsx_runtime.JSX.Element;
+declare function DialogFooter({ align, withDivider, className, children }: DialogFooterProps): React.JSX.Element;
 declare namespace DialogFooter {
     var displayName: string;
 }
 
-declare function AlertDialog({ ...props }: React.ComponentProps<typeof AlertDialog$1.Root>): react_jsx_runtime.JSX.Element;
-declare function AlertDialogTrigger({ ...props }: React.ComponentProps<typeof AlertDialog$1.Trigger>): react_jsx_runtime.JSX.Element;
-declare function AlertDialogContent({ className, ...props }: React.ComponentProps<typeof AlertDialog$1.Content>): react_jsx_runtime.JSX.Element;
-declare function AlertDialogHeader({ className, ...props }: React.ComponentProps<"div">): react_jsx_runtime.JSX.Element;
-declare function AlertDialogFooter({ className, ...props }: React.ComponentProps<"div">): react_jsx_runtime.JSX.Element;
-declare function AlertDialogTitle({ className, ...props }: React.ComponentProps<typeof AlertDialog$1.Title>): react_jsx_runtime.JSX.Element;
-declare function AlertDialogDescription({ className, ...props }: React.ComponentProps<typeof AlertDialog$1.Description>): react_jsx_runtime.JSX.Element;
-declare function AlertDialogAction({ className, ...props }: React.ComponentProps<typeof AlertDialog$1.Action>): react_jsx_runtime.JSX.Element;
-declare function AlertDialogCancel({ className, ...props }: React.ComponentProps<typeof AlertDialog$1.Cancel>): react_jsx_runtime.JSX.Element;
+declare function AlertDialog({ ...props }: React.ComponentProps<typeof AlertDialog$1.Root>): React.JSX.Element;
+declare function AlertDialogTrigger({ ...props }: React.ComponentProps<typeof AlertDialog$1.Trigger>): React.JSX.Element;
+declare function AlertDialogContent({ className, ...props }: React.ComponentProps<typeof AlertDialog$1.Content>): React.JSX.Element;
+declare function AlertDialogHeader({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element;
+declare function AlertDialogFooter({ className, ...props }: React.ComponentProps<"div">): React.JSX.Element;
+declare function AlertDialogTitle({ className, ...props }: React.ComponentProps<typeof AlertDialog$1.Title>): React.JSX.Element;
+declare function AlertDialogDescription({ className, ...props }: React.ComponentProps<typeof AlertDialog$1.Description>): React.JSX.Element;
+declare function AlertDialogAction({ className, ...props }: React.ComponentProps<typeof AlertDialog$1.Action>): React.JSX.Element;
+declare function AlertDialogCancel({ className, ...props }: React.ComponentProps<typeof AlertDialog$1.Cancel>): React.JSX.Element;
 
 interface ConfirmDeleteDialogProps {
     open: boolean;
@@ -267,16 +266,16 @@ interface ConfirmDeleteDialogProps {
     onConfirm: () => void;
     loading?: boolean;
 }
-declare function ConfirmDeleteDialog({ open, onOpenChange, title, description, itemName, onConfirm, loading, }: ConfirmDeleteDialogProps): react_jsx_runtime.JSX.Element;
+declare function ConfirmDeleteDialog({ open, onOpenChange, title, description, itemName, onConfirm, loading, }: ConfirmDeleteDialogProps): React.JSX.Element;
 
-declare function Breadcrumb({ ...props }: React.ComponentProps<"nav">): react_jsx_runtime.JSX.Element;
-declare function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">): react_jsx_runtime.JSX.Element;
-declare function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">): react_jsx_runtime.JSX.Element;
+declare function Breadcrumb({ ...props }: React.ComponentProps<"nav">): React.JSX.Element;
+declare function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">): React.JSX.Element;
+declare function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">): React.JSX.Element;
 declare function BreadcrumbLink({ asChild, className, ...props }: React.ComponentProps<"a"> & {
     asChild?: boolean;
-}): react_jsx_runtime.JSX.Element;
-declare function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">): react_jsx_runtime.JSX.Element;
-declare function BreadcrumbSeparator({ children, className, ...props }: React.ComponentProps<"li">): react_jsx_runtime.JSX.Element;
+}): React.JSX.Element;
+declare function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">): React.JSX.Element;
+declare function BreadcrumbSeparator({ children, className, ...props }: React.ComponentProps<"li">): React.JSX.Element;
 
 interface PaginationProps {
     page: number;
@@ -284,6 +283,6 @@ interface PaginationProps {
     onPageChange: (page: number) => void;
     className?: string;
 }
-declare function Pagination({ page, totalPages, onPageChange, className }: PaginationProps): react_jsx_runtime.JSX.Element | null;
+declare function Pagination({ page, totalPages, onPageChange, className }: PaginationProps): React.JSX.Element | null;
 
 export { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Calendar, CalendarGrid, CalendarHeader, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardProps, type CardVariant, ConfirmDeleteDialog, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, EmptyState, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Label, LabelBadge, type LabelColor, type LabelVariant, MonthGrid, Pagination, PasswordInput, PasswordStrength, YearGrid, formatDate, getDiasDelMes, isDisabledDay, isDisabledMonth, isDisabledYear, isPasswordValid, isSameDay, isWeekendDate, useDialogContext };

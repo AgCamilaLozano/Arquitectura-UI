@@ -1,6 +1,5 @@
 export { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Calendar, CalendarGrid, CalendarHeader, CalendarProps, Card, CardBody, CardBodyProps, CardFooter, CardFooterProps, CardHeader, CardHeaderProps, CardImage, CardImageProps, CardProps, CardVariant, ConfirmDeleteDialog, Dialog, DialogBody, DialogBodyProps, DialogFooter, DialogFooterProps, DialogHeader, DialogHeaderProps, DialogProps, DialogSize, DialogVariant, EmptyState, GraficaBar, GraficaDonut, GraficaLine, Label, LabelBadge, LabelColor, LabelVariant, MonthGrid, Pagination, PasswordInput, PasswordStrength, YearGrid, formatDate, getDiasDelMes, isDisabledDay, isDisabledMonth, isDisabledYear, isPasswordValid, isSameDay, isWeekendDate, useDialogContext } from './components.js';
 export { cn } from './utils.js';
-import * as react_jsx_runtime from 'react/jsx-runtime';
 import * as React$1 from 'react';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
 import { Avatar as Avatar$1, Collapsible as Collapsible$1, Popover as Popover$1, RadioGroup as RadioGroup$1, Separator as Separator$1, Switch as Switch$1 } from 'radix-ui';
@@ -11,20 +10,20 @@ import * as SelectPrimitive from '@radix-ui/react-select';
 import '@radix-ui/react-label';
 import 'clsx';
 
-declare function Sheet(props: React$1.ComponentProps<typeof SheetPrimitive.Root>): react_jsx_runtime.JSX.Element;
-declare function SheetTrigger(props: React$1.ComponentProps<typeof SheetPrimitive.Trigger>): react_jsx_runtime.JSX.Element;
-declare function SheetClose(props: React$1.ComponentProps<typeof SheetPrimitive.Close>): react_jsx_runtime.JSX.Element;
+declare function Sheet(props: React$1.ComponentProps<typeof SheetPrimitive.Root>): React$1.JSX.Element;
+declare function SheetTrigger(props: React$1.ComponentProps<typeof SheetPrimitive.Trigger>): React$1.JSX.Element;
+declare function SheetClose(props: React$1.ComponentProps<typeof SheetPrimitive.Close>): React$1.JSX.Element;
 declare function SheetContent({ className, children, side, showCloseButton, ...props }: React$1.ComponentProps<typeof SheetPrimitive.Content> & {
     side?: "top" | "right" | "bottom" | "left";
     showCloseButton?: boolean;
-}): react_jsx_runtime.JSX.Element;
+}): React$1.JSX.Element;
 declare namespace SheetContent {
     var displayName: string;
 }
-declare function SheetHeader({ className, ...props }: React$1.ComponentProps<"div">): react_jsx_runtime.JSX.Element;
-declare function SheetFooter({ className, ...props }: React$1.ComponentProps<"div">): react_jsx_runtime.JSX.Element;
-declare function SheetTitle({ className, ...props }: React$1.ComponentProps<typeof SheetPrimitive.Title>): react_jsx_runtime.JSX.Element;
-declare function SheetDescription({ className, ...props }: React$1.ComponentProps<typeof SheetPrimitive.Description>): react_jsx_runtime.JSX.Element;
+declare function SheetHeader({ className, ...props }: React$1.ComponentProps<"div">): React$1.JSX.Element;
+declare function SheetFooter({ className, ...props }: React$1.ComponentProps<"div">): React$1.JSX.Element;
+declare function SheetTitle({ className, ...props }: React$1.ComponentProps<typeof SheetPrimitive.Title>): React$1.JSX.Element;
+declare function SheetDescription({ className, ...props }: React$1.ComponentProps<typeof SheetPrimitive.Description>): React$1.JSX.Element;
 
 interface Column<T> {
     key: string;
@@ -80,13 +79,13 @@ interface TooltipProps {
     size?: TooltipSize;
     disabled?: boolean;
 }
-declare function Tooltip({ content, children, side, ariaLabel, align, variant, size, disabled, }: TooltipProps): react_jsx_runtime.JSX.Element;
+declare function Tooltip({ content, children, side, ariaLabel, align, variant, size, disabled, }: TooltipProps): React$1.JSX.Element;
 
 declare function Avatar({ className, size, ...props }: React$1.ComponentProps<typeof Avatar$1.Root> & {
     size?: "default" | "sm" | "lg";
-}): react_jsx_runtime.JSX.Element;
-declare function AvatarImage({ className, ...props }: React$1.ComponentProps<typeof Avatar$1.Image>): react_jsx_runtime.JSX.Element;
-declare function AvatarFallback({ className, ...props }: React$1.ComponentProps<typeof Avatar$1.Fallback>): react_jsx_runtime.JSX.Element;
+}): React$1.JSX.Element;
+declare function AvatarImage({ className, ...props }: React$1.ComponentProps<typeof Avatar$1.Image>): React$1.JSX.Element;
+declare function AvatarFallback({ className, ...props }: React$1.ComponentProps<typeof Avatar$1.Fallback>): React$1.JSX.Element;
 
 declare const buttonVariants: (props?: ({
     variant?: "outline" | "link" | "default" | "secondary" | "ghost" | "destructive" | null | undefined;
@@ -99,9 +98,9 @@ declare const Button: React$1.ForwardRefExoticComponent<ButtonProps & React$1.Re
 
 declare const Checkbox: React$1.ForwardRefExoticComponent<Omit<CheckboxPrimitive.CheckboxProps & React$1.RefAttributes<HTMLButtonElement>, "ref"> & React$1.RefAttributes<HTMLButtonElement>>;
 
-declare function Collapsible({ ...props }: React$1.ComponentProps<typeof Collapsible$1.Root>): react_jsx_runtime.JSX.Element;
-declare function CollapsibleTrigger({ ...props }: React$1.ComponentProps<typeof Collapsible$1.CollapsibleTrigger>): react_jsx_runtime.JSX.Element;
-declare function CollapsibleContent({ ...props }: React$1.ComponentProps<typeof Collapsible$1.CollapsibleContent>): react_jsx_runtime.JSX.Element;
+declare function Collapsible({ ...props }: React$1.ComponentProps<typeof Collapsible$1.Root>): React$1.JSX.Element;
+declare function CollapsibleTrigger({ ...props }: React$1.ComponentProps<typeof Collapsible$1.CollapsibleTrigger>): React$1.JSX.Element;
+declare function CollapsibleContent({ ...props }: React$1.ComponentProps<typeof Collapsible$1.CollapsibleContent>): React$1.JSX.Element;
 
 interface DropdownItem {
     label: string;
@@ -125,7 +124,7 @@ interface DropdownMenuProps {
     className?: string;
     triggerIcon?: React$1.ReactNode;
 }
-declare function DropdownMenu({ trigger, groups, align, width, disabled, className, triggerIcon, }: DropdownMenuProps): react_jsx_runtime.JSX.Element;
+declare function DropdownMenu({ trigger, groups, align, width, disabled, className, triggerIcon, }: DropdownMenuProps): React$1.JSX.Element;
 
 declare const inputVariants: (props?: ({
     variant?: "default" | "destructive" | null | undefined;
@@ -138,12 +137,12 @@ interface InputProps extends Omit<React$1.InputHTMLAttributes<HTMLInputElement>,
 }
 declare const Input: React$1.ForwardRefExoticComponent<InputProps & React$1.RefAttributes<HTMLInputElement>>;
 
-declare function Popover({ ...props }: React$1.ComponentProps<typeof Popover$1.Root>): react_jsx_runtime.JSX.Element;
-declare function PopoverTrigger({ ...props }: React$1.ComponentProps<typeof Popover$1.Trigger>): react_jsx_runtime.JSX.Element;
-declare function PopoverContent({ className, align, sideOffset, ...props }: React$1.ComponentProps<typeof Popover$1.Content>): react_jsx_runtime.JSX.Element;
+declare function Popover({ ...props }: React$1.ComponentProps<typeof Popover$1.Root>): React$1.JSX.Element;
+declare function PopoverTrigger({ ...props }: React$1.ComponentProps<typeof Popover$1.Trigger>): React$1.JSX.Element;
+declare function PopoverContent({ className, align, sideOffset, ...props }: React$1.ComponentProps<typeof Popover$1.Content>): React$1.JSX.Element;
 
-declare function RadioGroup({ className, ...props }: React$1.ComponentProps<typeof RadioGroup$1.Root>): react_jsx_runtime.JSX.Element;
-declare function RadioGroupItem({ className, ...props }: React$1.ComponentProps<typeof RadioGroup$1.Item>): react_jsx_runtime.JSX.Element;
+declare function RadioGroup({ className, ...props }: React$1.ComponentProps<typeof RadioGroup$1.Root>): React$1.JSX.Element;
+declare function RadioGroupItem({ className, ...props }: React$1.ComponentProps<typeof RadioGroup$1.Item>): React$1.JSX.Element;
 
 interface SearchableSelectOption {
     value: string;
@@ -160,49 +159,49 @@ interface SearchableSelectProps {
     allowCustom?: boolean;
     customPlaceholder?: string;
 }
-declare function SearchableSelect({ value, onValueChange, options, placeholder, searchPlaceholder, className, disabled, allowCustom, customPlaceholder, }: SearchableSelectProps): react_jsx_runtime.JSX.Element;
+declare function SearchableSelect({ value, onValueChange, options, placeholder, searchPlaceholder, className, disabled, allowCustom, customPlaceholder, }: SearchableSelectProps): React$1.JSX.Element;
 
-declare function Select({ ...props }: React$1.ComponentProps<typeof SelectPrimitive.Root>): react_jsx_runtime.JSX.Element;
-declare function SelectGroup({ ...props }: React$1.ComponentProps<typeof SelectPrimitive.Group>): react_jsx_runtime.JSX.Element;
-declare function SelectValue({ ...props }: React$1.ComponentProps<typeof SelectPrimitive.Value>): react_jsx_runtime.JSX.Element;
+declare function Select({ ...props }: React$1.ComponentProps<typeof SelectPrimitive.Root>): React$1.JSX.Element;
+declare function SelectGroup({ ...props }: React$1.ComponentProps<typeof SelectPrimitive.Group>): React$1.JSX.Element;
+declare function SelectValue({ ...props }: React$1.ComponentProps<typeof SelectPrimitive.Value>): React$1.JSX.Element;
 declare function SelectTrigger({ className, size, children, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Trigger> & {
     size?: "sm" | "default";
-}): react_jsx_runtime.JSX.Element;
+}): React$1.JSX.Element;
 declare namespace SelectTrigger {
     var displayName: string;
 }
-declare function SelectContent({ className, children, position, align, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Content>): react_jsx_runtime.JSX.Element;
+declare function SelectContent({ className, children, position, align, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Content>): React$1.JSX.Element;
 declare namespace SelectContent {
     var displayName: string;
 }
-declare function SelectLabel({ className, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Label>): react_jsx_runtime.JSX.Element;
+declare function SelectLabel({ className, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Label>): React$1.JSX.Element;
 declare namespace SelectLabel {
     var displayName: string;
 }
-declare function SelectItem({ className, children, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Item>): react_jsx_runtime.JSX.Element;
+declare function SelectItem({ className, children, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Item>): React$1.JSX.Element;
 declare namespace SelectItem {
     var displayName: string;
 }
-declare function SelectSeparator({ className, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Separator>): react_jsx_runtime.JSX.Element;
+declare function SelectSeparator({ className, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Separator>): React$1.JSX.Element;
 declare namespace SelectSeparator {
     var displayName: string;
 }
-declare function SelectScrollUpButton({ className, ...props }: React$1.ComponentProps<typeof SelectPrimitive.ScrollUpButton>): react_jsx_runtime.JSX.Element;
+declare function SelectScrollUpButton({ className, ...props }: React$1.ComponentProps<typeof SelectPrimitive.ScrollUpButton>): React$1.JSX.Element;
 declare namespace SelectScrollUpButton {
     var displayName: string;
 }
-declare function SelectScrollDownButton({ className, ...props }: React$1.ComponentProps<typeof SelectPrimitive.ScrollDownButton>): react_jsx_runtime.JSX.Element;
+declare function SelectScrollDownButton({ className, ...props }: React$1.ComponentProps<typeof SelectPrimitive.ScrollDownButton>): React$1.JSX.Element;
 declare namespace SelectScrollDownButton {
     var displayName: string;
 }
 
-declare function Separator({ className, orientation, decorative, ...props }: React$1.ComponentProps<typeof Separator$1.Root>): react_jsx_runtime.JSX.Element;
+declare function Separator({ className, orientation, decorative, ...props }: React$1.ComponentProps<typeof Separator$1.Root>): React$1.JSX.Element;
 
-declare function Skeleton({ className, ...props }: React.ComponentProps<"div">): react_jsx_runtime.JSX.Element;
+declare function Skeleton({ className, ...props }: React.ComponentProps<"div">): React$1.JSX.Element;
 
 declare function Switch({ className, size, ...props }: React$1.ComponentProps<typeof Switch$1.Root> & {
     size?: "sm" | "default";
-}): react_jsx_runtime.JSX.Element;
+}): React$1.JSX.Element;
 
 declare const textareaVariants: (props?: ({
     variant?: "default" | "destructive" | null | undefined;
