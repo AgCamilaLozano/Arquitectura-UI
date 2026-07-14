@@ -1,5 +1,0 @@
-export * from './Badges'
-export * from './Contenedores'
-export * from './Tooltip'
-export * from './dropdown-menu'
-export * from './Calendario'

@@ -1,11 +1,2 @@
-"use client";
-
-// lib/utils.ts
-import { clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-function cn(...inputs) {
-  return twMerge(clsx(inputs));
-}
-export {
-  cn
-};
+import {clsx}from'clsx';import {twMerge}from'tailwind-merge';function m(...r){return twMerge(clsx(r))}export{m as cn};//# sourceMappingURL=utils.js.map
+//# sourceMappingURL=utils.js.map

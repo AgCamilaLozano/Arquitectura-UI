@@ -1,9 +1,0 @@
-@import "tailwindcss";
-
-/* 1. Le decimos al Tailwind de tu App de pruebas que escanee tus componentes en desarrollo */
-@source "../lib/**/*.{ts,tsx}";
-
-/* 2. Importamos tu archivo de tokens y estilos base que definiste antes */
-@import "../lib/styles/globals.css";
-
-@variant dark (&:where(.dark, .dark *));
