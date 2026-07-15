@@ -56,8 +56,5 @@
     "eslint": "^9",
     "tsup": "^8.5.1",
     "typescript": "^5"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   }
 }
