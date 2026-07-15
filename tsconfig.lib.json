@@ -1,22 +1,22 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "noEmit": false,
-        "incremental": false,
-        "declaration": true,
-        "declarationDir": "dist",
-        "emitDeclarationOnly": true,
-        "outDir": "dist"
-    },
-    "include": [
-        "lib/**/*.ts",
-        "lib/**/*.tsx",
-        "lib/**/*.css",
-        "lib/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "dist",
-        "app/**/*"
-    ]
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "incremental": false,
+    "declaration": true,
+    "declarationDir": "dist",
+    "emitDeclarationOnly": true,
+    "outDir": "dist"
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.css",
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "app/**/*"
+  ]
 }
