@@ -8,7 +8,6 @@ export default defineConfig({
   },
   format: ["esm"],
   dts: {
-    // CORREGIDO: Fuerza a TypeScript a ignorar opciones incrementales conflictivas del tsconfig durante el bundling de tipos
     compilerOptions: {
       incremental: false,
       composite: false,
@@ -16,18 +15,25 @@ export default defineConfig({
     }
   },
   clean: true,
-  external: ["react", "react-dom", "next", "tailwindcss", "sonner", "next-themes"],
+  external: [
+    "react", 
+    "react-dom", 
+    "next", 
+    "tailwindcss", 
+    "sonner", 
+    "next-themes",
+    "date-holidays",
+    /^@radix-ui\/.*$/ // Excluye dinámicamente cualquier sub-paquete de Radix
+  ],
   minify: true,
   sourcemap: true,
-  splitting: false, // Mantiene los entrypoints limpios y consistentes con package.json
+  splitting: false,
   treeshake: true,
   outDir: "dist",
-  
-  // CORREGIDO: El banner condicional preserva "use client" solo para components y toast, evitando warnings en utils
   esbuildOptions(options, context) {
     if (context.format === "esm") {
       options.banner = {
-        js: "", // Dejamos que los archivos individuales declaren su propia directiva para evitar warnings en utilitarios puros
+        js: "",
       };
     }
   },
