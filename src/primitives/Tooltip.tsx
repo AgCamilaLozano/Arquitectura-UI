@@ -21,7 +21,7 @@ export interface TooltipProps {
 
 /* CORREGIDO: Mapeo de superficies y contraste con soporte HSL para evitar bloques vacíos */
 const variantClasses: Record<TooltipVariant, string> = {
-  default: "bg-primary text-white border border-transparent font-sans dark:bg-primary dark:text-primary-foreground",
+  default: "bg-primary text-background border border-transparent font-sans",
   rich: "bg-surface text-text-primary border border-border shadow-floating font-sans",
 };
 const sizeClasses: Record<TooltipSize, string> = {
