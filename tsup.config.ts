@@ -30,12 +30,5 @@ export default defineConfig({
   sourcemap: true,
   splitting: false,
   treeshake: true,
-  outDir: "dist",
-  esbuildOptions(options, context) {
-    if (context.format === "esm") {
-      options.banner = {
-        js: '"use client";',
-      };
-    }
-  },
+  outDir: "dist"
 });

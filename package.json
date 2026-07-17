@@ -14,6 +14,10 @@
       "import": "./dist/components.js",
       "types": "./dist/components.d.ts"
     },
+    "./primitives": {
+      "import": "./dist/primitives.js",
+      "types": "./dist/primitives.d.ts"
+    },
     "./utils": {
       "import": "./dist/utils.js",
       "types": "./dist/utils.d.ts"
@@ -23,7 +27,7 @@
     "dist"
   ],
   "scripts": {
-    "build:ui": "tsup",
+    "build:ui": "tsup && node -e \"const fs = require('fs'); ['dist/components.js', 'dist/primitives.js', 'dist/index.js'].forEach(f => { if(fs.existsSync(f)) { const c = fs.readFileSync(f, 'utf8'); fs.writeFileSync(f, '\\\"use client\\\";\\n' + c); } })\"",
     "clean-install": "node -e \"const fs = require('fs'); fs.rmSync('node_modules', { recursive: true, force: true }); fs.rmSync('pnpm-lock.yaml', { force: true });\" && pnpm install"
   },
   "dependencies": {
