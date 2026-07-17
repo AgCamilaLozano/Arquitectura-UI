@@ -34,9 +34,7 @@ export default defineConfig({
   esbuildOptions(options, context) {
     if (context.format === "esm") {
       options.banner = {
-        js: (context.entryName === "components" || context.entryName === "primitives") 
-          ? '"use client";' 
-          : "",
+        js: '"use client";',
       };
     }
   },
