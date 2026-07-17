@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     index: "src/index.ts",
     components: "src/components/index.ts",
+    primitives: "src/primitives/index.ts",
     utils: "src/utils/index.ts",
   },
   format: ["esm"],
@@ -23,7 +24,7 @@ export default defineConfig({
     "sonner", 
     "next-themes",
     "date-holidays",
-    /^@radix-ui\/.*$/ // Excluye dinámicamente cualquier sub-paquete de Radix
+    /^@radix-ui\/.*$/ 
   ],
   minify: true,
   sourcemap: true,
@@ -33,7 +34,9 @@ export default defineConfig({
   esbuildOptions(options, context) {
     if (context.format === "esm") {
       options.banner = {
-        js: "",
+        js: (context.entryName === "components" || context.entryName === "primitives") 
+          ? '"use client";' 
+          : "",
       };
     }
   },
