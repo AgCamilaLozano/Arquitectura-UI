@@ -1,3 +1,5 @@
+"use client"
+
 export * from './Sheet'
 export * from './Table'
 export * from './Tabs'

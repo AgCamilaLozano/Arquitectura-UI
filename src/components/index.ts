@@ -1,3 +1,5 @@
+"use client"
+
 export * from './Badges'
 export * from './Calendario'
 export * from './Password'
