@@ -1,0 +1,267 @@
+/* app/globals.css (ERP Principal - Agustin Services) */
+@import "tailwindcss";
+
+/* Inclusión de la fuente consumida de la librería instalada */
+@source "./src";
+
+/* Variante unificada para que Tailwind v4 escuche el selector inyectado por next-themes */
+@variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================
+   1. MAPEO DE UTILIDADES DE TAILWIND CSS V4
+   ========================================================================== */
+@theme inline {
+  /* Geometría Inmutable */
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
+  --radius-xl: var(--r-xl);
+  --radius-2xl: var(--r-2xl);
+
+  /* Familias Tipográficas (Inyectadas desde app/layout.tsx) */
+  --font-heading: var(--font-montserrat), sans-serif;
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+
+  /* Fondos y Superficies Sincronizados */
+  --color-background: hsl(var(--background));
+  --color-surface: hsl(var(--surface));
+  --color-muted: hsl(var(--surface));
+
+  /* Delimitadores y Bordes */
+  --color-border: hsl(var(--border-default));
+  --color-border-default: hsl(var(--border-default));
+  --color-border-strong: hsl(var(--border-strong));
+  --color-border-sidebar: hsl(var(--border-sidebar));
+
+  /* Identidad Visual Dinámica (Tenant Accent) */
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-soft: hsl(var(--accent-soft));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  /* Tipografía y Contenido */
+  --color-text-primary: hsl(var(--text-primary));
+  --color-text-secondary: hsl(var(--text-secondary));
+  --color-text-muted: hsl(var(--text-muted));
+  --color-text-disabled: hsl(var(--text-disabled));
+
+  /* Alertas y Estados Operativos (WCAG AA) */
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+
+  /* Fondos Suaves de Alertas */
+  --color-alert-error: hsl(var(--alert-error));
+  --color-alert-warning: hsl(var(--alert-warning));
+  --color-alert-info: hsl(var(--alert-info));
+  --color-alert-success: hsl(var(--alert-success));
+
+  /* Textos de Alertas */
+  --color-text-error: hsl(var(--text-error));
+  --color-text-success: hsl(var(--text-success));
+  --color-text-warning: hsl(var(--text-warning));
+  --color-text-info: hsl(var(--text-info));
+
+  /* Anillos de Enfoque */
+  --color-ring: hsl(var(--ring-color));
+  --color-ring-error: hsl(var(--ring-color-destructive));
+
+  /* Estructuras de Soporte */
+  --color-sidebar-bg: hsl(var(--sidebar-bg));
+  --color-overlay-dark: hsl(var(--overlay-dark));
+  --color-overlay-light: hsl(var(--overlay-light));
+
+  /* Sombras Mapeadas */
+  --shadow-raised: var(--shadow-raised);
+  --shadow-card: var(--shadow-card);
+  --shadow-floating: var(--shadow-floating);
+  --shadow-overlay: var(--shadow-overlay);
+
+  /* Gráficos Recharts */
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+}
+
+/* ==========================================================================
+   2. CONTRATO DE VARIABLES CSS (ROOT / FALLBACK MODO CLARO)
+   ========================================================================== */
+:root {
+  /* Canales Inyectados Dinámicamente desde Supabase (Sistema MONTAJE Base) */
+  --tenant-hue: 265;
+  --tenant-saturation: 84%;
+
+  /* Geometria e Interacción */
+  --radius: 0.5rem;
+  --r-sm: calc(var(--radius) - 4px);
+  --r-md: var(--radius);
+  --r-lg: calc(var(--radius) + 4px);
+  --r-xl: calc(var(--radius) + 8px);
+  --r-2xl: calc(var(--radius) + 12px);
+
+  /* Superficie y Estructura (Neutralidad) */
+  --background: 0 0% 100%;                  /* Blanco Puro (#FFFFFF) */
+  --surface: 240 4% 97%;                    /* Gris pálido (#F8F8F8) */
+  --border-default: 240 5% 90%;             /* Línea divisoria sutil */
+  --border-strong: var(--tenant-hue) 91% 74%;
+  --border-sidebar: var(--tenant-hue) 92% 92%;
+  --sidebar-bg: 220 10% 98%;
+
+  /* Tipografía Semántica */
+  --text-primary: 240 4% 18%;               /* Gris Core Sólido (#2D2D2E) */
+  --text-secondary: 240 2% 47%;             /* Descripciones y metadatos */
+  --text-muted: 240 4% 63%;
+  --text-disabled: 220 14% 84%;
+
+  /* Dinámica de Marca (Tenant Accent) */
+  --primary: 240 2% 18%;
+  --primary-foreground: 0 0% 100%;
+  --accent: var(--tenant-hue) var(--tenant-saturation) 58%;
+  --accent-foreground: 0 0% 100%;
+  --accent-soft: var(--tenant-hue) var(--tenant-saturation) 95%;
+
+  /* Semántica de Estados Operativos */
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 48 96% 89%;
+  --success: 142 76% 36%;
+  --success-foreground: 138 76% 97%;
+
+  /* Fondos Suaves de Alertas */
+  --alert-error: 0 100% 94%;
+  --alert-warning: 54 98% 92%;
+  --alert-info: 214 95% 93%;
+  --alert-success: 138 76% 93%;
+
+  /* Textos de Alertas */
+  --text-error: 357 100% 45%;
+  --text-success: 143 100% 33%;
+  --text-warning: 39 100% 41%;
+  --text-info: 221 98% 54%;
+
+  /* Estados e Interacción */
+  --ring-color: var(--accent);
+  --ring-color-destructive: var(--text-error);
+  --overlay-dark: 0 0% 0% / 0.5;
+  --overlay-light: 0 0% 100% / 0.5;
+
+  /* Sombras Mapeadas de Producción */
+  --shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-floating: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.12);
+
+  /* Gráficos Recharts */
+  --chart-1: var(--tenant-hue) var(--tenant-saturation) 52%;
+  --chart-2: var(--tenant-hue) 55% 62%;
+  --chart-3: var(--tenant-hue) 45% 72%;
+  --chart-4: var(--tenant-hue) 35% 82%;
+  --chart-5: var(--tenant-hue) 25% 88%;
+}
+
+/* ==========================================================================
+   3. INVERSIÓN SEMÁNTICA (MODO OSCURO .dark)
+   ========================================================================== */
+.dark {
+  --background: 240 5% 8%;               /* Gris Oscuro Transaccional (#14161A) */
+  --surface: 240 4% 12%;                 /* Fondo de tarjetas y sidebars */
+  --border-default: 240 3% 19%;          /* Líneas estructurales oscuras */
+  --border-strong: var(--tenant-hue) 91% 74%;
+  --border-sidebar: var(--tenant-hue) 45% 18%;
+  --sidebar-bg: 220 13% 8%;
+
+  --text-primary: 240 2% 93%;            /* Blanco roto */
+  --text-secondary: 240 2% 72%;          /* Texto secundario atenuado */
+  --text-muted: 220 8% 55%;
+  --text-disabled: 240 4% 34%;
+
+  --primary: 0 0% 98%;
+  --primary-foreground: 240 4% 18%;
+  --accent: var(--tenant-hue) var(--tenant-saturation) 65%;
+  --accent-soft: var(--tenant-hue) 20% 15%;
+
+  --alert-error: 0 65% 35% / 0.1;
+  --alert-warning: 48 96% 29% / 0.1;
+  --alert-info: 213 94% 40% / 0.1;
+  --alert-success: 142 72% 29% / 0.1;
+
+  --text-error: 352 100% 71%;
+  --text-success: 142 69% 58%;
+  --text-warning: 48 96% 53%;
+  --text-info: 213 94% 68%;
+
+  --shadow-raised: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.4);
+  --shadow-floating: 0 8px 32px rgba(0, 0, 0, 0.55);
+  --shadow-overlay: 0 16px 56px rgba(0, 0, 0, 0.65);
+
+  --chart-1: var(--tenant-hue) 60% 65%;
+  --chart-2: var(--tenant-hue) 50% 74%;
+  --chart-3: var(--tenant-hue) 40% 60%;
+  --chart-4: var(--tenant-hue) 30% 50%;
+  --chart-5: var(--tenant-hue) 20% 40%;
+}
+
+/* ==========================================================================
+   4. CLASES DE UTILIDAD TIPOGRÁFICA REGISTRADAS (SECCIÓN 3 MANUAL DE MARCA)
+   ========================================================================== */
+@utility text-display-xl {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+@utility text-heading-lg {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 2.0rem;
+}
+
+@utility text-body-base {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1.0rem;
+  line-height: 1.5rem;
+}
+
+@utility text-body-dense {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+@utility text-caption {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 1.0rem;
+}
+
+/* ==========================================================================
+   5. NORMALIZACIÓN BASE DEL SISTEMA
+   ========================================================================== */
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: hsl(var(--background));
+  color: hsl(var(--text-primary));
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), sans-serif;
+  letter-spacing: -0.02em;
+}

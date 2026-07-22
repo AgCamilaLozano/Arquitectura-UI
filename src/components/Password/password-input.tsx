@@ -4,18 +4,31 @@ import * as React from "react";
 import { cn } from "@/src/utils/utils";
 import { Button } from "@/src/primitives/button/button";
 
-const PasswordInput = React.forwardRef<
+export interface PasswordInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {}
+
+export const PasswordInput = React.forwardRef<
   HTMLInputElement,
-  React.ComponentProps<"input">
->(({ className, ...props }, ref) => {
+  PasswordInputProps
+>(({ className, disabled, ...props }, ref) => {
   const [showPassword, setShowPassword] = React.useState(false);
 
+  const togglePasswordVisibility = React.useCallback(() => {
+    setShowPassword((prev) => !prev);
+  }, []);
+
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <input
         type={showPassword ? "text" : "password"}
+        disabled={disabled}
         className={cn(
-          "flex h-9 w-full rounded-md border border-border bg-transparent px-3 py-1 pr-10 text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          "flex h-9 w-full rounded-sm border border-border bg-transparent px-3 py-1 pr-10",
+          "font-sans text-body-dense text-sm text-text-primary placeholder:text-text-secondary/70 transition-all duration-150 outline-none",
+          /* Física de Enfoque Unificada (Glow Effect de AGUSTIN) */
+          "focus-visible:outline-none focus-visible:border-border-strong focus-visible:ring-3 focus-visible:ring-border-strong/20 focus-visible:ring-offset-0",
+          /* Estados Deshabilitados */
+          "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-surface/50",
           className
         )}
         ref={ref}
@@ -25,9 +38,15 @@ const PasswordInput = React.forwardRef<
         type="button"
         variant="ghost"
         size="icon"
-        className="absolute right-0 top-0 size-9 text-text-secondary hover:text-text-primary"
-        onClick={() => setShowPassword((prev) => !prev)}
-        tabIndex={-1}
+        disabled={disabled}
+        onClick={togglePasswordVisibility}
+        aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+        aria-pressed={showPassword}
+        className={cn(
+          "absolute right-0 top-0 size-9 text-text-secondary hover:text-text-primary hover:bg-transparent",
+          "focus-visible:ring-2 focus-visible:ring-border-strong focus-visible:ring-offset-0 rounded-r-sm",
+          "disabled:pointer-events-none disabled:opacity-50"
+        )}
       >
         {showPassword ? (
           <span className="text-xs leading-none">○</span>
@@ -42,5 +61,3 @@ const PasswordInput = React.forwardRef<
   );
 });
 PasswordInput.displayName = "PasswordInput";
-
-export { PasswordInput };

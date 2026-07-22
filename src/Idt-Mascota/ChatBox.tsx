@@ -1,6 +1,7 @@
 'use client'
 
-import { Button, Textarea } from '@/src/primitives/textarea'
+import { Textarea } from '@/src/primitives/textarea'
+import { Button } from '../primitives';
 import { Card, CardHeader, CardBody } from "@/src/components/layout/Card";
 import { Cpu, Mic, Send, X, Loader2, AudioLines, Maximize2, Minimize2 } from 'lucide-react';
 import { useState } from "react";

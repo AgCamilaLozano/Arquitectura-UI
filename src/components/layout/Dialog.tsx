@@ -3,8 +3,13 @@
 import * as React from "react";
 import { X } from "lucide-react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { Button } from "@/src/primitives/button/button";
+import { Button } from "@/src/primitives";
 import { cn } from "@/src/utils/utils";
+
+
+/* ==========================================================================
+   TIPOS & PROPIEDADES
+   ========================================================================== */
 
 export type DialogVariant = "default" | "destructive" | "warning" | "info";
 export type DialogSize = "sm" | "md" | "lg" | "xl";
@@ -30,8 +35,16 @@ const sizeClasses: Record<DialogSize, string> = {
 interface DialogContextValue {
   variant: DialogVariant;
 }
-const DialogContext = React.createContext<DialogContextValue>({ variant: "default" });
+
+const DialogContext = React.createContext<DialogContextValue>({
+  variant: "default",
+});
+
 export const useDialogContext = () => React.useContext(DialogContext);
+
+/* ==========================================================================
+   COMPONENTE RAÍZ: DIALOG
+   ========================================================================== */
 
 export function Dialog({
   open,
@@ -44,22 +57,30 @@ export function Dialog({
   children,
 }: DialogProps) {
   return (
-    <DialogPrimitive.Root open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
+    <DialogPrimitive.Root
+      open={open}
+      onOpenChange={(isOpen) => !isOpen && onClose()}
+    >
       <DialogPrimitive.Portal>
-        
-        {/* Backdrop / Overlay con opacidad HSL y transiciones aceleradas */}
+        {/* Backdrop / Overlay esmerilado adaptable */}
         <DialogPrimitive.Overlay
           onClick={!closeOnOverlay ? (e) => e.preventDefault() : undefined}
-          className="fixed inset-0 z-50 bg-overlay-dark/50 data-[state=open]:animate-fade-in duration-200"
+          className={cn(
+            "fixed inset-0 z-50 bg-black/60",
+            "data-[state=open]:animate-in data-[state=closed]:animate-out",
+            "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 duration-200"
+          )}
         />
 
         {/* Contenedor centrador fijo */}
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
-          
           <DialogPrimitive.Content
             className={cn(
-              "relative w-full pointer-events-auto bg-background rounded-md overflow-hidden border border-border shadow-overlay",
-              "data-[state=open]:animate-fade-in-soft duration-200 font-sans text-text-primary",
+              "relative w-full pointer-events-auto bg-background rounded-sm overflow-hidden border border-border shadow-card",
+              "data-[state=open]:animate-in data-[state=closed]:animate-out",
+              "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+              "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 duration-200",
+              "font-sans text-text-primary",
               sizeClasses[size],
               className
             )}
@@ -68,11 +89,11 @@ export function Dialog({
               <DialogPrimitive.Close asChild>
                 <Button
                   variant="ghost"
-                  size="icon-sm"
+                  size="icon"
                   aria-label="Cerrar ventana"
-                  className="absolute top-4 right-4 text-text-muted hover:text-text-primary z-20"
+                  className="absolute top-4 right-4 size-8 text-text-secondary hover:text-text-primary z-20 focus-visible:ring-2 focus-visible:ring-border-strong focus-visible:ring-offset-0"
                 >
-                  <X />
+                  <X className="size-4" />
                 </Button>
               </DialogPrimitive.Close>
             )}
@@ -82,13 +103,14 @@ export function Dialog({
             </DialogContext.Provider>
           </DialogPrimitive.Content>
         </div>
-        
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>
   );
 }
 
-// ─── Subcomponente: DialogHeader ───────────────────────────────────────────────
+/* ==========================================================================
+   SUBCOMPONENTE: DIALOG HEADER
+   ========================================================================== */
 
 export interface DialogHeaderProps {
   title: React.ReactNode;
@@ -98,12 +120,12 @@ export interface DialogHeaderProps {
   className?: string;
 }
 
-/* CORREGIDO: Consumo exacto de combinaciones de color semánticas autorizadas (Fondo / Texto) */
+/* Consumo estricto de tokens HSL (globals.css v2.0) */
 const variantIconBg: Record<DialogVariant, string> = {
-  default: "bg-accent-soft text-accent border border-accent/10",
-  destructive: "bg-error text-text-error border border-text-error/10",
-  warning: "bg-warning text-text-warning border border-text-warning/10",
-  info: "bg-info text-text-info border border-text-info/10",
+  default: "bg-accent-soft text-accent border border-accent/20",
+  destructive: "bg-destructive/15 text-destructive border border-destructive/20",
+  warning: "bg-warning/15 text-warning border border-warning/20",
+  info: "bg-accent-soft text-accent border border-accent/20",
 };
 
 export function DialogHeader({
@@ -116,11 +138,20 @@ export function DialogHeader({
   const { variant } = useDialogContext();
 
   return (
-    <div className={cn("px-6 pt-6 flex flex-col relative", withDivider ? "pb-4" : "pb-2", className)}>
+    <div
+      className={cn(
+        "px-6 pt-6 flex flex-col relative",
+        withDivider ? "pb-4 border-b border-border" : "pb-2",
+        className
+      )}
+    >
       <div className="flex items-start gap-4">
         {icon && (
-          <span 
-            className={cn("flex items-center justify-center w-10 h-10 rounded-md shrink-0 transition-colors", variantIconBg[variant])}
+          <span
+            className={cn(
+              "flex items-center justify-center size-10 rounded-sm shrink-0 transition-colors",
+              variantIconBg[variant]
+            )}
             aria-hidden="true"
           >
             {icon}
@@ -128,29 +159,29 @@ export function DialogHeader({
         )}
 
         <div className="flex-1 min-w-0 pr-6">
-          {/* CORREGIDO: H2 semántico para cumplimiento estricto ARIA/A11y */}
           <DialogPrimitive.Title asChild>
-            <h2 className="font-heading font-semibold text-lg leading-snug text-text-primary tracking-tight">
+            <h2 className="font-heading font-semibold text-heading-lg leading-snug text-text-primary tracking-tight">
               {title}
             </h2>
           </DialogPrimitive.Title>
-          
+
           {description && (
             <DialogPrimitive.Description asChild>
-              <p className="mt-1 text-sm text-text-secondary leading-relaxed font-sans">
+              <p className="mt-1 text-body-dense text-text-secondary leading-relaxed font-sans">
                 {description}
               </p>
             </DialogPrimitive.Description>
           )}
         </div>
       </div>
-      {withDivider && <hr className="w-full rule-holo mt-4 absolute bottom-0 left-0" />}
     </div>
   );
 }
 DialogHeader.displayName = "DialogHeader";
 
-// ─── Subcomponente: DialogBody ─────────────────────────────────────────────────
+/* ==========================================================================
+   SUBCOMPONENTE: DIALOG BODY
+   ========================================================================== */
 
 export interface DialogBodyProps {
   scrollable?: boolean;
@@ -158,12 +189,16 @@ export interface DialogBodyProps {
   children: React.ReactNode;
 }
 
-export function DialogBody({ scrollable = false, className = "", children }: DialogBodyProps) {
+export function DialogBody({
+  scrollable = false,
+  className = "",
+  children,
+}: DialogBodyProps) {
   return (
-    <div 
+    <div
       className={cn(
-        "px-6 py-4 text-sm text-text-primary font-sans leading-relaxed", 
-        scrollable && "overflow-y-auto max-h-[55vh] scrollbar-soft", 
+        "px-6 py-4 text-body-dense text-text-primary font-sans leading-relaxed",
+        scrollable && "overflow-y-auto max-h-[55vh] scrollbar-soft",
         className
       )}
     >
@@ -173,7 +208,9 @@ export function DialogBody({ scrollable = false, className = "", children }: Dia
 }
 DialogBody.displayName = "DialogBody";
 
-// ─── Subcomponente: DialogFooter ───────────────────────────────────────────────
+/* ==========================================================================
+   SUBCOMPONENTE: DIALOG FOOTER
+   ========================================================================== */
 
 export interface DialogFooterProps {
   align?: "left" | "center" | "right" | "between";
@@ -182,23 +219,31 @@ export interface DialogFooterProps {
   children: React.ReactNode;
 }
 
-const footerAlignClasses: Record<NonNullable<DialogFooterProps["align"]>, string> = {
+const footerAlignClasses: Record<
+  NonNullable<DialogFooterProps["align"]>,
+  string
+> = {
   left: "justify-start",
   center: "justify-center",
   right: "justify-end",
   between: "justify-between",
 };
 
-export function DialogFooter({ align = "right", withDivider = true, className = "", children }: DialogFooterProps) {
+export function DialogFooter({
+  align = "right",
+  withDivider = true,
+  className = "",
+  children,
+}: DialogFooterProps) {
   return (
-    <div 
+    <div
       className={cn(
-        "flex items-center flex-wrap gap-2 px-6 pb-5 pt-4 border-t border-transparent relative font-sans", 
-        footerAlignClasses[align], 
+        "flex items-center flex-wrap gap-2 px-6 pb-5 pt-4 relative font-sans",
+        withDivider && "border-t border-border",
+        footerAlignClasses[align],
         className
       )}
     >
-      {withDivider && <div className="w-full rule-holo absolute top-0 left-0" />}
       {children}
     </div>
   );

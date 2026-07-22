@@ -10,17 +10,24 @@ function Switch({
   size = "default",
   ...props
 }: React.ComponentProps<typeof SwitchPrimitive.Root> & {
-  size?: "sm" | "default"
+  size?: "sm" | "default";
 }) {
   return (
     <SwitchPrimitive.Root
       data-slot="switch"
       data-size={size}
       className={cn(
-        "peer group/switch inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs transition-colors duration-200 outline-none cursor-pointer",
-        "data-[state=checked]:bg-accent data-[state=unchecked]:bg-muted",
-        "focus-visible:ring-[3px] focus-visible:ring-accent-soft focus-visible:border-accent",
-        "disabled:cursor-not-allowed disabled:opacity-30 data-[disabled]:opacity-30",
+        /* Estructura base, geometría circular y cursor */
+        "peer group/switch inline-flex shrink-0 items-center rounded-full border transition-all duration-200 select-none outline-none cursor-pointer shadow-xs",
+        /* Estado Unchecked: Superficie neutra con borde sutil */
+        "data-[state=unchecked]:bg-surface data-[state=unchecked]:border-border",
+        /* Estado Checked: Color de acento del tenant */
+        "data-[state=checked]:bg-accent data-[state=checked]:border-accent",
+        /* Anillo de enfoque unificado (Glow Effect) de AGUSTIN */
+        "focus-visible:border-border-strong focus-visible:ring-4 focus-visible:ring-border-strong/20 focus-visible:ring-offset-0",
+        /* Estado Deshabilitado */
+        "disabled:cursor-not-allowed disabled:opacity-40 data-[disabled]:opacity-40",
+        /* Escala de dimensiones de la pista */
         "data-[size=default]:h-5 data-[size=default]:w-9 data-[size=sm]:h-4 data-[size=sm]:w-7",
         className
       )}
@@ -29,15 +36,19 @@ function Switch({
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
         className={cn(
-          "bg-white  pointer-events-none block rounded-full shadow-xs ring-0 transition-transform duration-200 math-rendering-fallback",
+          /* Geometría de la perilla y sombras */
+          "pointer-events-none block rounded-full bg-accent-foreground/90 shadow-xs ring-0 transition-transform duration-200",
+          /* Dimensiones de la perilla según el tamaño */
           "group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3",
+          /* Posición inactiva (Unchecked) */
           "data-[state=unchecked]:translate-x-0.5",
+          /* Posición activa (Checked) según tamaño */
           "group-data-[size=default]/switch:data-[state=checked]:translate-x-[16px]",
           "group-data-[size=sm]/switch:data-[state=checked]:translate-x-[12px]"
         )}
       />
     </SwitchPrimitive.Root>
-  )
+  );
 }
 
-export { Switch }
+export { Switch };

@@ -3,22 +3,36 @@ import { Slot } from "radix-ui"
 
 import { cn } from "@/src/utils/utils"
 
+
+
+/* ==========================================================================
+   COMPONENTE RAÍZ: BREADCRUMB
+   ========================================================================== */
+
 function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
-  return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />
+  return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
 }
+
+/* ==========================================================================
+   LISTA DE BREADCRUMBS
+   ========================================================================== */
 
 function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
   return (
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        "text-text-muted flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5",
+        "flex flex-wrap items-center gap-1.5 font-sans text-body-dense text-text-muted text-sm break-words sm:gap-2",
         className
       )}
       {...props}
     />
-  )
+  );
 }
+
+/* ==========================================================================
+   ÍTEM DE BREADCRUMB
+   ========================================================================== */
 
 function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">) {
   return (
@@ -27,26 +41,38 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">) {
       className={cn("inline-flex items-center gap-1.5", className)}
       {...props}
     />
-  )
+  );
 }
+
+/* ==========================================================================
+   ENLACE DE BREADCRUMB (POLIMÓRFICO CON RADIX SLOT)
+   ========================================================================== */
 
 function BreadcrumbLink({
   asChild,
   className,
   ...props
 }: React.ComponentProps<"a"> & {
-  asChild?: boolean
+  asChild?: boolean;
 }) {
-  const Comp = asChild ? Slot.Root : "a"
+  const Comp = asChild ? Slot.Root : "a";
 
   return (
     <Comp
       data-slot="breadcrumb-link"
-      className={cn("hover:text-text-primary transition-colors", className)}
+      className={cn(
+        "transition-colors duration-150 hover:text-text-primary outline-none rounded-xs",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-strong focus-visible:ring-offset-0",
+        className
+      )}
       {...props}
     />
-  )
+  );
 }
+
+/* ==========================================================================
+   PÁGINA ACTUAL (ESTADO INACTIVO DE NAVEGACIÓN / RECURSO ACTIVO)
+   ========================================================================== */
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
   return (
@@ -55,10 +81,10 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
       role="link"
       aria-disabled="true"
       aria-current="page"
-      className={cn("text-text-primary font-normal", className)}
+      className={cn("font-medium text-text-primary select-none", className)}
       {...props}
     />
-  )
+  );
 }
 
 function BreadcrumbSeparator({
@@ -97,6 +123,7 @@ function BreadcrumbEllipsis({
   )
 }
 
+
 export {
   Breadcrumb,
   BreadcrumbList,
@@ -104,5 +131,5 @@ export {
   BreadcrumbLink,
   BreadcrumbPage,
   BreadcrumbSeparator,
-  
-}
+  BreadcrumbEllipsis,
+};

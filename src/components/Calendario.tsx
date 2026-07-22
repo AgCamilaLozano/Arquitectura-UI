@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState, useCallback, useMemo, useEffect } from "react";
-import { ChevronLeft, ChevronRight, CalendarDays, X } from "lucide-react";
+import {CalendarDays, X } from "lucide-react";
 import Holidays from "date-holidays";
-// Importamos el Popover de Radix para un anclaje perfecto
 import { Popover as PopoverPrimitive } from "radix-ui";
 import { cn } from "@/src/utils/utils";
 
-// ─── Tipos e Interfaces (Idénticos a tu lógica) ───────────────────────────────
+/* ==========================================================================
+   TIPOS E INTERFACES
+   ========================================================================== */
+
 type CalendarMode = "days" | "months" | "years";
 type SelectionMode = "date" | "month" | "year";
 
@@ -23,7 +25,7 @@ export interface CalendarProps {
   variant?: "full" | "input";
   selectionMode?: SelectionMode;
   value?: Date | null;
-  onChange?: (date: Date | null) => void; // Permitimos null para el borrado limpio
+  onChange?: (date: Date | null) => void;
   minDate?: Date;
   maxDate?: Date;
   placeholder?: string;
@@ -44,7 +46,10 @@ const MESES_CORTO: Record<number, string> = {
   6: "Jul", 7: "Ago", 8: "Sep", 9: "Oct", 10: "Nov", 11: "Dic",
 };
 
-// ─── Tus Funciones Utilitarias Matemáticas Matemáticas (Se quedan igual) ──────
+/* ==========================================================================
+   FUNCIONES UTILITARIAS
+   ========================================================================== */
+
 export function getDiasDelMes(year: number, month: number): (number | null)[] {
   const primerDia = new Date(year, month, 1).getDay();
   const offset = primerDia === 0 ? 6 : primerDia - 1;
@@ -55,14 +60,24 @@ export function getDiasDelMes(year: number, month: number): (number | null)[] {
 }
 
 export function isSameDay(a: Date, b: Date) {
-  return a.getDate() === b.getDate() && a.getMonth() === b.getMonth() && a.getFullYear() === b.getFullYear();
+  return (
+    a.getDate() === b.getDate() &&
+    a.getMonth() === b.getMonth() &&
+    a.getFullYear() === b.getFullYear()
+  );
 }
 
 export function isWeekendDate(date: Date) {
   return date.getDay() === 0 || date.getDay() === 6;
 }
 
-export function isDisabledDay(day: number, year: number, month: number, min?: Date, max?: Date): boolean {
+export function isDisabledDay(
+  day: number,
+  year: number,
+  month: number,
+  min?: Date,
+  max?: Date
+): boolean {
   const d = new Date(year, month, day);
   if (min && d < new Date(min.getFullYear(), min.getMonth(), min.getDate())) return true;
   if (max && d > new Date(max.getFullYear(), max.getMonth(), max.getDate())) return true;
@@ -85,11 +100,18 @@ export function isDisabledYear(year: number, min?: Date, max?: Date): boolean {
 
 export function formatDate(date: Date, mode: SelectionMode = "date"): string {
   if (mode === "year") return String(date.getFullYear());
-  if (mode === "month") return date.toLocaleDateString("es-CO", { month: "long", year: "numeric" });
-  return date.toLocaleDateString("es-CO", { day: "2-digit", month: "2-digit", year: "numeric" });
+  if (mode === "month")
+    return date.toLocaleDateString("es-CO", { month: "long", year: "numeric" });
+  return date.toLocaleDateString("es-CO", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
 }
 
-// ─── Sub-componentes Visuales Internos Reutilizables ─────────────────────────
+/* ==========================================================================
+   SUBCOMPONENTES VISUALES
+   ========================================================================== */
 
 interface YearGridProps {
   yearBase: number;
@@ -99,12 +121,20 @@ interface YearGridProps {
   maxDate?: Date;
   size?: "sm" | "lg";
 }
-export const YearGrid: React.FC<YearGridProps> = ({ yearBase, selected, onSelectYear, minDate, maxDate, size = "lg" }) => {
+
+export const YearGrid: React.FC<YearGridProps> = ({
+  yearBase,
+  selected,
+  onSelectYear,
+  minDate,
+  maxDate,
+  size = "lg",
+}) => {
   const years = Array.from({ length: 12 }, (_, i) => yearBase + i);
   const today = new Date();
 
   return (
-    <div className="grid grid-cols-4 gap-1">
+    <div className="grid grid-cols-4 gap-1.5 font-sans">
       {years.map((year) => {
         const isSelected = selected ? selected.getFullYear() === year : false;
         const isCurrentYear = today.getFullYear() === year;
@@ -116,15 +146,17 @@ export const YearGrid: React.FC<YearGridProps> = ({ yearBase, selected, onSelect
             type="button"
             disabled={disabled}
             onClick={() => !disabled && onSelectYear(year)}
+            aria-selected={isSelected}
             className={cn(
-              "flex items-center justify-center rounded-md border transition-all duration-150 outline-none",
-              size === "lg" ? "h-10 text-sm" : "h-8 text-xs",
+              "flex items-center justify-center rounded-sm border transition-all duration-150 outline-none select-none",
+              "focus-visible:border-border-strong focus-visible:ring-4 focus-visible:ring-border-strong/20",
+              size === "lg" ? "h-10 text-sm text-body-dense font-medium" : "h-8 text-caption",
               isSelected
-                ? "bg-accent text-white border-accent shadow-xs"
+                ? "bg-accent text-accent-foreground border-accent shadow-2xs font-semibold"
                 : isCurrentYear
-                ? "border-accent bg-accent-soft text-accent font-medium"
+                ? "border-accent bg-accent-soft text-accent font-semibold"
                 : disabled
-                ? "text-text-disabled bg-muted/50 cursor-not-allowed border-border"
+                ? "text-text-secondary/40 bg-surface/50 border-border/60 cursor-not-allowed"
                 : "border-border text-text-primary hover:bg-accent-soft hover:text-accent hover:border-accent cursor-pointer"
             )}
           >
@@ -144,14 +176,23 @@ interface MonthGridProps {
   maxDate?: Date;
   size?: "sm" | "lg";
 }
-export const MonthGrid: React.FC<MonthGridProps> = ({ year, selected, onSelectMonth, minDate, maxDate, size = "lg" }) => {
+
+export const MonthGrid: React.FC<MonthGridProps> = ({
+  year,
+  selected,
+  onSelectMonth,
+  minDate,
+  maxDate,
+  size = "lg",
+}) => {
   const today = new Date();
 
   return (
-    <div className="grid grid-cols-3 gap-1">
+    <div className="grid grid-cols-3 gap-1.5 font-sans">
       {Object.entries(MESES_CORTO).map(([key, label]) => {
         const month = Number(key);
-        const isSelected = selected ? selected.getFullYear() === year && selected.getMonth() === month : false;
+        const isSelected =
+          selected ? selected.getFullYear() === year && selected.getMonth() === month : false;
         const isCurrentMonth = today.getMonth() === month && today.getFullYear() === year;
         const disabled = isDisabledMonth(year, month, minDate, maxDate);
 
@@ -161,15 +202,17 @@ export const MonthGrid: React.FC<MonthGridProps> = ({ year, selected, onSelectMo
             type="button"
             disabled={disabled}
             onClick={() => !disabled && onSelectMonth(month)}
+            aria-selected={isSelected}
             className={cn(
-              "flex items-center justify-center rounded-md border transition-all duration-150 outline-none",
-              size === "lg" ? "h-12 text-sm" : "h-9 text-xs",
+              "flex items-center justify-center rounded-sm border transition-all duration-150 outline-none select-none",
+              "focus-visible:border-border-strong focus-visible:ring-4 focus-visible:ring-border-strong/20",
+              size === "lg" ? "h-12 text-body-dense text-sm font-medium" : "h-9 text-caption",
               isSelected
-                ? "bg-accent text-white border-accent shadow-xs"
+                ? "bg-accent text-accent-foreground border-accent shadow-2xs font-semibold"
                 : isCurrentMonth
-                ? "border-accent bg-accent-soft text-accent font-medium"
+                ? "border-accent bg-accent-soft text-accent font-semibold"
                 : disabled
-                ? "text-text-disabled bg-muted/50 cursor-not-allowed border-border"
+                ? "text-text-secondary/40 bg-surface/50 border-border/60 cursor-not-allowed"
                 : "border-border text-text-primary hover:bg-accent-soft hover:text-accent hover:border-accent cursor-pointer"
             )}
           >
@@ -191,27 +234,53 @@ interface CalendarGridProps {
   maxDate?: Date;
   size?: "sm" | "lg";
 }
-export const CalendarGrid: React.FC<CalendarGridProps> = ({ year, month, selected, today, onSelectDay, minDate, maxDate, size = "lg" }) => {
+
+export const CalendarGrid: React.FC<CalendarGridProps> = ({
+  year,
+  month,
+  selected,
+  today,
+  onSelectDay,
+  minDate,
+  maxDate,
+  size = "lg",
+}) => {
   const dias = getDiasDelMes(year, month);
 
   const holidays = useMemo(() => {
-    const hd = new Holidays("CO");
-    return hd.getHolidays(year).map((h: HolidayType) => new Date(h.date));
+    try {
+      const hd = new Holidays("CO");
+      return hd.getHolidays(year).map((h: HolidayType) => new Date(h.date));
+    } catch {
+      return [];
+    }
   }, [year]);
 
   return (
     <>
-      <div className={cn("grid grid-cols-7", size === "lg" ? "mb-2" : "mb-1")}>
+      <div className={cn("grid grid-cols-7 font-sans", size === "lg" ? "mb-2" : "mb-1")}>
         {DIAS_SEMANA.map((d, i) => (
-          <div key={i} className={cn("text-center font-medium border-b border-border text-text-muted select-none", size === "lg" ? "text-sm py-2" : "text-[12px] py-1")}>
+          <div
+            key={i}
+            className={cn(
+              "text-center text-xs font-medium border-b border-border text-text-secondary select-none",
+              size === "lg" ? "py-2" : "py-1"
+            )}
+          >
             {d}
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7">
+      <div className="grid grid-cols-7 font-sans">
         {dias.map((day, i) => {
-          if (!day) return <div key={`empty-${i}`} className={size === "lg" ? "h-14 w-full" : "h-8 w-8 mx-auto"} />;
+          if (!day)
+            return (
+              <div
+                key={`empty-${i}`}
+                className={size === "lg" ? "h-14 w-full" : "size-8 mx-auto"}
+              />
+            );
 
           const date = new Date(year, month, day);
           const isSelected = selected ? isSameDay(date, selected) : false;
@@ -226,25 +295,30 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({ year, month, selecte
               type="button"
               disabled={disabled}
               onClick={() => !disabled && onSelectDay(day)}
+              aria-selected={isSelected}
+              aria-current={isToday ? "date" : undefined}
               className={cn(
-                "flex flex-col items-center justify-center border border-border select-none transition-all duration-150 outline-none",
-                size === "lg" ? "h-14 w-full p-1" : "h-8 w-8 mx-auto rounded-md",
+                "flex flex-col items-center justify-center border-b border-border select-none transition-all duration-150 outline-none",
+                "focus-visible:border-border-strong focus-visible:ring-4 focus-visible:ring-border-strong/20 focus-visible:z-10",
+                size === "lg" ? "h-14  w-full p-1" : "size-8 mx-auto rounded-md",
                 isSelected
-                  ? "bg-accent text-white border-accent shadow-xs scale-102"
+                  ? "bg-accent text-accent-foreground border-accent shadow-2xs font-semibold z-10"
                   : isToday
                   ? "border-accent bg-accent-soft text-accent font-semibold"
                   : disabled
-                  ? "text-text-disabled bg-muted/40 cursor-not-allowed"
+                  ? "text-text-secondary/40 bg-surface/50 cursor-not-allowed"
                   : isHolidayDay
-                  ? "bg-error/40 text-text-error border-text-error/20"
+                  ? "bg-destructive/15 text-destructive border-destructive/20 font-medium"
                   : isWeekendDayValue
-                  ? "bg-muted/20 text-text-muted hover:bg-muted/40"
+                  ? "bg-surface/60 text-text-secondary hover:bg-surface"
                   : "text-text-primary hover:bg-accent-soft hover:text-accent"
               )}
             >
-              <span className={cn("text-center block", size === "lg" ? "text-sm font-medium" : "text-xs")}>{day}</span>
+              <span className={cn("text-center block", size === "lg" ? "text-body-dense font-medium" : "text-caption")}>
+                {day}
+              </span>
               {size === "lg" && (
-                <span className="text-[10px] block opacity-80 truncate">
+                <span className="text-[10px] block opacity-80 truncate leading-none mt-0.5">
                   {isHolidayDay ? "Festivo" : isToday ? "Hoy" : ""}
                 </span>
               )}
@@ -267,29 +341,81 @@ interface CalendarHeaderProps {
   selectionMode: SelectionMode;
   size?: "sm" | "lg";
 }
-export const CalendarHeader: React.FC<CalendarHeaderProps> = ({ year, month, mode, yearBase, onPrev, onNext, onClickTitle, selectionMode, size = "lg" }) => {
-  const canDrillUp = (mode === "days" && selectionMode === "date") || (mode === "months" && (selectionMode === "date" || selectionMode === "month")) || (mode === "days" && selectionMode === "month");
-  const titleLabel = mode === "years" ? `${yearBase} – ${yearBase + 11}` : mode === "months" ? String(year) : `${MESES_LARGO[month]} ${year}`;
+
+export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
+  year,
+  month,
+  mode,
+  yearBase,
+  onPrev,
+  onNext,
+  onClickTitle,
+  selectionMode,
+  size = "lg",
+}) => {
+  const canDrillUp =
+    (mode === "days" && selectionMode === "date") ||
+    (mode === "months" && (selectionMode === "date" || selectionMode === "month")) ||
+    (mode === "days" && selectionMode === "month");
+
+  const titleLabel =
+    mode === "years"
+      ? `${yearBase} – ${yearBase + 11}`
+      : mode === "months"
+      ? String(year)
+      : `${MESES_LARGO[month]} ${year}`;
 
   return (
-    <div className={cn("flex items-center justify-between", size === "lg" ? "mb-4 px-1" : "mb-2 px-0")}>
-      <button type="button" className={cn("flex items-center justify-center rounded-lg border border-border text-text-secondary hover:border-accent hover:text-accent hover:bg-accent-soft transition-all duration-150 cursor-pointer outline-none", size === "lg" ? "size-9" : "size-7")} onClick={onPrev}>
-        <ChevronLeft size={size === "lg" ? 16 : 14} />
+    <div className={cn("flex items-center justify-between font-sans", size === "lg" ? "mb-4 px-1" : "mb-2 px-0")}>
+      <button
+        type="button"
+        aria-label="Período anterior"
+        className={cn(
+          "flex flex-col items-center justify-center rounded-sm border border-border text-text-secondary",
+          "hover:border-border-strong hover:text-text-primary hover:bg-surface transition-all duration-150 cursor-pointer outline-none",
+          "focus-visible:border-border-strong focus-visible:ring-3 focus-visible:ring-border-strong/20",
+          size === "lg" ? "size-8" : "size-6"
+        )}
+        onClick={onPrev}
+      >
+        ‹
       </button>
 
-      <button type="button" onClick={canDrillUp ? onClickTitle : undefined} className={cn("flex flex-col items-center px-3 py-1 rounded-md transition-all duration-150 outline-none", canDrillUp ? "cursor-pointer hover:bg-accent-soft hover:text-accent" : "cursor-default")}>
-        <span className={cn("font-semibold tracking-wider text-text-primary", size === "lg" ? "text-sm" : "text-xs")}>{titleLabel}</span>
-        {canDrillUp && <span className="text-accent text-[9px] font-medium mt-0.5">▲ cambiar vista</span>}
+      <button
+        type="button"
+        onClick={canDrillUp ? onClickTitle : undefined}
+        className={cn(
+          "flex flex-col items-center px-3 py-1 rounded-sm transition-all duration-150 outline-none",
+          "focus-visible:ring-2 focus-visible:ring-border-strong",
+          canDrillUp ? "cursor-pointer hover:bg-accent-soft hover:text-accent" : "cursor-default"
+        )}
+      >
+        <span className={cn("font-heading font-semibold tracking-tight text-text-primary", size === "lg" ? "text-body-base" : "text-body-dense")}>
+          {titleLabel}
+        </span>
+        {canDrillUp && <span className="text-accent text-[10px] font-medium leading-none mt-0.5">▲ cambiar vista</span>}
       </button>
 
-      <button type="button" className={cn("flex items-center justify-center rounded-lg border border-border text-text-secondary hover:border-accent hover:text-accent hover:bg-accent-soft transition-all duration-150 cursor-pointer outline-none", size === "lg" ? "size-9" : "size-7")} onClick={onNext}>
-        <ChevronRight size={size === "lg" ? 16 : 14} />
+      <button
+        type="button"
+        aria-label="Período siguiente"
+        className={cn(
+          "flex items-center justify-center rounded-sm border border-border text-text-secondary",
+          "hover:border-border-strong hover:text-text-primary hover:bg-surface transition-all duration-150 cursor-pointer outline-none",
+          "focus-visible:border-border-strong focus-visible:ring-4 focus-visible:ring-border-strong/20",
+          size === "lg" ? "size-8" : "size-6"
+        )}
+        onClick={onNext}
+      >
+        ›
       </button>
     </div>
   );
 };
 
-// ─── Componente Principal Calendar ────────────────────────────────────────────
+/* ==========================================================================
+   COMPONENTE PRINCIPAL: CALENDAR
+   ========================================================================== */
 
 export const Calendar: React.FC<CalendarProps> = ({
   variant = "full",
@@ -306,7 +432,6 @@ export const Calendar: React.FC<CalendarProps> = ({
   const today = useMemo(() => new Date(), []);
   const [isMounted, setIsMounted] = useState(false);
 
-  // 4. SOLUCIÓN AL BUG DE HYDRATION: Esperar a que monte el cliente antes de evaluar fechas dinámicas
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -319,7 +444,8 @@ export const Calendar: React.FC<CalendarProps> = ({
   const viewYear = viewDate.getFullYear();
   const viewMonth = viewDate.getMonth();
 
-  const initialMode: CalendarMode = selectionMode === "year" ? "years" : selectionMode === "month" ? "months" : "days";
+  const initialMode: CalendarMode =
+    selectionMode === "year" ? "years" : selectionMode === "month" ? "months" : "days";
   const [mode, setMode] = useState<CalendarMode>(initialMode);
 
   const [yearBase, setYearBase] = useState(() => {
@@ -347,23 +473,32 @@ export const Calendar: React.FC<CalendarProps> = ({
     }
   }, [mode, viewYear]);
 
-  const handleSelectYear = useCallback((year: number) => {
-    setViewDate(new Date(year, viewMonth, 1));
-    if (selectionMode === "year") {
-      onChange?.(new Date(year, 0, 1));
-    } else setMode("months");
-  }, [viewMonth, selectionMode, onChange]);
+  const handleSelectYear = useCallback(
+    (year: number) => {
+      setViewDate(new Date(year, viewMonth, 1));
+      if (selectionMode === "year") {
+        onChange?.(new Date(year, 0, 1));
+      } else setMode("months");
+    },
+    [viewMonth, selectionMode, onChange]
+  );
 
-  const handleSelectMonth = useCallback((month: number) => {
-    setViewDate(new Date(viewYear, month, 1));
-    if (selectionMode === "month" || selectionMode === "year") {
-      onChange?.(new Date(viewYear, month, 1));
-    } else setMode("days");
-  }, [viewYear, selectionMode, onChange]);
+  const handleSelectMonth = useCallback(
+    (month: number) => {
+      setViewDate(new Date(viewYear, month, 1));
+      if (selectionMode === "month" || selectionMode === "year") {
+        onChange?.(new Date(viewYear, month, 1));
+      } else setMode("days");
+    },
+    [viewYear, selectionMode, onChange]
+  );
 
-  const handleSelectDay = useCallback((day: number) => {
-    onChange?.(new Date(viewYear, viewMonth, day));
-  }, [viewYear, viewMonth, onChange]);
+  const handleSelectDay = useCallback(
+    (day: number) => {
+      onChange?.(new Date(viewYear, viewMonth, day));
+    },
+    [viewYear, viewMonth, onChange]
+  );
 
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -373,50 +508,102 @@ export const Calendar: React.FC<CalendarProps> = ({
   const renderBody = (size: "sm" | "lg") => (
     <div className="flex flex-col gap-1.5">
       <CalendarHeader
-        year={viewYear} month={viewMonth} mode={mode} yearBase={yearBase}
-        onPrev={handlePrev} onNext={handleNext} onClickTitle={handleClickTitle}
-        selectionMode={selectionMode} size={size}
+        year={viewYear}
+        month={viewMonth}
+        mode={mode}
+        yearBase={yearBase}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        onClickTitle={handleClickTitle}
+        selectionMode={selectionMode}
+        size={size}
       />
-      {mode === "years" && <YearGrid yearBase={yearBase} selected={value} onSelectYear={handleSelectYear} minDate={minDate} maxDate={maxDate} size={size} />}
-      {mode === "months" && <MonthGrid year={viewYear} selected={value} onSelectMonth={handleSelectMonth} minDate={minDate} maxDate={maxDate} size={size} />}
-      {mode === "days" && <CalendarGrid year={viewYear} month={viewMonth} selected={value} today={today} onSelectDay={handleSelectDay} minDate={minDate} maxDate={maxDate} size={size} />}
+      {mode === "years" && (
+        <YearGrid
+          yearBase={yearBase}
+          selected={value}
+          onSelectYear={handleSelectYear}
+          minDate={minDate}
+          maxDate={maxDate}
+          size={size}
+        />
+      )}
+      {mode === "months" && (
+        <MonthGrid
+          year={viewYear}
+          selected={value}
+          onSelectMonth={handleSelectMonth}
+          minDate={minDate}
+          maxDate={maxDate}
+          size={size}
+        />
+      )}
+      {mode === "days" && (
+        <CalendarGrid
+          year={viewYear}
+          month={viewMonth}
+          selected={value}
+          today={today}
+          onSelectDay={handleSelectDay}
+          minDate={minDate}
+          maxDate={maxDate}
+          size={size}
+        />
+      )}
     </div>
   );
 
-  if (!isMounted) return <div className="h-10 min-w-[220px] bg-muted/20 animate-pulse rounded-md" />;
+  if (!isMounted)
+    return <div className="h-10 min-w-[220px] bg-surface/50 animate-pulse rounded-md" />;
 
-  // ── Variante FULL (Calendario Incrustado) ────────────────────────────────────
+  /* ── VARIANTE FULL (INCRUSTADO EN PÁGINA) ── */
   if (variant === "full") {
     return (
-      <div className={cn("bg-background rounded-xl border border-border p-5 w-full max-w-xl shadow-xs", className)}>
+      <div
+        className={cn(
+          "bg-background rounded-sm border border-border p-5 w-full max-w-xl shadow-xs font-sans text-text-primary",
+          className
+        )}
+      >
         {renderBody("lg")}
       </div>
     );
   }
 
-  // ── Variante INPUT (Flotante mediante Radix Popover) ─────────────────────────
+  /* ── VARIANTE INPUT (FLOTANTE MEDIANTE RADIX POPOVER) ── */
   return (
-    <div className={cn("flex flex-col gap-1.5 w-fit", className)}>
-      {label && <label className="text-sm text-text-secondary font-medium select-none">{label}</label>}
+    <div className={cn("flex flex-col gap-1.5 w-fit font-sans", className)}>
+      {label && (
+        <label className="text-body-dense text-text-secondary font-medium select-none">
+          {label}
+        </label>
+      )}
 
       <PopoverPrimitive.Root>
         <PopoverPrimitive.Trigger asChild disabled={disabled}>
           <button
             type="button"
             className={cn(
-              "inline-flex items-center gap-2 h-10 px-3 rounded-md border text-sm transition-all duration-150 min-w-[220px] text-left bg-background outline-none shadow-xs",
-              "border-border text-text-primary hover:border-accent cursor-pointer",
-              "data-[state=open]:border-accent data-[state=open]:ring-[3px] data-[state=open]:ring-accent-soft",
-              disabled && "opacity-50 cursor-not-allowed bg-muted"
+              "inline-flex items-center gap-2 h-9 px-3 rounded-sm border text-body-dense transition-all duration-150 min-w-[220px] text-left bg-background outline-none shadow-2xs",
+              "border-border text-text-primary hover:border-border-strong cursor-pointer",
+              /* Física de Enfoque Unificada (Glow Effect) */
+              "focus-visible:border-border-strong focus-visible:ring-3 focus-visible:ring-border-strong/20",
+              "data-[state=open]:border-border-strong data-[state=open]:ring-4 data-[state=open]:ring-border-strong/20",
+              disabled && "opacity-50 cursor-not-allowed bg-surface/50"
             )}
           >
-            <CalendarDays size={16} className="text-text-muted shrink-0" />
-            <span className={cn("flex-1 truncate", !value && "text-text-muted")}>
+            <CalendarDays className="size-4 text-text-secondary shrink-0" />
+            <span className={cn("flex-1 truncate", !value && "text-text-secondary/70")}>
               {value ? formatDate(value, selectionMode) : placeholder}
             </span>
             {value && !disabled && (
-              <span role="button" onClick={handleClear} className="text-text-muted hover:text-text-primary transition-colors shrink-0 p-0.5" aria-label="Limpiar fecha">
-                <X size={14} />
+              <span
+                role="button"
+                onClick={handleClear}
+                className="text-text-secondary hover:text-text-primary transition-colors shrink-0 p-0.5 rounded-xs focus-visible:ring-1 focus-visible:ring-border-strong"
+                aria-label="Limpiar fecha"
+              >
+                <X className="size-3.5" />
               </span>
             )}
           </button>
@@ -428,8 +615,10 @@ export const Calendar: React.FC<CalendarProps> = ({
             sideOffset={6}
             align="start"
             className={cn(
-              "z-[9999] bg-background border border-border rounded-md p-4 w-auto min-w-64 shadow-[var(--shadow-card)] outline-none",
-              "data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:zoom-in-95 duration-150"
+              "z-50 bg-background border border-border rounded-sm p-4 w-auto min-w-64 shadow-card outline-none font-sans",
+              "data-[state=open]:animate-in data-[state=closed]:animate-out",
+              "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+              "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 duration-150"
             )}
           >
             {renderBody("sm")}

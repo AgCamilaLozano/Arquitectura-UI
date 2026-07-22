@@ -17,44 +17,44 @@ interface LabelBadgeProps {
   className?: string;
 }
 
-/* CORREGIDO: Mapeo semántico estricto alineado con los tokens HSL de agustin/globals.css */
+/* MAPEO CORREGIDO: Tokens HSL semánticos alineados estrictamente con globals.css y Tailwind v4 */
 const colorVariantStyles: Record<LabelColor, Record<LabelVariant, string>> = {
   neutral: {
-    filled: "bg-primary text-primary-foreground border border-transparent",
-    soft: "bg-muted text-text-primary border border-border/40",
+    filled: "bg-primary !text-accent-foreground border border-transparent",
+    soft: "bg-surface text-text-primary border border-border",
     outline: "border border-border text-text-primary bg-transparent",
   },
   accent: {
-    filled: "bg-accent text-white border border-transparent",
-    soft: "bg-accent-soft text-accent border border-accent/20",
-    outline: "border border-accent text-accent bg-transparent",
+    filled: "bg-accent !text-accent-foreground border border-transparent",
+    soft: "bg-accent-soft !text-accent border border-accent/20",
+    outline: "border border-accent !text-accent bg-transparent",
   },
   success: {
-    filled: "bg-text-success text-white border border-transparent",
-    soft: "bg-success text-text-success border border-text-success/20",
-    outline: "border border-text-success text-text-success bg-transparent",
+    filled: "bg-text-success !text-accent-foreground border-transparent",
+    soft: "bg-alert-success !text-text-success border border-text-success/20",
+    outline: "border border-text-success !text-text-success bg-transparent",
   },
   error: {
-    filled: "bg-text-error text-white border border-transparent",
-    soft: "bg-error text-text-error border border-text-error/20",
-    outline: "border border-text-error text-text-error bg-transparent",
+    filled: "bg-destructive  !text-accent-foreground border border-transparent",
+    soft: "bg-alert-error !text-text-error border border-text-error/20",
+    outline: "border border-text-error !text-text-error bg-transparent",
   },
   warning: {
-    filled: "bg-text-warning text-white border border-transparent",
-    soft: "bg-warning text-text-warning border border-text-warning/20",
-    outline: "border border-text-warning text-text-warning bg-transparent",
+    filled: "bg-text-warning  !text-accent-foreground border border-transparent",
+    soft: "bg-alert-warning !text-text-warning border border-text-warning/20",
+    outline: "border border-text-warning !text-text-warning bg-transparent",
   },
   info: {
-    filled: "bg-text-info text-white border border-transparent",
-    soft: "bg-info text-text-info border border-text-info/20",
-    outline: "border border-text-info text-text-info bg-transparent",
+    filled: "bg-text-info  !text-accent-foreground border border-transparent",
+    soft: "bg-alert-info !text-text-info border border-text-info/20",
+    outline: "border border-text-info !text-text-info bg-transparent",
   },
 };
 
 const sizeStyles = {
-  sm: "text-xs px-2 py-0.5 gap-1 rounded-sm",
-  md: "text-sm px-2.5 py-1 gap-1.5 rounded-md",
-  lg: "text-sm px-3 py-1.5 gap-2 rounded-md",
+  sm: "text-caption px-2 py-0.5 gap-1 rounded-sm",
+  md: "text-body-dense px-2.5 py-1 gap-1.5 rounded-md",
+  lg: "text-body-dense px-3 py-1.5 gap-2 rounded-md",
 };
 
 const iconSizeStyles = {
@@ -83,15 +83,15 @@ export function LabelBadge({
     >
       {/* Icono Contextual de Acompañamiento */}
       {icon && (
-        <span 
-          className={cn("flex-shrink-0 flex items-center justify-center text-current/80", iconSizeStyles[size])}
+        <span
+          className={cn("flex-shrink-0 flex items-center justify-center !text-current", iconSizeStyles[size])}
           aria-hidden="true"
         >
           {icon}
         </span>
       )}
 
-      {/* Contenedor de Texto con elipsis de seguridad para evitar desbordamientos */}
+      {/* Contenedor de Texto con elipsis de seguridad */}
       <span className="truncate max-w-[140px] md:max-w-[200px]">{label}</span>
 
       {/* Botón de Remoción / Desasignación de Filtro */}

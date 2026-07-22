@@ -86,9 +86,9 @@ export function SearchableSelect({
         disabled={disabled}
         onClick={() => { if (!disabled) setOpen((p) => !p); setShowCustomInput(false); setCustomValue(""); }}
         className={cn(
-          "flex items-center justify-between gap-1 w-full rounded-md border border-border",
-          "bg-background px-3 py-2 text-sm ring-offset-background",
-          "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+          "flex items-center justify-between gap-1 w-full rounded-sm border border-border",
+          "bg-background px-3 py-2 text-sm ",
+          "focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-0",
           "disabled:cursor-not-allowed disabled:opacity-50",
           "hover:bg-accent-soft/50 transition-colors"
         )}
@@ -105,7 +105,7 @@ export function SearchableSelect({
       </button>
 
       {open && (
-        <div className="absolute z-50 mt-1 w-full min-w-[200px] rounded-md border bg-background border-border shadow-md outline-none animate-in fade-in-0 zoom-in-95">
+        <div className="absolute z-50 mt-1 w-full min-w-[200px] rounded-sm border bg-background border-border shadow-md outline-none animate-in fade-in-0 zoom-in-95">
           <div className="p-2 border-b border-border">
             <div className="relative">
               <input

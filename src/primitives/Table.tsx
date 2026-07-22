@@ -33,14 +33,27 @@ function getCellValue<T>(row: T, col: Column<T>): React.ReactNode {
 }
 
 const paddingClasses: Record<"sm" | "md" | "lg", string> = {
-  sm: "py-2 px-3 text-xs",
-  md: "p-4 text-sm",
-  lg: "py-5 px-6 text-base",
+  sm: "py-2 px-3 text-caption",
+  md: "py-3 px-4 text-body-dense",
+  lg: "py-4 px-6 text-body-base",
 };
 
 export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps<any>>(
-  ({ className, data = [], columns = [], maxHeight = "70vh", rowKey, emptyState, isLoading = false, headerVariant = "default", size = "md", ...props }, ref) => {
-
+  (
+    {
+      className,
+      data = [],
+      columns = [],
+      maxHeight = "70vh",
+      rowKey,
+      emptyState,
+      isLoading = false,
+      headerVariant = "default",
+      size = "md",
+      ...props
+    },
+    ref
+  ) => {
     // Procesamiento optimizado del agrupamiento lineal de cabeceras macro
     const groupedHeaders = React.useMemo(() => {
       const result: { label: string; start: number; span: number }[] = [];
@@ -70,7 +83,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps<any>>(
       <div
         ref={ref}
         className={cn(
-          "relative w-full overflow-hidden rounded-md border border-border bg-background flex flex-col shadow-xs",
+          "relative w-full overflow-hidden rounded-sm border border-border bg-background flex flex-col shadow-xs font-sans",
           className
         )}
         {...props}
@@ -79,26 +92,28 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps<any>>(
           className="scrollbar-soft overflow-auto w-full h-auto"
           style={{ maxHeight }}
         >
-          <table className="w-full text-sm text-left border-collapse font-sans text-text-primary">
-            
+          <table className="w-full text-left border-collapse text-text-primary">
             {/* ── ENCABEZADOS DE TABLA (STICKY) ── */}
-            <thead 
+            <thead
               className={cn(
-                "sticky top-0 z-20 font-heading select-none border-b border-border transition-colors duration-150",
-                isAccent ? "bg-accent text-white" : "bg-surface text-text-secondary"
+                "sticky top-0 z-20 select-none border-b border-border transition-colors duration-150 font-sans",
+                isAccent
+                  ? "bg-accent text-accent-foreground"
+                  : "bg-surface text-text-secondary"
               )}
             >
-              {/* Fila de Grupos Estructurales (ej: Datos del Contratista, Montos Totales) */}
+              {/* Fila de Grupos Estructurales */}
               {hasGroups && (
                 <tr className="border-b border-border/50">
                   {groupedHeaders.map((g, idx) => (
                     <th
                       key={`group-${g.label}-${idx}`}
                       colSpan={g.span}
+                      scope="colgroup"
                       className={cn(
-                        "py-2 px-4 text-center font-bold text-[10px] tracking-wider uppercase whitespace-nowrap",
-                        idx !== 0 && "border-l border-border/30",
-                        isAccent ? "text-white/90" : "text-accent label-mono"
+                        "py-1.5 px-3 text-center font-bold text-caption tracking-wider uppercase whitespace-nowrap",
+                        idx !== 0 && "border-l border-border/40",
+                        isAccent ? "text-accent-foreground/90" : "text-accent"
                       )}
                     >
                       {g.label}
@@ -110,14 +125,16 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps<any>>(
               {/* Fila de Columnas Individuales */}
               <tr className="border-b border-border">
                 {columns.map((col, i) => {
-                  const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
-                  
+                  const isFirstInGroup =
+                    col.group && (i === 0 || columns[i - 1].group !== col.group);
+
                   return (
                     <th
                       key={col.key}
+                      scope="col"
                       className={cn(
-                        "font-semibold text-xs tracking-tight whitespace-nowrap align-middle h-10",
-                        isFirstInGroup && i !== 0 && "border-l border-border/30",
+                        "font-semibold text-body-dense tracking-tight whitespace-nowrap align-middle h-10",
+                        isFirstInGroup && i !== 0 && "border-l border-border/40",
                         cellPaddingClass
                       )}
                       style={{
@@ -136,11 +153,17 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps<any>>(
             {/* ── CUERPO DE DATOS TRANSPARENTE ── */}
             <tbody className="divide-y divide-border bg-background">
               {isLoading ? (
-                /* Fila Animada Automática (Skeleton Progress) sin saltos visuales de CLS [cite: 1754, 1755] */
+                /* Fila Animada Automática (Skeleton Progress) */
                 Array.from({ length: 5 }).map((_, rowIdx) => (
-                  <tr key={`skeleton-row-${rowIdx}`} className="border-b border-border last:border-0">
+                  <tr
+                    key={`skeleton-row-${rowIdx}`}
+                    className="border-b border-border last:border-0"
+                  >
                     {columns.map((col) => (
-                      <td key={`skeleton-cell-${col.key}`} className={cellPaddingClass}>
+                      <td
+                        key={`skeleton-cell-${col.key}`}
+                        className={cellPaddingClass}
+                      >
                         <Skeleton className="h-4 w-2/3 rounded-sm" />
                       </td>
                     ))}
@@ -150,7 +173,7 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps<any>>(
                 <tr>
                   <td
                     colSpan={columns.length}
-                    className="py-12 px-4 text-center text-text-muted font-sans font-normal"
+                    className="py-12 px-4 text-center text-text-secondary font-sans font-normal text-body-base"
                   >
                     {emptyState ?? "No se encontraron registros en este módulo."}
                   </td>
@@ -162,17 +185,18 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps<any>>(
                   return (
                     <tr
                       key={key}
-                      className="transition-colors duration-150 hover:bg-muted/30 font-sans border-b border-border last:border-0"
+                      className="transition-colors duration-150 hover:bg-surface font-sans border-b border-border last:border-0"
                     >
                       {columns.map((col, i) => {
-                        const isFirstInGroup = col.group && (i === 0 || columns[i - 1].group !== col.group);
+                        const isFirstInGroup =
+                          col.group && (i === 0 || columns[i - 1].group !== col.group);
 
                         return (
                           <td
                             key={col.key}
                             className={cn(
                               "align-middle tracking-tight text-text-primary font-normal",
-                              isFirstInGroup && i !== 0 && "border-l border-border/30",
+                              isFirstInGroup && i !== 0 && "border-l border-border/40",
                               cellPaddingClass
                             )}
                             style={{ textAlign: col.align ?? "left" }}
@@ -191,6 +215,8 @@ export const DataTable = React.forwardRef<HTMLDivElement, DataTableProps<any>>(
       </div>
     );
   }
-) as <T>(props: DataTableProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> }) => React.ReactElement;
+) as <T>(
+  props: DataTableProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> }
+) => React.ReactElement;
 
 (DataTable as any).displayName = "DataTable";

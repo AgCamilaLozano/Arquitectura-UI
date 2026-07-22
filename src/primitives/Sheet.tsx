@@ -29,7 +29,10 @@ function SheetOverlay({
     <SheetPrimitive.Overlay
       data-slot="sheet-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-overlay-dark/50 data-[state=open]:animate-fade-in duration-200",
+        /* Fondo difuminado y transición suave */
+        "fixed inset-0 z-50 bg-black/60",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out",
+        "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 duration-200",
         className
       )}
       {...props}
@@ -53,16 +56,18 @@ function SheetContent({
       <SheetPrimitive.Content
         data-slot="sheet-content"
         className={cn(
-          "bg-background text-text-primary fixed z-50 flex flex-col gap-0 shadow-floating transition ease-in-out duration-300 font-sans outline-none",
-          "data-[state=open]:animate-fade-in-soft",
+          /* Superficie neutra sólida, elevación y tipografía base */
+          "bg-background p-5 text-text-primary fixed z-50 flex flex-col gap-0 shadow-floating font-sans outline-none transition ease-in-out duration-300",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out duration-300",
+          /* Posicionamiento y bordes semánticos según el lado */
           side === "right" &&
-            "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-full sm:w-3/4 border-l border-border sm:max-w-md",
+            "inset-y-0 right-0 h-full w-full sm:w-3/4 sm:max-w-md border-l border-border data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right",
           side === "left" &&
-            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-full sm:w-3/4 border-r border-border sm:max-w-md",
+            "inset-y-0 left-0 h-full w-full sm:w-3/4 sm:max-w-md border-r border-border data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left",
           side === "top" &&
-            "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b border-border",
+            "inset-x-0 top-0 h-auto border-b border-border data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top",
           side === "bottom" &&
-            "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t border-border",
+            "inset-x-0 bottom-0 h-auto border-t border-border data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
           className
         )}
         {...props}
@@ -73,8 +78,9 @@ function SheetContent({
         {showCloseButton && (
           <SheetPrimitive.Close
             className={cn(
-              "absolute top-4 right-4 rounded-md opacity-60 transition-all cursor-pointer p-1.5 text-text-muted hover:text-text-primary hover:bg-muted outline-none",
-              "focus-visible:outline-none focus-visible:border-accent focus-visible:ring-4 focus-visible:ring-border-strong/20 focus-visible:ring-offset-0"
+              "absolute top-4 right-4 rounded-sm p-1.5 text-text-secondary hover:text-text-primary hover:bg-surface transition-all cursor-pointer outline-none",
+              /* Física del Anillo de Enfoque Unificado (Glow Effect) */
+              "focus-visible:border-border-strong focus-visible:ring-4 focus-visible:ring-border-strong/20 focus-visible:ring-offset-0"
             )}
             aria-label="Cerrar panel"
           >
@@ -95,7 +101,7 @@ function SheetHeader({
     <div
       data-slot="sheet-header"
       className={cn(
-        "flex flex-col gap-1.5 p-5 border-b border-border relative",
+        "flex flex-col gap-1.5 py-5 border-b border-border relative",
         className
       )}
       {...props}
@@ -111,7 +117,7 @@ function SheetFooter({
     <div
       data-slot="sheet-footer"
       className={cn(
-        "mt-auto flex flex-row justify-end gap-2 p-5 border-t border-border",
+        "mt-auto flex flex-row justify-end gap-2 py-5 border-t border-border bg-surface/30",
         className
       )}
       {...props}
@@ -127,7 +133,7 @@ function SheetTitle({
     <SheetPrimitive.Title
       data-slot="sheet-title"
       className={cn(
-        "text-text-primary font-heading font-semibold text-lg tracking-tight",
+        "text-text-primary font-heading font-semibold  text-heading-lg tracking-tight",
         className
       )}
       {...props}
@@ -160,4 +166,6 @@ export {
   SheetFooter,
   SheetTitle,
   SheetDescription,
+  SheetPortal,
+  SheetOverlay,
 };

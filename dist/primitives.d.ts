@@ -1,14 +1,17 @@
 import * as React$1 from 'react';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
-import { Avatar as Avatar$1, Collapsible as Collapsible$1, Popover as Popover$1, RadioGroup as RadioGroup$1, Separator as Separator$1, Switch as Switch$1 } from 'radix-ui';
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import { Avatar as Avatar$1, Checkbox as Checkbox$1, Collapsible as Collapsible$1, Popover as Popover$1, RadioGroup as RadioGroup$1, Separator as Separator$1, Switch as Switch$1 } from 'radix-ui';
 import * as class_variance_authority_types from 'class-variance-authority/types';
 import { VariantProps } from 'class-variance-authority';
-import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
+import * as DropdownPrimitive from '@radix-ui/react-dropdown-menu';
 import * as SelectPrimitive from '@radix-ui/react-select';
 
 declare function Sheet(props: React$1.ComponentProps<typeof SheetPrimitive.Root>): React$1.JSX.Element;
 declare function SheetTrigger(props: React$1.ComponentProps<typeof SheetPrimitive.Trigger>): React$1.JSX.Element;
 declare function SheetClose(props: React$1.ComponentProps<typeof SheetPrimitive.Close>): React$1.JSX.Element;
+declare function SheetPortal(props: React$1.ComponentProps<typeof SheetPrimitive.Portal>): React$1.JSX.Element;
+declare function SheetOverlay({ className, ...props }: React$1.ComponentProps<typeof SheetPrimitive.Overlay>): React$1.JSX.Element;
 declare function SheetContent({ className, children, side, showCloseButton, ...props }: React$1.ComponentProps<typeof SheetPrimitive.Content> & {
     side?: "top" | "right" | "bottom" | "left";
     showCloseButton?: boolean;
@@ -69,19 +72,27 @@ interface TooltipProps {
     content: React$1.ReactNode;
     children: React$1.ReactNode;
     side?: TooltipSide;
-    ariaLabel?: string;
     align?: "start" | "center" | "end";
+    ariaLabel?: string;
     variant?: TooltipVariant;
     size?: TooltipSize;
     disabled?: boolean;
+    delayDuration?: number;
 }
-declare function Tooltip({ content, children, side, ariaLabel, align, variant, size, disabled, }: TooltipProps): React$1.JSX.Element;
+declare function Tooltip({ content, children, side, align, ariaLabel, variant, size, disabled, delayDuration, }: TooltipProps): React$1.JSX.Element;
+declare const TooltipProvider: React$1.FC<TooltipPrimitive.TooltipProviderProps>;
+declare const TooltipRoot: React$1.FC<TooltipPrimitive.TooltipProps>;
+declare const TooltipTrigger: React$1.ForwardRefExoticComponent<TooltipPrimitive.TooltipTriggerProps & React$1.RefAttributes<HTMLButtonElement>>;
+declare const TooltipContent: React$1.ForwardRefExoticComponent<TooltipPrimitive.TooltipContentProps & React$1.RefAttributes<HTMLDivElement>>;
 
 declare function Avatar({ className, size, ...props }: React$1.ComponentProps<typeof Avatar$1.Root> & {
     size?: "default" | "sm" | "lg";
 }): React$1.JSX.Element;
 declare function AvatarImage({ className, ...props }: React$1.ComponentProps<typeof Avatar$1.Image>): React$1.JSX.Element;
 declare function AvatarFallback({ className, ...props }: React$1.ComponentProps<typeof Avatar$1.Fallback>): React$1.JSX.Element;
+declare function AvatarBadge({ className, ...props }: React$1.ComponentProps<"span">): React$1.JSX.Element;
+declare function AvatarGroup({ className, ...props }: React$1.ComponentProps<"div">): React$1.JSX.Element;
+declare function AvatarGroupCount({ className, ...props }: React$1.ComponentProps<"div">): React$1.JSX.Element;
 
 declare const buttonVariants: (props?: ({
     variant?: "outline" | "link" | "default" | "secondary" | "ghost" | "destructive" | null | undefined;
@@ -92,7 +103,7 @@ interface ButtonProps extends React$1.ButtonHTMLAttributes<HTMLButtonElement>, V
 }
 declare const Button: React$1.ForwardRefExoticComponent<ButtonProps & React$1.RefAttributes<HTMLButtonElement>>;
 
-declare const Checkbox: React$1.ForwardRefExoticComponent<Omit<CheckboxPrimitive.CheckboxProps & React$1.RefAttributes<HTMLButtonElement>, "ref"> & React$1.RefAttributes<HTMLButtonElement>>;
+declare const Checkbox: React$1.ForwardRefExoticComponent<Omit<Checkbox$1.CheckboxProps & React$1.RefAttributes<HTMLButtonElement>, "ref"> & React$1.RefAttributes<HTMLButtonElement>>;
 
 declare function Collapsible({ ...props }: React$1.ComponentProps<typeof Collapsible$1.Root>): React$1.JSX.Element;
 declare function CollapsibleTrigger({ ...props }: React$1.ComponentProps<typeof Collapsible$1.CollapsibleTrigger>): React$1.JSX.Element;
@@ -120,10 +131,21 @@ interface DropdownMenuProps {
     className?: string;
     triggerIcon?: React$1.ReactNode;
 }
+declare const DropdownMenuRoot: React$1.FC<DropdownPrimitive.DropdownMenuProps>;
+declare const DropdownMenuTrigger: React$1.ForwardRefExoticComponent<DropdownPrimitive.DropdownMenuTriggerProps & React$1.RefAttributes<HTMLButtonElement>>;
+declare const DropdownMenuGroup: React$1.ForwardRefExoticComponent<DropdownPrimitive.DropdownMenuGroupProps & React$1.RefAttributes<HTMLDivElement>>;
+declare const DropdownMenuPortal: React$1.FC<DropdownPrimitive.DropdownMenuPortalProps>;
+declare function DropdownMenuContent({ className, sideOffset, align, ...props }: React$1.ComponentProps<typeof DropdownPrimitive.Content>): React$1.JSX.Element;
+declare function DropdownMenuItem({ className, variant, ...props }: React$1.ComponentProps<typeof DropdownPrimitive.Item> & {
+    variant?: "default" | "danger";
+}): React$1.JSX.Element;
+declare function DropdownMenuLabel({ className, ...props }: React$1.ComponentProps<typeof DropdownPrimitive.Label>): React$1.JSX.Element;
+declare function DropdownMenuSeparator({ className, ...props }: React$1.ComponentProps<typeof DropdownPrimitive.Separator>): React$1.JSX.Element;
 declare function DropdownMenu({ trigger, groups, align, width, disabled, className, triggerIcon, }: DropdownMenuProps): React$1.JSX.Element;
 
 declare const inputVariants: (props?: ({
     variant?: "default" | "destructive" | null | undefined;
+    inputSize?: "sm" | "lg" | "default" | null | undefined;
     withIcon?: "none" | "both" | "right" | "left" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface InputProps extends Omit<React$1.InputHTMLAttributes<HTMLInputElement>, "size">, VariantProps<typeof inputVariants> {
@@ -135,6 +157,8 @@ declare const Input: React$1.ForwardRefExoticComponent<InputProps & React$1.RefA
 
 declare function Popover({ ...props }: React$1.ComponentProps<typeof Popover$1.Root>): React$1.JSX.Element;
 declare function PopoverTrigger({ ...props }: React$1.ComponentProps<typeof Popover$1.Trigger>): React$1.JSX.Element;
+declare function PopoverAnchor({ ...props }: React$1.ComponentProps<typeof Popover$1.Anchor>): React$1.JSX.Element;
+declare function PopoverClose({ ...props }: React$1.ComponentProps<typeof Popover$1.Close>): React$1.JSX.Element;
 declare function PopoverContent({ className, align, sideOffset, ...props }: React$1.ComponentProps<typeof Popover$1.Content>): React$1.JSX.Element;
 
 declare function RadioGroup({ className, ...props }: React$1.ComponentProps<typeof RadioGroup$1.Root>): React$1.JSX.Element;
@@ -161,7 +185,7 @@ declare function Select({ ...props }: React$1.ComponentProps<typeof SelectPrimit
 declare function SelectGroup({ ...props }: React$1.ComponentProps<typeof SelectPrimitive.Group>): React$1.JSX.Element;
 declare function SelectValue({ ...props }: React$1.ComponentProps<typeof SelectPrimitive.Value>): React$1.JSX.Element;
 declare function SelectTrigger({ className, size, children, ...props }: React$1.ComponentProps<typeof SelectPrimitive.Trigger> & {
-    size?: "sm" | "default";
+    size?: "sm" | "default" | "lg";
 }): React$1.JSX.Element;
 declare namespace SelectTrigger {
     var displayName: string;
@@ -206,4 +230,4 @@ interface TextareaProps extends React$1.TextareaHTMLAttributes<HTMLTextAreaEleme
 }
 declare const Textarea: React$1.ForwardRefExoticComponent<TextareaProps & React$1.RefAttributes<HTMLTextAreaElement>>;
 
-export { Avatar, AvatarFallback, AvatarImage, Button, type ButtonProps, Checkbox, Collapsible, CollapsibleContent, CollapsibleTrigger, type Column, DataTable, type DataTableProps, type DropdownGroup, type DropdownItem, DropdownMenu, type DropdownMenuProps, Input, type InputProps, Popover, PopoverContent, PopoverTrigger, RadioGroup, RadioGroupItem, SearchableSelect, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger, Skeleton, Switch, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, type TextareaProps, Tooltip, type TooltipProps, buttonVariants, inputVariants, textareaVariants };
+export { Avatar, AvatarBadge, AvatarFallback, AvatarGroup, AvatarGroupCount, AvatarImage, Button, type ButtonProps, Checkbox, Collapsible, CollapsibleContent, CollapsibleTrigger, type Column, DataTable, type DataTableProps, type DropdownGroup, type DropdownItem, DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, type DropdownMenuProps, DropdownMenuRoot, DropdownMenuSeparator, DropdownMenuTrigger, Input, type InputProps, Popover, PopoverAnchor, PopoverClose, PopoverContent, PopoverTrigger, RadioGroup, RadioGroupItem, SearchableSelect, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetOverlay, SheetPortal, SheetTitle, SheetTrigger, Skeleton, Switch, type TabItem, Tabs, type TabsProps, type TabsVariant, Textarea, type TextareaProps, Tooltip, TooltipContent, type TooltipProps, TooltipProvider, TooltipRoot, type TooltipSide, type TooltipSize, TooltipTrigger, type TooltipVariant, buttonVariants, inputVariants, textareaVariants };
