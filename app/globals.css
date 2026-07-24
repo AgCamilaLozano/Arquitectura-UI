@@ -229,7 +229,7 @@
 @utility text-body-base {
   font-family: var(--font-sans);
   font-weight: 400;
-  font-size: 1.0rem;
+  font-size: 0.85rem;
   line-height: 1.5rem;
 }
 

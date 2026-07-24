@@ -29,7 +29,8 @@
   "scripts": {
     "dev:web": "next dev",
     "build:ui": "tsup && node -e \"const fs = require('fs'); ['dist/components.js', 'dist/primitives.js', 'dist/index.js'].forEach(f => { if(fs.existsSync(f)) { const c = fs.readFileSync(f, 'utf8'); fs.writeFileSync(f, '\\\"use client\\\";\\n' + c); } })\"",
-    "clean-install": "node -e \"const fs = require('fs'); fs.rmSync('node_modules', { recursive: true, force: true }); fs.rmSync('pnpm-lock.yaml', { force: true });\" && pnpm install"
+    "clean-install": "node -e \"const fs = require('fs'); fs.rmSync('node_modules', { recursive: true, force: true }); fs.rmSync('pnpm-lock.yaml', { force: true });\" && pnpm install",
+    "capture:banner": "node scripts/capture-banner.mjs"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.3",
@@ -41,8 +42,10 @@
     "@radix-ui/react-tooltip": "^1.1.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.4.0",
     "date-holidays": "^3.28.0",
     "radix-ui": "^1.4.3",
+    "react-day-picker": "^9.14.0",
     "tailwind-merge": "^3.0.1"
   },
   "peerDependencies": {
@@ -55,6 +58,7 @@
     "tailwindcss": "^4.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^22",
     "@types/react": "^19.0.0",

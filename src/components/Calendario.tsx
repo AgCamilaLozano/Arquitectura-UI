@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useState, useCallback, useMemo, useEffect } from "react";
-import {CalendarDays, X } from "lucide-react";
 import Holidays from "date-holidays";
-import { Popover as PopoverPrimitive } from "radix-ui";
-import { cn } from "@/src/utils/utils";
+import { cn } from "@/src"; // Importación oficial del proyecto (lib/utils.ts)
 
 /* ==========================================================================
    TIPOS E INTERFACES
@@ -22,15 +20,11 @@ interface HolidayType {
 }
 
 export interface CalendarProps {
-  variant?: "full" | "input";
   selectionMode?: SelectionMode;
   value?: Date | null;
   onChange?: (date: Date | null) => void;
   minDate?: Date;
   maxDate?: Date;
-  placeholder?: string;
-  label?: string;
-  disabled?: boolean;
   className?: string;
 }
 
@@ -98,17 +92,6 @@ export function isDisabledYear(year: number, min?: Date, max?: Date): boolean {
   return false;
 }
 
-export function formatDate(date: Date, mode: SelectionMode = "date"): string {
-  if (mode === "year") return String(date.getFullYear());
-  if (mode === "month")
-    return date.toLocaleDateString("es-CO", { month: "long", year: "numeric" });
-  return date.toLocaleDateString("es-CO", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-}
-
 /* ==========================================================================
    SUBCOMPONENTES VISUALES
    ========================================================================== */
@@ -119,7 +102,6 @@ interface YearGridProps {
   onSelectYear: (year: number) => void;
   minDate?: Date;
   maxDate?: Date;
-  size?: "sm" | "lg";
 }
 
 export const YearGrid: React.FC<YearGridProps> = ({
@@ -128,13 +110,12 @@ export const YearGrid: React.FC<YearGridProps> = ({
   onSelectYear,
   minDate,
   maxDate,
-  size = "lg",
 }) => {
   const years = Array.from({ length: 12 }, (_, i) => yearBase + i);
   const today = new Date();
 
   return (
-    <div className="grid grid-cols-4 gap-1.5 font-sans">
+    <div className="grid grid-cols-4 gap-1.5 font-lato">
       {years.map((year) => {
         const isSelected = selected ? selected.getFullYear() === year : false;
         const isCurrentYear = today.getFullYear() === year;
@@ -148,16 +129,15 @@ export const YearGrid: React.FC<YearGridProps> = ({
             onClick={() => !disabled && onSelectYear(year)}
             aria-selected={isSelected}
             className={cn(
-              "flex items-center justify-center rounded-sm border transition-all duration-150 outline-none select-none",
-              "focus-visible:border-border-strong focus-visible:ring-4 focus-visible:ring-border-strong/20",
-              size === "lg" ? "h-10 text-sm text-body-dense font-medium" : "h-8 text-caption",
+              "flex items-center justify-center rounded-[var(--radius)] border border-[hsl(var(--border-default))] transition-all duration-150 outline-none select-none h-10 text-sm font-medium",
+              "focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))]",
               isSelected
-                ? "bg-accent text-accent-foreground border-accent shadow-2xs font-semibold"
+                ? "bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] border-[hsl(var(--accent))] font-semibold shadow-xs"
                 : isCurrentYear
-                ? "border-accent bg-accent-soft text-accent font-semibold"
+                ? "border-[hsl(var(--accent))] bg-[hsl(var(--accent-soft))] text-[hsl(var(--accent))] font-semibold"
                 : disabled
-                ? "text-text-secondary/40 bg-surface/50 border-border/60 cursor-not-allowed"
-                : "border-border text-text-primary hover:bg-accent-soft hover:text-accent hover:border-accent cursor-pointer"
+                ? "text-[hsl(var(--text-secondary))]/40 bg-[hsl(var(--surface))]/50 border-[hsl(var(--border-default))]/60 cursor-not-allowed"
+                : "text-[hsl(var(--text-primary))] hover:bg-[hsl(var(--accent-soft))] hover:text-[hsl(var(--accent))] hover:border-[hsl(var(--accent))] cursor-pointer"
             )}
           >
             {year}
@@ -174,7 +154,6 @@ interface MonthGridProps {
   onSelectMonth: (month: number) => void;
   minDate?: Date;
   maxDate?: Date;
-  size?: "sm" | "lg";
 }
 
 export const MonthGrid: React.FC<MonthGridProps> = ({
@@ -183,12 +162,11 @@ export const MonthGrid: React.FC<MonthGridProps> = ({
   onSelectMonth,
   minDate,
   maxDate,
-  size = "lg",
 }) => {
   const today = new Date();
 
   return (
-    <div className="grid grid-cols-3 gap-1.5 font-sans">
+    <div className="grid grid-cols-3 gap-1.5 font-lato">
       {Object.entries(MESES_CORTO).map(([key, label]) => {
         const month = Number(key);
         const isSelected =
@@ -204,16 +182,15 @@ export const MonthGrid: React.FC<MonthGridProps> = ({
             onClick={() => !disabled && onSelectMonth(month)}
             aria-selected={isSelected}
             className={cn(
-              "flex items-center justify-center rounded-sm border transition-all duration-150 outline-none select-none",
-              "focus-visible:border-border-strong focus-visible:ring-4 focus-visible:ring-border-strong/20",
-              size === "lg" ? "h-12 text-body-dense text-sm font-medium" : "h-9 text-caption",
+              "flex items-center justify-center rounded-[var(--radius)] border border-[hsl(var(--border-default))] transition-all duration-150 outline-none select-none h-12 text-sm font-medium",
+              "focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))]",
               isSelected
-                ? "bg-accent text-accent-foreground border-accent shadow-2xs font-semibold"
+                ? "bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] border-[hsl(var(--accent))] shadow-xs font-semibold"
                 : isCurrentMonth
-                ? "border-accent bg-accent-soft text-accent font-semibold"
+                ? "border-[hsl(var(--accent))] bg-[hsl(var(--accent-soft))] text-[hsl(var(--accent))] font-semibold"
                 : disabled
-                ? "text-text-secondary/40 bg-surface/50 border-border/60 cursor-not-allowed"
-                : "border-border text-text-primary hover:bg-accent-soft hover:text-accent hover:border-accent cursor-pointer"
+                ? "text-[hsl(var(--text-secondary))]/40 bg-[hsl(var(--surface))]/50 border-[hsl(var(--border-default))]/60 cursor-not-allowed"
+                : "text-[hsl(var(--text-primary))] hover:bg-[hsl(var(--accent-soft))] hover:text-[hsl(var(--accent))] hover:border-[hsl(var(--accent))] cursor-pointer"
             )}
           >
             {label}
@@ -232,7 +209,6 @@ interface CalendarGridProps {
   onSelectDay: (day: number) => void;
   minDate?: Date;
   maxDate?: Date;
-  size?: "sm" | "lg";
 }
 
 export const CalendarGrid: React.FC<CalendarGridProps> = ({
@@ -243,7 +219,6 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   onSelectDay,
   minDate,
   maxDate,
-  size = "lg",
 }) => {
   const dias = getDiasDelMes(year, month);
 
@@ -258,29 +233,21 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 
   return (
     <>
-      <div className={cn("grid grid-cols-7 font-sans", size === "lg" ? "mb-2" : "mb-1")}>
+      <div className="grid grid-cols-7 font-lato mb-2">
         {DIAS_SEMANA.map((d, i) => (
           <div
             key={i}
-            className={cn(
-              "text-center text-xs font-medium border-b border-border text-text-secondary select-none",
-              size === "lg" ? "py-2" : "py-1"
-            )}
+            className="text-center text-xs font-medium border-b border-[hsl(var(--border-default))] text-[hsl(var(--text-secondary))] select-none py-2"
           >
             {d}
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 font-sans">
+      <div className="grid grid-cols-7 font-lato">
         {dias.map((day, i) => {
           if (!day)
-            return (
-              <div
-                key={`empty-${i}`}
-                className={size === "lg" ? "h-14 w-full" : "size-8 mx-auto"}
-              />
-            );
+            return <div key={`empty-${i}`} className="h-14 w-full" />;
 
           const date = new Date(year, month, day);
           const isSelected = selected ? isSameDay(date, selected) : false;
@@ -298,30 +265,27 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
               aria-selected={isSelected}
               aria-current={isToday ? "date" : undefined}
               className={cn(
-                "flex flex-col items-center justify-center border-b border-border select-none transition-all duration-150 outline-none",
-                "focus-visible:border-border-strong focus-visible:ring-4 focus-visible:ring-border-strong/20 focus-visible:z-10",
-                size === "lg" ? "h-14  w-full p-1" : "size-8 mx-auto rounded-md",
+                "flex flex-col items-center justify-center border-b border-[hsl(var(--border-default))] select-none transition-all duration-150 outline-none h-14 w-full p-1",
+                "focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))] focus-visible:z-10",
                 isSelected
-                  ? "bg-accent text-accent-foreground border-accent shadow-2xs font-semibold z-10"
+                  ? "bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] border-[hsl(var(--accent))] shadow-xs font-semibold z-10"
                   : isToday
-                  ? "border-accent bg-accent-soft text-accent font-semibold"
+                  ? "border-[hsl(var(--accent))] bg-[hsl(var(--accent-soft))] text-[hsl(var(--accent))] font-semibold"
                   : disabled
-                  ? "text-text-secondary/40 bg-surface/50 cursor-not-allowed"
+                  ? "text-[hsl(var(--text-secondary))]/40 bg-[hsl(var(--surface))]/50 cursor-not-allowed"
                   : isHolidayDay
-                  ? "bg-destructive/15 text-destructive border-destructive/20 font-medium"
+                  ? "bg-[hsl(var(--destructive))]/15 text-[hsl(var(--destructive))] border-[hsl(var(--destructive))]/20 font-medium"
                   : isWeekendDayValue
-                  ? "bg-surface/60 text-text-secondary hover:bg-surface"
-                  : "text-text-primary hover:bg-accent-soft hover:text-accent"
+                  ? "bg-[hsl(var(--surface))]/60 text-[hsl(var(--text-secondary))] hover:bg-[hsl(var(--surface))]"
+                  : "text-[hsl(var(--text-primary))] hover:bg-[hsl(var(--accent-soft))] hover:text-[hsl(var(--accent))]"
               )}
             >
-              <span className={cn("text-center block", size === "lg" ? "text-body-dense font-medium" : "text-caption")}>
+              <span className="text-center block text-sm font-medium">
                 {day}
               </span>
-              {size === "lg" && (
-                <span className="text-[10px] block opacity-80 truncate leading-none mt-0.5">
-                  {isHolidayDay ? "Festivo" : isToday ? "Hoy" : ""}
-                </span>
-              )}
+              <span className="text-[10px] block opacity-80 truncate leading-none mt-0.5">
+                {isHolidayDay ? "Festivo" : isToday ? "Hoy" : ""}
+              </span>
             </button>
           );
         })}
@@ -339,7 +303,6 @@ interface CalendarHeaderProps {
   onNext: () => void;
   onClickTitle: () => void;
   selectionMode: SelectionMode;
-  size?: "sm" | "lg";
 }
 
 export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
@@ -351,7 +314,6 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
   onNext,
   onClickTitle,
   selectionMode,
-  size = "lg",
 }) => {
   const canDrillUp =
     (mode === "days" && selectionMode === "date") ||
@@ -366,15 +328,14 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
       : `${MESES_LARGO[month]} ${year}`;
 
   return (
-    <div className={cn("flex items-center justify-between font-sans", size === "lg" ? "mb-4 px-1" : "mb-2 px-0")}>
+    <div className="flex items-center justify-between font-lato mb-4 px-1">
       <button
         type="button"
         aria-label="Período anterior"
         className={cn(
-          "flex flex-col items-center justify-center rounded-sm border border-border text-text-secondary",
-          "hover:border-border-strong hover:text-text-primary hover:bg-surface transition-all duration-150 cursor-pointer outline-none",
-          "focus-visible:border-border-strong focus-visible:ring-3 focus-visible:ring-border-strong/20",
-          size === "lg" ? "size-8" : "size-6"
+          "flex items-center justify-center rounded-[var(--radius)] border border-[hsl(var(--border-default))] text-[hsl(var(--text-secondary))] size-8",
+          "hover:border-[hsl(var(--text-primary))] hover:text-[hsl(var(--text-primary))] hover:bg-[hsl(var(--surface))] transition-all duration-150 cursor-pointer outline-none",
+          "focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))]"
         )}
         onClick={onPrev}
       >
@@ -385,25 +346,24 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
         type="button"
         onClick={canDrillUp ? onClickTitle : undefined}
         className={cn(
-          "flex flex-col items-center px-3 py-1 rounded-sm transition-all duration-150 outline-none",
-          "focus-visible:ring-2 focus-visible:ring-border-strong",
-          canDrillUp ? "cursor-pointer hover:bg-accent-soft hover:text-accent" : "cursor-default"
+          "flex flex-col items-center px-3 py-1 rounded-[var(--radius)] transition-all duration-150 outline-none",
+          "focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))]",
+          canDrillUp ? "cursor-pointer hover:bg-[hsl(var(--accent-soft))] hover:text-[hsl(var(--accent))]" : "cursor-default"
         )}
       >
-        <span className={cn("font-heading font-semibold tracking-tight text-text-primary", size === "lg" ? "text-body-base" : "text-body-dense")}>
+        <span className="font-montserrat font-semibold tracking-tight text-[hsl(var(--text-primary))] text-base">
           {titleLabel}
         </span>
-        {canDrillUp && <span className="text-accent text-[10px] font-medium leading-none mt-0.5">▲ cambiar vista</span>}
+        {canDrillUp && <span className="text-[hsl(var(--accent))] text-[10px] font-medium leading-none mt-0.5">▲ cambiar vista</span>}
       </button>
 
       <button
         type="button"
         aria-label="Período siguiente"
         className={cn(
-          "flex items-center justify-center rounded-sm border border-border text-text-secondary",
-          "hover:border-border-strong hover:text-text-primary hover:bg-surface transition-all duration-150 cursor-pointer outline-none",
-          "focus-visible:border-border-strong focus-visible:ring-4 focus-visible:ring-border-strong/20",
-          size === "lg" ? "size-8" : "size-6"
+          "flex items-center justify-center rounded-[var(--radius)] border border-[hsl(var(--border-default))] text-[hsl(var(--text-secondary))] size-8",
+          "hover:border-[hsl(var(--text-primary))] hover:text-[hsl(var(--text-primary))] hover:bg-[hsl(var(--surface))] transition-all duration-150 cursor-pointer outline-none",
+          "focus-visible:ring-2 focus-visible:ring-[hsl(var(--accent))]"
         )}
         onClick={onNext}
       >
@@ -414,19 +374,15 @@ export const CalendarHeader: React.FC<CalendarHeaderProps> = ({
 };
 
 /* ==========================================================================
-   COMPONENTE PRINCIPAL: CALENDAR
+   COMPONENTE PRINCIPAL: CALENDAR (ÚNICAMENTE VARIANTE INCRUSTADA "FULL")
    ========================================================================== */
 
 export const Calendar: React.FC<CalendarProps> = ({
-  variant = "full",
   selectionMode = "date",
   value = null,
   onChange,
   minDate,
   maxDate,
-  placeholder = "Seleccionar fecha",
-  label,
-  disabled = false,
   className = "",
 }) => {
   const today = useMemo(() => new Date(), []);
@@ -500,131 +456,60 @@ export const Calendar: React.FC<CalendarProps> = ({
     [viewYear, viewMonth, onChange]
   );
 
-  const handleClear = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onChange?.(null);
-  };
-
-  const renderBody = (size: "sm" | "lg") => (
-    <div className="flex flex-col gap-1.5">
-      <CalendarHeader
-        year={viewYear}
-        month={viewMonth}
-        mode={mode}
-        yearBase={yearBase}
-        onPrev={handlePrev}
-        onNext={handleNext}
-        onClickTitle={handleClickTitle}
-        selectionMode={selectionMode}
-        size={size}
-      />
-      {mode === "years" && (
-        <YearGrid
-          yearBase={yearBase}
-          selected={value}
-          onSelectYear={handleSelectYear}
-          minDate={minDate}
-          maxDate={maxDate}
-          size={size}
-        />
-      )}
-      {mode === "months" && (
-        <MonthGrid
-          year={viewYear}
-          selected={value}
-          onSelectMonth={handleSelectMonth}
-          minDate={minDate}
-          maxDate={maxDate}
-          size={size}
-        />
-      )}
-      {mode === "days" && (
-        <CalendarGrid
-          year={viewYear}
-          month={viewMonth}
-          selected={value}
-          today={today}
-          onSelectDay={handleSelectDay}
-          minDate={minDate}
-          maxDate={maxDate}
-          size={size}
-        />
-      )}
-    </div>
-  );
-
-  if (!isMounted)
-    return <div className="h-10 min-w-[220px] bg-surface/50 animate-pulse rounded-md" />;
-
-  /* ── VARIANTE FULL (INCRUSTADO EN PÁGINA) ── */
-  if (variant === "full") {
-    return (
-      <div
-        className={cn(
-          "bg-background rounded-sm border border-border p-5 w-full max-w-xl shadow-xs font-sans text-text-primary",
-          className
-        )}
-      >
-        {renderBody("lg")}
-      </div>
-    );
+  if (!isMounted) {
+    return <div className="h-80 w-full max-w-xl bg-[hsl(var(--surface))]/50 animate-pulse rounded-[var(--radius)]" />;
   }
 
-  /* ── VARIANTE INPUT (FLOTANTE MEDIANTE RADIX POPOVER) ── */
   return (
-    <div className={cn("flex flex-col gap-1.5 w-fit font-sans", className)}>
-      {label && (
-        <label className="text-body-dense text-text-secondary font-medium select-none">
-          {label}
-        </label>
+    <div
+      className={cn(
+        "bg-[hsl(var(--background))] rounded-[var(--radius)] border border-[hsl(var(--border-default))] p-5 w-full max-w-xl shadow-xs font-lato text-[hsl(var(--text-primary))]",
+        className
       )}
-
-      <PopoverPrimitive.Root>
-        <PopoverPrimitive.Trigger asChild disabled={disabled}>
-          <button
-            type="button"
-            className={cn(
-              "inline-flex items-center gap-2 h-9 px-3 rounded-sm border text-body-dense transition-all duration-150 min-w-[220px] text-left bg-background outline-none shadow-2xs",
-              "border-border text-text-primary hover:border-border-strong cursor-pointer",
-              /* Física de Enfoque Unificada (Glow Effect) */
-              "focus-visible:border-border-strong focus-visible:ring-3 focus-visible:ring-border-strong/20",
-              "data-[state=open]:border-border-strong data-[state=open]:ring-4 data-[state=open]:ring-border-strong/20",
-              disabled && "opacity-50 cursor-not-allowed bg-surface/50"
-            )}
-          >
-            <CalendarDays className="size-4 text-text-secondary shrink-0" />
-            <span className={cn("flex-1 truncate", !value && "text-text-secondary/70")}>
-              {value ? formatDate(value, selectionMode) : placeholder}
-            </span>
-            {value && !disabled && (
-              <span
-                role="button"
-                onClick={handleClear}
-                className="text-text-secondary hover:text-text-primary transition-colors shrink-0 p-0.5 rounded-xs focus-visible:ring-1 focus-visible:ring-border-strong"
-                aria-label="Limpiar fecha"
-              >
-                <X className="size-3.5" />
-              </span>
-            )}
-          </button>
-        </PopoverPrimitive.Trigger>
-
-        <PopoverPrimitive.Portal>
-          <PopoverPrimitive.Content
-            side="bottom"
-            sideOffset={6}
-            align="start"
-            className={cn(
-              "z-50 bg-background border border-border rounded-sm p-4 w-auto min-w-64 shadow-card outline-none font-sans",
-              "data-[state=open]:animate-in data-[state=closed]:animate-out",
-              "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-              "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 duration-150"
-            )}
-          >
-            {renderBody("sm")}
-          </PopoverPrimitive.Content>
-        </PopoverPrimitive.Portal>
-      </PopoverPrimitive.Root>
+    >
+      <div className="flex flex-col gap-1.5">
+        <CalendarHeader
+          year={viewYear}
+          month={viewMonth}
+          mode={mode}
+          yearBase={yearBase}
+          onPrev={handlePrev}
+          onNext={handleNext}
+          onClickTitle={handleClickTitle}
+          selectionMode={selectionMode}
+        />
+        {mode === "years" && (
+          <YearGrid
+            yearBase={yearBase}
+            selected={value}
+            onSelectYear={handleSelectYear}
+            minDate={minDate}
+            maxDate={maxDate}
+          />
+        )}
+        {mode === "months" && (
+          <MonthGrid
+            year={viewYear}
+            selected={value}
+            onSelectMonth={handleSelectMonth}
+            minDate={minDate}
+            maxDate={maxDate}
+          />
+        )}
+        {mode === "days" && (
+          <CalendarGrid
+            year={viewYear}
+            month={viewMonth}
+            selected={value}
+            today={today}
+            onSelectDay={handleSelectDay}
+            minDate={minDate}
+            maxDate={maxDate}
+          />
+        )}
+      </div>
     </div>
   );
 };
+
+Calendar.displayName = "Calendar";

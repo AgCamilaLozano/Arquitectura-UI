@@ -21,7 +21,7 @@ export function Section({ id, title, description, children }: {
 
 export function DemoBox({ children }: { children: React.ReactNode }) {
   return (
-    <div className="border border-border-default rounded-lg p-6 mb-4">
+    <div className="border border-border-default rounded-md p-6 mb-4">
       {children}
     </div>
   )

@@ -37,7 +37,7 @@ function Switch({
         data-slot="switch-thumb"
         className={cn(
           /* Geometría de la perilla y sombras */
-          "pointer-events-none block rounded-full bg-accent-foreground/90 shadow-xs ring-0 transition-transform duration-200",
+          "pointer-events-none block rounded-full bg-accent-foreground shadow-xs ring-0 transition-transform duration-200",
           /* Dimensiones de la perilla según el tamaño */
           "group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3",
           /* Posición inactiva (Unchecked) */

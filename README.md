@@ -1,151 +1,396 @@
-# `@agustin/ui` — Sistema de Diseño & Librería UI Multitenant
+<div align="center">
 
-> **Librería oficial de componentes atómicos, primitivas interactivas, tokens semánticos y arquitectura visual para el ERP de producción audiovisual AGUSTIN (AGAI / AgStudios).**
+<img src="./docs/assets/banner.png" alt="@agustin/ui Banner" width="100%">
 
-![Next.js 16](https://img.shields.io/badge/Next.js-16_App_Router-161618?style=flat-square&logo=next.js)
-![React 19](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)
-![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4-38BDF8?style=flat-square&logo=tailwind-css)
-![Radix UI](https://img.shields.io/badge/Radix_UI-Primitives-7c3aed?style=flat-square)
-![WCAG 2.1 AA](https://img.shields.io/badge/WCAG-2.1_AA_Compliant-22c55e?style=flat-square)
+<br>
+
+# 💜 @agustin/ui
+
+### Sistema de Diseño • Librería UI • Visual Runtime
+
+Infraestructura visual oficial del **ERP AGUSTIN (AGAI / AgStudios)**
+
+Construido con **React 19**, **Next.js 16**, **Tailwind CSS v4**, **TypeScript** y **Radix UI**
+
+> Componentes reutilizables • Tokens semánticos • Multi-Tenant • React Server Components • Accesibilidad WCAG 2.1 AA
+
+<br>
+
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=next.js)
+![Tailwind](https://img.shields.io/badge/Tailwind-v4-38BDF8?style=for-the-badge&logo=tailwind-css)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript)
+![Radix UI](https://img.shields.io/badge/Radix_UI-Primitives-7c3aed?style=for-the-badge)
+![WCAG](https://img.shields.io/badge/WCAG-2.1_AA-success?style=for-the-badge)
+
+</div>
 
 ---
 
-## 1. Visión General & Principios de Arquitectura
+# Tabla de Contenido
 
-`@agustin/ui` es la infraestructura de software visual optimizada para estandarizar las interfaces de los 30 módulos operacionales del ERP AGUSTIN (Contratación, Finanzas de Producción, Proyectos, Órdenes de Compra, Facturación, Presupuestos, etc.).
-
-### Principios Inmutables de Ingeniería UI/UX
-
-1. **Aislamiento Multi-Tenant Puro**: Los componentes están 100% desacoplados de la identidad de marca de los clientes. Ningún componente empaqueta estilos rígidos, colores en Hexadecimal (`#HEX`) ni valores RGB estáticos. La tematización opera dinámicamente en *runtime* a nivel de Edge.
-2. **Neutralidad de Superficie**: El andamiaje (grids, tablas, celdas y fondos) utiliza variables pálidas de baja saturación (`--background`, `--surface`, `--border-default`) para mitigar la fatiga cognitiva durante jornadas extensas de análisis financiero y operativo.
-3. **Intencionalidad Cromática (Morado MONTAJE Base)**: El uso del color de marca (`var(--accent)`) y colores de estado (`--destructive`, `--warning`, `--success`) se reserva estrictamente para disparadores interactivos, indicadores de estado y retroalimentación del sistema.
-4. **Física de Enfoque Unificada (*Glow Effect*)**: Todos los elementos interactivos responden a la navegación por teclado con el anillo de enfoque corporativo unificado (`focus-visible:border-border-strong focus-visible:ring-4 focus-visible:ring-border-strong/20`).
-5. **Rendimiento RSC & A11y**: Estructuras complejas se renderizan como *React Server Components* (RSC) para reducir el bundle enviado al navegador y garantizar el cumplimiento nativo del estándar **WCAG 2.1 AA**.
+- [¿Qué es @agustin/ui?](#-qué-es-agustinui)
+- [¿Por qué existe?](#-por-qué-existe)
+- [Principios](#-principios)
+- [Arquitectura](#-arquitectura)
+- [Contrato Visual](#-contrato-visual)
+- [Características](#-características)
+- [Quick Start](#-quick-start)
+- [Instalación](#-instalación)
+- [Sistema de Temas](#-sistema-de-temas)
+- [Organización](#-organización)
+- [Documentación](#-documentación)
+- [Roadmap](#-roadmap)
+- [Contribución](#-contribución)
+- [Licencia](#-licencia)
 
 ---
 
-## 2. Guía de Instalación e Integración
+# ¿Qué es @agustin/ui?
 
-Sigue estos pasos para integrar `@agustin/ui` en cualquier proyecto cliente o módulo del ecosistema AGUSTIN:
+`@agustin/ui` es el Sistema de Diseño oficial del ERP **AGUSTIN**.
 
-### Paso 1: Instalación del Paquete
+Más que una librería de componentes, constituye una infraestructura visual diseñada para construir aplicaciones empresariales consistentes, escalables y accesibles.
 
-Instala la librería consumiendo **pnpm** (gestor oficial del repositorio):
+Toda la identidad visual se abstrae mediante **tokens semánticos**, **variables CSS HSL** y **Tailwind CSS v4**, permitiendo que múltiples organizaciones compartan una misma base de código sin modificar los componentes.
+
+---
+
+# ¿Por qué existe?
+
+Antes de `@agustin/ui`, cada módulo del ERP evolucionaba con componentes y estilos propios.
+
+Esto provocaba:
+
+- Componentes duplicados
+- Inconsistencias visuales
+- Alto costo de mantenimiento
+- Dificultad para incorporar nuevos clientes
+- Tematización compleja
+
+`@agustin/ui` centraliza toda la infraestructura visual del ERP para ofrecer una única fuente de verdad.
+
+---
+
+# En números
+
+| | |
+|:---|:---:|
+| Componentes | **30+** |
+| Utilidades | **2+** |
+| Tokens | **40+** |
+| TypeScript | **100%** |
+| React Server Components | ✅ |
+| Multi-Tenant | ✅ |
+| Dark Mode | ✅ |
+| WCAG 2.1 AA | ✅ |
+
+---
+
+# Principios
+
+## Diseño Semántico
+
+Los componentes nunca conocen colores.
+
+Siempre utilizan tokens.
+
+```tsx
+className="bg-accent"
+```
+
+Nunca:
+
+```tsx
+className="bg-purple-600"
+```
+
+---
+
+## Multi-Tenant
+
+Cada empresa define únicamente sus variables HSL.
+
+Los componentes permanecen idénticos.
+
+---
+
+## Server First
+
+La librería prioriza React Server Components para minimizar JavaScript en cliente.
+
+---
+
+## Accesibilidad
+
+Todos los componentes cumplen WCAG 2.1 AA y utilizan primitivas accesibles de Radix UI.
+
+---
+
+## Consistencia
+
+Todos los módulos del ERP comparten:
+
+- Componentes
+- Tipografía
+- Espaciados
+- Sombras
+- Tokens
+- Estados
+- Interacciones
+
+---
+
+# Arquitectura
+
+```mermaid
+flowchart LR
+
+Tenant["Empresa"]
+
+Tenant --> Variables["Variables CSS"]
+
+Variables --> Tokens["@theme inline"]
+
+Tokens --> Tailwind["Tailwind CSS"]
+
+Tailwind --> Components["Componentes UI"]
+
+Components --> ERP["ERP AGUSTIN"]
+```
+
+---
+
+# Contrato Visual
+
+```
+:root
+   │
+   ▼
+Variables CSS
+
+--background
+--surface
+--accent
+--text-primary
+--border-default
+--border-strong
+
+   │
+   ▼
+
+tokens.css
+
+   │
+
+@theme inline
+
+   │
+
+Tailwind CSS
+
+   │
+
+bg-background
+
+text-accent
+
+border-border-default
+
+   │
+
+Componentes
+```
+
+---
+
+# Filosofía
+
+❌ Nunca
+
+```tsx
+<Button className="bg-purple-600" />
+```
+
+✅ Siempre
+
+```tsx
+<Button className="bg-accent" />
+```
+
+---
+
+❌ Nunca
+
+```css
+color:#7c3aed;
+```
+
+✅ Siempre
+
+```css
+color:hsl(var(--accent));
+```
+
+---
+
+❌ Nunca
+
+```css
+background:#ffffff;
+```
+
+✅ Siempre
+
+```css
+background:hsl(var(--background));
+```
+
+---
+
+# Características
+
+- React 19
+- Next.js 16
+- Tailwind CSS v4
+- TypeScript
+- Radix UI
+- Multi-Tenant
+- Dark Mode
+- Light Mode
+- SSR
+- React Server Components
+- WCAG 2.1 AA
+- Tree Shaking
+- Tokens Semánticos
+- Compound Components
+- Headless UI
+
+---
+
+# Instalación
 
 ```bash
 pnpm add @agustin/ui
 ```
 
-> **Nota:** Verifica que tu proyecto cuente con las *peer dependencies* requeridas: `react@^18 || ^19`, `tailwindcss@^4.0.0`, `lucide-react`, `next-themes` y `@radix-ui/react-*`.
+---
 
-### Paso 2: Importación de Tokens en el `globals.css` del ERP
+## Peer Dependencies
 
-La librería no empaqueta valores `:root` estáticos. En su lugar, expone su mapeo de Tailwind CSS v4 (`tokens.css`). Debes importarlo dentro del archivo `app/globals.css` de tu aplicación consumidora y declarar las variables HSL correspondientes:
+```text
+react >=18
 
-```css
-/* app/globals.css en la aplicación ERP */
-@import "tailwindcss";
-@import "@agustin/ui/tokens.css";
+react-dom >=18
 
-:root {
-  /* Canales Inyectados dinámicamente según la Empresa (Sistema MONTAJE Base: 265 - Morado) */
-  --tenant-hue: 265;
-  --tenant-saturation: 84%;
+next >=14
 
-  /* Geometría e Interacción Inmutables */
-  --radius: 0.5rem;
-  --font-montserrat: 'Montserrat', sans-serif;
-  --font-lato: 'Lato', sans-serif;
+tailwindcss >=4
 
-  /* Superficie y Estructura (Modo Claro) */
-  --background: 0 0% 100%;                  /* Blanco Puro */
-  --surface: 240 4% 97%;                    /* Gris pálido de baja saturación */
-  --border-default: 240 5% 90%;             /* Línea divisoria sutil */
-  --border-strong: var(--tenant-hue) var(--tenant-saturation) 48%; /* Anillo Glow */
+typescript >=5
 
-  /* Tipografía Semántica */
-  --text-primary: 240 4% 18%;               /* Gris Core Sólido (#2D2D2E) */
-  --text-secondary: 240 2% 47%;             /* Descripciones y metadatos */
+node >=20
 
-  /* Dinámica de Marca (Tenant Accent) */
-  --accent: var(--tenant-hue) var(--tenant-saturation) 58%;
-  --accent-foreground: 0 0% 100%;
-  --accent-soft: var(--tenant-hue) var(--tenant-saturation) 95%;
+next-themes
 
-  /* Semántica de Estados Operativos */
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 98%;
-  --warning: 38 92% 50%;
-  --warning-foreground: 48 96% 89%;
-  --success: 142 76% 36%;
-  --success-foreground: 138 76% 97%;
-}
+lucide-react
 
-/* Contrato de Inversión Semántica para Modo Oscuro (.dark) */
-.dark {
-  --background: 240 5% 8%;               /* Gris Oscuro Transaccional (#14161A) */
-  --surface: 240 4% 12%;                 /* Fondo de tarjetas y sidebars */
-  --border-default: 240 3% 19%;          /* Líneas estructurales oscuras */
-  --border-strong: var(--tenant-hue) var(--tenant-saturation) 55%;
-
-  --text-primary: 240 2% 93%;            /* Blanco roto de alta legibilidad */
-  --text-secondary: 240 2% 72%;          /* Texto secundario atenuado */
-
-  --accent: var(--tenant-hue) var(--tenant-saturation) 65%;
-  --accent-soft: var(--tenant-hue) 20% 15%;
-}
+@radix-ui/*
 ```
 
-### Paso 3: Configuración del Provider Raíz
+---
 
-Envuelve el árbol de la aplicación en tu layout principal (`app/layout.tsx`) con el `TooltipProvider` e inyecta las fuentes corporativas (**Montserrat** y **Lato**):
+# Quick Start
 
 ```tsx
-import { TooltipProvider } from "@agustin/ui";
-import "@/app/globals.css";
+import { Button, TooltipProvider } from "@agustin/ui";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Page() {
   return (
-    <html lang="es" className="dark">
-      <body className="font-sans bg-background text-text-primary antialiased">
-        <TooltipProvider delayDuration="{200}">
-          {children}
-        </TooltipProvider>
-      </body>
-    </html>
+    <TooltipProvider>
+      <Button>
+        Crear Orden de Compra
+      </Button>
+    </TooltipProvider>
   );
 }
 ```
 
 ---
 
-## 3. Escala Tipográfica Operativa
+# Sistema de Temas
 
-Las familias tipográficas se consumen en las aplicaciones consumidoras mediante las clases del sistema:
+El sistema utiliza un contrato basado en variables HSL.
 
-| Token / Clase | Fuente | Peso | Tamaño / Interlínea | Aplicación Técnica |
-| :--- | :--- | :--- | :--- | :--- |
-| `text-display-xl` | Montserrat | Bold (700) | 2.25rem (36px) / 2.5rem | Títulos de Dashboard y Cabeceras de Módulos |
-| `text-heading-lg` | Montserrat | SemiBold (600) | 1.5rem (24px) / 2.0rem | Encabezados de Paneles, Modales y Drawers |
-| `text-body-base` | Lato | Regular (400) | 1.0rem (16px) / 1.5rem | Entradas de formularios, celdas y párrafos |
-| `text-body-dense` | Lato | Medium (500) | 0.875rem (14px) / 1.25rem | Tablas densas ERP, Badges, Botones y Menús |
-| `text-caption` | Lato | Regular (400) | 0.75rem (12px) / 1.0rem | Metadatos, Tooltips, Fechas y Ejes de Gráficos |
+```css
+:root{
 
----
+--tenant-hue:265;
 
-## 4. Reglas de Contribución para Desarrolladores
+--tenant-saturation:84%;
 
-1. **Uso Obligatorio del Helper `cn()`**: Toda combinación condicional de clases de Tailwind debe procesarse mediante `cn()` (`clsx` + `tailwind-merge`) localizado en `@agustin/ui/utils`.
-2. **Prohibición de Estilos Hardcodeados**: No se aceptan Pull Requests que contengan colores en Hexadecimal (`#HEX`), RGB estáticos o tokens cerrados fuera de la especificación oficial de `@theme inline`.
-3. **Anillo de Enfoque Morado Unificado**: Todo nuevo componente interactivo debe incluir la firma corporativa de enfoque:
-   ```tsx
-   "focus-visible:border-border-strong focus-visible:ring-4 focus-visible:ring-border-strong/20"
-   ```
+}
+```
+
+Estas variables alimentan `tokens.css`, el cual genera automáticamente los alias utilizados por Tailwind CSS.
 
 ---
 
-*Documentación oficial mantenida por el Equipo TI & UI/UX Lead — AGUSTIN Services V2.0.*
+# Organización del Proyecto
+
+```text
+src/
+
+├── components/
+│   Componentes compuestos
+│
+├── primitives/
+│   Componentes base reutilizables
+│
+├── theme/
+│   ├── tokens.css
+│   └── index.ts
+│
+├── utils/
+│
+└── index.ts
+```
+
+---
+
+# Documentación
+
+| Documento | Descripción |
+|------------|-------------|
+| ARCHITECTURE.md | Arquitectura |
+| THEMING.md | Sistema de Tokens |
+| COMPONENTS.md | Componentes |
+| UTILS.md | Utilidades |
+| CONTRIBUTING.md | Convenciones |
+| DEVELOPMENT.md | Desarrollo |
+
+---
+
+# Contribución
+
+Todo nuevo componente debe cumplir las siguientes reglas:
+
+- Consumir únicamente tokens semánticos.
+- Utilizar `cn()` para combinar clases.
+- No utilizar colores HEX.
+- No utilizar colores RGB.
+- Mantener compatibilidad con React Server Components.
+- Implementar accesibilidad por defecto.
+- Utilizar el Focus Ring corporativo.
+
+Las convenciones completas se encuentran en `CONTRIBUTING.md`.
+
+---
+
+# Licencia
+
+Licencia propietaria.
+
+Todos los derechos reservados.
+
+© **AGAI · AgStudios**

@@ -23,15 +23,11 @@ declare const Label: React.ForwardRefExoticComponent<Omit<LabelPrimitive.LabelPr
 type CalendarMode = "days" | "months" | "years";
 type SelectionMode = "date" | "month" | "year";
 interface CalendarProps {
-    variant?: "full" | "input";
     selectionMode?: SelectionMode;
     value?: Date | null;
     onChange?: (date: Date | null) => void;
     minDate?: Date;
     maxDate?: Date;
-    placeholder?: string;
-    label?: string;
-    disabled?: boolean;
     className?: string;
 }
 declare function getDiasDelMes(year: number, month: number): (number | null)[];
@@ -40,14 +36,12 @@ declare function isWeekendDate(date: Date): boolean;
 declare function isDisabledDay(day: number, year: number, month: number, min?: Date, max?: Date): boolean;
 declare function isDisabledMonth(year: number, month: number, min?: Date, max?: Date): boolean;
 declare function isDisabledYear(year: number, min?: Date, max?: Date): boolean;
-declare function formatDate(date: Date, mode?: SelectionMode): string;
 interface YearGridProps {
     yearBase: number;
     selected: Date | null;
     onSelectYear: (year: number) => void;
     minDate?: Date;
     maxDate?: Date;
-    size?: "sm" | "lg";
 }
 declare const YearGrid: React__default.FC<YearGridProps>;
 interface MonthGridProps {
@@ -56,7 +50,6 @@ interface MonthGridProps {
     onSelectMonth: (month: number) => void;
     minDate?: Date;
     maxDate?: Date;
-    size?: "sm" | "lg";
 }
 declare const MonthGrid: React__default.FC<MonthGridProps>;
 interface CalendarGridProps {
@@ -67,7 +60,6 @@ interface CalendarGridProps {
     onSelectDay: (day: number) => void;
     minDate?: Date;
     maxDate?: Date;
-    size?: "sm" | "lg";
 }
 declare const CalendarGrid: React__default.FC<CalendarGridProps>;
 interface CalendarHeaderProps {
@@ -79,7 +71,6 @@ interface CalendarHeaderProps {
     onNext: () => void;
     onClickTitle: () => void;
     selectionMode: SelectionMode;
-    size?: "sm" | "lg";
 }
 declare const CalendarHeader: React__default.FC<CalendarHeaderProps>;
 declare const Calendar: React__default.FC<CalendarProps>;
@@ -304,4 +295,16 @@ interface PaginationProps extends React.ComponentProps<"nav"> {
 }
 declare function Pagination({ page, totalPages, onPageChange, showFirstLast, className, ...props }: PaginationProps): React.JSX.Element | null;
 
-export { AlertDialog, AlertDialogAction, type AlertDialogActionProps, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, AlertDialogPortal, AlertDialogTitle, AlertDialogTrigger, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Calendar, CalendarGrid, CalendarHeader, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardProps, type CardVariant, ConfirmDeleteDialog, DEFAULT_PASSWORD_RULES, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, EmptyState, type EmptyStateProps, type EmptyStateSize, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Label, LabelBadge, type LabelColor, type LabelVariant, MonthGrid, Pagination, type PaginationProps, PasswordInput, type PasswordInputProps, type PasswordRule, PasswordStrength, type PasswordStrengthProps, YearGrid, formatDate, getDiasDelMes, isDisabledDay, isDisabledMonth, isDisabledYear, isPasswordValid, isSameDay, isWeekendDate, useDialogContext };
+/**
+ * COMPONENTE COMPUESTO: DATE PICKER INPUT
+ */
+interface DatePickerInputProps {
+    value?: Date;
+    onChange?: (date: Date | undefined) => void;
+    placeholder?: string;
+    className?: string;
+    disabled?: boolean;
+}
+declare function DatePickerInput({ value, onChange, placeholder, className, disabled, }: DatePickerInputProps): React.JSX.Element;
+
+export { AlertDialog, AlertDialogAction, type AlertDialogActionProps, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, AlertDialogPortal, AlertDialogTitle, AlertDialogTrigger, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Calendar, CalendarGrid, CalendarHeader, type CalendarProps, Card, CardBody, type CardBodyProps, CardFooter, type CardFooterProps, CardHeader, type CardHeaderProps, CardImage, type CardImageProps, type CardProps, type CardVariant, ConfirmDeleteDialog, DEFAULT_PASSWORD_RULES, DatePickerInput, Dialog, DialogBody, type DialogBodyProps, DialogFooter, type DialogFooterProps, DialogHeader, type DialogHeaderProps, type DialogProps, type DialogSize, type DialogVariant, EmptyState, type EmptyStateProps, type EmptyStateSize, GraficaBar, GraficaDonut, PureLineChart as GraficaLine, Label, LabelBadge, type LabelColor, type LabelVariant, MonthGrid, Pagination, type PaginationProps, PasswordInput, type PasswordInputProps, type PasswordRule, PasswordStrength, type PasswordStrengthProps, YearGrid, getDiasDelMes, isDisabledDay, isDisabledMonth, isDisabledYear, isPasswordValid, isSameDay, isWeekendDate, useDialogContext };

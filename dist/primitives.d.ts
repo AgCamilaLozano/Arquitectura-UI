@@ -146,7 +146,7 @@ declare function DropdownMenu({ trigger, groups, align, width, disabled, classNa
 declare const inputVariants: (props?: ({
     variant?: "default" | "destructive" | null | undefined;
     inputSize?: "sm" | "lg" | "default" | null | undefined;
-    withIcon?: "none" | "both" | "right" | "left" | null | undefined;
+    withIcon?: "none" | "both" | "left" | "right" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface InputProps extends Omit<React$1.InputHTMLAttributes<HTMLInputElement>, "size">, VariantProps<typeof inputVariants> {
     iconLeft?: React$1.ReactNode;

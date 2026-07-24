@@ -22,9 +22,9 @@ const inputVariants = cva(
           "border-destructive text-text-error placeholder:text-text-error/50 focus-visible:border-text-error focus-visible:ring-ring-error/20",
       },
       inputSize: {
-        default: "h-9 py-1.5", // Calibrado a 36px (estándar de densidad ERP)
-        sm: "h-8 py-1 text-caption",
-        lg: "h-10 py-2 text-body-base",
+        default: "h-9 py-1.5 text-[14px]", // Calibrado a 36px (estándar de densidad ERP)
+        sm: "h-8 py-1 text-caption text-sm",
+        lg: "h-10 py-2 text-body-base text-md",
       },
       withIcon: {
         none: "px-3",
